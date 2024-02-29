@@ -1,0 +1,58 @@
+app:
+  name: ui
+  image:
+    repository: 'onecx/onecx-user-profile-ui'
+  routing:
+    enabled: true
+    path: /mfe/user-profile/
+  
+  operator:
+    # Microfrontend
+    microfrontend:
+      enabled: true
+      spec:
+        exposedModule: "./OneCXUser ProfileModule"
+        description: "OneCX User Profile UI"
+        note: "OneCX User Profile UI module auto import via MF operator"
+    # Permission
+    permission:
+      enabled: true
+      spec:
+        permissions:
+          ANNOUCEMENT:
+            CREATE: Create user profile
+            EDIT: Edit user profile
+            DELETE: Delete user profile
+            SAVE: Update and save user profile
+            IMPORT: Import user profile
+            EXPORT: Export user profile
+            VIEW: View mode for user profile
+            SEARCH: Search user profile
+    # Keycloak
+    keycloak:
+      enabled: true
+      client: |-
+        {
+          "clientId": "onecx-user-profile-ui",
+          "enabled": true,
+          "description": "Keycloak client for onecx-user-profile-ui",
+          "redirectUris": ["*"],
+          "webOrigins": ["*"],
+          "publicClient": true,
+          "protocol": "openid-connect"
+        }
+      roles: |-
+        [
+           {
+             "name": "onecx-user-profile-admin",
+             "description": "OneCX User Profile admin"
+           },
+           {
+             "name": "onecx-user-profile-user",
+             "description": "OneCX User Profile user"
+           }
+         ]
+
+# PIPE Config
+
+

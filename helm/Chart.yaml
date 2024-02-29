@@ -1,0 +1,17 @@
+apiVersion: v2
+name: onecx-user-profile-ui
+version: 0.0.0
+description: OneCX user-profile UI.
+home: https://github.com/onecx/onecx-user-profile-ui
+keywords:
+  - user-profile
+sources:
+  - https://github.com/onecx/onecx-user-profile-ui
+maintainers:
+  - name: OneCX Developer Team
+    email: tkit_dev@1000kit.org
+dependencies:
+  - name: helm-angular-app
+    version: ^0
+    repository: oci://ghcr.io/onecx/charts
+    alias: app
