@@ -1,0 +1,141 @@
+{
+  "ACTIONS": {
+    "CONFIRMATION": {
+      "NO": "No",
+      "YES": "Yes",
+      "NO.TOOLTIP": "Cancel the action",
+      "YES.TOOLTIP": "Proceed with the action"
+    },
+    "COPY": {
+      "LABEL": "Copy",
+      "ANNOUNCEMENT.TOOLTIP": "Create a new Announcement with the data",
+      "CLIPBOARD.TOOLTIP": "Copy to clipboard"
+    },
+    "CREATE": {
+      "LABEL": "Create",
+      "ANNOUNCEMENT": "Create Announcement",
+      "ANNOUNCEMENT.TOOLTIP": "Create a new Announcement",
+      "MESSAGE": {
+        "ANNOUNCEMENT_ALREADY_EXIST": "An Announcement with that title already exists",
+        "OK": "The Announcement was created successfully",
+        "NOK": "An error has occurred. The Announcement was not created."
+      }
+    },
+    "DELETE": {
+      "LABEL": "Delete",
+      "ANNOUNCEMENT": "Delete Announcement",
+      "ANNOUNCEMENT.TOOLTIP": "Delete this Announcement",
+      "MESSAGE_TEXT": "Do you want to delete \"{{ITEM}}\"?",
+      "MESSAGE_INFO": "This action cannot be undone!",
+      "MESSAGE": {
+        "OK": "The announcement was deleted successfully",
+        "NOK": "An error has occurred. The announcement was not deleted."
+      }
+    },
+    "EDIT": {
+      "ANNOUNCEMENT": "Edit Announcement",
+      "ANNOUNCEMENT.TOOLTIP": "Edit the Announcement properties",
+      "MESSAGE": {
+        "OK": "The announcement was saved successfully",
+        "NOK": "An error has occurred. The announcement was not saved."
+      }
+    },
+    "SEARCH": {
+      "ACTIONS": "Actions",
+      "LABEL": "Search",
+      "LABEL.TOOLTIP": "Start Searching",
+      "RESET": "Reset",
+      "RESET_TOOLTIP": "Clear given criteria",
+      "NO_DATA": "No data",
+      "NO_RESULTS": "Search returned no results",
+      "SEARCH_FAILED": "Search failed",
+      "NOT_FOUND": "No data found"
+    }
+  },
+  "GENERAL": {
+    "CLOSE": "Close",
+    "CANCEL": "Cancel",
+    "SAVE": "Save",
+    "VIEW": "View",
+    "WORKSPACES.NOT_FOUND": "Workspaces could not be loaded",
+    "TOOLTIPS": {
+      "CLOSE": "Leave dialog",
+      "CANCEL": "Cancel action",
+      "CANCEL_EDIT": "Cancel edit mode",
+      "CANCEL_AND_CLOSE": "Cancel and close dialog",
+      "CANCEL_WITHOUT_SAVE": "Cancel action without saving",
+      "EDIT": "Edit data",
+      "SAVE": "Save changes"
+    }
+  },
+  "BREADCRUMBS": {
+    "CREATE": "New",
+    "DETAILS": "Details",
+    "RELOAD": "Reload",
+    "SWITCH_TO_EDIT_MODE": "Edit"
+  },
+  "DIALOG": {
+    "SEARCH.HEADER": "Announcement Management",
+    "SEARCH.SUBHEADER": "Searching and managing of Announcements",
+    "DETAIL.SUBHEADER": "Announcement Details"
+  },
+  "ANNOUNCEMENT": {
+    "ID": "Id",
+    "APPLICATION": "Application",
+    "WORKSPACE": "Workspace",
+    "TITLE": "Title",
+    "TYPE": "Type",
+    "STATUS": "Status",
+    "PRIORITY": "Priority",
+    "START_DATE": "Start",
+    "START_DATE_RANGE": "Start Date from - to",
+    "END_DATE": "End",
+    "END_DATE_RANGE": "End Date from - to",
+    "CONTENT": "Content",
+    "DATE_RANGES_ERROR": "Invalid date ranges: The end date range should be after/equal the start date range.",
+    "EVERY_WORKSPACE": "All Workspaces",
+    "WORKSPACE_NOT_FOUND": "-- not found --",
+    "TOOLTIPS": {
+      "TITLE": "Title of the Announcement",
+      "TITLE.CRITERIA": "Title of the Announcement, Wildcards supported: *, ?",
+      "WORKSPACE": "Workspace for which the announcement should be applied..",
+      "TYPE": "Type of the Announcement",
+      "STATUS": "Status of the Announcement",
+      "PRIORITY": "Priority of the Announcement",
+      "START_DATE": "Date and Time on which the announcement becomes active",
+      "START_DATE_RANGE": "Date range of the start date",
+      "END_DATE": "Date and Time on which the announcement becomes inactive",
+      "END_DATE_RANGE": "Date range of the end date",
+      "CONTENT": "The text of the displayed announcement"
+    }
+  },
+  "ENUMS": {
+    "ANNOUNCEMENT_TYPE": {
+      "EVENT": "Event",
+      "INFO": "Information",
+      "SYSTEM_MAINTENANCE": "Maintenance"
+    },
+    "ANNOUNCEMENT_STATUS": {
+      "ACTIVE": "Active",
+      "INACTIVE": "Inactive"
+    },
+    "ANNOUNCEMENT_PRIORITY": {
+      "IMPORTANT": "High",
+      "LOW": "Low",
+      "NORMAL": "Normal"
+    }
+  },
+  "VALIDATION": {
+    "HINTS": {
+      "FORMAT_URL": "Format: "
+    },
+    "ERRORS": {
+      "INTERNAL_ERROR": "Internal error",
+      "INVALID_DATE_RANGE": "The start date is after the end date. It must be before that.",
+      "EMPTY_REQUIRED_FIELD": "This field is required.",
+      "MAXIMUM_LENGTH": "Only {{chars}} characters are allowed.",
+      "MINIMUM_LENGTH": "At least {{chars}} characters are required.",
+      "PATTERN_ERROR": "Your input does not match the required pattern"
+    }
+  }
+}
