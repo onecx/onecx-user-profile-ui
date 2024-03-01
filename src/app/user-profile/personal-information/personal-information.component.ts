@@ -7,7 +7,7 @@ import * as countriesInfo from 'i18n-iso-countries'
 import { AUTH_SERVICE, IAuthService, PhoneType, UserPerson } from '@onecx/portal-integration-angular'
 
 @Component({
-  selector: 'up-personal-info-form',
+  selector: 'app-personal-info-form',
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss']
 })

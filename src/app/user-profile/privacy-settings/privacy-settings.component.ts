@@ -7,7 +7,7 @@ import {
 } from '@onecx/portal-integration-angular'
 
 @Component({
-  selector: 'up-privacy-settings',
+  selector: 'app-privacy-settings',
   templateUrl: './privacy-settings.component.html'
 })
 export class PrivacySettingsComponent implements OnInit {

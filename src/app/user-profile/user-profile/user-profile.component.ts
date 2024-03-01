@@ -4,7 +4,7 @@ import { AUTH_SERVICE, IAuthService, UserPerson, PortalMessageService } from '@o
 import { UserProfileService } from '../user-profile.service'
 
 @Component({
-  selector: 'up-user-profile',
+  selector: 'app-user-profile',
   templateUrl: './user-profile.component.html'
 })
 export class UserProfileComponent {
