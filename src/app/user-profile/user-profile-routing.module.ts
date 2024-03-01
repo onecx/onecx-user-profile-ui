@@ -1,7 +1,6 @@
 import { NgModule } from '@angular/core'
 import { Routes, RouterModule } from '@angular/router'
 
-import { RolePermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { AccountSettingsComponent } from './account-settings/account-settings.component'
 import { UserProfileComponent } from './user-profile/user-profile.component'
 import { CanActivateGuard } from '../shared/can-active-guard.service'
@@ -27,18 +26,6 @@ const routes: Routes = [
     canActivate: [CanActivateGuard],
     data: {
       breadcrumb: 'PROFILE.BREADCRUMBS.SETTINGS',
-      breadcrumbFn: (data: any) => `${data.labeli18n}`
-    },
-    resolve: {
-      labeli18n: LabelResolver
-    }
-  },
-  {
-    path: 'roles-and-perms',
-    component: RolePermissionsComponent,
-    canActivate: [CanActivateGuard],
-    data: {
-      breadcrumb: 'PROFILE.BREADCRUMBS.PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {

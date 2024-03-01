@@ -1,0 +1,78 @@
+<div class="sm:pt-2 pb-2 sm:pb-3 px-3">
+  <form [formGroup]="formGroup">
+    <div class="font-bold my-2">{{ 'LAYOUT_THEME.MENU_MODE' | translate }}</div>
+    <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
+      <div *ocxIfBreakpoint="'mobile'">{{ 'LAYOUT_THEME.MENU_MODES.VERTICAL_SIDEBAR_ON_MOBILE' | translate }}</div>
+      <p-selectButton
+        *ocxIfBreakpoint="'desktop'"
+        id="up_layout_theme_menu_mode"
+        [options]="menuModeSelectItems"
+        formControlName="menuMode"
+        (onChange)="saveMenuMode()"
+        title="{{ 'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate }}"
+      >
+        <ng-template let-item>{{ item.label | translate }}</ng-template>
+      </p-selectButton>
+      <button
+        *ngIf="changedMenuMode"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-refresh"
+        class="ml-3 p-2 p-button-text"
+        id="up_layout_theme_menu_mode_refresh"
+        (click)="applyChange()"
+        [label]="'GENERAL.RELOAD' | translate"
+        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+      ></button>
+    </div>
+
+    <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LAYOUT_THEME.COLOR_SCHEME' | translate }}</div>
+    <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
+      <p-selectButton
+        id="up_layout_theme_color_scheme"
+        [options]="colorSchemeSelectItems"
+        formControlName="colorScheme"
+        (onChange)="saveColorScheme()"
+        title="{{ 'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate }}"
+      >
+        <ng-template let-item>{{ item.label | translate }}</ng-template>
+      </p-selectButton>
+      <button
+        *ngIf="changedColorScheme"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-refresh"
+        class="ml-3 p-2 p-button-text"
+        id="up_layout_theme_color_scheme_refresh"
+        (click)="applyChange()"
+        [label]="'GENERAL.RELOAD' | translate"
+        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+      ></button>
+    </div>
+
+    <div class="font-bold mt-4 sm:mt-5 mb-3">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</div>
+    <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
+      <p-inputSwitch
+        id="up_layout_theme_breadcrumbs"
+        formControlName="breadcrumbs"
+        (onChange)="saveBreadcrumbs()"
+        title="{{ 'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate }}"
+      >
+      </p-inputSwitch>
+      <button
+        *ngIf="changedBreadcrumbs"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-refresh"
+        class="ml-5 p-2 p-button-text"
+        id="up_layout_theme_breadcrumbs_refresh"
+        (click)="applyChange()"
+        [label]="'GENERAL.RELOAD' | translate"
+        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+      ></button>
+    </div>
+  </form>
+</div>

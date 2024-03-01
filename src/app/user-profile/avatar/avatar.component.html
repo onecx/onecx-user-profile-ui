@@ -1,0 +1,93 @@
+<div class="mx-3 mb-1 sm:mb-2 md:mb-3 relative flex flex-wrap justify-content-start gap-4 row-gap-1">
+  <div>
+    <!-- No image => show placeholder -->
+    <img
+      *ngIf="!userAvatar?.imageUrl"
+      alt="Avatar placeholder image"
+      class="avatar-image"
+      aria-describedby="Avatar placeholder image"
+      [src]="imageUrl"
+    />
+    <!-- Show avatar image -->
+    <img
+      *ngIf="userAvatar?.imageUrl"
+      #avatarImage
+      alt="Avatar image"
+      class="avatar-image"
+      aria-describedby="Avatar image"
+      [src]="imageUrl"
+    />
+  </div>
+
+  <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
+    <input hidden type="file" #selectedFileInput (change)="onFileUpload($event)" />
+    <div class="flex flex-row sm:flex-column flex-wrap gap-1 toolbar">
+      <button
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-camera"
+        class="p-2 p-button-text"
+        id="up_avatar_button_select"
+        (click)="selectedFileInput.click()"
+        [label]="'GENERAL.CHANGE' | translate"
+        [title]="'AVATAR.CHOOSE' | translate"
+      ></button>
+      <button
+        *ngIf="userAvatar?.imageUrl"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-trash"
+        class="p-2 p-button-text"
+        id="up_avatar_button_remove"
+        (click)="showAvatarDeleteDialog = true"
+        [label]="'GENERAL.REMOVE' | translate"
+        [title]="'AVATAR.REMOVE' | translate"
+      ></button>
+    </div>
+  </ng-container>
+</div>
+
+<!-- DELETE -->
+<p-dialog
+  [(visible)]="showAvatarDeleteDialog"
+  [header]="'AVATAR.REMOVE' | translate"
+  [modal]="true"
+  [closable]="true"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ 'max-width': '425px' }"
+>
+  <div class="flex column-gap-3 row-gap-1 justify-content-start align-items-center">
+    <div class="pi pi-question-circle text-3xl text-primary"></div>
+    <div>
+      <div>{{ 'AVATAR.REMOVE.MESSAGE' | translate }}</div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap column-gap-2 row-gap-1 justify-content-end">
+      <button
+        pButton
+        id="up_avatar_button_abort_delete"
+        autofocus
+        type="button"
+        class="m-0"
+        icon="pi pi-times"
+        iconPos="left"
+        [label]="'ACTIONS.CONFIRMATION.NO' | translate"
+        (click)="showAvatarDeleteDialog = false"
+      ></button>
+      <button
+        pButton
+        id="up_avatar_button_confirm_delete"
+        type="button"
+        class="m-0"
+        icon="pi pi-check"
+        iconPos="left"
+        [label]="'ACTIONS.CONFIRMATION.YES' | translate"
+        (click)="onDeleteAvatarImage()"
+      ></button>
+    </div>
+  </ng-template>
+</p-dialog>

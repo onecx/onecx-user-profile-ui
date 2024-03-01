@@ -1,0 +1,25 @@
+<div class="sm:pt-2 pb-2 sm:pb-3 px-3">
+  <form [formGroup]="formGroup">
+    <div class="font-bold mt-2 mb-3">{{ 'PRIVACY_SETTINGS.HIDE_MY_PROFILE' | translate }}</div>
+    <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
+      <p-inputSwitch
+        id="up_privacy_settings_hide_my_profile"
+        formControlName="hideMyProfile"
+        (onChange)="savePrivacySettings()"
+        title="{{ 'PRIVACY_SETTINGS.PRIVACY.TOOLTIP' | translate }}"
+      ></p-inputSwitch>
+      <button
+        *ngIf="changedPrivacySettings"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-refresh"
+        class="ml-3 p-2 p-button-text"
+        id="up_privacy_settings_refresh"
+        (click)="applyChange()"
+        [label]="'GENERAL.RELOAD' | translate"
+        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+      ></button>
+    </div>
+  </form>
+</div>

@@ -1,0 +1,16 @@
+<ocx-portal-page permission="PROFILE_PERSONAL_INFO#VIEW" helpArticleId="PAGE_USER_PROFILE">
+  <ocx-page-header
+    [header]="personalInfo.firstName + ' ' + personalInfo.lastName"
+    [subheader]="'PROFILE.SUBHEADER' | translate"
+  >
+  </ocx-page-header>
+
+  <ocx-page-content>
+    <up-personal-info-form
+      [personalInfo]="personalInfo"
+      [userId]="userId"
+      (personalInfoUpdate)="onPersonalInfoUpdate($event)"
+    >
+    </up-personal-info-form>
+  </ocx-page-content>
+</ocx-portal-page>
