@@ -13,7 +13,7 @@ import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 
 @Component({
-  selector: 'up-locale-timezone',
+  selector: 'app-locale-timezone',
   templateUrl: './locale-timezone.component.html',
   styleUrls: ['./locale-timezone.component.scss']
 })

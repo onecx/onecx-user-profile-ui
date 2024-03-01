@@ -10,7 +10,7 @@ import {
 } from '@onecx/portal-integration-angular'
 
 @Component({
-  selector: 'up-layout-theme',
+  selector: 'app-layout-theme',
   templateUrl: './layout-theme.component.html'
 })
 export class LayoutThemeComponent implements OnInit {

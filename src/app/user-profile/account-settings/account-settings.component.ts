@@ -15,7 +15,7 @@ import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.c
 import { PreferencesSettingsComponent } from '../preferences-settings/preferences-settings.component'
 
 @Component({
-  selector: 'up-account-settings',
+  selector: 'app-account-settings',
   templateUrl: './account-settings.component.html'
 })
 export class AccountSettingsComponent implements OnInit {

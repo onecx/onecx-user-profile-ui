@@ -15,7 +15,7 @@ import { AvatarUploadService } from '../../shared/avatar-upload.service'
 import { environment } from '../../../environments/environment'
 
 @Component({
-  selector: 'up-avatar',
+  selector: 'app-avatar',
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss']
 })
