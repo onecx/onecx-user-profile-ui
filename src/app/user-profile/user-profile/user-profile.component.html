@@ -6,11 +6,6 @@
   </ocx-page-header>
 
   <ocx-page-content>
-    <up-personal-info-form
-      [personalInfo]="personalInfo"
-      [userId]="userId"
-      (personalInfoUpdate)="onPersonalInfoUpdate($event)"
-    >
-    </up-personal-info-form>
+    <app-personal-info-form (personalInfoUpdate)="onPersonalInfoUpdate($event)"> </app-personal-info-form>
   </ocx-page-content>
 </ocx-portal-page>

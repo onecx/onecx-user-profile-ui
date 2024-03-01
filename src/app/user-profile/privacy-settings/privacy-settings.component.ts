@@ -1,10 +1,6 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
-import {
-  AUTH_SERVICE,
-  IAuthService,
-  UserProfileAccountSettingsPrivacySettings
-} from '@onecx/portal-integration-angular'
+import { UserProfileAccountSettingsPrivacySettings, UserService } from '@onecx/portal-integration-angular'
 
 @Component({
   selector: 'app-privacy-settings',
@@ -18,14 +14,14 @@ export class PrivacySettingsComponent implements OnInit {
   public changedPrivacySettings = false
   public formGroup: UntypedFormGroup
 
-  constructor(@Inject(AUTH_SERVICE) public authService: IAuthService) {
+  constructor(private userService: UserService) {
     this.formGroup = new UntypedFormGroup({
       hideMyProfile: new UntypedFormControl()
     })
   }
 
   public ngOnInit(): void {
-    if (!this.authService.hasPermission('ACCOUNT_SETTINGS_PRIVACY#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
+    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_PRIVACY#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
   }
 
   public savePrivacySettings(): void {

@@ -1,25 +1,26 @@
-import { Component, Inject } from '@angular/core'
+import { Component } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
-import { AUTH_SERVICE, IAuthService, UserPerson, PortalMessageService } from '@onecx/portal-integration-angular'
+import { UserPerson, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 import { UserProfileService } from '../user-profile.service'
+import { Observable, map } from 'rxjs'
 
 @Component({
   selector: 'app-user-profile',
   templateUrl: './user-profile.component.html'
 })
 export class UserProfileComponent {
-  public personalInfo: UserPerson
-  public userId: string
+  public personalInfo$: Observable<UserPerson>
+  public userId$: Observable<string>
   public messages: { [key: string]: string } = {}
 
   constructor(
-    @Inject(AUTH_SERVICE) public authService: IAuthService,
+    public user: UserService,
     public translate: TranslateService,
     private readonly userProfileService: UserProfileService,
     private msgService: PortalMessageService
   ) {
-    this.personalInfo = this.authService.getCurrentUser()?.person || {}
-    this.userId = this.authService.getCurrentUser()?.userId || ''
+    this.personalInfo$ = this.user.profile$.pipe(map((profile) => profile.person || {}))
+    this.userId$ = this.user.profile$.pipe(map((profile) => profile.userId || ''))
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {

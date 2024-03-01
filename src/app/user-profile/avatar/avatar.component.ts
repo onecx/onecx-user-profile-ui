@@ -1,18 +1,19 @@
-import { Component, ElementRef, Inject, OnInit, Optional, ViewChild } from '@angular/core'
+import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 
 import {
   AUTH_SERVICE,
   AvatarInfo,
   IAuthService,
-  MFE_INFO,
-  MfeInfo,
+  UserService,
+  AppStateService,
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 
-import { UserProfileService } from '../user-profile.service'
-import { AvatarUploadService } from '../../shared/avatar-upload.service'
+import { UserProfileService } from 'src/app/user-profile/user-profile.service'
+import { AvatarUploadService } from 'src/app/shared/services/avatar-upload.service'
 import { environment } from '../../../environments/environment'
+import { combineLatest, map, Observable } from 'rxjs'
 
 @Component({
   selector: 'app-avatar',
@@ -22,99 +23,45 @@ import { environment } from '../../../environments/environment'
 export class AvatarComponent implements OnInit {
   @ViewChild('selectedFileInput') selectedFileInput: ElementRef | undefined
   public selectedFile: File | undefined
-  public userAvatar: AvatarInfo | undefined
+  public userAvatar$: Observable<AvatarInfo | undefined> | undefined
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
-  public imageUrl?: string
-  public apiPrefix = environment.BASE_PATH
-  public placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
+  public imageUrl$: Observable<string> | undefined
+  private apiPrefix = environment.BASE_PATH
+  protected placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
 
   @ViewChild('avatarImage', { read: ElementRef, static: true })
   public avatarImage!: ElementRef
 
   constructor(
     @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
-    @Optional() @Inject(MFE_INFO) private readonly mfeInfo: MfeInfo,
     private readonly upService: UserProfileService,
     private readonly avatarService: AvatarUploadService,
-    private msgService: PortalMessageService
+    private msgService: PortalMessageService,
+    private userService: UserService,
+    private appStateService: AppStateService
   ) {}
 
   public ngOnInit(): void {
-    this.userAvatar = this.authService.getCurrentUser()?.avatar
+    this.userAvatar$ = this.userService.profile$.pipe(map((profile) => profile.avatar))
     this.prepareAvatarImageUrl()
   }
 
-  private prepareAvatarImageUrl(): void {
-    // if image URL does not start with a http, then it stored in the backend. So we need to put prefix in front
-    if (this.userAvatar?.imageUrl && !this.userAvatar.imageUrl.match(/^(http|https)/g)) {
-      this.imageUrl = this.apiPrefix + this.userAvatar.imageUrl
-    } else {
-      this.imageUrl = this.userAvatar?.imageUrl
-        ? this.userAvatar.imageUrl
-        : // this.mfeInfo is available only in non standalone mode
-          (this.mfeInfo?.remoteBaseUrl ? this.mfeInfo.remoteBaseUrl : './') + this.placeHolderPath
-    }
-  }
-
   public onDeleteAvatarImage(): void {
-    this.userAvatar = undefined
+    this.userAvatar$ = this.userService.profile$.pipe(map(() => undefined))
     this.showAvatarDeleteDialog = false
     this.upService.removeAvatar().subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-        this.reloadWindow()
+        window.location.reload()
       },
       error: () => {
         this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
       }
     })
-    this.imageUrl = (this.mfeInfo?.remoteBaseUrl ? this.mfeInfo.remoteBaseUrl : './') + this.placeHolderPath
-  }
-
-  public reloadWindow(): void {
-    window.location.reload()
-  }
-
-  /* Displays latest image in UI */
-  private updateImage(): void {
-    if (this.selectedFile) {
-      const reader = new FileReader()
-      reader.readAsDataURL(this.selectedFile)
-      reader.onload = (): void => {
-        if (reader.result) {
-          this.userAvatar = {
-            smallImageUrl: reader.result.toString(),
-            imageUrl: reader.result.toString()
-          }
-        }
-      }
-    }
-  }
-
-  private checkDimension(file: File): void {
-    const reader = new FileReader()
-    const img = new Image()
-
-    reader.onload = (e: any) => {
-      img.src = e.target.result.toString()
-
-      img.onload = () => {
-        const elem = document.createElement('canvas')
-        elem.width = 400
-        elem.height = 400
-        const ctx = elem.getContext('2d')
-        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-        ctx!.drawImage(img, 0, 0, 400, 400)
-        elem.toBlob((blob) => {
-          if (blob) {
-            this.selectedFile = new File([blob], 'untitled', { type: blob.type })
-          }
-        })
-        this.previewSrc = elem.toDataURL()
-      }
-    }
-    reader.readAsDataURL(file)
+    this.imageUrl$ = this.appStateService.currentMfe$.pipe(
+      map((currentMfe) => (currentMfe.remoteBaseUrl ? currentMfe.remoteBaseUrl : './') + this.placeHolderPath)
+    )
   }
 
   // Extract image file(s)
@@ -144,16 +91,16 @@ export class AvatarComponent implements OnInit {
     }
     // revert to userProfileService once BFF is fixed
     this.selectedFile &&
-      this.avatarService.setUserAvatar(this.selectedFile).subscribe(
-        (data) => {
+      this.avatarService.setUserAvatar(this.selectedFile).subscribe({
+        next: (data: any) => {
           this.showUploadSuccess()
           localStorage.removeItem('tkit_user_profile')
-          this.reloadWindow()
+          window.location.reload()
 
-          this.userAvatar = data
+          this.userAvatar$ = this.userService.profile$.pipe(map((profile) => (profile.avatar = data)))
           this.prepareAvatarImageUrl()
         },
-        (error: HttpErrorResponse) => {
+        error: (error: HttpErrorResponse) => {
           if (error.error?.errorCode === 'WRONG_AVATAR_CONTENT_TYPE') {
             this.msgService.error({
               summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
@@ -166,6 +113,65 @@ export class AvatarComponent implements OnInit {
             })
           }
         }
-      )
+      })
+  }
+
+  private prepareAvatarImageUrl(): void {
+    // if image URL does not start with a http, then it stored in the backend. So we need to put prefix in front
+    this.imageUrl$ = combineLatest([
+      this.userService.profile$.asObservable(),
+      this.appStateService.currentMfe$.asObservable()
+    ]).pipe(
+      map(([userProfile, currentMfe]) => {
+        if (userProfile.avatar?.imageUrl && !userProfile.avatar.imageUrl.match(/^(http|https)/g)) {
+          return this.apiPrefix + userProfile.avatar.imageUrl
+        } else {
+          return userProfile.avatar?.imageUrl
+            ? userProfile.avatar.imageUrl
+            : // this.mfeInfo is available only in non standalone mode
+              (currentMfe.remoteBaseUrl ? currentMfe.remoteBaseUrl : './') + this.placeHolderPath
+        }
+      })
+    )
+  }
+
+  /* Displays latest image in UI */
+  private updateImage(): void {
+    if (this.selectedFile) {
+      const reader = new FileReader()
+      reader.readAsDataURL(this.selectedFile)
+      reader.onload = (): void => {
+        if (reader.result) {
+          this.userAvatar$ = this.userService.profile$.pipe(
+            map(() => ({ smallImageUrl: reader.result?.toString(), imageUrl: reader.result?.toString() }))
+          )
+        }
+      }
+    }
+  }
+
+  private checkDimension(file: File): void {
+    const reader = new FileReader()
+    const img = new Image()
+
+    reader.onload = (e: any) => {
+      img.src = e.target.result.toString()
+
+      img.onload = () => {
+        const elem = document.createElement('canvas')
+        elem.width = 400
+        elem.height = 400
+        const ctx = elem.getContext('2d')
+        // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
+        ctx!.drawImage(img, 0, 0, 400, 400)
+        elem.toBlob((blob) => {
+          if (blob) {
+            this.selectedFile = new File([blob], 'untitled', { type: blob.type })
+          }
+        })
+        this.previewSrc = elem.toDataURL()
+      }
+    }
+    reader.readAsDataURL(file)
   }
 }

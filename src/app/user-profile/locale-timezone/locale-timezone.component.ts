@@ -1,13 +1,12 @@
-import { Component, EventEmitter, Inject, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { FormControl, UntypedFormGroup } from '@angular/forms'
-import { SelectItem } from 'primeng/api'
-
 import {
-  AUTH_SERVICE,
   ConfigurationService,
-  IAuthService,
-  UserProfileAccountSettingsLocaleAndTimeSettings
+  CONFIG_KEY,
+  UserProfileAccountSettingsLocaleAndTimeSettings,
+  UserService
 } from '@onecx/portal-integration-angular'
+import { SelectItem } from 'primeng/api'
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
@@ -36,9 +35,9 @@ export class LocaleTimezoneComponent implements OnInit {
   public timezoneExampleDate = new Date()
 
   constructor(
-    @Inject(AUTH_SERVICE) public authService: IAuthService,
     private readonly localAndTimezoneService: LocalAndTimezoneService,
-    private readonly configService: ConfigurationService
+    private readonly configService: ConfigurationService,
+    private userService: UserService
   ) {
     this.formGroup = new UntypedFormGroup({
       timezone: new FormControl(''),
@@ -47,8 +46,8 @@ export class LocaleTimezoneComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.editLanguage = this.authService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
-    this.editTimezone = this.authService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
+    this.editLanguage = this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
+    this.editTimezone = this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
     if (this.localeTimezone) {
       this.formGroup.patchValue(this.localeTimezone)
     }
@@ -68,14 +67,16 @@ export class LocaleTimezoneComponent implements OnInit {
       // eslint-disable-next-line no-console
       (error) => console.log(error)
     )
-    const availLangsProperty = this.configService.getProperty('SUPPORTED-LANGUAGES')
-    const availLangs = availLangsProperty ? availLangsProperty.split(',').map((l) => l.trim()) : ['en', 'de']
-    this.localeSelectItems = availLangs.map((l) => ({
+    const supportedLanguagesProperty = this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES)
+    const supportedLanguages = supportedLanguagesProperty
+      ? supportedLanguagesProperty.split(',').map((l) => l.trim())
+      : ['en', 'de']
+    this.localeSelectItems = supportedLanguages.map((l) => ({
       label: 'LANGUAGE.' + l.toUpperCase(),
       value: l
     }))
-    this.locale = this.formGroup.get('locale')?.value ? this.formGroup.get('locale')?.value : this.locale
-    this.timezone = this.formGroup.get('timezone')?.value ? this.formGroup.get('timezone')?.value : this.timezone
+    this.locale = this.formGroup.get('locale')?.value
+    this.timezone = this.formGroup.get('timezone')?.value
     this.refreshTimezoneExample()
   }
 

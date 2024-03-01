@@ -2,20 +2,20 @@
   <div>
     <!-- No image => show placeholder -->
     <img
-      *ngIf="!userAvatar?.imageUrl"
+      *ngIf="!(userAvatar$ | async)?.imageUrl"
       alt="Avatar placeholder image"
       class="avatar-image"
       aria-describedby="Avatar placeholder image"
-      [src]="imageUrl"
+      [src]="placeHolderPath"
     />
     <!-- Show avatar image -->
     <img
-      *ngIf="userAvatar?.imageUrl"
+      *ngIf="(userAvatar$ | async)?.imageUrl"
       #avatarImage
       alt="Avatar image"
       class="avatar-image"
       aria-describedby="Avatar image"
-      [src]="imageUrl"
+      [src]="imageUrl$ | async"
     />
   </div>
 
@@ -34,7 +34,7 @@
         [title]="'AVATAR.CHOOSE' | translate"
       ></button>
       <button
-        *ngIf="userAvatar?.imageUrl"
+        *ngIf="(userAvatar$ | async)?.imageUrl"
         pButton
         pRipple
         type="button"
@@ -69,7 +69,6 @@
     <div class="flex flex-wrap column-gap-2 row-gap-1 justify-content-end">
       <button
         pButton
-        id="up_avatar_button_abort_delete"
         autofocus
         type="button"
         class="m-0"
@@ -80,7 +79,6 @@
       ></button>
       <button
         pButton
-        id="up_avatar_button_confirm_delete"
         type="button"
         class="m-0"
         icon="pi pi-check"

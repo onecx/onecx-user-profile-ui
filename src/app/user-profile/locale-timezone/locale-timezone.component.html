@@ -1,14 +1,10 @@
 <div class="sm:py-2 px-3">
   <form [formGroup]="formGroup">
     <div class="font-bold my-2">{{ 'LANGUAGE_TIMEZONE.LANGUAGE' | translate }}</div>
-    <div id="up_account_language_uneditable" class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editLanguage">
+    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editLanguage">
       {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | translate) : 'no-value' }}
     </div>
-    <div
-      id="up_account_language_editable"
-      *ngIf="editLanguage"
-      class="flex flex-wrap justify-content-start align-items-center"
-    >
+    <div *ngIf="editLanguage" class="flex flex-wrap justify-content-start align-items-center">
       <p-dropdown
         id="up_account_locale_list"
         formControlName="locale"
@@ -39,14 +35,10 @@
     </div>
 
     <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</div>
-    <div id="up_account_timezone_uneditable" class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editTimezone">
+    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editTimezone">
       {{ this.formGroup.value['timezone'] ? formGroup.value['timezone'] : 'no-value' }}
     </div>
-    <div
-      id="up_account_timezone_editable"
-      *ngIf="editTimezone"
-      class="flex flex-wrap justify-content-start align-items-center row-gap-3"
-    >
+    <div *ngIf="editTimezone" class="flex flex-wrap justify-content-start align-items-center row-gap-3">
       <p-dropdown
         id="up_account_timezone_list"
         styleClass="shrink-margin"
@@ -80,7 +72,7 @@
         [value]="timezoneExampleDate | date : 'long' : timezoneUTC : locale"
         title="{{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate }}"
       />
-      <label for="up_account_timezone_example">{{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE' | translate }}</label>
+      <label for="up_account_timezone_example">Example</label>
     </span>
     <br />
   </form>
