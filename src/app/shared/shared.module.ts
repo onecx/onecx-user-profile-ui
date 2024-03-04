@@ -14,13 +14,17 @@ import { DataViewModule } from 'primeng/dataview'
 import { DialogModule } from 'primeng/dialog'
 import { DialogService } from 'primeng/dynamicdialog'
 import { DropdownModule } from 'primeng/dropdown'
+import { InputSwitchModule } from 'primeng/inputswitch'
 import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { KeyFilterModule } from 'primeng/keyfilter'
 import { ListboxModule } from 'primeng/listbox'
 import { MultiSelectModule } from 'primeng/multiselect'
+import { PanelModule } from 'primeng/panel'
+import { RippleModule } from 'primeng/ripple'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
+import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
 
 import {
@@ -51,14 +55,18 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     DialogModule,
     DropdownModule,
     FormsModule,
+    InputSwitchModule,
     InputTextModule,
     InputTextareaModule,
     KeyFilterModule,
     ListboxModule,
     MultiSelectModule,
+    PanelModule,
     ReactiveFormsModule,
+    RippleModule,
     SelectButtonModule,
     TableModule,
+    TabViewModule,
     ToastModule,
     TranslateModule,
     ErrorTailorModule.forRoot({

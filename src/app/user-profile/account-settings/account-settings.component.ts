@@ -1,10 +1,10 @@
-import { Component, EventEmitter, Inject, OnInit, Output, ViewChild } from '@angular/core'
+import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
 import { Router } from '@angular/router'
+
 import {
-  AUTH_SERVICE,
   ConfigurationService,
-  IAuthService,
   UserPerson,
+  UserService,
   UserProfileAccountSettings,
   UserProfilePreference,
   PortalMessageService
@@ -12,7 +12,6 @@ import {
 import { UserProfileService } from '../user-profile.service'
 import { EditPreference } from '../model/editPreference'
 import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.component'
-import { PreferencesSettingsComponent } from '../preferences-settings/preferences-settings.component'
 
 @Component({
   selector: 'app-account-settings',
@@ -21,9 +20,8 @@ import { PreferencesSettingsComponent } from '../preferences-settings/preference
 export class AccountSettingsComponent implements OnInit {
   @Output() public editModeUpdate = new EventEmitter<boolean>()
   @ViewChild(PrivacySettingsComponent, { static: false }) privacySettings!: PrivacySettingsComponent
-  @ViewChild(PreferencesSettingsComponent, { static: false }) preferenceSettings!: PreferencesSettingsComponent
 
-  public personalInfo: UserPerson
+  public personalInfo: UserPerson = {}
   public settings: UserProfileAccountSettings = {}
   public settingsInitial: UserProfileAccountSettings = {}
   public preferences: UserProfilePreference[] = []
@@ -34,18 +32,31 @@ export class AccountSettingsComponent implements OnInit {
   private profileCacheItem = 'tkit_user_profile'
 
   constructor(
-    @Inject(AUTH_SERVICE) public authService: IAuthService,
-
     private readonly userProfileService: UserProfileService,
     private msgService: PortalMessageService,
+    private user: UserService,
     private readonly router: Router,
     private readonly confService: ConfigurationService // private readonly stateService: StateService
   ) {
-    this.personalInfo = this.authService.getCurrentUser()?.person || {}
+    this.user.profile$.subscribe(
+      (profile) => {
+        this.personalInfo = profile.person || {}
+      },
+      (error) => {
+        console.error('Failed to load user profile', error)
+      }
+    )
   }
 
   public ngOnInit(): void {
-    this.settings = this.authService.getCurrentUser()?.accountSettings || {}
+    this.user.profile$.subscribe(
+      (profile) => {
+        this.settings = profile.accountSettings || {}
+      },
+      (error) => {
+        console.error('Failed to load user profile', error)
+      }
+    )
     this.settingsInitial = { ...this.settings }
     this.loadPreferences()
   }

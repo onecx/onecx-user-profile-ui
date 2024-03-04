@@ -19,7 +19,7 @@
                 readonly
                 class="w-full"
                 id="up_personal_info_first_name"
-                [value]="personalInfo.firstName"
+                [value]="(personalInfo$ | async)?.firstName"
               />
               <label for="up_personal_info_first_name">{{ 'PERSONAL_INFO_FORM.FIRST_NAME' | translate }}</label>
             </span>
@@ -32,14 +32,21 @@
                 readonly
                 class="w-full"
                 id="up_personal_info_last_name"
-                [value]="personalInfo.lastName"
+                [value]="(personalInfo$ | async)?.lastName"
               />
               <label for="up_personal_info_last_name">{{ 'PERSONAL_INFO_FORM.LAST_NAME' | translate }}</label>
             </span>
           </div>
           <div class="max-w-25rem">
             <span class="p-float-label">
-              <input pInputText type="text" readonly class="w-full" id="up_personal_info_user_id" [value]="userId" />
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                id="up_personal_info_user_id"
+                [value]="userId$ | async"
+              />
               <label for="up_personal_info_user_id">{{ 'PERSONAL_INFO_FORM.ID' | translate }}</label>
             </span>
           </div>
@@ -53,7 +60,7 @@
             <div class="font-bold text-2xl">Avatar</div>
           </div>
         </ng-template>
-        <up-avatar> </up-avatar>
+        <app-avatar> </app-avatar>
       </p-panel>
     </div>
 
@@ -115,7 +122,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_street"
                 formControlName="street"
-                [value]="personalInfo.address?.street"
+                [value]="(personalInfo$ | async)?.address?.street"
               />
               <label for="up_personal_info_address_street">{{ 'PERSONAL_INFO_FORM.STREET' | translate }}</label>
             </span>
@@ -127,7 +134,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
-                [value]="personalInfo.address?.streetNo"
+                [value]="(personalInfo$ | async)?.address?.streetNo"
               />
               <label for="up_personal_info_address_street_no">
                 {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}</label
@@ -143,7 +150,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
-                [value]="personalInfo.address?.postalCode"
+                [value]="(personalInfo$ | async)?.address?.postalCode"
               />
               <label for="up_personal_info_address_postal_code">
                 {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}</label
@@ -160,7 +167,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_city"
                 formControlName="city"
-                [value]="personalInfo.address?.city"
+                [value]="(personalInfo$ | async)?.address?.city"
               />
               <label for="up_personal_info_address_city">{{ 'PERSONAL_INFO_FORM.CITY' | translate }}</label>
             </span>
@@ -248,7 +255,7 @@
                 [readonly]="!phoneEdit"
                 id="up_personal_info_phone_number"
                 formControlName="number"
-                [value]="personalInfo.phone?.number"
+                [value]="(personalInfo$ | async)?.phone?.number"
               />
               <label for="up_personal_info_phone_number">{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER' | translate }}</label>
             </span>

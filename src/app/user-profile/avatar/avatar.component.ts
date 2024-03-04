@@ -11,8 +11,8 @@ import {
 } from '@onecx/portal-integration-angular'
 
 import { UserProfileService } from 'src/app/user-profile/user-profile.service'
-import { AvatarUploadService } from 'src/app/shared/services/avatar-upload.service'
-import { environment } from '../../../environments/environment'
+import { AvatarUploadService } from 'src/app/shared/avatar-upload.service'
+import { environment } from 'src/environments/environment'
 import { combineLatest, map, Observable } from 'rxjs'
 
 @Component({
@@ -27,7 +27,7 @@ export class AvatarComponent implements OnInit {
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<string> | undefined
-  private apiPrefix = environment.BASE_PATH
+  private apiPrefix = environment.apiPrefix
   protected placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
 
   @ViewChild('avatarImage', { read: ElementRef, static: true })
