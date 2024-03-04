@@ -10,8 +10,7 @@ import {
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 
-import { UserProfileService } from 'src/app/user-profile/user-profile.service'
-import { AvatarUploadService } from 'src/app/shared/avatar-upload.service'
+import { UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
 import { combineLatest, map, Observable } from 'rxjs'
 
@@ -35,8 +34,7 @@ export class AvatarComponent implements OnInit {
 
   constructor(
     @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
-    private readonly upService: UserProfileService,
-    private readonly avatarService: AvatarUploadService,
+    private avatarService: UserAvatarAPIService,
     private msgService: PortalMessageService,
     private userService: UserService,
     private appStateService: AppStateService
@@ -50,7 +48,7 @@ export class AvatarComponent implements OnInit {
   public onDeleteAvatarImage(): void {
     this.userAvatar$ = this.userService.profile$.pipe(map(() => undefined))
     this.showAvatarDeleteDialog = false
-    this.upService.removeAvatar().subscribe({
+    this.avatarService.deleteUserAvatar().subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         window.location.reload()
@@ -91,7 +89,7 @@ export class AvatarComponent implements OnInit {
     }
     // revert to userProfileService once BFF is fixed
     this.selectedFile &&
-      this.avatarService.setUserAvatar(this.selectedFile).subscribe({
+      this.avatarService.uploadAvatar({ body: this.selectedFile }).subscribe({
         next: (data: any) => {
           this.showUploadSuccess()
           localStorage.removeItem('tkit_user_profile')

@@ -1,8 +1,9 @@
 import { Component } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
+
 import { UserPerson, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
-import { UserProfileService } from '../user-profile.service'
 import { Observable, map } from 'rxjs'
+import { UpdateUserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-profile',
@@ -16,7 +17,7 @@ export class UserProfileComponent {
   constructor(
     public user: UserService,
     public translate: TranslateService,
-    private readonly userProfileService: UserProfileService,
+    private readonly userProfileService: UserProfileAPIService,
     private msgService: PortalMessageService
   ) {
     this.personalInfo$ = this.user.profile$.pipe(map((profile) => profile.person || {}))
@@ -24,7 +25,7 @@ export class UserProfileComponent {
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {
-    this.userProfileService.updatePersonalInfo(person).subscribe({
+    this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: () => {
         this.showMessage('success')
       },
