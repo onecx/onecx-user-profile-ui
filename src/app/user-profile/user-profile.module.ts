@@ -9,7 +9,7 @@ import { UserProfileComponent } from './user-profile/user-profile.component'
 import { AvatarComponent } from './avatar/avatar.component'
 import { PersonalInformationComponent } from './personal-information/personal-information.component'
 import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
-// import { AccountSettingsComponent } from './account-settings/account-settings.component'
+import { AccountSettingsComponent } from './account-settings/account-settings.component'
 import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
 import { PrivacySettingsComponent } from './privacy-settings/privacy-settings.component'
 
@@ -25,7 +25,7 @@ const routes: Routes = [
     UserProfileComponent,
     PersonalInformationComponent,
     AvatarComponent,
-    // AccountSettingsComponent,
+    AccountSettingsComponent,
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacySettingsComponent
