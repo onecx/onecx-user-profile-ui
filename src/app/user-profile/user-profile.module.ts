@@ -6,7 +6,7 @@ import { addInitializeModuleGuard, InitializeModuleGuard, PortalCoreModule } fro
 import { SharedModule } from '../shared/shared.module'
 
 import { UserProfileComponent } from './user-profile/user-profile.component'
-import { UserProfileRoutingModule } from './user-profile-routing.module'
+// import { UserProfileRoutingModule } from './user-profile-routing.module'
 import { AvatarComponent } from './avatar/avatar.component'
 import { PersonalInformationComponent } from './personal-information/personal-information.component'
 import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
@@ -27,12 +27,12 @@ const routes: Routes = [
     PersonalInformationComponent,
     AvatarComponent,
     AccountSettingsComponent,
+    LayoutThemeComponent,
     LocaleTimezoneComponent,
-    PrivacySettingsComponent,
-    LayoutThemeComponent
+    PrivacySettingsComponent
   ],
   imports: [
-    UserProfileRoutingModule,
+    // UserProfileRoutingModule,
     PortalCoreModule.forMicroFrontend(),
     [RouterModule.forChild(addInitializeModuleGuard(routes))],
     SharedModule
