@@ -6,136 +6,192 @@
       "NO.TOOLTIP": "Abbruch der Aktion",
       "YES.TOOLTIP": "Fortfahren mit der Aktion"
     },
-    "COPY": {
-      "LABEL": "Kopieren",
-      "ANNOUNCEMENT.TOOLTIP": "Mit den Daten eine neue Neuigkeit anlegen",
-      "CLIPBOARD.TOOLTIP": "In die Zwischenablage kopieren"
-    },
-    "CREATE": {
-      "LABEL": "Erstellen",
-      "ANNOUNCEMENT": "Neuigkeit erstellen",
-      "ANNOUNCEMENT.TOOLTIP": "Eine neue Neuigkeit erstellen",
-      "MESSAGE": {
-        "ANNOUNCEMENT_ALREADY_EXIST": "Eine Neuigkeit mit diesem Titel existert schon",
-        "OK": "Die Neuigkeit wurde erfolgreich erstellt",
-        "NOK": "Ein Fehler ist aufgetreten. Die Neuigkeit wurde nicht erstellt."
-      }
-    },
-    "DELETE": {
-      "LABEL": "Löschen",
-      "ANNOUNCEMENT": "Neuigkeit löschen",
-      "ANNOUNCEMENT.TOOLTIP": "Diese Neuigkeit löschen",
-      "MESSAGE_TEXT": "Möchten Sie \"{{ITEM}}\" löschen?",
-      "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-      "MESSAGE": {
-        "OK": "Die Neuigkeit wurde erfolgreich gelöscht",
-        "NOK": "Ein Fehler ist aufgetreten. Die Neuigkeit wurde nicht gelöscht."
-      }
-    },
-    "EDIT": {
-      "ANNOUNCEMENT": "Neuigkeit bearbeiten",
-      "ANNOUNCEMENT.TOOLTIP": "Die Neuigkeit bearbeiten",
-      "MESSAGE": {
-        "OK": "Die Neuigkeit wurde erfolgreich gespeichert",
-        "NOK": "Ein Fehler ist aufgetreten. Die Neuigkeit wurde nicht gespeichert."
-      }
-    },
     "SEARCH": {
-      "ACTIONS": "Aktionen",
-      "LABEL": "Suchen",
-      "LABEL.TOOLTIP": "Suche starten",
-      "RESET": "Zurücksetzen",
-      "RESET_TOOLTIP": "Suchkriterien löschen",
-      "NO_DATA": "Keine Ergebnisse",
-      "NO_RESULTS": "Die Suche ergab keine Ergebnisse",
-      "SEARCH_FAILED": "Die Suche ist fehlgeschlagen",
-      "NOT_FOUND": "Keine Daten gefunden"
+      "ERROR": "Daten nicht abrufbar",
+      "FILTER": "Filter",
+      "FILTER_OF": "Filter für ",
+      "FILTER_CLEAR": "Filter entfernen",
+      "NO_DATA": "Keine Daten",
+      "RELOAD": "Daten neu laden",
+      "SORT_BY": "Sortiert nach",
+      "SORT_DIRECTION_ASC": "aufsteigend",
+      "SORT_DIRECTION_DESC": "absteigend"
     }
   },
   "GENERAL": {
-    "CLOSE": "Schließen",
-    "CANCEL": "Abbrechen",
+    "APPLY": "Anwenden",
+    "APPLY.TOOLTIP": "Die Seite neu laden um die Änderung sofort zu sehen",
+    "EDIT": "Bearbeiten",
+    "EDIT.TOOLTIP": "In den Ändermodus wechseln",
+    "FILTER_CLEAR": "Filter entfernen",
+    "CHANGE": "Ändern",
+    "REMOVE": "Entfernen",
+    "RELOAD": "Neuladen",
     "SAVE": "Speichern",
-    "VIEW": "Ansehen",
-    "WORKSPACES.NOT_FOUND": "Workspaces konnten nicht geladen werden",
-    "TOOLTIPS": {
-      "CLOSE": "Dialog verlassen",
-      "CANCEL": "Die Aktion abbrechen",
-      "CANCEL_EDIT": "Den Änderungsmodus verlassen",
-      "CANCEL_AND_CLOSE": "Abbrechen und Dialog schließen",
-      "CANCEL_WITHOUT_SAVE": "Die Aktion ohne Speichern abbrechen",
-      "EDIT": "Daten bearbeiten",
-      "SAVE": "Die Änderungen speichern"
+    "SAVE.TOOLTIP": "Speichern",
+    "CLOSE": "Schließen",
+    "CLOSE.TOOLTIP": "Schließen",
+    "CANCEL": "Abbrechen",
+    "CANCEL.TOOLTIP": "Ändern abbrechen ohne speichern"
+  },
+  "PROFILE": {
+    "SUBHEADER": "Persönliche Daten verwalten",
+    "BREADCRUMBS": {
+      "PROFILE": "Profil",
+      "SETTINGS": "Einstellungen",
+      "PERMISSIONS": "Berechtigungen"
     }
   },
-  "BREADCRUMBS": {
-    "CREATE": "Neu",
-    "DETAILS": "Details",
-    "RELOAD": "Neu Laden",
-    "SWITCH_TO_EDIT_MODE": "Bearbeiten"
-  },
-  "DIALOG": {
-    "SEARCH.HEADER": "Neuigkeitsverwaltung",
-    "SEARCH.SUBHEADER": "Suchen und Verwalten von Neuigkeiten",
-    "DETAIL.SUBHEADER": "Neuigkeitendetails"
-  },
-  "ANNOUNCEMENT": {
-    "ID": "Id",
-    "APPLICATION": "Applikation",
-    "WORKSPACE": "Workspace",
-    "TITLE": "Titel",
-    "TYPE": "Typ",
-    "STATUS": "Status",
-    "PRIORITY": "Priorität",
-    "START_DATE": "Start",
-    "START_DATE_RANGE": "Startdatum von - bis",
-    "END_DATE": "Ende",
-    "END_DATE_RANGE": "Endedatum von - bis",
-    "CONTENT": "Text",
-    "DATE_RANGES_ERROR": "Falsche Datumsbereiche: Der Bereich des Enddatums sollte nach/gleich dem Bereich des Startdatums liegen.",
-    "EVERY_WORKSPACE": "Alle Workspaces",
-    "WORKSPACE_NOT_FOUND": "-- nicht gefunden --",
-    "TOOLTIPS": {
-      "TITLE": "Titel der Neuigkeit",
-      "TITLE.CRITERIA": "Titel der Neuigkeit, Suche mit Wildcards: *, ?",
-      "WORKSPACE": "Workspace, bei dem die Neuigkeit angezeigt werden soll",
-      "TYPE": "Typ der Neuigkeit",
-      "STATUS": "Status der Neuigkeit",
-      "PRIORITY": "Priorität der Neuigkeit",
-      "START_DATE": "Datum und Zeit zu dem die Neuigkeit aktiv wird",
-      "START_DATE_RANGE": "Datumsbereich des Startdatums",
-      "END_DATE": "Datum und Zeit zu dem die Neuigkeit inaktiv wird",
-      "END_DATE_RANGE": "Datumsbereich des Endedatums",
-      "CONTENT": "Der Text der angezeigten Neuigkeit"
-    }
-  },
-  "ENUMS": {
-    "ANNOUNCEMENT_TYPE": {
-      "EVENT": "Ereignis",
-      "INFO": "Information",
-      "SYSTEM_MAINTENANCE": "Wartung"
+  "PERSONAL_INFO_FORM": {
+    "HEADER": {
+      "GENERAL": "Persönliche Informationen",
+      "ADDRESS": "Adresse",
+      "PHONE": "Telefonnummer"
     },
-    "ANNOUNCEMENT_STATUS": {
-      "ACTIVE": "Aktiv",
-      "INACTIVE": "Inaktiv"
+    "FIRST_NAME": "Vorname",
+    "LAST_NAME": "Nachname",
+    "DISPLAY_NAME": "Anzeigename",
+    "ID": "Benutzer-ID",
+    "USERNAME": "Benutzername",
+    "EMAIL": "Email",
+    "COUNTRY": "Land",
+    "CITY": "Ort",
+    "POSTAL_CODE": "PLZ",
+    "STREET": "Straße",
+    "HOUSE_NUMBER": "Hausnummer",
+    "NUMBER": "Nummer",
+    "TAKE_OVER": "Übernehmen",
+    "EXIT_EDITING": "Bearbeitung abbrechen",
+    "CLEAR_FORM": "Alles entfernen",
+    "PHONE_TYPE": "Typ",
+    "PHONE": {
+      "MOBILE": "Mobile",
+      "LANDLINE": "Festnetz"
     },
-    "ANNOUNCEMENT_PRIORITY": {
-      "IMPORTANT": "Hoch",
-      "LOW": "Niedrig",
-      "NORMAL": "Normal"
+    "PHONE_NUMBER": "Telefonnummer",
+    "MSG": {
+      "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
+      "SAVE_ERROR": "Datenspeicherung fehlgeschlagen"
     }
   },
-  "VALIDATION": {
-    "HINTS": {
-      "FORMAT_URL": "Format: "
-    },
-    "ERRORS": {
-      "INTERNAL_ERROR": "Interner Fehler",
-      "INVALID_DATE_RANGE": "Das Startdatum liegt nach dem Enddatum. Es muss davor liegen.",
-      "EMPTY_REQUIRED_FIELD": "Dieses Feld ist ein Pflichtfeld.",
-      "MAXIMUM_LENGTH": "Es sind nur {{chars}} Zeichen erlaubt.",
-      "MINIMUM_LENGTH": "Es sind mindestens {{chars}} Zeichen erforderlich.",
-      "PATTERN_ERROR": "Ihre Eingabe entspricht nicht dem benötigten Format."
+  "SEARCH": {
+    "ACTION": "Aktion",
+    "NO_DATA": "Keine Daten"
+  },
+  "SETTINGS": {
+    "SUBHEADER": "Meine Einstellungen",
+    "PREFERENCE_ITEM": {
+      "APPLICATION_ID": "Anwendungs-ID",
+      "NAME": "Name",
+      "DESCRIPTION": "Beschreibung",
+      "VALUE": "Wert"
     }
+  },
+  "AVATAR": {
+    "UPDATE": "Foto aktualisieren",
+    "CHOOSE": "Foto auswählen",
+    "REMOVE": "Foto entfernen",
+    "REMOVE.MESSAGE": "Möchten Sie das Foto entfernen?",
+    "UPLOAD": "Foto hochladen",
+    "CANCEL": "Abbrechen",
+    "CHOOSE_ANOTHER": "Anderes Foto auswählen",
+    "REMOVE_CONFIRM": "Foto entfernen",
+    "REMOVE_CANCEL": "Derzeitiges Foto beibehalten",
+    "MSG": {
+      "FILE_TOO_LARGE": {
+        "SUMMARY": "Datei zu groß",
+        "DETAIL": "Die Dateigröße darf {{maxFileSize}} KB nicht überschreiten"
+      },
+      "TOO_SMALL": {
+        "SUMMARY": "Bild zu klein",
+        "DETAIL": "Stellen Sie sicher, dass die Bildgröße mindestens {{minimumImageWidth}}x{{minimumImageHeight}}px beträgt"
+      },
+      "WRONG_RATIO": {
+        "SUMMARY": "Falsches Bildverhältnis",
+        "DETAIL": "Verwenden Sie ein quadratisches Bild"
+      },
+      "UPLOAD_ERROR": {
+        "SUMMARY": "Datei-Hochladen fehlgeschlagen",
+        "DETAIL": "Während der Verarbeitung ist ein Fehler aufgetreten. Versuchen Sie, ein anderes Bild hochzuladen."
+      },
+      "WRONG_CONTENT_TYPE": {
+        "SUMMARY": "Falsches Dateiformat",
+        "DETAIL": "Stellen Sie eine PNG- oder JPEG-Datei bereit."
+      },
+      "UPLOAD_SUCCESS": "Datei erfolgreich hochgeladen",
+      "REMOVE_SUCCESS": "Foto erfolgreich entfernt",
+      "REMOVE_ERROR": "Foto konnte nicht entfernt werden"
+    }
+  },
+  "ROLE_PERMISSIONS": {
+    "HEADLINE": "Zugewiesene Rollen und Berechtigungen",
+    "TAB_NAME_ROLES": "Rollen",
+    "TAB_NAME_PERMISSIONS": "Berechtigungen",
+    "TITLE_ROLES": "Meine Rollen",
+    "TITLE_PERMISSIONS": "Meine Berechtigungen",
+    "NO_RESULTS": "Keine Daten",
+    "PERMISSION": "Berechtigung",
+    "APPLICATION": "Anwendung",
+    "NAME": "Name",
+    "ACTION": "Aktion",
+    "RESOURCE": "Ressource",
+    "ROLE": "Rolle",
+    "TABS": {
+      "ROLES": "Rollen",
+      "PERMISSIONS": "Berechtigungen"
+    },
+    "MSG": {
+      "PERMISSIONS_REFRESH_INFO": "Berechtigungen wurden aktualisiert",
+      "PERMISSIONS_REFRESH_ERROR": "Fehler beim Aktualisieren"
+    }
+  },
+  "LANGUAGE_TIMEZONE": {
+    "TAB_NAME_LANGUAGE_TIMEZONE": "Sprache & Zeitzone",
+    "LANGUAGE": "Sprache",
+    "TIMEZONE": "Zeitzone",
+    "LANGUAGE.TOOLTIP": "Sprache in der die Seiten angezeigt werden",
+    "TIMEZONE.TOOLTIP": "Zeitzone für die Datumsanzeige",
+    "TIMEZONE_EXAMPLE": "Beispiel",
+    "TIMEZONE_EXAMPLE.TOOLTIP": "Beispielhafte Repräsentation der gewählten Zeitzone"
+  },
+  "USER_SETTINGS": {
+    "HEADLINE": "Einstellungen",
+    "SUCCESS": "Einstellungen erfolgreich aktualisiert",
+    "ERROR": "Aktualisierung der Einstellungen fehlgeschlagen",
+    "CLEAR_CACHE_INFO": "Cache wurde entfernt"
+  },
+  "PRIVACY_SETTINGS": {
+    "TAB_NAME_PRIVACY": "Privatsphäre",
+    "HIDE_MY_PROFILE": "Mein Profil ausblenden",
+    "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
+  },
+  "LAYOUT_THEME": {
+    "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
+    "BREADCRUMBS": "Seitenpfad",
+    "BREADCRUMBS.TOOLTIP": "Generelle Sichtbarkeit des Seitenpfads",
+    "MENU_MODE": "Menüdarstellung",
+    "MENU_MODES": {
+      "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Seitenleiste (Mobil)",
+      "HORIZONTAL": "Horizontal",
+      "STATIC": "Statisch",
+      "OVERLAY": "Überlagert",
+      "SLIM": "Schlank",
+      "SLIMPLUS": "Schlank +",
+      "TOOLTIP": "Darstellungsweise des Menüs"
+    },
+    "COLOR_SCHEME": "Farbschema",
+    "COLOR_SCHEMES": {
+      "AUTO": "Automatisch",
+      "LIGHT": "Hell",
+      "DARK": "Dunkel",
+      "TOOLTIP": "Darstellung des Farbschemas"
+    }
+  },
+  "LANGUAGE": {
+    "DE": "Deutsch",
+    "EN": "Englisch"
+  },
+  "PREFERENCES": {
+    "TAB_NAME_PREFERENCES": "Präferenzen"
   }
 }
