@@ -10,7 +10,7 @@ import {
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 import { UserProfileService } from '../user-profile.service'
-import { EditPreference } from '../model/editPreference'
+// import { EditPreference } from '../model/editPreference'
 import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.component'
 
 @Component({
@@ -123,7 +123,7 @@ export class AccountSettingsComponent implements OnInit {
     )
   }
 
-  editPreference(editPreference: EditPreference): void {
+  editPreference(editPreference: any): void {
     const preferenceId: string = editPreference.id
     const value: string = editPreference.value
     this.userProfileService.updateUserPreference(preferenceId, value).subscribe(
@@ -138,7 +138,7 @@ export class AccountSettingsComponent implements OnInit {
     )
   }
 
-  deletePreference(preferenceId: string): void {
+  deletePreference(preferenceId: any): void {
     this.userProfileService.deleteUserPreference(preferenceId).subscribe({
       next: () => {
         const preferenceIndex = this.preferences.findIndex((p) => p.id == preferenceId)

@@ -1,10 +1,10 @@
-import { Component, ElementRef, Inject, OnInit, ViewChild } from '@angular/core'
+import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 
 import {
-  AUTH_SERVICE,
+  // AUTH_SERVICE,
   AvatarInfo,
-  IAuthService,
+  // IAuthService,
   UserService,
   AppStateService,
   PortalMessageService
@@ -33,7 +33,7 @@ export class AvatarComponent implements OnInit {
   public avatarImage!: ElementRef
 
   constructor(
-    @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
+    // @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
     private avatarService: UserAvatarAPIService,
     private msgService: PortalMessageService,
     private userService: UserService,
@@ -82,11 +82,11 @@ export class AvatarComponent implements OnInit {
   }
 
   public uploadImage(): void {
-    if (this.authService.getAuthProviderName().toLowerCase().includes('mock')) {
-      this.updateImage()
-      this.showUploadSuccess()
-      return
-    }
+    // if (this.authService.getAuthProviderName().toLowerCase().includes('mock')) {
+    //   this.updateImage()
+    //   this.showUploadSuccess()
+    //   return
+    // }
     // revert to userProfileService once BFF is fixed
     this.selectedFile &&
       this.avatarService.uploadAvatar({ body: this.selectedFile }).subscribe({

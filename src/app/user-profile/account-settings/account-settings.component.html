@@ -6,41 +6,41 @@
   </ocx-page-header>
 
   <ocx-page-content>
-    <p-tabView [(activeIndex)]="selectedTab">
-      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE_TIMEZONE#VIEW'">
-        <ng-template pTemplate="header"> {{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE' | translate }} </ng-template>
-        <app-locale-timezone
-          [localeTimezone]="settingsInitial.localeAndTimeSettings"
-          (localeTimezoneChange)="localeTimezoneChange($event)"
-          (applyChanges)="reloadPage()"
-        ></app-locale-timezone>
-      </p-tabPanel>
-      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LAYOUT_THEME#VIEW'">
-        <ng-template pTemplate="header"> {{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME' | translate }} </ng-template>
+    <!-- <p-tabView [(activeIndex)]="selectedTab"> -->
+    <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE_TIMEZONE#VIEW'">
+      <ng-template pTemplate="header"> {{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE' | translate }} </ng-template>
+      <app-locale-timezone
+        [localeTimezone]="settingsInitial.localeAndTimeSettings"
+        (localeTimezoneChange)="localeTimezoneChange($event)"
+        (applyChanges)="reloadPage()"
+      ></app-locale-timezone>
+    </p-tabPanel>
+    <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LAYOUT_THEME#VIEW'">
+      <ng-template pTemplate="header"> {{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME' | translate }} </ng-template>
 
-        <app-layout-theme
-          [layoutAndTheme]="settingsInitial.layoutAndThemeSettings"
-          (layoutAndThemeChange)="layoutAndThemeChange($event)"
-          (applyChanges)="reloadPage()"
-        ></app-layout-theme>
-      </p-tabPanel>
-      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_PRIVACY#VIEW'">
-        <ng-template pTemplate="header"> {{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY' | translate }} </ng-template>
-        <app-privacy-settings
-          [privacySettings]="settings.privacySettings"
-          (privacySettingsChange)="privacySettingsChange($event)"
-          (applyChanges)="reloadPage()"
-        ></app-privacy-settings>
-      </p-tabPanel>
-      <p-tabPanel header="Preferences" *ocxIfPermission="'ACCOUNT_SETTINGS_PREFERENCES#VIEW'">
-        <ng-template pTemplate="header"> {{ 'PREFERENCES.TAB_NAME_PREFERENCES' | translate }} </ng-template>
-        <app-preferences-settings
-          [preferences]="preferences"
-          (editPreference)="editPreference($event)"
-          (deletePreference)="deletePreference($event)"
-        >
-        </app-preferences-settings>
-      </p-tabPanel>
-    </p-tabView>
+      <app-layout-theme
+        [layoutAndTheme]="settingsInitial.layoutAndThemeSettings"
+        (layoutAndThemeChange)="layoutAndThemeChange($event)"
+        (applyChanges)="reloadPage()"
+      ></app-layout-theme>
+    </p-tabPanel>
+    <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_PRIVACY#VIEW'">
+      <ng-template pTemplate="header"> {{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY' | translate }} </ng-template>
+      <app-privacy-settings
+        [privacySettings]="settings.privacySettings"
+        (privacySettingsChange)="privacySettingsChange($event)"
+        (applyChanges)="reloadPage()"
+      ></app-privacy-settings>
+    </p-tabPanel>
+    <p-tabPanel header="Preferences" *ocxIfPermission="'ACCOUNT_SETTINGS_PREFERENCES#VIEW'">
+      <ng-template pTemplate="header"> {{ 'PREFERENCES.TAB_NAME_PREFERENCES' | translate }} </ng-template>
+      <app-preferences-settings
+        [preferences]="preferences"
+        (editPreference)="editPreference($event)"
+        (deletePreference)="deletePreference($event)"
+      >
+      </app-preferences-settings>
+    </p-tabPanel>
+    <!-- </p-tabView> -->
   </ocx-page-content>
 </ocx-portal-page>

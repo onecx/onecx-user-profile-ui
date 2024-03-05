@@ -38,7 +38,7 @@ const routes: Routes = [
       initialNavigation: 'enabledBlocking',
       enableTracing: true
     }),
-    PortalCoreModule.forRoot('onecx-announcement-ui'),
+    PortalCoreModule.forRoot('onecx-user-profile-ui'),
     TranslateModule.forRoot({
       isolate: true,
       loader: {
