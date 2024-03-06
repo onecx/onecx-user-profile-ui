@@ -1,0 +1,79 @@
+<div class="sm:py-2 px-3">
+  <form [formGroup]="formGroup">
+    <div class="font-bold my-2">{{ 'LANGUAGE_TIMEZONE.LANGUAGE' | translate }}</div>
+    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editLanguage">
+      {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | translate) : 'no-value' }}
+    </div>
+    <div *ngIf="editLanguage" class="flex flex-wrap justify-content-start align-items-center">
+      <p-dropdown
+        id="up_account_locale_list"
+        formControlName="locale"
+        [options]="localeSelectItems"
+        [filter]="true"
+        (onChange)="saveLocale()"
+        title="{{ 'LANGUAGE_TIMEZONE.LANGUAGE.TOOLTIP' | translate }}"
+      >
+        <ng-template pTemplate="item" let-item>
+          <span [id]="item.value"> {{ item.label | translate }} </span>
+        </ng-template>
+        <ng-template pTemplate="selectedItem" let-item>
+          <span [id]="item.value"> {{ item.label | translate }} </span>
+        </ng-template>
+      </p-dropdown>
+      <button
+        *ngIf="changedLanguage"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-refresh"
+        class="ml-3 sm:ml-5 p-2 p-button-text"
+        id="up_account_locale_refresh"
+        (click)="applyChange()"
+        [label]="'GENERAL.RELOAD' | translate"
+        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+      ></button>
+    </div>
+
+    <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</div>
+    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editTimezone">
+      {{ this.formGroup.value['timezone'] ? formGroup.value['timezone'] : 'no-value' }}
+    </div>
+    <div *ngIf="editTimezone" class="flex flex-wrap justify-content-start align-items-center row-gap-3">
+      <p-dropdown
+        id="up_account_timezone_list"
+        styleClass="shrink-margin"
+        formControlName="timezone"
+        [options]="timezoneSelectItems"
+        [filter]="true"
+        placeholder="None"
+        (onChange)="saveTimezone()"
+        title="{{ 'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate }}"
+      ></p-dropdown>
+      <button
+        *ngIf="changedTimezone"
+        pButton
+        pRipple
+        type="button"
+        icon="pi pi-refresh"
+        class="ml-3 sm:ml-5 p-2 p-button-text"
+        id="up_account_timezone_refresh"
+        (click)="applyChange()"
+        [label]="'GENERAL.RELOAD' | translate"
+        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+      ></button>
+    </div>
+    <span class="p-float-label mt-4">
+      <input
+        pInputText
+        readonly
+        type="text"
+        class="w-full xs:w-20rem"
+        id="up_account_timezone_example"
+        [value]="timezoneExampleDate | date : 'long' : timezoneUTC : locale"
+        title="{{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate }}"
+      />
+      <label for="up_account_timezone_example">Example</label>
+    </span>
+    <br />
+  </form>
+</div>

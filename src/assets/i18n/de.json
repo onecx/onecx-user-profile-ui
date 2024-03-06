@@ -1,0 +1,197 @@
+{
+  "ACTIONS": {
+    "CONFIRMATION": {
+      "NO": "Nein",
+      "YES": "Ja",
+      "NO.TOOLTIP": "Abbruch der Aktion",
+      "YES.TOOLTIP": "Fortfahren mit der Aktion"
+    },
+    "SEARCH": {
+      "ERROR": "Daten nicht abrufbar",
+      "FILTER": "Filter",
+      "FILTER_OF": "Filter für ",
+      "FILTER_CLEAR": "Filter entfernen",
+      "NO_DATA": "Keine Daten",
+      "RELOAD": "Daten neu laden",
+      "SORT_BY": "Sortiert nach",
+      "SORT_DIRECTION_ASC": "aufsteigend",
+      "SORT_DIRECTION_DESC": "absteigend"
+    }
+  },
+  "GENERAL": {
+    "APPLY": "Anwenden",
+    "APPLY.TOOLTIP": "Die Seite neu laden um die Änderung sofort zu sehen",
+    "EDIT": "Bearbeiten",
+    "EDIT.TOOLTIP": "In den Ändermodus wechseln",
+    "FILTER_CLEAR": "Filter entfernen",
+    "CHANGE": "Ändern",
+    "REMOVE": "Entfernen",
+    "RELOAD": "Neuladen",
+    "SAVE": "Speichern",
+    "SAVE.TOOLTIP": "Speichern",
+    "CLOSE": "Schließen",
+    "CLOSE.TOOLTIP": "Schließen",
+    "CANCEL": "Abbrechen",
+    "CANCEL.TOOLTIP": "Ändern abbrechen ohne speichern"
+  },
+  "PROFILE": {
+    "SUBHEADER": "Persönliche Daten verwalten",
+    "BREADCRUMBS": {
+      "PROFILE": "Profil",
+      "SETTINGS": "Einstellungen",
+      "PERMISSIONS": "Berechtigungen"
+    }
+  },
+  "PERSONAL_INFO_FORM": {
+    "HEADER": {
+      "GENERAL": "Persönliche Informationen",
+      "ADDRESS": "Adresse",
+      "PHONE": "Telefonnummer"
+    },
+    "FIRST_NAME": "Vorname",
+    "LAST_NAME": "Nachname",
+    "DISPLAY_NAME": "Anzeigename",
+    "ID": "Benutzer-ID",
+    "USERNAME": "Benutzername",
+    "EMAIL": "Email",
+    "COUNTRY": "Land",
+    "CITY": "Ort",
+    "POSTAL_CODE": "PLZ",
+    "STREET": "Straße",
+    "HOUSE_NUMBER": "Hausnummer",
+    "NUMBER": "Nummer",
+    "TAKE_OVER": "Übernehmen",
+    "EXIT_EDITING": "Bearbeitung abbrechen",
+    "CLEAR_FORM": "Alles entfernen",
+    "PHONE_TYPE": "Typ",
+    "PHONE": {
+      "MOBILE": "Mobile",
+      "LANDLINE": "Festnetz"
+    },
+    "PHONE_NUMBER": "Telefonnummer",
+    "MSG": {
+      "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
+      "SAVE_ERROR": "Datenspeicherung fehlgeschlagen"
+    }
+  },
+  "SEARCH": {
+    "ACTION": "Aktion",
+    "NO_DATA": "Keine Daten"
+  },
+  "SETTINGS": {
+    "SUBHEADER": "Meine Einstellungen",
+    "PREFERENCE_ITEM": {
+      "APPLICATION_ID": "Anwendungs-ID",
+      "NAME": "Name",
+      "DESCRIPTION": "Beschreibung",
+      "VALUE": "Wert"
+    }
+  },
+  "AVATAR": {
+    "UPDATE": "Foto aktualisieren",
+    "CHOOSE": "Foto auswählen",
+    "REMOVE": "Foto entfernen",
+    "REMOVE.MESSAGE": "Möchten Sie das Foto entfernen?",
+    "UPLOAD": "Foto hochladen",
+    "CANCEL": "Abbrechen",
+    "CHOOSE_ANOTHER": "Anderes Foto auswählen",
+    "REMOVE_CONFIRM": "Foto entfernen",
+    "REMOVE_CANCEL": "Derzeitiges Foto beibehalten",
+    "MSG": {
+      "FILE_TOO_LARGE": {
+        "SUMMARY": "Datei zu groß",
+        "DETAIL": "Die Dateigröße darf {{maxFileSize}} KB nicht überschreiten"
+      },
+      "TOO_SMALL": {
+        "SUMMARY": "Bild zu klein",
+        "DETAIL": "Stellen Sie sicher, dass die Bildgröße mindestens {{minimumImageWidth}}x{{minimumImageHeight}}px beträgt"
+      },
+      "WRONG_RATIO": {
+        "SUMMARY": "Falsches Bildverhältnis",
+        "DETAIL": "Verwenden Sie ein quadratisches Bild"
+      },
+      "UPLOAD_ERROR": {
+        "SUMMARY": "Datei-Hochladen fehlgeschlagen",
+        "DETAIL": "Während der Verarbeitung ist ein Fehler aufgetreten. Versuchen Sie, ein anderes Bild hochzuladen."
+      },
+      "WRONG_CONTENT_TYPE": {
+        "SUMMARY": "Falsches Dateiformat",
+        "DETAIL": "Stellen Sie eine PNG- oder JPEG-Datei bereit."
+      },
+      "UPLOAD_SUCCESS": "Datei erfolgreich hochgeladen",
+      "REMOVE_SUCCESS": "Foto erfolgreich entfernt",
+      "REMOVE_ERROR": "Foto konnte nicht entfernt werden"
+    }
+  },
+  "ROLE_PERMISSIONS": {
+    "HEADLINE": "Zugewiesene Rollen und Berechtigungen",
+    "TAB_NAME_ROLES": "Rollen",
+    "TAB_NAME_PERMISSIONS": "Berechtigungen",
+    "TITLE_ROLES": "Meine Rollen",
+    "TITLE_PERMISSIONS": "Meine Berechtigungen",
+    "NO_RESULTS": "Keine Daten",
+    "PERMISSION": "Berechtigung",
+    "APPLICATION": "Anwendung",
+    "NAME": "Name",
+    "ACTION": "Aktion",
+    "RESOURCE": "Ressource",
+    "ROLE": "Rolle",
+    "TABS": {
+      "ROLES": "Rollen",
+      "PERMISSIONS": "Berechtigungen"
+    },
+    "MSG": {
+      "PERMISSIONS_REFRESH_INFO": "Berechtigungen wurden aktualisiert",
+      "PERMISSIONS_REFRESH_ERROR": "Fehler beim Aktualisieren"
+    }
+  },
+  "LANGUAGE_TIMEZONE": {
+    "TAB_NAME_LANGUAGE_TIMEZONE": "Sprache & Zeitzone",
+    "LANGUAGE": "Sprache",
+    "TIMEZONE": "Zeitzone",
+    "LANGUAGE.TOOLTIP": "Sprache in der die Seiten angezeigt werden",
+    "TIMEZONE.TOOLTIP": "Zeitzone für die Datumsanzeige",
+    "TIMEZONE_EXAMPLE": "Beispiel",
+    "TIMEZONE_EXAMPLE.TOOLTIP": "Beispielhafte Repräsentation der gewählten Zeitzone"
+  },
+  "USER_SETTINGS": {
+    "HEADLINE": "Einstellungen",
+    "SUCCESS": "Einstellungen erfolgreich aktualisiert",
+    "ERROR": "Aktualisierung der Einstellungen fehlgeschlagen",
+    "CLEAR_CACHE_INFO": "Cache wurde entfernt"
+  },
+  "PRIVACY_SETTINGS": {
+    "TAB_NAME_PRIVACY": "Privatsphäre",
+    "HIDE_MY_PROFILE": "Mein Profil ausblenden",
+    "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
+  },
+  "LAYOUT_THEME": {
+    "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
+    "BREADCRUMBS": "Seitenpfad",
+    "BREADCRUMBS.TOOLTIP": "Generelle Sichtbarkeit des Seitenpfads",
+    "MENU_MODE": "Menüdarstellung",
+    "MENU_MODES": {
+      "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Seitenleiste (Mobil)",
+      "HORIZONTAL": "Horizontal",
+      "STATIC": "Statisch",
+      "OVERLAY": "Überlagert",
+      "SLIM": "Schlank",
+      "SLIMPLUS": "Schlank +",
+      "TOOLTIP": "Darstellungsweise des Menüs"
+    },
+    "COLOR_SCHEME": "Farbschema",
+    "COLOR_SCHEMES": {
+      "AUTO": "Automatisch",
+      "LIGHT": "Hell",
+      "DARK": "Dunkel",
+      "TOOLTIP": "Darstellung des Farbschemas"
+    }
+  },
+  "LANGUAGE": {
+    "DE": "Deutsch",
+    "EN": "Englisch"
+  },
+  "PREFERENCES": {
+    "TAB_NAME_PREFERENCES": "Präferenzen"
+  }
+}

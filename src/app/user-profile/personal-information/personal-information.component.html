@@ -1,0 +1,267 @@
+<!--Personal Info-->
+<form [formGroup]="formGroup">
+  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4">
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0">
+      <p-panel styleClass="surface-50">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
+            <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.GENERAL' | translate }}</div>
+          </div>
+        </ng-template>
+        <div
+          class="mx-1 sm:mx-2 md:mx-3 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-5"
+        >
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                id="up_personal_info_first_name"
+                [value]="(personalInfo$ | async)?.firstName"
+              />
+              <label for="up_personal_info_first_name">{{ 'PERSONAL_INFO_FORM.FIRST_NAME' | translate }}</label>
+            </span>
+          </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                id="up_personal_info_last_name"
+                [value]="(personalInfo$ | async)?.lastName"
+              />
+              <label for="up_personal_info_last_name">{{ 'PERSONAL_INFO_FORM.LAST_NAME' | translate }}</label>
+            </span>
+          </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                id="up_personal_info_user_id"
+                [value]="userId$ | async"
+              />
+              <label for="up_personal_info_user_id">{{ 'PERSONAL_INFO_FORM.ID' | translate }}</label>
+            </span>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0" *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
+      <p-panel styleClass="surface-50 h-full">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
+            <div class="font-bold text-2xl">Avatar</div>
+          </div>
+        </ng-template>
+        <app-avatar> </app-avatar>
+      </p-panel>
+    </div>
+
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0" *ocxIfPermission="'PROFILE_ADDRESS#VIEW'">
+      <p-panel formGroupName="address" styleClass="surface-50">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
+            <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.ADDRESS' | translate }}</div>
+            <div *ocxIfPermission="'PROFILE_ADDRESS#EDIT'">
+              <button
+                *ngIf="!addressEdit"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-pencil"
+                class="p-2 p-button-text"
+                id="up_personal_info_address_edit"
+                (click)="toggleAddressEdit()"
+                [label]="'GENERAL.EDIT' | translate"
+                [title]="'GENERAL.EDIT.TOOLTIP' | translate"
+              ></button>
+              <button
+                *ngIf="addressEdit"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-times"
+                class="p-2 p-button-text"
+                id="up_personal_info_address_cancel"
+                (click)="cancelAddressEdit()"
+                [label]="'GENERAL.CANCEL' | translate"
+                [title]="'GENERAL.CANCEL.TOOLTIP' | translate"
+              ></button>
+              <button
+                *ngIf="addressEdit"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-save"
+                class="p-2 p-button-text"
+                id="up_personal_info_address_save"
+                (click)="updateAddress()"
+                [label]="'GENERAL.SAVE' | translate"
+                [title]="'GENERAL.SAVE.TOOLTIP' | translate"
+              ></button>
+            </div>
+          </div>
+        </ng-template>
+
+        <div
+          class="mx-1 sm:mx-2 md:mx-3 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-5"
+        >
+          <div class="max-w-32rem flex flex-wrap gap-2 row-gap-3">
+            <span class="p-float-label flex-grow-1">
+              <input
+                pInputText
+                type="text"
+                class="w-full"
+                [readonly]="!addressEdit"
+                id="up_personal_info_address_street"
+                formControlName="street"
+                [value]="(personalInfo$ | async)?.address?.street"
+              />
+              <label for="up_personal_info_address_street">{{ 'PERSONAL_INFO_FORM.STREET' | translate }}</label>
+            </span>
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                class="max-w-8rem pt-3 pb-2"
+                [readonly]="!addressEdit"
+                id="up_personal_info_address_street_no"
+                formControlName="streetNo"
+                [value]="(personalInfo$ | async)?.address?.streetNo"
+              />
+              <label for="up_personal_info_address_street_no">
+                {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}</label
+              >
+            </span>
+          </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                class="w-full"
+                [readonly]="!addressEdit"
+                id="up_personal_info_address_postal_code"
+                formControlName="postalCode"
+                [value]="(personalInfo$ | async)?.address?.postalCode"
+              />
+              <label for="up_personal_info_address_postal_code">
+                {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}</label
+              >
+            </span>
+          </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                [readonly]="!addressEdit"
+                id="up_personal_info_address_city"
+                formControlName="city"
+                [value]="(personalInfo$ | async)?.address?.city"
+              />
+              <label for="up_personal_info_address_city">{{ 'PERSONAL_INFO_FORM.CITY' | translate }}</label>
+            </span>
+          </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <p-dropdown
+                styleClass="w-full"
+                id="up_personal_info_address_country"
+                [readonly]="!addressEdit"
+                [options]="countries"
+                formControlName="country"
+              >
+              </p-dropdown>
+              <label for="up_personal_info_address_country">{{ 'PERSONAL_INFO_FORM.COUNTRY' | translate }}</label>
+            </span>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0" *ocxIfPermission="'PROFILE_PHONE#VIEW'">
+      <p-panel formGroupName="phone" styleClass="surface-50">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
+            <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.PHONE' | translate }}</div>
+            <div *ocxIfPermission="'PROFILE_PHONE#EDIT'">
+              <button
+                *ngIf="!phoneEdit"
+                pButton
+                pRipple
+                type="button"
+                id="up_personal_info_phone_edit"
+                class="p-2 p-button-text"
+                icon="pi pi-pencil"
+                label="{{ 'GENERAL.EDIT' | translate }}"
+                (click)="togglePhoneEdit()"
+              ></button>
+              <button
+                *ngIf="phoneEdit"
+                pButton
+                pRipple
+                type="button"
+                id="up_personal_info_phone_cancel"
+                icon="pi pi-times"
+                class="p-2 p-button-text"
+                label="{{ 'GENERAL.CANCEL' | translate }}"
+                (click)="cancelPhoneEdit()"
+              ></button>
+              <button
+                *ngIf="phoneEdit"
+                pButton
+                pRipple
+                type="button"
+                id="up_personal_info_phone_save"
+                class="p-2 p-button-text"
+                icon="pi pi-save"
+                label="{{ 'GENERAL.SAVE' | translate }}"
+                (click)="this.updatePhone()"
+              ></button>
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="mx-1 sm:mx-2 md:mx-3 mb-3 flex justify-content-start gap-2">
+          <div>
+            <span class="p-float-label">
+              <p-dropdown
+                id="up_personal_info_phone_type"
+                [options]="phoneTypes"
+                formControlName="type"
+                [readonly]="!phoneEdit"
+              >
+              </p-dropdown>
+              <label for="up_personal_info_phone_type"> {{ 'PERSONAL_INFO_FORM.PHONE_TYPE' | translate }} </label>
+            </span>
+          </div>
+          <div class="w-20rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                [readonly]="!phoneEdit"
+                id="up_personal_info_phone_number"
+                formControlName="number"
+                [value]="(personalInfo$ | async)?.phone?.number"
+              />
+              <label for="up_personal_info_phone_number">{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER' | translate }}</label>
+            </span>
+          </div>
+        </div>
+      </p-panel>
+    </div>
+  </div>
+</form>
