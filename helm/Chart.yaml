@@ -1,7 +1,7 @@
 apiVersion: v2
 name: onecx-user-profile-ui
 version: 0.0.0
-description: OneCX user-profile UI.
+description: OneCX User Profile UI
 home: https://github.com/onecx/onecx-user-profile-ui
 keywords:
   - user-profile

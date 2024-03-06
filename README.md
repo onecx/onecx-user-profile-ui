@@ -1,2 +1,2 @@
 # onecx-user-profile-ui
-OneCx user-profile UI
+OneCX User Profile UI
