@@ -10,6 +10,7 @@ import {
   PortalMessageService
 } from '@onecx/portal-integration-angular'
 import { UserProfileService } from '../user-profile.service'
+import { UserProfileAPIService } from 'src/app/shared/generated'
 // import { EditPreference } from '../model/editPreference'
 import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.component'
 
@@ -35,6 +36,7 @@ export class AccountSettingsComponent implements OnInit {
     private readonly userProfileService: UserProfileService,
     private msgService: PortalMessageService,
     private user: UserService,
+    private userProfileApiService: UserProfileAPIService,
     private readonly router: Router,
     private readonly confService: ConfigurationService // private readonly stateService: StateService
   ) {
@@ -113,9 +115,19 @@ export class AccountSettingsComponent implements OnInit {
   // }
 
   private loadPreferences(): void {
-    this.userProfileService.getUserPreferences().subscribe(
-      (preferences: UserProfilePreference[]) => {
-        this.preferences = preferences
+    // this.userProfileService.getUserPreferences().subscribe(
+    //   (preferences: UserProfilePreference[]) => {
+    //     this.preferences = preferences
+    //   },
+    //   () => {
+    //     this.preferences = []
+    //   }
+    // )
+    this.userProfileApiService.getUserPreference().subscribe(
+      (preferences) => {
+        if (preferences.preferences) {
+          this.preferences = preferences.preferences
+        }
       },
       () => {
         this.preferences = []
@@ -126,7 +138,7 @@ export class AccountSettingsComponent implements OnInit {
   editPreference(editPreference: any): void {
     const preferenceId: string = editPreference.id
     const value: string = editPreference.value
-    this.userProfileService.updateUserPreference(preferenceId, value).subscribe(
+    this.userProfileApiService.updateUserPreference({ id: preferenceId, body: value }).subscribe(
       (preference: UserProfilePreference) => {
         const preferenceIndex = this.preferences.findIndex((p) => p.id == preferenceId)
         this.preferences[preferenceIndex] = preference

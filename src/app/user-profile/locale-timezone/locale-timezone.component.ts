@@ -8,7 +8,7 @@ import {
   UserService
 } from '@onecx/portal-integration-angular'
 import { SelectItem } from 'primeng/api'
-import { LocalAndTimezoneService } from './service/localAndTimezone.service'
+import { LocalAndTimezoneService } from 'src/app/user-profile/locale-timezone/service/localAndTimezone.service'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 

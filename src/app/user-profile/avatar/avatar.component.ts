@@ -1,14 +1,7 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 
-import {
-  // AUTH_SERVICE,
-  AvatarInfo,
-  // IAuthService,
-  UserService,
-  AppStateService,
-  PortalMessageService
-} from '@onecx/portal-integration-angular'
+import { AvatarInfo, UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
@@ -33,7 +26,6 @@ export class AvatarComponent implements OnInit {
   public avatarImage!: ElementRef
 
   constructor(
-    // @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
     private avatarService: UserAvatarAPIService,
     private msgService: PortalMessageService,
     private userService: UserService,

@@ -1,8 +1,9 @@
 import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
-import { MenuModeEnum } from './models/menu-mode'
-import { ColorSchemeEnum } from './models/color-scheme'
+
+import { MenuModeEnum } from 'src/app/user-profile/layout-theme/models/menu-mode'
+import { ColorSchemeEnum } from 'src/app/user-profile/layout-theme/models/color-scheme'
 import { UserProfileAccountSettingsLayoutAndThemeSettings, UserService } from '@onecx/portal-integration-angular'
 
 @Component({

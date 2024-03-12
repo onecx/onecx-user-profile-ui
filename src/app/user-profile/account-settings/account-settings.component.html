@@ -32,7 +32,7 @@
           (applyChanges)="reloadPage()"
         ></app-privacy-settings>
       </p-tabPanel>
-      <p-tabPanel header="Preferences" *ocxIfPermission="'ACCOUNT_SETTINGS_PREFERENCES#VIEW'">
+      <!-- <p-tabPanel header="Preferences" *ocxIfPermission="'ACCOUNT_SETTINGS_PREFERENCES#VIEW'">
         <ng-template pTemplate="header"> {{ 'PREFERENCES.TAB_NAME_PREFERENCES' | translate }} </ng-template>
         <app-preferences-settings
           [preferences]="preferences"
@@ -40,7 +40,7 @@
           (deletePreference)="deletePreference($event)"
         >
         </app-preferences-settings>
-      </p-tabPanel>
+      </p-tabPanel> -->
     </p-tabView>
   </ocx-page-content>
 </ocx-portal-page>

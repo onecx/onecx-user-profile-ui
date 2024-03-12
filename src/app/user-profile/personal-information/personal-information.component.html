@@ -1,5 +1,5 @@
 <!--Personal Info-->
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
   <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel styleClass="surface-50">
@@ -136,9 +136,9 @@
                 formControlName="streetNo"
                 [value]="(personalInfo$ | async)?.address?.streetNo"
               />
-              <label for="up_personal_info_address_street_no">
-                {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}</label
-              >
+              <label for="up_personal_info_address_street_no">{{
+                'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate
+              }}</label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -152,9 +152,9 @@
                 formControlName="postalCode"
                 [value]="(personalInfo$ | async)?.address?.postalCode"
               />
-              <label for="up_personal_info_address_postal_code">
-                {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}</label
-              >
+              <label for="up_personal_info_address_postal_code">{{
+                'PERSONAL_INFO_FORM.POSTAL_CODE' | translate
+              }}</label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -196,10 +196,9 @@
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.PHONE' | translate }}</div>
             <div *ocxIfPermission="'PROFILE_PHONE#EDIT'">
               <button
-                *ngIf="!phoneEdit"
+                *ngIf="!this.phoneEdit"
                 pButton
                 pRipple
-                type="button"
                 id="up_personal_info_phone_edit"
                 class="p-2 p-button-text"
                 icon="pi pi-pencil"
@@ -210,7 +209,6 @@
                 *ngIf="phoneEdit"
                 pButton
                 pRipple
-                type="button"
                 id="up_personal_info_phone_cancel"
                 icon="pi pi-times"
                 class="p-2 p-button-text"
@@ -218,10 +216,9 @@
                 (click)="cancelPhoneEdit()"
               ></button>
               <button
-                *ngIf="phoneEdit"
+                *ngIf="this.phoneEdit"
                 pButton
                 pRipple
-                type="button"
                 id="up_personal_info_phone_save"
                 class="p-2 p-button-text"
                 icon="pi pi-save"

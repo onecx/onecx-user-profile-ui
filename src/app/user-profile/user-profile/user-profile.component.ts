@@ -25,6 +25,7 @@ export class UserProfileComponent {
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {
+    console.log('UPDATE')
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: () => {
         this.showMessage('success')
