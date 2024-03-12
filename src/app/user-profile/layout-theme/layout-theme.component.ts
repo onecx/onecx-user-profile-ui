@@ -4,15 +4,16 @@ import { SelectItem } from 'primeng/api'
 
 import { MenuModeEnum } from 'src/app/user-profile/layout-theme/models/menu-mode'
 import { ColorSchemeEnum } from 'src/app/user-profile/layout-theme/models/color-scheme'
-import { UserProfileAccountSettingsLayoutAndThemeSettings, UserService } from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/portal-integration-angular'
+import { ColorScheme } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-layout-theme',
   templateUrl: './layout-theme.component.html'
 })
 export class LayoutThemeComponent implements OnInit {
-  @Input() layoutAndTheme: UserProfileAccountSettingsLayoutAndThemeSettings | undefined
-  @Output() layoutAndThemeChange = new EventEmitter<UserProfileAccountSettingsLayoutAndThemeSettings>()
+  @Input() colorScheme: ColorScheme | undefined
+  @Output() colorSchemeChange = new EventEmitter<ColorScheme>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
   public changedMenuMode = false
@@ -51,22 +52,22 @@ export class LayoutThemeComponent implements OnInit {
     if (!this.userService.hasPermission('ACCOUNT_SETTINGS_BREADCRUMBS#EDIT'))
       this.formGroup.get('breadcrumbs')?.disable()
 
-    if (this.layoutAndTheme) {
-      this.formGroup.patchValue(this.layoutAndTheme)
+    if (this.colorScheme) {
+      this.formGroup.patchValue({ colorScheme: this.colorScheme })
     }
   }
 
   public saveMenuMode(): void {
     this.changedMenuMode = true
-    this.layoutAndThemeChange.emit(this.formGroup.value)
+    this.colorSchemeChange.emit(this.formGroup.value)
   }
   public saveColorScheme(): void {
     this.changedColorScheme = true
-    this.layoutAndThemeChange.emit(this.formGroup.value)
+    this.colorSchemeChange.emit(this.formGroup.value)
   }
   public saveBreadcrumbs(): void {
     this.changedBreadcrumbs = true
-    this.layoutAndThemeChange.emit(this.formGroup.value)
+    this.colorSchemeChange.emit(this.formGroup.value)
   }
 
   public applyChange() {

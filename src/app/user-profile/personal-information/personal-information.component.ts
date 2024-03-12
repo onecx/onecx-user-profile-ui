@@ -5,8 +5,8 @@ import { SelectItem } from 'primeng/api'
 import { TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
 
-import { PhoneType, UserPerson, UserService } from '@onecx/portal-integration-angular'
-import { UserProfileAPIService } from 'src/app/shared/generated'
+import { PhoneType } from '@onecx/portal-integration-angular'
+import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 import { from, map, mergeMap, Observable, of } from 'rxjs'
 
 @Component({
@@ -34,14 +34,11 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   constructor(
     public http: HttpClient,
     public translate: TranslateService,
-    private userService: UserService,
-    private userApiService: UserProfileAPIService
+    private userProfileService: UserProfileAPIService
   ) {
     // get data and init form only
-    // this.personalInfo$ = this.userApiService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
-
-    this.personalInfo$ = this.userService.profile$.pipe(map((profile) => profile.person || {}))
-    this.userId$ = this.userService.profile$.pipe(map((profile) => profile.id || ''))
+    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+    this.userId$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.id || ''))
     this.formGroup = this.initFormGroup()
   }
 

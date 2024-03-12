@@ -4,7 +4,7 @@ import { FormControl, UntypedFormGroup } from '@angular/forms'
 import {
   ConfigurationService,
   CONFIG_KEY,
-  UserProfileAccountSettingsLocaleAndTimeSettings,
+  // UserProfileAccountSettingsLocaleAndTimeSettings,
   UserService
 } from '@onecx/portal-integration-angular'
 import { SelectItem } from 'primeng/api'
@@ -18,8 +18,9 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
   styleUrls: ['./locale-timezone.component.scss']
 })
 export class LocaleTimezoneComponent implements OnInit {
-  @Input() public localeTimezone: UserProfileAccountSettingsLocaleAndTimeSettings | undefined
-  @Output() public localeTimezoneChange = new EventEmitter<UserProfileAccountSettingsLocaleAndTimeSettings>()
+  @Input() public localeInput: string | undefined
+  @Input() public timezoneInput: string | undefined
+  @Output() public localeTimezoneChange = new EventEmitter<string>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
   public editLanguage = false
@@ -49,8 +50,11 @@ export class LocaleTimezoneComponent implements OnInit {
   public ngOnInit(): void {
     this.editLanguage = this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
     this.editTimezone = this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
-    if (this.localeTimezone) {
-      this.formGroup.patchValue(this.localeTimezone)
+    if (this.locale) {
+      this.formGroup.patchValue({ locale: this.locale })
+    }
+    if (this.timezone) {
+      this.formGroup.patchValue({ timezone: this.timezone })
     }
     this.initLocalesAndTimezones()
   }

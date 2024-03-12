@@ -7,7 +7,7 @@ import { UserProfileAccountSettingsPrivacySettings, UserService } from '@onecx/p
   templateUrl: './privacy-settings.component.html'
 })
 export class PrivacySettingsComponent implements OnInit {
-  @Input() privacySettings: UserProfileAccountSettingsPrivacySettings | undefined
+  @Input() privacySettings: boolean | undefined
   @Output() privacySettingsChange = new EventEmitter<UserProfileAccountSettingsPrivacySettings>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
