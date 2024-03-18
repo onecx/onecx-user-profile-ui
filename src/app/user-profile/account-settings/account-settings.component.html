@@ -10,9 +10,10 @@
       <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE_TIMEZONE#VIEW'">
         <ng-template pTemplate="header"> {{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE' | translate }} </ng-template>
         <app-locale-timezone
-          [locale]="settingsInitial.locale"
-          [timezone]="settingsInitial.timezone"
-          (localeTimezoneChange)="localeTimezoneChange($event)"
+          [localeInput]="settingsInitial.locale"
+          [timezoneInput]="settingsInitial.timezone"
+          (localeChange)="localeChange($event)"
+          (timezoneChange)="timezoneChange($event)"
           (applyChanges)="reloadPage()"
         ></app-locale-timezone>
       </p-tabPanel>
@@ -21,7 +22,9 @@
 
         <app-layout-theme
           [colorScheme]="settingsInitial.colorScheme"
+          [menuMode]="settingsInitial.menuMode"
           (colorSchemeChange)="colorSchemeChange($event)"
+          (menuModeChange)="menuModeChange($event)"
           (applyChanges)="reloadPage()"
         ></app-layout-theme>
       </p-tabPanel>

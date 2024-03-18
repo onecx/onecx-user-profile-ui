@@ -2,10 +2,10 @@ import { Component, OnInit, Input, Output, EventEmitter } from '@angular/core'
 import { UntypedFormGroup, UntypedFormControl } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
-import { MenuModeEnum } from 'src/app/user-profile/layout-theme/models/menu-mode'
-import { ColorSchemeEnum } from 'src/app/user-profile/layout-theme/models/color-scheme'
+// import { MenuModeEnum } from './models/menu-mode'
+// import { ColorSchemeEnum } from './models/color-scheme'
 import { UserService } from '@onecx/portal-integration-angular'
-import { ColorScheme } from 'src/app/shared/generated'
+import { ColorScheme, MenuMode } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-layout-theme',
@@ -13,7 +13,10 @@ import { ColorScheme } from 'src/app/shared/generated'
 })
 export class LayoutThemeComponent implements OnInit {
   @Input() colorScheme: ColorScheme | undefined
+  @Input() menuMode: MenuMode | undefined
   @Output() colorSchemeChange = new EventEmitter<ColorScheme>()
+  @Output() menuModeChange = new EventEmitter<MenuMode>()
+  @Output() breadcrumbsChange = new EventEmitter<boolean>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
   public changedMenuMode = false
@@ -25,16 +28,16 @@ export class LayoutThemeComponent implements OnInit {
 
   constructor(private userService: UserService) {
     this.menuModeSelectItems = [
-      { label: 'LAYOUT_THEME.MENU_MODES.HORIZONTAL', value: MenuModeEnum.HORIZONTAL },
-      { label: 'LAYOUT_THEME.MENU_MODES.STATIC', value: MenuModeEnum.STATIC },
-      { label: 'LAYOUT_THEME.MENU_MODES.OVERLAY', value: MenuModeEnum.OVERLAY },
-      { label: 'LAYOUT_THEME.MENU_MODES.SLIM', value: MenuModeEnum.SLIM }
-      //{ label: 'LAYOUT_THEME.MENU_MODES.SLIMPLUS', value: MenuModeEnum.SLIMPLUS },
+      { label: 'LAYOUT_THEME.MENU_MODES.HORIZONTAL', value: MenuMode.Horizontal },
+      { label: 'LAYOUT_THEME.MENU_MODES.STATIC', value: MenuMode.Static },
+      { label: 'LAYOUT_THEME.MENU_MODES.OVERLAY', value: MenuMode.Overlay },
+      { label: 'LAYOUT_THEME.MENU_MODES.SLIM', value: MenuMode.Slim }
+      //{ label: 'LAYOUT_THEME.MENU_MODES.SLIMPLUS', value: MenuMode.SLIMPLUS },
     ]
     this.colorSchemeSelectItems = [
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.AUTO', value: ColorSchemeEnum.AUTO },
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.LIGHT', value: ColorSchemeEnum.LIGHT },
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorSchemeEnum.DARK }
+      { label: 'LAYOUT_THEME.COLOR_SCHEMES.AUTO', value: ColorScheme.Auto },
+      { label: 'LAYOUT_THEME.COLOR_SCHEMES.LIGHT', value: ColorScheme.Light },
+      { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorScheme.Dark }
     ]
     this.formGroup = new UntypedFormGroup({
       menuMode: new UntypedFormControl(),
@@ -59,7 +62,7 @@ export class LayoutThemeComponent implements OnInit {
 
   public saveMenuMode(): void {
     this.changedMenuMode = true
-    this.colorSchemeChange.emit(this.formGroup.value)
+    this.menuModeChange.emit(this.formGroup.value)
   }
   public saveColorScheme(): void {
     this.changedColorScheme = true
@@ -67,7 +70,7 @@ export class LayoutThemeComponent implements OnInit {
   }
   public saveBreadcrumbs(): void {
     this.changedBreadcrumbs = true
-    this.colorSchemeChange.emit(this.formGroup.value)
+    this.breadcrumbsChange.emit(this.formGroup.value)
   }
 
   public applyChange() {

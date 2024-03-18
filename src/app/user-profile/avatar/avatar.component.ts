@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { AvatarInfo, UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { UserAvatarAPIService } from 'src/app/shared/generated'
-import { environment } from 'src/environments/environment'
+import { environment } from '../../../environments/environment'
 import { combineLatest, map, Observable } from 'rxjs'
 
 @Component({

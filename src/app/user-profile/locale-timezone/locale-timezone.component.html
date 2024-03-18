@@ -44,6 +44,7 @@
         styleClass="shrink-margin"
         formControlName="timezone"
         [options]="timezoneSelectItems"
+        [value]="timezone"
         [filter]="true"
         placeholder="None"
         (onChange)="saveTimezone()"

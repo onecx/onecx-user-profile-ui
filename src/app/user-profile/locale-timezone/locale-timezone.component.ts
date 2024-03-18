@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core'
 import { FormControl, UntypedFormGroup } from '@angular/forms'
 
 import {
@@ -8,7 +8,7 @@ import {
   UserService
 } from '@onecx/portal-integration-angular'
 import { SelectItem } from 'primeng/api'
-import { LocalAndTimezoneService } from 'src/app/user-profile/locale-timezone/service/localAndTimezone.service'
+import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 
@@ -17,10 +17,11 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
   templateUrl: './locale-timezone.component.html',
   styleUrls: ['./locale-timezone.component.scss']
 })
-export class LocaleTimezoneComponent implements OnInit {
+export class LocaleTimezoneComponent implements OnInit, OnChanges {
   @Input() public localeInput: string | undefined
   @Input() public timezoneInput: string | undefined
-  @Output() public localeTimezoneChange = new EventEmitter<string>()
+  @Output() public localeChange = new EventEmitter<string>()
+  @Output() public timezoneChange = new EventEmitter<string>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
   public editLanguage = false
@@ -56,7 +57,16 @@ export class LocaleTimezoneComponent implements OnInit {
     if (this.timezone) {
       this.formGroup.patchValue({ timezone: this.timezone })
     }
-    this.initLocalesAndTimezones()
+  }
+
+  public ngOnChanges(): void {
+    if (this.localeInput) {
+      this.formGroup.patchValue({ locale: this.localeInput })
+    }
+    if (this.timezoneInput) {
+      this.initLocalesAndTimezones()
+      this.formGroup.patchValue({ timezone: this.timezoneInput })
+    }
   }
 
   public initLocalesAndTimezones(): void {
@@ -68,6 +78,7 @@ export class LocaleTimezoneComponent implements OnInit {
           utc: tz.utc,
           factor: tz.factor
         }))
+        console.log('TIME', this.timezoneInput)
       },
       // eslint-disable-next-line no-console
       (error) => console.log(error)
@@ -89,16 +100,17 @@ export class LocaleTimezoneComponent implements OnInit {
     this.changedLanguage = true
     this.locale = this.formGroup.get('locale')?.value
     this.refreshTimezoneExample()
-    this.localeTimezoneChange.emit(this.formGroup.value)
+    this.localeChange.emit(this.locale)
   }
   public saveTimezone(): void {
     this.changedTimezone = true
     this.timezone = this.formGroup.get('timezone')?.value
     this.refreshTimezoneExample()
-    this.localeTimezoneChange.emit(this.formGroup.value)
+    this.timezoneChange.emit(this.timezone)
   }
 
   public refreshTimezoneExample(): void {
+    console.log('TZ', this.timezoneInput)
     this.timezoneExampleDate = new Date()
     const tz = this.timezoneSelectItems.filter((tz) => tz.label === this.timezone)[0]
     this.timezoneUTC = tz.factor
