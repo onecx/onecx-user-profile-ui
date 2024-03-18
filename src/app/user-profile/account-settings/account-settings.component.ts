@@ -41,10 +41,8 @@ export class AccountSettingsComponent implements OnInit {
   public ngOnInit(): void {
     this.userProfileService.getUserSettings().subscribe({
       next: (profile) => {
-        console.log('PROFILE', profile)
         this.settings = profile || {}
         this.settingsInitial = { ...this.settings }
-        console.log('INIT', this.settingsInitial.timezone)
       },
       error: (error) => {
         console.error('Failed to load user profile', error)

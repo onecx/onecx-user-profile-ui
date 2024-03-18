@@ -78,7 +78,6 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
           utc: tz.utc,
           factor: tz.factor
         }))
-        console.log('TIME', this.timezoneInput)
       },
       // eslint-disable-next-line no-console
       (error) => console.log(error)
@@ -110,7 +109,6 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   }
 
   public refreshTimezoneExample(): void {
-    console.log('TZ', this.timezoneInput)
     this.timezoneExampleDate = new Date()
     const tz = this.timezoneSelectItems.filter((tz) => tz.label === this.timezone)[0]
     this.timezoneUTC = tz.factor
