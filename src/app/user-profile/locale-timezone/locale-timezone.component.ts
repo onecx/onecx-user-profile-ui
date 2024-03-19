@@ -1,12 +1,7 @@
 import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core'
 import { FormControl, UntypedFormGroup } from '@angular/forms'
 
-import {
-  ConfigurationService,
-  CONFIG_KEY,
-  // UserProfileAccountSettingsLocaleAndTimeSettings,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { ConfigurationService, CONFIG_KEY, UserService } from '@onecx/portal-integration-angular'
 import { SelectItem } from 'primeng/api'
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 
@@ -64,9 +59,9 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
       this.formGroup.patchValue({ locale: this.localeInput })
     }
     if (this.timezoneInput) {
-      this.initLocalesAndTimezones()
       this.formGroup.patchValue({ timezone: this.timezoneInput })
     }
+    this.initLocalesAndTimezones()
   }
 
   public initLocalesAndTimezones(): void {
@@ -111,7 +106,9 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   public refreshTimezoneExample(): void {
     this.timezoneExampleDate = new Date()
     const tz = this.timezoneSelectItems.filter((tz) => tz.label === this.timezone)[0]
-    this.timezoneUTC = tz.factor
+    if (tz) {
+      this.timezoneUTC = tz.factor
+    }
   }
 
   public applyChange() {
