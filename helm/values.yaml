@@ -20,14 +20,8 @@ app:
       spec:
         permissions:
           USERPROFILE:
-            CREATE: Create user profile
-            DELETE: Delete user profile
             EDIT: Edit user profile
-            SAVE: Update and save user profile
-            SEARCH: Search user profile
             VIEW: View mode for user profile
-            EXPORT: Export user profile
-            IMPORT: Import user profile
     # Keycloak
     keycloak:
       client:

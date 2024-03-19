@@ -21,7 +21,7 @@ export class PrivacySettingsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_PRIVACY#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
+    if (!this.userService.hasPermission('USERPROFILE#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
   }
 
   public savePrivacySettings(): void {
