@@ -70,7 +70,8 @@ export class AccountSettingsComponent implements OnInit {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public privacySettingsChange(ev: any) {
-    this.settings.hideMyProfile = ev
+    console.log('EV', ev)
+    this.settings.hideMyProfile = ev.hideMyProfile
     this.saveUserSettingsInfo()
   }
 
