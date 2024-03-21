@@ -32,4 +32,5 @@ export class PrivacySettingsComponent implements OnInit {
   public applyChange() {
     this.applyChanges.emit(true)
   }
+  // test
 }
