@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 
 import { AvatarInfo, UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
 
-import { UserAvatarAPIService } from 'src/app/shared/generated'
+import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from '../../../environments/environment'
 import { combineLatest, map, Observable } from 'rxjs'
 
@@ -40,7 +40,7 @@ export class AvatarComponent implements OnInit {
   public onDeleteAvatarImage(): void {
     this.userAvatar$ = this.userService.profile$.pipe(map(() => undefined))
     this.showAvatarDeleteDialog = false
-    this.avatarService.deleteUserAvatar().subscribe({
+    this.avatarService.deleteUserAvatar({ refType: RefType.Normal }).subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         window.location.reload()

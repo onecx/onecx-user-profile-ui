@@ -11,7 +11,6 @@ import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/sha
 })
 export class UserProfileComponent {
   public personalInfo$: Observable<UserPerson>
-  public userId$: Observable<string>
   public messages: { [key: string]: string } = {}
 
   constructor(
@@ -20,7 +19,6 @@ export class UserProfileComponent {
     private msgService: PortalMessageService
   ) {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
-    this.userId$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.id || ''))
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {
