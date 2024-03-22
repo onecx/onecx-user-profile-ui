@@ -1,14 +1,14 @@
 import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
-import { UserProfileAccountSettingsPrivacySettings, UserService } from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/portal-integration-angular'
 
 @Component({
   selector: 'app-privacy-settings',
   templateUrl: './privacy-settings.component.html'
 })
 export class PrivacySettingsComponent implements OnInit {
-  @Input() privacySettings: UserProfileAccountSettingsPrivacySettings | undefined
-  @Output() privacySettingsChange = new EventEmitter<UserProfileAccountSettingsPrivacySettings>()
+  @Input() privacySettings: boolean | undefined
+  @Output() privacySettingsChange = new EventEmitter<boolean>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
   public changedPrivacySettings = false
@@ -21,7 +21,7 @@ export class PrivacySettingsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_PRIVACY#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
+    if (!this.userService.hasPermission('USERPROFILE#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
   }
 
   public savePrivacySettings(): void {

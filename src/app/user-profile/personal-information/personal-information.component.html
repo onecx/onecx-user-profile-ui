@@ -1,5 +1,5 @@
 <!--Personal Info-->
-<form [formGroup]="formGroup">
+<form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async" *ocxIfPermission="'USERPROFILE#VIEW'">
   <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel styleClass="surface-50">
@@ -53,7 +53,7 @@
         </div>
       </p-panel>
     </div>
-    <div class="col-12 md:col-6 px-3 py-1 md:py-0" *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel styleClass="surface-50 h-full">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
@@ -64,12 +64,12 @@
       </p-panel>
     </div>
 
-    <div class="col-12 md:col-6 px-3 py-1 md:py-0" *ocxIfPermission="'PROFILE_ADDRESS#VIEW'">
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel formGroupName="address" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.ADDRESS' | translate }}</div>
-            <div *ocxIfPermission="'PROFILE_ADDRESS#EDIT'">
+            <div *ocxIfPermission="'USERPROFILE#EDIT'">
               <button
                 *ngIf="!addressEdit"
                 pButton
@@ -137,8 +137,8 @@
                 [value]="(personalInfo$ | async)?.address?.streetNo"
               />
               <label for="up_personal_info_address_street_no">
-                {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}</label
-              >
+                {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}
+              </label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -153,8 +153,8 @@
                 [value]="(personalInfo$ | async)?.address?.postalCode"
               />
               <label for="up_personal_info_address_postal_code">
-                {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}</label
-              >
+                {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}
+              </label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -189,17 +189,16 @@
       </p-panel>
     </div>
 
-    <div class="col-12 md:col-6 px-3 py-1 md:py-0" *ocxIfPermission="'PROFILE_PHONE#VIEW'">
+    <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel formGroupName="phone" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.PHONE' | translate }}</div>
-            <div *ocxIfPermission="'PROFILE_PHONE#EDIT'">
+            <div *ocxIfPermission="'USERPROFILE#EDIT'">
               <button
-                *ngIf="!phoneEdit"
+                *ngIf="!this.phoneEdit"
                 pButton
                 pRipple
-                type="button"
                 id="up_personal_info_phone_edit"
                 class="p-2 p-button-text"
                 icon="pi pi-pencil"
@@ -210,7 +209,6 @@
                 *ngIf="phoneEdit"
                 pButton
                 pRipple
-                type="button"
                 id="up_personal_info_phone_cancel"
                 icon="pi pi-times"
                 class="p-2 p-button-text"
@@ -218,10 +216,9 @@
                 (click)="cancelPhoneEdit()"
               ></button>
               <button
-                *ngIf="phoneEdit"
+                *ngIf="this.phoneEdit"
                 pButton
                 pRipple
-                type="button"
                 id="up_personal_info_phone_save"
                 class="p-2 p-button-text"
                 icon="pi pi-save"

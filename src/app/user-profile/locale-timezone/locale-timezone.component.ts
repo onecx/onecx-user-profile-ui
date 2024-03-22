@@ -1,12 +1,7 @@
-import { Component, EventEmitter, Input, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core'
 import { FormControl, UntypedFormGroup } from '@angular/forms'
 
-import {
-  ConfigurationService,
-  CONFIG_KEY,
-  UserProfileAccountSettingsLocaleAndTimeSettings,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { ConfigurationService, CONFIG_KEY, UserService } from '@onecx/portal-integration-angular'
 import { SelectItem } from 'primeng/api'
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 
@@ -17,13 +12,14 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
   templateUrl: './locale-timezone.component.html',
   styleUrls: ['./locale-timezone.component.scss']
 })
-export class LocaleTimezoneComponent implements OnInit {
-  @Input() public localeTimezone: UserProfileAccountSettingsLocaleAndTimeSettings | undefined
-  @Output() public localeTimezoneChange = new EventEmitter<UserProfileAccountSettingsLocaleAndTimeSettings>()
+export class LocaleTimezoneComponent implements OnInit, OnChanges {
+  @Input() public localeInput: string | undefined
+  @Input() public timezoneInput: string | undefined
+  @Output() public localeChange = new EventEmitter<string>()
+  @Output() public timezoneChange = new EventEmitter<string>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
-  public editLanguage = false
-  public editTimezone = false
+  public editProfile = false
   public changedLanguage = false
   public changedTimezone = false
   public formGroup: UntypedFormGroup
@@ -47,10 +43,21 @@ export class LocaleTimezoneComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.editLanguage = this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
-    this.editTimezone = this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
-    if (this.localeTimezone) {
-      this.formGroup.patchValue(this.localeTimezone)
+    this.editProfile = this.userService.hasPermission('USERPROFILE#EDIT')
+    if (this.locale) {
+      this.formGroup.patchValue({ locale: this.locale })
+    }
+    if (this.timezone) {
+      this.formGroup.patchValue({ timezone: this.timezone })
+    }
+  }
+
+  public ngOnChanges(): void {
+    if (this.localeInput) {
+      this.formGroup.patchValue({ locale: this.localeInput })
+    }
+    if (this.timezoneInput) {
+      this.formGroup.patchValue({ timezone: this.timezoneInput })
     }
     this.initLocalesAndTimezones()
   }
@@ -85,19 +92,21 @@ export class LocaleTimezoneComponent implements OnInit {
     this.changedLanguage = true
     this.locale = this.formGroup.get('locale')?.value
     this.refreshTimezoneExample()
-    this.localeTimezoneChange.emit(this.formGroup.value)
+    this.localeChange.emit(this.locale)
   }
   public saveTimezone(): void {
     this.changedTimezone = true
     this.timezone = this.formGroup.get('timezone')?.value
     this.refreshTimezoneExample()
-    this.localeTimezoneChange.emit(this.formGroup.value)
+    this.timezoneChange.emit(this.timezone)
   }
 
   public refreshTimezoneExample(): void {
     this.timezoneExampleDate = new Date()
     const tz = this.timezoneSelectItems.filter((tz) => tz.label === this.timezone)[0]
-    this.timezoneUTC = tz.factor
+    if (tz) {
+      this.timezoneUTC = tz.factor
+    }
   }
 
   public applyChange() {

@@ -19,7 +19,7 @@
     />
   </div>
 
-  <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
+  <ng-container *ocxIfPermission="'USERPROFILE#EDIT'">
     <input hidden type="file" #selectedFileInput (change)="onFileUpload($event)" />
     <div class="flex flex-row sm:flex-column flex-wrap gap-1 toolbar">
       <button

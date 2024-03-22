@@ -19,6 +19,7 @@ model/phoneType.ts
 model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts
 model/problemDetailResponse.ts
+model/refType.ts
 model/updateUserPerson.ts
 model/updateUserPersonRequest.ts
 model/updateUserSettings.ts

@@ -11,7 +11,8 @@
  */
 
 
-export interface ImageInfo { 
-    id?: string;
+export enum RefType {
+    Small = 'small',
+    Normal = 'normal'
 }
 

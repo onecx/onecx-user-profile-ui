@@ -5,15 +5,15 @@ import { RouterModule, Routes } from '@angular/router'
 
 import { addInitializeModuleGuard, InitializeModuleGuard, PortalCoreModule } from '@onecx/portal-integration-angular'
 
-import { SharedModule } from '../shared/shared.module'
+import { SharedModule } from 'src/app/shared/shared.module'
 
-import { UserProfileComponent } from './user-profile/user-profile.component'
-import { AvatarComponent } from './avatar/avatar.component'
-import { PersonalInformationComponent } from './personal-information/personal-information.component'
-import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
-import { AccountSettingsComponent } from './account-settings/account-settings.component'
-import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
-import { PrivacySettingsComponent } from './privacy-settings/privacy-settings.component'
+import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
+import { AvatarComponent } from 'src/app/user-profile/avatar/avatar.component'
+import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
+import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/locale-timezone.component'
+import { AccountSettingsComponent } from 'src/app/user-profile/account-settings/account-settings.component'
+import { LayoutThemeComponent } from 'src/app/user-profile/layout-theme/layout-theme.component'
+import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
 
 const routes: Routes = [
   {
