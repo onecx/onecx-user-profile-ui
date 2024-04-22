@@ -11,7 +11,7 @@ app:
     microfrontend:
       enabled: true
       spec:
-        exposedModule: "./OneCXUser ProfileModule"
+        exposedModule: "./OneCXUserProfileModule"
         description: "OneCX User Profile UI"
         note: "OneCX User Profile UI auto import via MF operator"
     # Permission
