@@ -1,17 +1,10 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 
-import {
-  // AUTH_SERVICE,
-  AvatarInfo,
-  // IAuthService,
-  UserService,
-  AppStateService,
-  PortalMessageService
-} from '@onecx/portal-integration-angular'
+import { AvatarInfo, UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
 
-import { UserAvatarAPIService } from 'src/app/shared/generated'
-import { environment } from 'src/environments/environment'
+import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
+import { environment } from '../../../environments/environment'
 import { combineLatest, map, Observable } from 'rxjs'
 
 @Component({
@@ -33,7 +26,6 @@ export class AvatarComponent implements OnInit {
   public avatarImage!: ElementRef
 
   constructor(
-    // @Inject(AUTH_SERVICE) private readonly authService: IAuthService,
     private avatarService: UserAvatarAPIService,
     private msgService: PortalMessageService,
     private userService: UserService,
@@ -48,7 +40,7 @@ export class AvatarComponent implements OnInit {
   public onDeleteAvatarImage(): void {
     this.userAvatar$ = this.userService.profile$.pipe(map(() => undefined))
     this.showAvatarDeleteDialog = false
-    this.avatarService.deleteUserAvatar().subscribe({
+    this.avatarService.deleteUserAvatar({ refType: RefType.Normal }).subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         window.location.reload()
