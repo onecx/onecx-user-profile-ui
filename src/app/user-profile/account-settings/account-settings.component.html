@@ -1,4 +1,4 @@
-<ocx-portal-page permission="USERPROFILE#VIEW" helpArticleId="PAGE_USER_SETTINGS">
+<ocx-portal-page *ocxIfPermission="'USERPROFILE#VIEW'" helpArticleId="PAGE_USER_SETTINGS">
   <ocx-page-header
     [header]="(personalInfo$ | async)?.firstName + ' ' + (personalInfo$ | async)?.lastName"
     [subheader]="'SETTINGS.SUBHEADER' | translate"
