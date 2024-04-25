@@ -35,7 +35,7 @@ import {
 } from '@onecx/portal-integration-angular'
 
 import { Configuration } from 'src/app/shared/generated'
-import { environment } from '../../environments/environment'
+import { environment } from 'src/environments/environment'
 import { LabelResolver } from './label.resolver'
 
 export function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {

@@ -21,6 +21,8 @@ describe('SharedModule', () => {
   // TODO: correct this and do the right thing
   it('should return the correct basePath with mfeInfo', () => {
     const mfeInfo: MfeInfo = {
+      appId: 'onecx-user-profile-ui',
+      productName: 'onecx-user-profile',
       mountPath: '',
       remoteBaseUrl: 'http://localhost:4200/',
       baseHref: '',
