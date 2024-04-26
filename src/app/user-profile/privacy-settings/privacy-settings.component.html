@@ -6,6 +6,7 @@
         id="up_privacy_settings_hide_my_profile"
         formControlName="hideMyProfile"
         (onChange)="savePrivacySettings()"
+        [(ngModel)]="privacySettings"
         title="{{ 'PRIVACY_SETTINGS.PRIVACY.TOOLTIP' | translate }}"
       ></p-inputSwitch>
       <button

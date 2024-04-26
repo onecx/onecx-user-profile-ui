@@ -1,10 +1,10 @@
 <div class="sm:py-2 px-3">
   <form [formGroup]="formGroup">
     <div class="font-bold my-2">{{ 'LANGUAGE_TIMEZONE.LANGUAGE' | translate }}</div>
-    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editLanguage">
-      {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | translate) : 'no-value' }}
+    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editProfile">
+      {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | uppercase | translate) : 'no-value' }}
     </div>
-    <div *ngIf="editLanguage" class="flex flex-wrap justify-content-start align-items-center">
+    <div *ngIf="editProfile" class="flex flex-wrap justify-content-start align-items-center">
       <p-dropdown
         id="up_account_locale_list"
         formControlName="locale"
@@ -35,10 +35,10 @@
     </div>
 
     <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</div>
-    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editTimezone">
+    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editProfile">
       {{ this.formGroup.value['timezone'] ? formGroup.value['timezone'] : 'no-value' }}
     </div>
-    <div *ngIf="editTimezone" class="flex flex-wrap justify-content-start align-items-center row-gap-3">
+    <div *ngIf="editProfile" class="flex flex-wrap justify-content-start align-items-center row-gap-3">
       <p-dropdown
         id="up_account_timezone_list"
         styleClass="shrink-margin"
