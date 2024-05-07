@@ -36,6 +36,10 @@
           (applyChanges)="reloadPage()"
         ></app-privacy-settings>
       </p-tabPanel>
+      <p-tabPanel>
+        <ng-template pTemplate="header">{{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}</ng-template>
+        <ocx-slot name="changePassword"> </ocx-slot>
+      </p-tabPanel>
     </p-tabView>
   </ocx-page-content>
 </ocx-portal-page>

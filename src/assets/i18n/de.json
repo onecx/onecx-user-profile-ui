@@ -165,6 +165,9 @@
     "HIDE_MY_PROFILE": "Mein Profil ausblenden",
     "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
   },
+  "PASSWORD": {
+    "TAB_NAME_PASSWORD": "Passwort"
+  },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
     "BREADCRUMBS": "Seitenpfad",
