@@ -31,7 +31,7 @@ import { AppStateService, ConfigurationService, PortalApiConfiguration } from '@
 import { Configuration } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
 import { LabelResolver } from './label.resolver'
-import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
+import { AngularRemoteComponentsModule, SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 
 export function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {
   return new PortalApiConfiguration(Configuration, environment.apiPrefix, configService, appStateService)
@@ -117,6 +117,10 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
   ],
   //this is not elegant, for some reason the injection token from primeng does not work across federated module
   providers: [
+    {
+      provide: SLOT_SERVICE,
+      useExisting: SlotService
+    },
     ConfirmationService,
     LabelResolver,
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] }
