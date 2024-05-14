@@ -1,19 +1,20 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
 import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
+import { InitializeModuleGuard, addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
-import { addInitializeModuleGuard, InitializeModuleGuard, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 
-import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
-import { AvatarComponent } from 'src/app/user-profile/avatar/avatar.component'
-import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
-import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/locale-timezone.component'
 import { AccountSettingsComponent } from 'src/app/user-profile/account-settings/account-settings.component'
+import { AvatarComponent } from 'src/app/user-profile/avatar/avatar.component'
 import { LayoutThemeComponent } from 'src/app/user-profile/layout-theme/layout-theme.component'
+import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/locale-timezone.component'
+import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
 import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
+import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
 
 const routes: Routes = [
   {
@@ -44,8 +45,7 @@ const routes: Routes = [
     [RouterModule.forChild(addInitializeModuleGuard(routes))],
     SharedModule
   ],
-  providers: [InitializeModuleGuard],
-  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
+  providers: [InitializeModuleGuard]
 })
 export class UserProfileModule {
   constructor() {

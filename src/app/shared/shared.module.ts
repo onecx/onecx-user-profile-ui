@@ -1,37 +1,37 @@
-import { CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
+import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
+import { ErrorTailorModule } from '@ngneat/error-tailor'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ColorSketchModule } from 'ngx-color/sketch'
-import { ErrorTailorModule } from '@ngneat/error-tailor'
 
+import { ConfirmationService } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { CalendarModule } from 'primeng/calendar'
 import { ConfirmDialogModule } from 'primeng/confirmdialog'
 import { ConfirmPopupModule } from 'primeng/confirmpopup'
-import { ConfirmationService } from 'primeng/api'
 import { DataViewModule } from 'primeng/dataview'
 import { DialogModule } from 'primeng/dialog'
-import { DialogService } from 'primeng/dynamicdialog'
 import { DropdownModule } from 'primeng/dropdown'
+import { DialogService } from 'primeng/dynamicdialog'
 import { InputSwitchModule } from 'primeng/inputswitch'
 import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { KeyFilterModule } from 'primeng/keyfilter'
 import { ListboxModule } from 'primeng/listbox'
 import { MultiSelectModule } from 'primeng/multiselect'
-import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
+import { PanelModule } from 'primeng/panel'
 
 import {
   AppStateService,
   ConfigurationService,
-  PortalDialogService,
-  PortalApiConfiguration
+  PortalApiConfiguration,
+  PortalDialogService
 } from '@onecx/portal-integration-angular'
 
 import { Configuration } from 'src/app/shared/generated'
@@ -124,7 +124,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     LabelResolver,
     { provide: DialogService, useClass: PortalDialogService },
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] }
-  ],
-  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
+  ]
 })
 export class SharedModule {}

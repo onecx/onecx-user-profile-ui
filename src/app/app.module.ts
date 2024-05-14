@@ -1,23 +1,23 @@
-import { APP_INITIALIZER, CUSTOM_ELEMENTS_SCHEMA, NO_ERRORS_SCHEMA, NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient, HttpClientModule } from '@angular/common/http'
-import { RouterModule, Routes } from '@angular/router'
+import { APP_INITIALIZER, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule, Routes } from '@angular/router'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 
+import { KeycloakAuthModule } from '@onecx/keycloak-auth'
 import {
   APP_CONFIG,
   AppStateService,
-  createTranslateLoader,
-  translateServiceInitializer,
   PortalCoreModule,
-  UserService
+  UserService,
+  createTranslateLoader,
+  translateServiceInitializer
 } from '@onecx/portal-integration-angular'
-import { KeycloakAuthModule } from '@onecx/keycloak-auth'
 
-import { AppComponent } from './app.component'
 import { environment } from 'src/environments/environment'
+import { AppComponent } from './app.component'
 
 const routes: Routes = [
   {
@@ -56,8 +56,7 @@ const routes: Routes = [
       multi: true,
       deps: [UserService, TranslateService]
     }
-  ],
-  schemas: [NO_ERRORS_SCHEMA, CUSTOM_ELEMENTS_SCHEMA]
+  ]
 })
 export class AppModule {
   constructor() {
