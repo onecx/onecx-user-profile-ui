@@ -2,6 +2,7 @@ import { HttpClient } from '@angular/common/http'
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 
 import {
   addInitializeModuleGuard,
@@ -33,7 +34,13 @@ const routes: Routes = [
     })
   ],
   exports: [],
-  providers: [ConfigurationService],
+  providers: [
+    ConfigurationService,
+    {
+      provide: SLOT_SERVICE,
+      useExisting: SlotService
+    }
+  ],
   schemas: []
 })
 export class OneCXUserProfileModule {
