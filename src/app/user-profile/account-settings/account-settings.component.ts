@@ -40,7 +40,7 @@ export class AccountSettingsComponent implements OnInit {
     private readonly slotService: SlotService
   ) {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
-    this.isChangePasswordComponentDefined$ = this.slotService.isComponentDefinedForSlot(this.changePasswordSlotName)
+    this.isChangePasswordComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.changePasswordSlotName)
   }
 
   public ngOnInit(): void {
