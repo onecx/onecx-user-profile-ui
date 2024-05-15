@@ -5,6 +5,7 @@ import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RouterTestingModule } from '@angular/router/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
+import { of } from 'rxjs'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
