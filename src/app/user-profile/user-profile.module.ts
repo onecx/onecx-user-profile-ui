@@ -15,6 +15,7 @@ import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/lo
 import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
 import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
 import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
+import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
     path: 'account',
     component: AccountSettingsComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'search',
+    component: UserProfileSearchComponent,
+    pathMatch: 'full'
   }
 ]
 @NgModule({
@@ -36,7 +42,8 @@ const routes: Routes = [
     AccountSettingsComponent,
     LayoutThemeComponent,
     LocaleTimezoneComponent,
-    PrivacySettingsComponent
+    PrivacySettingsComponent,
+    UserProfileSearchComponent
   ],
   imports: [
     CommonModule,

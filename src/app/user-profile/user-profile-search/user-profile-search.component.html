@@ -1,0 +1,80 @@
+<ocx-portal-page>
+  <!-- <ocx-portal-page permission="USER_PROFILE_ADMIN#SEARCH"> -->
+  <ocx-page-header
+    [header]="'DIALOG.SEARCH.HEADER' | translate"
+    [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
+    [manualBreadcrumbs]="true"
+  >
+  </ocx-page-header>
+
+  <ocx-content-container layout="horizontal" breakpoint="lg">
+    <ocx-content class="w-full" [ngClass]="'lg:w-12'" *ngIf="(resultData$ | async)!.length > 0 && !searchError">
+      <ocx-interactive-data-view
+        [data]="(filteredData$ | async) ?? []"
+        [columns]="columns"
+        [emptyResultsMessage]="'USERPROFILE_SEARCH.EMPTY_RESULTS' | translate"
+        [supportedViewLayouts]="['grid', 'table']"
+        [defaultGroupKey]="'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT'"
+      >
+        <ng-template #topCenter>
+          <ocx-data-view-controls
+            [enableSorting]="false"
+            [enableFiltering]="true"
+            (filterChange)="onFilterChange($event)"
+            [filterColumns]="['WORKSPACE.NAME' | translate, 'WORKSPACE.THEME' | translate]"
+            [translations]="dataViewControlsTranslations"
+          >
+          </ocx-data-view-controls>
+        </ng-template>
+        <ng-template #listItemSubtitleLines let-item>
+          <div *ngFor="let subtitleLineId of subtitleLineIds" class="edit-time text-xl my-3">
+            {{ item[subtitleLineId] }}
+          </div>
+        </ng-template>
+        <ng-template #gridItem let-item>
+          <div class="col-12 lg:col-6 xl:col-4 flex">
+            <div
+              class="data-grid-item card flex flex-column justify-content-between w-12 lg:w-11 mb-4 mt-4 align-self-stretch"
+            >
+              <div class="flex flex-row justify-content-between align-items-center">
+                <div class="data-grid-items flex-row">
+                  <div class="text-xl my-3 font-bold">{{ item['displayName'] }}</div>
+                  <div *ngFor="let subtitleLineId of subtitleLineIds" class="text-xl my-3">
+                    {{ item[subtitleLineId] }}
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </ng-template>
+        <ng-template #gridItemSubtitleLines let-item>
+          <div *ngFor="let subtitleLineId of subtitleLineIds" class="edit-time text-xl my-3">
+            {{ item[subtitleLineId] }}
+          </div>
+        </ng-template>
+      </ocx-interactive-data-view>
+    </ocx-content>
+
+    <ocx-content *ngIf="!searchExecuted" class="w-full">
+      <div class="flex justify-content-center">
+        <p-message
+          *ngIf="!searchExecuted"
+          severity="info"
+          text="{{ 'USERPROFILE_SEARCH.MSG_BEFORE_FIRST_SEARCH' | translate }}"
+        ></p-message>
+      </div>
+    </ocx-content>
+
+    <ocx-content *ngIf="searchExecuted && !searchError && resultData$ === null" class="w-full">
+      <div class="flex justify-content-center">
+        <p-message severity="info" text="{{ 'USERPROFILE_SEARCH.MSG_NO_RESULTS' | translate }}"></p-message>
+      </div>
+    </ocx-content>
+
+    <ocx-content *ngIf="searchError" class="w-full">
+      <div class="flex justify-content-center">
+        <p-message severity="error" text="{{ 'USERPROFILE_SEARCH.MSG_SEARCH_FAILED' | translate }}"></p-message>
+      </div>
+    </ocx-content>
+  </ocx-content-container>
+</ocx-portal-page>
