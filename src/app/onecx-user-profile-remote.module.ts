@@ -3,9 +3,9 @@ import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
+import { addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
 import {
-  addInitializeModuleGuard,
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
