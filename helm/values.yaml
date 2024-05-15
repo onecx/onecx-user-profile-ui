@@ -30,6 +30,8 @@ app:
             VIEW: View mode for user profile
             EXPORT: Export user profile
             IMPORT: Import user profile
+          USERPROFILE_ADMIN:
+            SEARCH: Search user profile in admin mode
     # Keycloak
     keycloak:
       client:
