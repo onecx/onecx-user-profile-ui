@@ -166,7 +166,8 @@
     "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
   },
   "PASSWORD": {
-    "TAB_NAME_PASSWORD": "Passwort"
+    "TAB_NAME_PASSWORD": "Passwort",
+    "NOT_AVAILABLE": "Die Funktion zur Passwortänderung ist nicht verfügbar"
   },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
