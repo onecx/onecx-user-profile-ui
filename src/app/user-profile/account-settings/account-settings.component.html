@@ -36,6 +36,19 @@
           (applyChanges)="reloadPage()"
         ></app-privacy-settings>
       </p-tabPanel>
+      <p-tabPanel>
+        <ng-template pTemplate="header">{{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}</ng-template>
+        <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
+          <ocx-slot
+            *ngIf="isChangePasswordComponentDefined$ | async; else changePasswordPlaceholder"
+            name="{{ changePasswordSlotName }}"
+          >
+          </ocx-slot>
+          <ng-template #changePasswordPlaceholder>
+            <div class="font-bold mt-2 mb-3">{{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}</div>
+          </ng-template>
+        </div>
+      </p-tabPanel>
     </p-tabView>
   </ocx-page-content>
 </ocx-portal-page>

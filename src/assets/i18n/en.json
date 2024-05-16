@@ -165,6 +165,10 @@
     "HIDE_MY_PROFILE": "Hide my profile",
     "PRIVACY.TOOLTIP": "Enable/Disable hiding the profile"
   },
+  "PASSWORD": {
+    "TAB_NAME_PASSWORD": "Password",
+    "NOT_AVAILABLE": "Password change functionality is not available"
+  },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Layout & Theme",
     "BREADCRUMBS": "Breadcrumbs",

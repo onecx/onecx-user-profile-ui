@@ -13,7 +13,6 @@ import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { DataViewModule } from 'primeng/dataview'
 import { DialogModule } from 'primeng/dialog'
 import { DropdownModule } from 'primeng/dropdown'
-import { DialogService } from 'primeng/dynamicdialog'
 import { InputSwitchModule } from 'primeng/inputswitch'
 import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
@@ -27,16 +26,12 @@ import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
 import { PanelModule } from 'primeng/panel'
 
-import {
-  AppStateService,
-  ConfigurationService,
-  PortalApiConfiguration,
-  PortalDialogService
-} from '@onecx/portal-integration-angular'
+import { AppStateService, ConfigurationService, PortalApiConfiguration } from '@onecx/portal-integration-angular'
 
 import { Configuration } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
 import { LabelResolver } from './label.resolver'
+import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
 
 export function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {
   return new PortalApiConfiguration(Configuration, environment.apiPrefix, configService, appStateService)
@@ -90,7 +85,8 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
           (selector) => element.tagName === selector
         )
       }
-    })
+    }),
+    AngularRemoteComponentsModule
   ],
   exports: [
     AutoCompleteModule,
@@ -116,13 +112,13 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     TableModule,
     TabViewModule,
     ToastModule,
-    TranslateModule
+    TranslateModule,
+    AngularRemoteComponentsModule
   ],
   //this is not elegant, for some reason the injection token from primeng does not work across federated module
   providers: [
     ConfirmationService,
     LabelResolver,
-    { provide: DialogService, useClass: PortalDialogService },
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] }
   ]
 })

@@ -38,4 +38,11 @@ app:
           kcConfig:
             clientId: "onecx-product-store-ui"
 
+    slot:
+      enabled: true
+      specs:
+        changePassword:
+          name: 'changePassword'
+          description: 'User Profile change password'
+
 # PIPE Config

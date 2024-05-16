@@ -11,6 +11,7 @@ import {
 import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.component'
 import { map } from 'rxjs/operators'
 import { Observable } from 'rxjs'
+import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
   selector: 'app-account-settings',
@@ -21,9 +22,11 @@ export class AccountSettingsComponent implements OnInit {
   @ViewChild(PrivacySettingsComponent, { static: false }) privacySettings!: PrivacySettingsComponent
 
   public personalInfo$: Observable<UserPerson>
+  public isChangePasswordComponentDefined$: Observable<boolean>
   public settings: UserProfileAccountSettings = {}
   public settingsInitial: UserProfileAccountSettings = {}
   public selectedTab = 0
+  public changePasswordSlotName = 'changePassword'
 
   private cacheItem = 'httpCache'
   // This is the local-cache-key for the user profile, containing the localization and timezone setting
@@ -33,9 +36,11 @@ export class AccountSettingsComponent implements OnInit {
     private msgService: PortalMessageService,
     private userProfileService: UserProfileAPIService,
     private readonly router: Router,
-    private readonly confService: ConfigurationService // private readonly stateService: StateService
+    private readonly confService: ConfigurationService, // private readonly stateService: StateService
+    private readonly slotService: SlotService
   ) {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+    this.isChangePasswordComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.changePasswordSlotName)
   }
 
   public ngOnInit(): void {
