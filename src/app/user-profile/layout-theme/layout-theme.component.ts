@@ -28,8 +28,8 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
     this.menuModeSelectItems = [
       { label: 'LAYOUT_THEME.MENU_MODES.HORIZONTAL', value: MenuMode.Horizontal },
       { label: 'LAYOUT_THEME.MENU_MODES.STATIC', value: MenuMode.Static },
-      { label: 'LAYOUT_THEME.MENU_MODES.OVERLAY', value: MenuMode.Overlay },
-      { label: 'LAYOUT_THEME.MENU_MODES.SLIM', value: MenuMode.Slim }
+      { label: 'LAYOUT_THEME.MENU_MODES.OVERLAY', value: MenuMode.Overlay, disabled: true },
+      { label: 'LAYOUT_THEME.MENU_MODES.SLIM', value: MenuMode.Slim, disabled: true }
       //{ label: 'LAYOUT_THEME.MENU_MODES.SLIMPLUS', value: MenuMode.SLIMPLUS },
     ]
     this.colorSchemeSelectItems = [
