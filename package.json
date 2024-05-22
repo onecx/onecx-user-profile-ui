@@ -11,7 +11,6 @@
     "openapiOutput": "src/app/shared/generated"
   },
   "scripts": {
-    "startPort": "ng serve --port 5027",
     "build": "ng build",
     "clean": "npm cache clean --force && npm run clean-angular",
     "clean-angular": "ng cache clean",
@@ -50,7 +49,6 @@
     "@ngneat/falso": "^6.4.0",
     "@ngrx/effects": "^15.4.0",
     "@ngrx/router-store": "^15.4.0",
-    "@ngrx/store": "^15.4.0",
     "@ngx-translate/core": "^14.0.0",
     "@ngx-translate/http-loader": "^7.0.0",
     "@onecx/angular-remote-components": "^4.25.1",
