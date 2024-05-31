@@ -3,7 +3,7 @@ import { Router } from '@angular/router'
 import { MenuItem } from 'primeng/api'
 import { Table } from 'primeng/table'
 
-import { Membership, UserPerson, PortalMessageService } from '@onecx/portal-integration-angular'
+import { Membership, UserPerson, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 // import { UserProfileService } from '../user-profile.service'
 import { PermissionRowitem } from './models/permissionRowItem'
 import { environment } from '../../../environments/environment'
@@ -18,6 +18,7 @@ export class RolesPermissionsComponent implements OnInit {
   public memberships: Membership[] = []
   public roles: string[] = []
   environment = environment
+  public myPermissions = new Array<string>() // permissions of the user
 
   public permissionItems: PermissionRowitem[] = []
   public items: MenuItem[] = []
@@ -33,11 +34,13 @@ export class RolesPermissionsComponent implements OnInit {
 
   constructor(
     private readonly router: Router,
+    private userService: UserService,
     // private readonly userProfileService: UserProfileService,
     private msgService: PortalMessageService
   ) {
     this.personalInfo = {}
     // = this.authService.getCurrentUser()?.person || {}
+    if (userService.hasPermission('ROLES_PERMISSIONS#VIEW')) this.myPermissions.push('ROLES_PERMISSIONS#VIEW')
   }
 
   public ngOnInit(): void {
