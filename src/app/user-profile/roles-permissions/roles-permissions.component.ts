@@ -3,10 +3,11 @@ import { Router } from '@angular/router'
 import { MenuItem } from 'primeng/api'
 import { Table } from 'primeng/table'
 
-import { Membership, UserPerson, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
-// import { UserProfileService } from '../user-profile.service'
+import { Membership, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 import { PermissionRowitem } from './models/permissionRowItem'
 import { environment } from '../../../environments/environment'
+import { Observable, map } from 'rxjs'
 
 @Component({
   selector: 'app-roles-permissions',
@@ -14,7 +15,7 @@ import { environment } from '../../../environments/environment'
   styleUrls: ['./roles-permissions.component.scss']
 })
 export class RolesPermissionsComponent implements OnInit {
-  public personalInfo: UserPerson
+  public personalInfo$: Observable<UserPerson>
   public memberships: Membership[] = []
   public roles: string[] = []
   environment = environment
@@ -35,11 +36,10 @@ export class RolesPermissionsComponent implements OnInit {
   constructor(
     private readonly router: Router,
     private userService: UserService,
-    // private readonly userProfileService: UserProfileService,
+    private readonly userProfileService: UserProfileAPIService,
     private msgService: PortalMessageService
   ) {
-    this.personalInfo = {}
-    // = this.authService.getCurrentUser()?.person || {}
+    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
     if (userService.hasPermission('ROLES_PERMISSIONS#VIEW')) this.myPermissions.push('ROLES_PERMISSIONS#VIEW')
   }
 

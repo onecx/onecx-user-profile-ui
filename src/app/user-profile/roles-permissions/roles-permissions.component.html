@@ -1,6 +1,6 @@
 <ocx-portal-page permission="ROLES_PERMISSIONS#VIEW" helpArticleId="PAGE_USER_PERMISSIONS">
   <ocx-page-header
-    [header]="personalInfo.firstName + ' ' + personalInfo.lastName"
+    [header]="(personalInfo$ | async)?.firstName + ' ' + (personalInfo$ | async)?.lastName"
     [subheader]="'ROLE_PERMISSIONS.HEADLINE' | translate"
   >
   </ocx-page-header>
