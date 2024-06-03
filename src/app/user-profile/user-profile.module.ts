@@ -29,7 +29,7 @@ const routes: Routes = [
     pathMatch: 'full'
   },
   {
-    path: 'roles-perms',
+    path: 'roles-and-perms',
     component: RolesPermissionsComponent,
     pathMatch: 'full'
   }

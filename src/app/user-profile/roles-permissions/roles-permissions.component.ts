@@ -25,6 +25,7 @@ export class RolesPermissionsComponent implements OnInit {
   public items: MenuItem[] = []
   public cols = [{}]
   public selectedColumns = [{}]
+  public selectedTab = 0
   public sortValue = ''
   public visibility = false
   public activeItem: MenuItem | undefined

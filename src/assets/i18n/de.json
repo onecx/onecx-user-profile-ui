@@ -22,7 +22,7 @@
     "APPLY": "Anwenden",
     "APPLY.TOOLTIP": "Die Seite neu laden um die Änderung sofort zu sehen",
     "EDIT": "Bearbeiten",
-    "EDIT.TOOLTIP": "In den Ändermodus wechseln",
+    "EDIT.TOOLTIP": "In den Änderungsmodus wechseln",
     "FILTER_CLEAR": "Filter entfernen",
     "CHANGE": "Ändern",
     "REMOVE": "Entfernen",
@@ -49,26 +49,36 @@
       "PHONE": "Telefonnummer"
     },
     "FIRST_NAME": "Vorname",
+    "FIRST_NAME.TOOLTIP": "Vorname des aktuellen Nutzers",
     "LAST_NAME": "Nachname",
+    "LAST_NAME.TOOLTIP": "Nachname des aktuellen Nutzers",
     "DISPLAY_NAME": "Anzeigename",
     "ID": "Benutzer-ID",
+    "ID.TOOLTIP": "Benutzer-ID des aktuellen Nutzers",
     "USERNAME": "Benutzername",
     "EMAIL": "Email",
     "COUNTRY": "Land",
+    "COUNTRY.TOOLTIP": "Land des aktuellen Nutzers",
     "CITY": "Ort",
+    "CITY.TOOLTIP": "Ort des aktuellen Nutzers",
     "POSTAL_CODE": "PLZ",
+    "POSTAL_CODE.TOOLTIP": "Postleitzahl des aktuellen Nutzers",
     "STREET": "Straße",
+    "STREET.TOOLTIP": "Straße des aktuellen Nutzers",
     "HOUSE_NUMBER": "Hausnummer",
+    "HOUSE_NUMBER.TOOLTIP": "Hausnummer des aktuellen Nutzers",
     "NUMBER": "Nummer",
     "TAKE_OVER": "Übernehmen",
     "EXIT_EDITING": "Bearbeitung abbrechen",
     "CLEAR_FORM": "Alles entfernen",
     "PHONE_TYPE": "Typ",
+    "PHONE_TYPE.TOOLTIP": "Typ des aktuellen Nutzers",
     "PHONE": {
       "MOBILE": "Mobile",
       "LANDLINE": "Festnetz"
     },
     "PHONE_NUMBER": "Telefonnummer",
+    "PHONE_NUMBER.TOOLTIP": "Telefonnummer des aktuellen Nutzers",
     "MSG": {
       "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
       "SAVE_ERROR": "Datenspeicherung fehlgeschlagen"
@@ -126,7 +136,9 @@
   "ROLE_PERMISSIONS": {
     "HEADLINE": "Zugewiesene Rollen und Berechtigungen",
     "TAB_NAME_ROLES": "Rollen",
+    "TAB_NAME_ROLES.TOOLTIP": "Rollen des aktuellen Nutzers",
     "TAB_NAME_PERMISSIONS": "Berechtigungen",
+    "TAB_NAME_PERMISSIONS.TOOLTIP": "Berechtigungen des aktuellen Nutzers",
     "TITLE_ROLES": "Meine Rollen",
     "TITLE_PERMISSIONS": "Meine Berechtigungen",
     "NO_RESULTS": "Keine Daten",
@@ -147,9 +159,10 @@
   },
   "LANGUAGE_TIMEZONE": {
     "TAB_NAME_LANGUAGE_TIMEZONE": "Sprache & Zeitzone",
+    "TAB_NAME_LANGUAGE_TIMEZONE.TOOLTIP": "Einstellungen zu Sprache und Zeitzone des aktuellen Nutzers",
     "LANGUAGE": "Sprache",
     "TIMEZONE": "Zeitzone",
-    "LANGUAGE.TOOLTIP": "Sprache in der die Seiten angezeigt werden",
+    "LANGUAGE.TOOLTIP": "Sprache, in der die Seiten angezeigt werden",
     "TIMEZONE.TOOLTIP": "Zeitzone für die Datumsanzeige",
     "TIMEZONE_EXAMPLE": "Beispiel",
     "TIMEZONE_EXAMPLE.TOOLTIP": "Beispielhafte Repräsentation der gewählten Zeitzone"
@@ -162,15 +175,18 @@
   },
   "PRIVACY_SETTINGS": {
     "TAB_NAME_PRIVACY": "Privatsphäre",
+    "TAB_NAME_PRIVACY.TOOLTIP": "Einstellungen zur Privatsphäre des aktuellen Nutzers",
     "HIDE_MY_PROFILE": "Mein Profil ausblenden",
     "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Passwort",
+    "TAB_NAME_PASSWORD.TOOLTIP": "Passwort des aktuellen Nutzers",
     "NOT_AVAILABLE": "Die Funktion zur Passwortänderung ist nicht verfügbar"
   },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
+    "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Einstellungen zu Darstellung und Aussehen",
     "BREADCRUMBS": "Seitenpfad",
     "BREADCRUMBS.TOOLTIP": "Generelle Sichtbarkeit des Seitenpfads",
     "MENU_MODE": "Menüdarstellung",

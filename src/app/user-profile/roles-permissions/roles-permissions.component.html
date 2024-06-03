@@ -9,9 +9,13 @@
       <ocx-loading></ocx-loading>
     </ng-template>
 
-    <p-tabView *ngIf="permissionItems; else loading">
+    <p-tabView *ngIf="permissionItems; else loading" [(activeIndex)]="selectedTab">
       <p-tabPanel>
-        <ng-template pTemplate="header"> {{ 'ROLE_PERMISSIONS.TAB_NAME_PERMISSIONS' | translate }} </ng-template>
+        <ng-template pTemplate="header">
+          <span title="{{ 'ROLE_PERMISSIONS.TAB_NAME_PERMISSIONS.TOOLTIP' | translate }}">
+            {{ 'ROLE_PERMISSIONS.TAB_NAME_PERMISSIONS' | translate }}
+          </span>
+        </ng-template>
         <p-table
           #permissionTable
           [columns]="cols"
@@ -91,7 +95,11 @@
       </p-tabPanel>
 
       <p-tabPanel>
-        <ng-template pTemplate="header"> {{ 'ROLE_PERMISSIONS.TAB_NAME_ROLES' | translate }} </ng-template>
+        <ng-template pTemplate="header">
+          <span title="{{ 'ROLE_PERMISSIONS.TAB_NAME_ROLES.TOOLTIP' | translate }}">
+            {{ 'ROLE_PERMISSIONS.TAB_NAME_ROLES' | translate }}
+          </span>
+        </ng-template>
         <p-table [value]="roles">
           <ng-template pTemplate="header">
             <tr>
