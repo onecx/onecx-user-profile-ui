@@ -16,6 +16,7 @@ import { PersonalInformationComponent } from 'src/app/user-profile/personal-info
 import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
 import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
+import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
 
 const routes: Routes = [
   {
@@ -26,6 +27,11 @@ const routes: Routes = [
   {
     path: 'account',
     component: AccountSettingsComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'search',
+    component: UserProfileSearchComponent,
     pathMatch: 'full'
   },
   {
@@ -43,6 +49,7 @@ const routes: Routes = [
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacySettingsComponent,
+    UserProfileSearchComponent,
     RolesPermissionsComponent
   ],
   imports: [

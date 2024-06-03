@@ -1,19 +1,25 @@
 {
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "Benutzerprofil",
+      "SUBHEADER": "Benutzerprofile suchen"
+    }
+  },
   "ACTIONS": {
     "CONFIRMATION": {
       "NO": "Nein",
       "YES": "Ja",
-      "NO.TOOLTIP": "Abbruch der Aktion",
-      "YES.TOOLTIP": "Fortfahren mit der Aktion"
+      "NO.TOOLTIP": "Aktion abbrechen",
+      "YES.TOOLTIP": "Mit der Aktion fortfahren"
     },
     "SEARCH": {
-      "ERROR": "Daten nicht abrufbar",
-      "FILTER": "Filter",
-      "FILTER_OF": "Filter für ",
-      "FILTER_CLEAR": "Filter entfernen",
+      "ERROR": "Daten nicht verfügbar",
+      "FILTER": "Filtern",
+      "FILTER_OF": "Filter für",
+      "FILTER_CLEAR": "Filter löschen",
       "NO_DATA": "Keine Daten",
       "RELOAD": "Daten neu laden",
-      "SORT_BY": "Sortiert nach",
+      "SORT_BY": "Sortieren nach",
       "SORT_DIRECTION_ASC": "aufsteigend",
       "SORT_DIRECTION_DESC": "absteigend"
     }
@@ -22,17 +28,17 @@
     "APPLY": "Anwenden",
     "APPLY.TOOLTIP": "Die Seite neu laden um die Änderung sofort zu sehen",
     "EDIT": "Bearbeiten",
-    "EDIT.TOOLTIP": "In den Änderungsmodus wechseln",
-    "FILTER_CLEAR": "Filter entfernen",
+    "EDIT.TOOLTIP": "In den Bearbeitungsmodus wechseln",
+    "FILTER_CLEAR": "Filter löschen",
     "CHANGE": "Ändern",
     "REMOVE": "Entfernen",
-    "RELOAD": "Neuladen",
+    "RELOAD": "Neu laden",
     "SAVE": "Speichern",
     "SAVE.TOOLTIP": "Speichern",
     "CLOSE": "Schließen",
     "CLOSE.TOOLTIP": "Schließen",
     "CANCEL": "Abbrechen",
-    "CANCEL.TOOLTIP": "Ändern abbrechen ohne speichern"
+    "CANCEL.TOOLTIP": "Bearbeitung abbrechen, ohne zu speichern"
   },
   "PROFILE": {
     "SUBHEADER": "Persönliche Daten verwalten",
@@ -56,7 +62,7 @@
     "ID": "Benutzer-ID",
     "ID.TOOLTIP": "Benutzer-ID des aktuellen Nutzers",
     "USERNAME": "Benutzername",
-    "EMAIL": "Email",
+    "EMAIL": "E-Mail",
     "COUNTRY": "Land",
     "COUNTRY.TOOLTIP": "Land des aktuellen Nutzers",
     "CITY": "Ort",
@@ -69,19 +75,19 @@
     "HOUSE_NUMBER.TOOLTIP": "Hausnummer des aktuellen Nutzers",
     "NUMBER": "Nummer",
     "TAKE_OVER": "Übernehmen",
-    "EXIT_EDITING": "Bearbeitung abbrechen",
-    "CLEAR_FORM": "Alles entfernen",
+    "EXIT_EDITING": "Bearbeitung beenden",
+    "CLEAR_FORM": "Alle löschen",
     "PHONE_TYPE": "Typ",
     "PHONE_TYPE.TOOLTIP": "Typ des aktuellen Nutzers",
     "PHONE": {
-      "MOBILE": "Mobile",
+      "MOBILE": "Mobil",
       "LANDLINE": "Festnetz"
     },
     "PHONE_NUMBER": "Telefonnummer",
     "PHONE_NUMBER.TOOLTIP": "Telefonnummer des aktuellen Nutzers",
     "MSG": {
       "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
-      "SAVE_ERROR": "Datenspeicherung fehlgeschlagen"
+      "SAVE_ERROR": "Daten konnten nicht gespeichert werden"
     }
   },
   "SEARCH": {
@@ -106,35 +112,35 @@
     "CANCEL": "Abbrechen",
     "CHOOSE_ANOTHER": "Anderes Foto auswählen",
     "REMOVE_CONFIRM": "Foto entfernen",
-    "REMOVE_CANCEL": "Derzeitiges Foto beibehalten",
+    "REMOVE_CANCEL": "Aktuelles Foto behalten",
     "MSG": {
       "FILE_TOO_LARGE": {
         "SUMMARY": "Datei zu groß",
-        "DETAIL": "Die Dateigröße darf {{maxFileSize}} KB nicht überschreiten"
+        "DETAIL": "Dateigröße darf nicht mehr als {{maxFileSize}} KB betragen"
       },
       "TOO_SMALL": {
         "SUMMARY": "Bild zu klein",
-        "DETAIL": "Stellen Sie sicher, dass die Bildgröße mindestens {{minimumImageWidth}}x{{minimumImageHeight}}px beträgt"
+        "DETAIL": "Stellen Sie sicher, dass die Bildgröße mindestens {{minimumImageWidth}} x {{minimumImageHeight}} px beträgt"
       },
       "WRONG_RATIO": {
         "SUMMARY": "Falsches Bildverhältnis",
-        "DETAIL": "Verwenden Sie ein quadratisches Bild"
+        "DETAIL": "Bitte verwenden Sie ein quadratisches Bild"
       },
       "UPLOAD_ERROR": {
-        "SUMMARY": "Datei-Hochladen fehlgeschlagen",
-        "DETAIL": "Während der Verarbeitung ist ein Fehler aufgetreten. Versuchen Sie, ein anderes Bild hochzuladen."
+        "SUMMARY": "Datei-Upload fehlgeschlagen",
+        "DETAIL": "Beim Verarbeiten ist ein Fehler aufgetreten, versuchen Sie eine andere Datei hochzuladen"
       },
       "WRONG_CONTENT_TYPE": {
         "SUMMARY": "Falsches Dateiformat",
-        "DETAIL": "Stellen Sie eine PNG- oder JPEG-Datei bereit."
+        "DETAIL": "Bitte stellen Sie eine PNG- oder JPEG-Datei bereit"
       },
       "UPLOAD_SUCCESS": "Datei erfolgreich hochgeladen",
-      "REMOVE_SUCCESS": "Foto erfolgreich entfernt",
-      "REMOVE_ERROR": "Foto konnte nicht entfernt werden"
+      "REMOVE_SUCCESS": "Datei erfolgreich entfernt",
+      "REMOVE_ERROR": "Dateientfernung fehlgeschlagen"
     }
   },
   "ROLE_PERMISSIONS": {
-    "HEADLINE": "Zugewiesene Rollen und Berechtigungen",
+    "HEADLINE": "Rollen und Berechtigungen gewährt",
     "TAB_NAME_ROLES": "Rollen",
     "TAB_NAME_ROLES.TOOLTIP": "Rollen des aktuellen Nutzers",
     "TAB_NAME_PERMISSIONS": "Berechtigungen",
@@ -154,7 +160,7 @@
     },
     "MSG": {
       "PERMISSIONS_REFRESH_INFO": "Berechtigungen wurden aktualisiert",
-      "PERMISSIONS_REFRESH_ERROR": "Fehler beim Aktualisieren"
+      "PERMISSIONS_REFRESH_ERROR": "Fehler beim Aktualisieren der Berechtigungen"
     }
   },
   "LANGUAGE_TIMEZONE": {
@@ -163,15 +169,16 @@
     "LANGUAGE": "Sprache",
     "TIMEZONE": "Zeitzone",
     "LANGUAGE.TOOLTIP": "Sprache, in der die Seiten angezeigt werden",
+    "LANGUAGE.TOOLTIP": "Sprache, in der die Seiten angezeigt werden",
     "TIMEZONE.TOOLTIP": "Zeitzone für die Datumsanzeige",
     "TIMEZONE_EXAMPLE": "Beispiel",
-    "TIMEZONE_EXAMPLE.TOOLTIP": "Beispielhafte Repräsentation der gewählten Zeitzone"
+    "TIMEZONE_EXAMPLE.TOOLTIP": "Beispiel für die gewählte Zeitzone"
   },
   "USER_SETTINGS": {
     "HEADLINE": "Einstellungen",
     "SUCCESS": "Einstellungen erfolgreich aktualisiert",
-    "ERROR": "Aktualisierung der Einstellungen fehlgeschlagen",
-    "CLEAR_CACHE_INFO": "Cache wurde entfernt"
+    "ERROR": "Einstellungen konnten nicht aktualisiert werden",
+    "CLEAR_CACHE_INFO": "Cache wurde geleert"
   },
   "PRIVACY_SETTINGS": {
     "TAB_NAME_PRIVACY": "Privatsphäre",
@@ -191,20 +198,20 @@
     "BREADCRUMBS.TOOLTIP": "Generelle Sichtbarkeit des Seitenpfads",
     "MENU_MODE": "Menüdarstellung",
     "MENU_MODES": {
-      "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Seitenleiste (Mobil)",
+      "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Sidebar (Mobil)",
       "HORIZONTAL": "Horizontal",
       "STATIC": "Statisch",
-      "OVERLAY": "Überlagert",
+      "OVERLAY": "Überlagerung",
       "SLIM": "Schlank",
       "SLIMPLUS": "Schlank +",
-      "TOOLTIP": "Darstellungsweise des Menüs"
+      "TOOLTIP": "Wählen Sie die bevorzugte Darstellung des Menüs"
     },
     "COLOR_SCHEME": "Farbschema",
     "COLOR_SCHEMES": {
       "AUTO": "Automatisch",
       "LIGHT": "Hell",
       "DARK": "Dunkel",
-      "TOOLTIP": "Darstellung des Farbschemas"
+      "TOOLTIP": "Wählen Sie den bevorzugten Bildschirmmodus"
     }
   },
   "LANGUAGE": {
@@ -212,6 +219,40 @@
     "EN": "Englisch"
   },
   "PREFERENCES": {
-    "TAB_NAME_PREFERENCES": "Präferenzen"
+    "TAB_NAME_PREFERENCES": "Vorlieben"
+  },
+  "USERPROFILE_SEARCH": {
+    "USERPROFILE_MODULE": "Benutzerprofilmodul",
+    "SEARCH": "Suche",
+    "EMPTY_RESULTS": "Keine Ergebnisse",
+    "MSG_BEFORE_FIRST_SEARCH": "Beginnen Sie eine Suche, um Ereignisse zu finden",
+    "CHANGE_CRITERIA": "Suchkriterien wechseln",
+    "ID": "Id",
+    "FIRSTNAME": "Vorname",
+    "LASTNAME": "Nachname",
+    "EMAIL": "E-Mail",
+    "MODIFICATION_DATE": "Änderungsdatum",
+    "CREATION_USER": "Erstellungsbenutzer",
+    "COLUMN_HEADER_NAME": {
+      "ID": "Id",
+      "FIRSTNAME": "Vorname",
+      "LASTNAME": "Nachname",
+      "DISPLAYNAME": "Angezeigter Name",
+      "EMAIL": "E-Mail",
+      "MODIFICATION_DATE": "Änderungsdatum",
+      "CREATION_USER": "Erstellungsbenutzer"
+    },
+    "PREDEFINED_GROUP": {
+      "DEFAULT": "Standard",
+      "EXTENDED": "Erweitert",
+      "FULL": "Voll"
+    },
+    "MESSAGE": {
+      "SUCCESS": "Erfolg",
+      "NO_RESULTS": "Keine Ergebnisse"
+    },
+    "MENU_ITEM": {
+      "SHOW_HIDE_SUMMARY": "Zusammenfassung anzeigen/ausblenden"
+    }
   }
 }

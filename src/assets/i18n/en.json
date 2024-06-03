@@ -1,4 +1,10 @@
 {
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "User Profile",
+      "SUBHEADER": "Search User Profiles"
+    }
+  },
   "ACTIONS": {
     "CONFIRMATION": {
       "NO": "No",
@@ -212,5 +218,40 @@
   },
   "PREFERENCES": {
     "TAB_NAME_PREFERENCES": "Preferences"
+  },
+  "USERPROFILE_SEARCH": {
+    "USERPROFILE_MODULE": "UserProfileModule",
+    "SEARCH": "Search",
+    "EMPTY_RESULTS": "Keine Ergebnisse",
+    "MSG_BEFORE_FIRST_SEARCH": "Start a search to find events",
+    "CHANGE_CRITERIA": "Switch search criteria schema",
+    "ID": "Id",
+    "FIRSTNAME": "First name",
+    "LASTNAME": "Last name",
+    "EMAIL": "Email",
+    "MODIFICATION_DATE": "Modification Date",
+    "CREATION_USER": "Creation User",
+    "COLUMN_HEADER_NAME": {
+      "ID": "Id",
+      "FIRSTNAME": "First name",
+      "LASTNAME": "Last name",
+      "DISPLAYNAME": "Display Name",
+      "EMAIL": "Email",
+      "MODIFICATION_DATE": "Modification Date",
+      "CREATION_USER": "Creation User"
+    },
+    "PREDEFINED_GROUP": {
+      "DEFAULT": "Default",
+      "EXTENDED": "Extended",
+      "FULL": "Full"
+    },
+
+    "MESSAGE": {
+      "SUCESS": "Success",
+      "NO_RESULTS": "No results"
+    },
+    "MENU_ITEM": {
+      "SHOW_HIDE_SUMMARY": "Show/Hide Summary"
+    }
   }
 }
