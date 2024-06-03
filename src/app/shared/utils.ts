@@ -48,3 +48,37 @@ export function dropDownGetLabelByValue(ddArray: SelectItem[], val: string): str
 export function sortByLocale(a: any, b: any): number {
   return a.toUpperCase().localeCompare(b.toUpperCase())
 }
+
+/***************** Time functions for calendar */
+export function getLocale(): string {
+  const locale: string = navigator.language
+  return locale && locale.toLocaleLowerCase().match(/^(en|en-.+|de|de-.+)$/) ? locale : 'en-US'
+}
+
+export function getDateFormat(type: string): string {
+  const formatObject = new Intl.DateTimeFormat(getLocale()).formatToParts(new Date())
+
+  return formatObject
+    .map((object) => {
+      switch (object.type) {
+        case 'day':
+          return 'dd'
+        case 'month':
+          return 'mm'
+        case 'year':
+          return type && type === 'dateformat' ? 'yy' : 'yyyy'
+        default:
+          return object.value
+      }
+    })
+    .join('')
+}
+
+export function getTooltipContent(value: string, maxlength?: number) {
+  if (value) {
+    const tooltipContent = value.toString()
+    const truncatedLength = maxlength ?? 30
+    return tooltipContent.length > truncatedLength ? tooltipContent : null
+  }
+  return null
+}
