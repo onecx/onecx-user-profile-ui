@@ -1,14 +1,19 @@
-<ocx-portal-page *ocxIfPermission="'USERPROFILE#VIEW'" helpArticleId="PAGE_USER_SETTINGS">
+<ocx-portal-page *ocxIfPermission="'ACCOUNT_SETTINGS#VIEW'" helpArticleId="PAGE_USER_SETTINGS">
   <ocx-page-header
-    [header]="(personalInfo$ | async)?.firstName + ' ' + (personalInfo$ | async)?.lastName"
+    *ngIf="personalInfo$ | async as person"
+    [header]="person.firstName + ' ' + person.lastName"
     [subheader]="'SETTINGS.SUBHEADER' | translate"
   >
   </ocx-page-header>
 
   <ocx-page-content>
     <p-tabView [(activeIndex)]="selectedTab">
-      <p-tabPanel>
-        <ng-template pTemplate="header"> {{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE' | translate }} </ng-template>
+      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE_TIMEZONE#VIEW'">
+        <ng-template pTemplate="header">
+          <span title="{{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE.TOOLTIP' | translate }}">
+            {{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE' | translate }}
+          </span>
+        </ng-template>
         <app-locale-timezone
           [localeInput]="settingsInitial.locale"
           [timezoneInput]="settingsInitial.timezone"
@@ -17,9 +22,12 @@
           (applyChanges)="reloadPage()"
         ></app-locale-timezone>
       </p-tabPanel>
-      <p-tabPanel>
-        <ng-template pTemplate="header"> {{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME' | translate }} </ng-template>
-
+      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LAYOUT_THEME#VIEW'">
+        <ng-template pTemplate="header">
+          <span title="{{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME.TOOLTIP' | translate }}">
+            {{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME' | translate }}
+          </span>
+        </ng-template>
         <app-layout-theme
           [colorScheme]="settingsInitial.colorScheme"
           [menuMode]="settingsInitial.menuMode"
@@ -28,8 +36,12 @@
           (applyChanges)="reloadPage()"
         ></app-layout-theme>
       </p-tabPanel>
-      <p-tabPanel>
-        <ng-template pTemplate="header"> {{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY' | translate }} </ng-template>
+      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_PRIVACY#VIEW'">
+        <ng-template pTemplate="header">
+          <span title="{{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY.TOOLTIP' | translate }}">
+            {{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY' | translate }}
+          </span>
+        </ng-template>
         <app-privacy-settings
           [privacySettings]="settings.hideMyProfile"
           (privacySettingsChange)="privacySettingsChange($event)"
@@ -37,7 +49,11 @@
         ></app-privacy-settings>
       </p-tabPanel>
       <p-tabPanel>
-        <ng-template pTemplate="header">{{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}</ng-template>
+        <ng-template pTemplate="header">
+          <span title="{{ 'PASSWORD.TAB_NAME_PASSWORD.TOOLTIP' | translate }}">
+            {{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}
+          </span>
+        </ng-template>
         <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
           <ocx-slot
             *ngIf="isChangePasswordComponentDefined$ | async; else changePasswordPlaceholder"

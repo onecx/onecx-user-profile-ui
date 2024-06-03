@@ -15,6 +15,7 @@ import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/lo
 import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
 import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
 import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
+import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
 
 const routes: Routes = [
@@ -32,6 +33,11 @@ const routes: Routes = [
     path: 'search',
     component: UserProfileSearchComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'roles-and-perms',
+    component: RolesPermissionsComponent,
+    pathMatch: 'full'
   }
 ]
 @NgModule({
@@ -43,7 +49,8 @@ const routes: Routes = [
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacySettingsComponent,
-    UserProfileSearchComponent
+    UserProfileSearchComponent,
+    RolesPermissionsComponent
   ],
   imports: [
     CommonModule,

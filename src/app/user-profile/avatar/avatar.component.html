@@ -1,5 +1,5 @@
 <div class="mx-3 mb-1 sm:mb-2 md:mb-3 relative flex flex-wrap justify-content-start gap-4 row-gap-1">
-  <div>
+  <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
     <!-- No image => show placeholder -->
     <img
       *ngIf="!(userAvatar$ | async)?.imageUrl"
@@ -19,7 +19,7 @@
     />
   </div>
 
-  <ng-container *ocxIfPermission="'USERPROFILE#EDIT'">
+  <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
     <input hidden type="file" #selectedFileInput (change)="onFileUpload($event)" />
     <div class="flex flex-row sm:flex-column flex-wrap gap-1 toolbar">
       <button

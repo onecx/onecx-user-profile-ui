@@ -54,17 +54,25 @@
       "ADDRESS": "Address",
       "PHONE": "Phone number"
     },
-    "FIRST_NAME": "Name",
+    "FIRST_NAME": "First name",
+    "FIRST_NAME.TOOLTIP": "The current user's first name",
     "LAST_NAME": "Surname",
+    "LAST_NAME.TOOLTIP": "The current user's last name",
     "DISPLAY_NAME": "Display Name",
     "ID": "User ID",
+    "ID.TOOLTIP": "The current user's ID",
     "USERNAME": "Username",
     "EMAIL": "Email",
     "COUNTRY": "Country",
+    "COUNTRY.TOOLTIP": "The current user's country",
     "CITY": "City",
+    "CITY.TOOLTIP": "The current user's city",
     "POSTAL_CODE": "Postcode",
+    "POSTAL_CODE.TOOLTIP": "The current user's postcode",
     "STREET": "Street",
+    "STREET.TOOLTIP": "The current user's street",
     "HOUSE_NUMBER": "House Number",
+    "HOUSE_NUMBER.TOOLTIP": "The current user's house number",
     "NUMBER": "Number",
     "TAKE_OVER": "Take Over",
     "EXIT_EDITING": "Exit Editing",
@@ -75,6 +83,7 @@
       "LANDLINE": "Landline"
     },
     "PHONE_NUMBER": "Phone Number",
+    "PHONE_NUMBER.TOOLTIP": "The current user's phone number",
     "MSG": {
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data"
@@ -132,7 +141,9 @@
   "ROLE_PERMISSIONS": {
     "HEADLINE": "Roles and Permissions granted",
     "TAB_NAME_ROLES": "Roles",
+    "TAB_NAME_ROLES.TOOLTIP": "The current user's roles",
     "TAB_NAME_PERMISSIONS": "Permissions",
+    "TAB_NAME_PERMISSIONS.TOOLTIP": "The current user's permissions",
     "TITLE_ROLES": "My Roles",
     "TITLE_PERMISSIONS": "My Permissions",
     "NO_RESULTS": "No data",
@@ -153,6 +164,7 @@
   },
   "LANGUAGE_TIMEZONE": {
     "TAB_NAME_LANGUAGE_TIMEZONE": "Language & Timezone",
+    "TAB_NAME_LANGUAGE_TIMEZONE.TOOLTIP": "The current user's language and timezone settings",
     "LANGUAGE": "Language",
     "TIMEZONE": "Timezone",
     "LANGUAGE.TOOLTIP": "Language in which the pages are displayed",
@@ -168,15 +180,18 @@
   },
   "PRIVACY_SETTINGS": {
     "TAB_NAME_PRIVACY": "Privacy",
+    "TAB_NAME_PRIVACY.TOOLTIP": "The current user's privacy settings",
     "HIDE_MY_PROFILE": "Hide my profile",
     "PRIVACY.TOOLTIP": "Enable/Disable hiding the profile"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Password",
+    "TAB_NAME_PASSWORD.TOOLTIP": "The current user's password",
     "NOT_AVAILABLE": "Password change functionality is not available"
   },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Layout & Theme",
+    "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Layout and theme settings",
     "BREADCRUMBS": "Breadcrumbs",
     "BREADCRUMBS.TOOLTIP": "Show/Hide Breadcrumbs",
     "MENU_MODE": "Menu View Mode",

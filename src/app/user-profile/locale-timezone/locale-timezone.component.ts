@@ -19,7 +19,8 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   @Output() public timezoneChange = new EventEmitter<string>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
-  public editProfile = false
+  public editLanguage = false
+  public editTimezone = false
   public changedLanguage = false
   public changedTimezone = false
   public formGroup: UntypedFormGroup
@@ -43,7 +44,8 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.editProfile = this.userService.hasPermission('USERPROFILE#EDIT')
+    this.editLanguage = this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
+    this.editTimezone = this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
     if (this.locale) {
       this.formGroup.patchValue({ locale: this.locale })
     }
