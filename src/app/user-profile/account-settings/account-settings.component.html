@@ -8,7 +8,7 @@
 
   <ocx-page-content>
     <p-tabView [(activeIndex)]="selectedTab">
-      <p-tabPanel>
+      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE_TIMEZONE#VIEW'">
         <ng-template pTemplate="header">
           <span title="{{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE.TOOLTIP' | translate }}">
             {{ 'LANGUAGE_TIMEZONE.TAB_NAME_LANGUAGE_TIMEZONE' | translate }}
@@ -22,7 +22,7 @@
           (applyChanges)="reloadPage()"
         ></app-locale-timezone>
       </p-tabPanel>
-      <p-tabPanel>
+      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LAYOUT_THEME#VIEW'">
         <ng-template pTemplate="header">
           <span title="{{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME.TOOLTIP' | translate }}">
             {{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME' | translate }}
@@ -36,7 +36,7 @@
           (applyChanges)="reloadPage()"
         ></app-layout-theme>
       </p-tabPanel>
-      <p-tabPanel>
+      <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_PRIVACY#VIEW'">
         <ng-template pTemplate="header">
           <span title="{{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY.TOOLTIP' | translate }}">
             {{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY' | translate }}
