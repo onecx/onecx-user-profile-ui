@@ -169,7 +169,6 @@
     "LANGUAGE": "Sprache",
     "TIMEZONE": "Zeitzone",
     "LANGUAGE.TOOLTIP": "Sprache, in der die Seiten angezeigt werden",
-    "LANGUAGE.TOOLTIP": "Sprache, in der die Seiten angezeigt werden",
     "TIMEZONE.TOOLTIP": "Zeitzone für die Datumsanzeige",
     "TIMEZONE_EXAMPLE": "Beispiel",
     "TIMEZONE_EXAMPLE.TOOLTIP": "Beispiel für die gewählte Zeitzone"
@@ -204,14 +203,14 @@
       "OVERLAY": "Überlagerung",
       "SLIM": "Schlank",
       "SLIMPLUS": "Schlank +",
-      "TOOLTIP": "Wählen Sie die bevorzugte Darstellung des Menüs"
+      "TOOLTIP": "Wählen Sie die Darstellung des Menüs"
     },
     "COLOR_SCHEME": "Farbschema",
     "COLOR_SCHEMES": {
       "AUTO": "Automatisch",
       "LIGHT": "Hell",
       "DARK": "Dunkel",
-      "TOOLTIP": "Wählen Sie den bevorzugten Bildschirmmodus"
+      "TOOLTIP": "Wählen Sie den Bildschirmmodus"
     }
   },
   "LANGUAGE": {
