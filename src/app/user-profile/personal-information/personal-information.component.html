@@ -1,8 +1,8 @@
 <!--Personal Info-->
-<form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async" *ocxIfPermission="'USERPROFILE#VIEW'">
+<form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
   <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel styleClass="surface-50">
+      <p-panel *ocxIfPermission="'PROFILE_PERSONAL_INFO#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.GENERAL' | translate }}</div>
@@ -68,11 +68,11 @@
     </div>
 
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel formGroupName="address" styleClass="surface-50">
+      <p-panel *ocxIfPermission="'PROFILE_ADDRESS#VIEW'" formGroupName="address" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.ADDRESS' | translate }}</div>
-            <div *ocxIfPermission="'USERPROFILE#EDIT'">
+            <div *ocxIfPermission="'PROFILE_ADDRESS#EDIT'">
               <button
                 *ngIf="!addressEdit"
                 pButton
@@ -198,11 +198,11 @@
     </div>
 
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel formGroupName="phone" styleClass="surface-50">
+      <p-panel *ocxIfPermission="'PROFILE_PHONE#VIEW'" formGroupName="phone" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.PHONE' | translate }}</div>
-            <div *ocxIfPermission="'USERPROFILE#EDIT'">
+            <div *ocxIfPermission="'PROFILE_PHONE#EDIT'">
               <button
                 *ngIf="!this.phoneEdit"
                 pButton

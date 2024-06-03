@@ -1,6 +1,7 @@
-<ocx-portal-page *ocxIfPermission="'USERPROFILE#VIEW'" helpArticleId="PAGE_USER_SETTINGS">
+<ocx-portal-page *ocxIfPermission="'ACCOUNT_SETTINGS#VIEW'" helpArticleId="PAGE_USER_SETTINGS">
   <ocx-page-header
-    [header]="(personalInfo$ | async)?.firstName + ' ' + (personalInfo$ | async)?.lastName"
+    *ngIf="personalInfo$ | async as person"
+    [header]="person.firstName + ' ' + person.lastName"
     [subheader]="'SETTINGS.SUBHEADER' | translate"
   >
   </ocx-page-header>
