@@ -79,5 +79,8 @@ app:
         changePassword:
           name: 'changePassword'
           description: 'User Profile change password'
+        userRolesAndPermissions:
+          name: 'user RolesAndPermissions'
+          description: 'User Profile show current user's roles and permissions'
 
 # PIPE Config

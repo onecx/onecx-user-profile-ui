@@ -77,8 +77,8 @@
     "TAKE_OVER": "Übernehmen",
     "EXIT_EDITING": "Bearbeitung beenden",
     "CLEAR_FORM": "Alle löschen",
-    "PHONE_TYPE": "Typ",
-    "PHONE_TYPE.TOOLTIP": "Typ des aktuellen Nutzers",
+    "PHONE_TYPE": "Telefontyp",
+    "PHONE_TYPE.TOOLTIP": "Telefontyp des aktuellen Nutzers",
     "PHONE": {
       "MOBILE": "Mobil",
       "LANDLINE": "Festnetz"
