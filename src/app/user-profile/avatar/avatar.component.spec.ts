@@ -1,3 +1,87 @@
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { AppStateService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+
+import { AvatarComponent } from './avatar.component'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { UserAvatarAPIService } from 'src/app/shared/generated'
+
+describe('AvatarComponent', () => {
+  let component: AvatarComponent
+  let fixture: ComponentFixture<AvatarComponent>
+
+  const userServiceSpy = {
+    removeAvatar: jasmine.createSpy('removeAvatar')
+  }
+
+  const avatarServiceSpy = {
+    deleteUserAvatar: jasmine.createSpy('deleteUserAvatar'),
+    uploadAvatar: jasmine.createSpy('uploadAvatar')
+  }
+
+  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
+
+  //   const avatarOnBackend = {
+  //     avatar: {
+  //       userUploaded: true,
+  //       lastUpdateTime: undefined,
+  //       imageUrl: 'mockUrl',
+  //       smallImageUrl: 'smallUrl'
+  //     }
+  //   }
+
+  //   const avatarHttp = {
+  //     avatar: {
+  //       userUploaded: true,
+  //       lastUpdateTime: undefined,
+  //       imageUrl: 'http://mockUrl',
+  //       smallImageUrl: 'http://mockUrl'
+  //     }
+  //   }
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AvatarComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: UserService, useValue: userServiceSpy },
+        { provide: UserAvatarAPIService, useValue: avatarServiceSpy },
+        { provide: PortalMessageService, useValue: msgServiceSpy },
+        { provide: UserService },
+        { provide: AppStateService }
+      ]
+    }).compileComponents()
+    msgServiceSpy.success.calls.reset()
+    msgServiceSpy.error.calls.reset()
+    avatarServiceSpy.deleteUserAvatar.calls.reset()
+    avatarServiceSpy.uploadAvatar.calls.reset()
+  }))
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AvatarComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
+
+  describe('Save Avatar image', () => {
+    it('should upload a new File', () => {
+      component.ngOnInit()
+    })
+  })
+
+  describe('Delete Avatar image', () => {
+    it('should delete an existing Avatar image', () => {})
+  })
+})
+
 // import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
 // import { HttpClient, HttpErrorResponse } from '@angular/common/http'

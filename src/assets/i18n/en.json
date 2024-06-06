@@ -220,7 +220,7 @@
     "TAB_NAME_PREFERENCES": "Preferences"
   },
   "USERPROFILE_SEARCH": {
-    "USERPROFILE_MODULE": "UserProfileModule",
+    "USERPROFILE_MODULE": "onecx-user-profile",
     "SEARCH": "Search",
     "EMPTY_RESULTS": "Keine Ergebnisse",
     "MSG_BEFORE_FIRST_SEARCH": "Start a search to find events",
@@ -253,5 +253,8 @@
     "MENU_ITEM": {
       "SHOW_HIDE_SUMMARY": "Show/Hide Summary"
     }
+  },
+  "BREADCRUMBS": {
+    "SEARCH": "Search"
   }
 }
