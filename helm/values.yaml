@@ -30,6 +30,41 @@ app:
             VIEW: View mode for user profile
             EXPORT: Export user profile
             IMPORT: Import user profile
+          ACCOUNT_SETTINGS:
+            VIEW: View account settings
+          ACCOUNT_SETTINGS_LAYOUT_MENU:
+            EDIT: Edit layout menu setting
+          ACCOUNT_SETTINGS_COLOR_SCHEME:
+            EDIT: Edit color scheme setting
+          ACCOUNT_SETTINGS_BREADCRUMBS:
+            EDIT: Edit breadcrumbs setting
+          ACCOUNT_SETTINGS_LANGUAGE_TIMEZONE:
+            VIEW: View language and timezone
+          ACCOUNT_SETTINGS_LANGUAGE:
+            EDIT: Edit language setting
+          ACCOUNT_SETTINGS_TIMEZONE:
+            EDIT: Edit timezone setting
+          ACCOUNT_SETTINGS_LAYOUT_THEME:
+            VIEW: View layout theme setting
+          ACCOUNT_SETTINGS_PREFERENCES:
+            VIEW: View preferences setting
+          ACCOUNT_SETTINGS_PRIVACY:
+            EDIT: Edit privacy setting
+            VIEW: View privacy setting
+          PROFILE_PERSONAL_INFO:
+            VIEW: View personal info
+          PROFILE_ADDRESS:
+            EDIT: Edit address
+            VIEW: View address
+          PROFILE_AVATAR:
+            EDIT: Edit avatar
+            VIEW: View avatar
+          PROFILE_PHONE:
+            EDIT: Edit avatar
+            VIEW: View avatar
+          ROLES_PERMISSIONS:
+            VIEW: View roles and permissions
+          
     # Keycloak
     keycloak:
       client:
@@ -41,8 +76,8 @@ app:
     slot:
       enabled: true
       specs:
-        changePassword:
-          name: 'changePassword'
-          description: 'User Profile change password'
+        onecx-user-profile-change-password:
+          name: 'onecx-userProfile-changePassword'
+          description: 'User profile password change'
 
 # PIPE Config

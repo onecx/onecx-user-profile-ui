@@ -1,8 +1,8 @@
 <!--Personal Info-->
-<form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async" *ocxIfPermission="'USERPROFILE#VIEW'">
+<form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
   <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel styleClass="surface-50">
+      <p-panel *ocxIfPermission="'PROFILE_PERSONAL_INFO#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.GENERAL' | translate }}</div>
@@ -20,6 +20,7 @@
                 class="w-full"
                 id="up_personal_info_first_name"
                 [value]="(personalInfo$ | async)?.firstName"
+                title="{{ 'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_first_name">{{ 'PERSONAL_INFO_FORM.FIRST_NAME' | translate }}</label>
             </span>
@@ -33,6 +34,7 @@
                 class="w-full"
                 id="up_personal_info_last_name"
                 [value]="(personalInfo$ | async)?.lastName"
+                title="{{ 'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_last_name">{{ 'PERSONAL_INFO_FORM.LAST_NAME' | translate }}</label>
             </span>
@@ -46,6 +48,7 @@
                 class="w-full"
                 id="up_personal_info_user_id"
                 [value]="userId$ | async"
+                title="{{ 'PERSONAL_INFO_FORM.ID.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_user_id">{{ 'PERSONAL_INFO_FORM.ID' | translate }}</label>
             </span>
@@ -65,11 +68,11 @@
     </div>
 
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel formGroupName="address" styleClass="surface-50">
+      <p-panel *ocxIfPermission="'PROFILE_ADDRESS#VIEW'" formGroupName="address" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.ADDRESS' | translate }}</div>
-            <div *ocxIfPermission="'USERPROFILE#EDIT'">
+            <div *ocxIfPermission="'PROFILE_ADDRESS#EDIT'">
               <button
                 *ngIf="!addressEdit"
                 pButton
@@ -123,6 +126,7 @@
                 id="up_personal_info_address_street"
                 formControlName="street"
                 [value]="(personalInfo$ | async)?.address?.street"
+                title="{{ 'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_street">{{ 'PERSONAL_INFO_FORM.STREET' | translate }}</label>
             </span>
@@ -135,6 +139,7 @@
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
                 [value]="(personalInfo$ | async)?.address?.streetNo"
+                title="{{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_street_no">
                 {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}
@@ -151,6 +156,7 @@
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
                 [value]="(personalInfo$ | async)?.address?.postalCode"
+                title="{{ 'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_postal_code">
                 {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}
@@ -168,6 +174,7 @@
                 id="up_personal_info_address_city"
                 formControlName="city"
                 [value]="(personalInfo$ | async)?.address?.city"
+                title="{{ 'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_city">{{ 'PERSONAL_INFO_FORM.CITY' | translate }}</label>
             </span>
@@ -180,6 +187,7 @@
                 [readonly]="!addressEdit"
                 [options]="countries"
                 formControlName="country"
+                title="{{ 'PERSONAL_INFO_FORM.COUNTRY.TOOLTIP' | translate }}"
               >
               </p-dropdown>
               <label for="up_personal_info_address_country">{{ 'PERSONAL_INFO_FORM.COUNTRY' | translate }}</label>
@@ -190,11 +198,11 @@
     </div>
 
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel formGroupName="phone" styleClass="surface-50">
+      <p-panel *ocxIfPermission="'PROFILE_PHONE#VIEW'" formGroupName="phone" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
             <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.PHONE' | translate }}</div>
-            <div *ocxIfPermission="'USERPROFILE#EDIT'">
+            <div *ocxIfPermission="'PROFILE_PHONE#EDIT'">
               <button
                 *ngIf="!this.phoneEdit"
                 pButton
@@ -203,6 +211,7 @@
                 class="p-2 p-button-text"
                 icon="pi pi-pencil"
                 label="{{ 'GENERAL.EDIT' | translate }}"
+                [title]="'GENERAL.EDIT.TOOLTIP' | translate"
                 (click)="togglePhoneEdit()"
               ></button>
               <button
@@ -253,6 +262,7 @@
                 id="up_personal_info_phone_number"
                 formControlName="number"
                 [value]="(personalInfo$ | async)?.phone?.number"
+                title="{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_phone_number">{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER' | translate }}</label>
             </span>

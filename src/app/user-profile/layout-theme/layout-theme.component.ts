@@ -45,9 +45,13 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
-    if (!this.userService.hasPermission('USERPROFILE#EDIT')) {
+    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT')) {
       this.formGroup.get('menuMode')?.disable()
+    }
+    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
       this.formGroup.get('colorScheme')?.disable() // UI is not ready to offer it
+    }
+    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_BREADCRUMBS#EDIT')) {
       this.formGroup.get('breadcrumbs')?.disable()
     }
   }
