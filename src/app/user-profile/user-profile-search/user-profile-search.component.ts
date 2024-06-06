@@ -95,14 +95,6 @@ export class UserProfileSearchComponent implements OnInit {
         'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
         'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
       ]
-    },
-    {
-      columnType: ColumnType.RELATIVE_DATE,
-      id: 'modificationDate',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.MODIFICATION_DATE',
-      filterable: true,
-      sortable: true,
-      predefinedGroupKeys: ['USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT']
     }
   ]
 

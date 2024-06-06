@@ -1,278 +1,605 @@
-// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-// import { PersonalInformationComponent } from './personal-information.component'
-// import { HttpClientTestingModule } from '@angular/common/http/testing'
-// import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
-// import { HttpLoaderFactory } from '../../shared/shared.module'
-// import { HttpClient } from '@angular/common/http'
-// import { NO_ERRORS_SCHEMA } from '@angular/core'
-// import { AUTH_SERVICE, PhoneType, UserPerson, UserProfile } from '@onecx/portal-integration-angular'
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
+import { PersonalInformationComponent } from './personal-information.component'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
+import { of } from 'rxjs'
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 
-// describe('PersonalInformationComponent', () => {
-//   let component: PersonalInformationComponent
-//   let fixture: ComponentFixture<PersonalInformationComponent>
+describe('PersonalInformationComponent', () => {
+  let component: PersonalInformationComponent
+  let fixture: ComponentFixture<PersonalInformationComponent>
 
-//   const authServiceSpy = jasmine.createSpyObj('AUTH_SERVICE', ['getCurrentUser'])
+  const defaultCurrentUser: UserProfile = {
+    userId: '15',
+    id: 'testId',
+    person: {
+      firstName: 'John',
+      lastName: 'Doe',
+      displayName: 'John Doe Display Name',
+      email: 'john.doe@example.com',
+      address: {
+        street: 'Candy Lane',
+        streetNo: '12',
+        city: 'Candy Town',
+        postalCode: '80243',
+        country: 'EN'
+      },
+      phone: {
+        type: PhoneType.Mobile,
+        number: '123456789'
+      }
+    }
+  }
 
-//   const defaultCurrentUser: UserProfile = {
-//     userId: '15',
-//     person: {
-//       firstName: 'John',
-//       lastName: 'Doe',
-//       displayName: 'John Doe Display Name',
-//       email: 'john.doe@example.com',
-//       address: {
-//         street: 'Candy Lane',
-//         streetNo: '12',
-//         city: 'Candy Town',
-//         postalCode: '80-243',
-//         country: 'EN'
-//       },
-//       phone: {
-//         type: PhoneType.MOBILE,
-//         number: '123456789'
-//       }
-//     }
-//   }
+  const testUserPerson: UserPerson = {
+    firstName: 'newName',
+    lastName: 'newLastName',
+    displayName: 'newDisplayName',
+    email: 'newmail@example.com',
+    address: {
+      street: 'newStreet',
+      streetNo: 'newStreetNo',
+      city: 'newCity',
+      postalCode: 'newCode',
+      country: 'newCountry'
+    },
+    phone: {
+      type: PhoneType.Mobile,
+      number: '+4916883930'
+    }
+  }
 
-//   beforeEach(waitForAsync(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [PersonalInformationComponent],
-//       imports: [
-//         HttpClientTestingModule,
-//         TranslateModule.forRoot({
-//           loader: {
-//             provide: TranslateLoader,
-//             useFactory: HttpLoaderFactory,
-//             deps: [HttpClient]
-//           }
-//         })
-//       ],
-//       schemas: [NO_ERRORS_SCHEMA],
-//       providers: [{ provide: AUTH_SERVICE, useValue: authServiceSpy }]
-//     }).compileComponents()
-//     authServiceSpy.getCurrentUser.and.returnValue(defaultCurrentUser)
-//   }))
+  const userProfileServiceSpy = {
+    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
+    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({}))
+  }
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(PersonalInformationComponent)
-//     component = fixture.componentInstance
-//     fixture.detectChanges()
-//     spyOn(component, 'getCountryNames').and.returnValue(
-//       Promise.resolve({
-//         PL: 'Poland',
-//         DE: 'Germany'
-//       })
-//     )
-//     component.countries = []
-//   })
+  const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
+    'PortalMessageService',
+    ['success', 'error']
+  )
 
-//   it('should create', async () => {
-//     await component.ngOnInit()
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PersonalInformationComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: PortalMessageService, useValue: messageServiceMock },
+        { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
+      ]
+    }).compileComponents()
+    userProfileServiceSpy.getMyUserProfile.calls.reset()
+    userProfileServiceSpy.updateUserPerson.calls.reset()
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+  }))
 
-//     expect(component).toBeTruthy()
-//     expect(component.personalInfo).toEqual(defaultCurrentUser.person)
-//     expect(component.userId).toBe(defaultCurrentUser.userId)
-//     expect(component.countries).toEqual([
-//       {
-//         label: '',
-//         value: null
-//       },
-//       {
-//         label: 'Poland',
-//         value: 'PL'
-//       },
-//       {
-//         label: 'Germany',
-//         value: 'DE'
-//       }
-//     ])
-//   })
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(PersonalInformationComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
 
-//   it('should create with empty user', async () => {
-//     authServiceSpy.getCurrentUser.and.returnValue({})
+  // afterEach(() => {
+  //     userProfileServiceSpy.getMyUserProfile.calls.reset()
+  //     userProfileServiceSpy.updateUserPerson.calls.reset()
+  // })
 
-//     fixture = TestBed.createComponent(PersonalInformationComponent)
-//     component = fixture.componentInstance
-//     fixture.detectChanges()
+  it('should create', async () => {
+    let personalInfoValue: UserPerson = {}
+    let userIdValue: string = ''
 
-//     spyOn(component, 'getCountryNames').and.returnValue(
-//       Promise.resolve({
-//         PL: 'Poland',
-//         DE: 'Germany'
-//       })
-//     )
-//     component.countries = []
+    expect(component).toBeTruthy()
+    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
+    component.personalInfo$.subscribe((person) => (personalInfoValue = person))
+    component.userId$.subscribe((id) => (userIdValue = id))
 
-//     await component.ngOnInit()
+    expect(personalInfoValue).toEqual(defaultCurrentUser.person as UserPerson)
+    expect(userIdValue).toEqual('testId')
+  })
 
-//     expect(component.personalInfo).toEqual({})
-//     expect(component.userId).toBe('')
-//     expect(component.countries).toEqual([
-//       {
-//         label: '',
-//         value: null
-//       },
-//       {
-//         label: 'Poland',
-//         value: 'PL'
-//       },
-//       {
-//         label: 'Germany',
-//         value: 'DE'
-//       }
-//     ])
-//     expect(component.formGroup.value).toEqual({
-//       address: {
-//         street: '',
-//         streetNo: '',
-//         city: '',
-//         postalCode: '',
-//         country: 'DE'
-//       },
-//       phone: {
-//         type: PhoneType.MOBILE,
-//         number: ''
-//       }
-//     })
-//   })
+  describe('Avatar', () => {
+    it('should change the Avatar when Avatar is not empty', async () => {})
 
-//   it('should reset form on address edit cancel', async () => {
-//     await component.ngOnInit()
+    it('should change the Avatar when Avatar is empty', async () => {})
 
-//     component.toggleAddressEdit()
+    it('should remove the Avatar', async () => {})
+  })
 
-//     fixture.detectChanges()
+  describe('initialization and changes', () => {
+    it('should call createCountryList', fakeAsync(() => {
+      component.formUpdates$ = of({})
 
-//     const newAddress = {
-//       street: 'newInputStreet',
-//       streetNo: '12345',
-//       postalCode: '12-345',
-//       city: 'newCity',
-//       country: 'newCountry'
-//     }
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl('newStreet'),
+          streetNo: new UntypedFormControl('newStreetNo'),
+          postalCode: new UntypedFormControl('80243'),
+          city: new UntypedFormControl('newCity'),
+          country: new UntypedFormControl('newCountry')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('+4916883930')
+        })
+      })
 
-//     component.formGroup.value['address'] = newAddress
+      let spyCreateCountry = spyOn<any>(component, 'createCountryList').and.callFake(() => {
+        return Promise.resolve({
+          testUserPerson
+        })
+      })
 
-//     component.cancelAddressEdit()
+      fixture.detectChanges()
+      component.ngOnInit()
+      tick(2000)
 
-//     fixture.detectChanges()
+      component.formUpdates$.subscribe((person) => {
+        let p: any = person
+        console.log(p)
+        expect(p.firstName).toEqual(undefined)
+      })
+      tick(2000)
+      expect(spyCreateCountry).toHaveBeenCalled()
+    }))
 
-//     expect(component.formGroup.value['address']).toEqual(defaultCurrentUser.person.address)
-//     expect(component.addressEdit).toBeFalse()
-//   })
+    it('should call createCountryList empty personalInfo', fakeAsync(() => {
+      component.formUpdates$ = of({})
+      component.personalInfo$ = of()
 
-//   it('should update information and emit on address edit save', async () => {
-//     spyOn(localStorage, 'removeItem')
-//     spyOn(component.personalInfoUpdate, 'emit')
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl('newStreet'),
+          streetNo: new UntypedFormControl('newStreetNo'),
+          postalCode: new UntypedFormControl('80243'),
+          city: new UntypedFormControl('newCity'),
+          country: new UntypedFormControl('newCountry')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('+4916883930')
+        })
+      })
 
-//     await component.ngOnInit()
+      let spyCreateCountry = spyOn<any>(component, 'createCountryList').and.callFake(() => {
+        return Promise.resolve({
+          testUserPerson
+        })
+      })
 
-//     component.toggleAddressEdit()
+      // spy = spyOn(component.createCountryList).and.returnValue(false);
 
-//     fixture.detectChanges()
+      fixture.detectChanges()
+      component.ngOnInit()
+      tick(2000)
 
-//     const newAddress = {
-//       street: 'newInputStreet',
-//       streetNo: '12345',
-//       postalCode: '12-345',
-//       city: 'newCity',
-//       country: 'newCountry'
-//     }
+      component.formUpdates$.subscribe((person) => {
+        let p: any = person
+        expect(p.firstName).toEqual(null)
+      })
+      tick(2000)
+      expect(spyCreateCountry).not.toHaveBeenCalled()
+    }))
 
-//     component.formGroup.value['address'] = newAddress
+    it('should call onChanges personalInfo', fakeAsync(() => {
+      component.formUpdates$ = of({})
 
-//     component.updateAddress()
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl('newStreet'),
+          streetNo: new UntypedFormControl('newStreetNo'),
+          postalCode: new UntypedFormControl('80243'),
+          city: new UntypedFormControl('newCity'),
+          country: new UntypedFormControl('newCountry')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('+4916883930')
+        })
+      })
 
-//     fixture.detectChanges()
+      fixture.detectChanges()
+      component.ngOnChanges()
+      tick(2000)
 
-//     expect(component.personalInfo.address).toEqual(newAddress)
-//     expect(component.addressEdit).toBeFalse()
-//     expect(localStorage.removeItem).toHaveBeenCalledOnceWith('tkit_user_profile')
-//     expect(component.personalInfoUpdate.emit).toHaveBeenCalledOnceWith(component.personalInfo)
-//   })
+      component.formUpdates$.subscribe((person) => {
+        let p: any = person
+        expect(p.firstName).toEqual(defaultCurrentUser.person?.firstName)
+        expect(p.lastName).toEqual(defaultCurrentUser.person?.lastName)
+      })
+    }))
 
-//   it('should reset form on phone edit cancel', async () => {
-//     await component.ngOnInit()
+    it('should call onChanges empty formGroup', fakeAsync(() => {
+      component.formUpdates$ = of({})
 
-//     component.togglePhoneEdit()
+      component.formGroup = undefined!
 
-//     fixture.detectChanges()
+      fixture.detectChanges()
+      component.ngOnChanges()
+      tick(2000)
 
-//     const newPhone = {
-//       type: PhoneType.LANDLINE,
-//       number: '111222333'
-//     }
+      component.formUpdates$.subscribe((person) => {
+        let p: any = person
+        expect(p).toBeUndefined()
+      })
+      tick(1000)
+    }))
+  })
 
-//     component.formGroup.value['phone'] = newPhone
+  describe('Address', () => {
+    it('should change the Address when Address is not empty', fakeAsync(() => {
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl('newStreet'),
+          streetNo: new UntypedFormControl('1'),
+          postalCode: new UntypedFormControl('80000'),
+          city: new UntypedFormControl('newCity'),
+          country: new UntypedFormControl('DE')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('+4916883930')
+        })
+      })
 
-//     component.cancelPhoneEdit()
+      component.formUpdates$ = of({})
 
-//     fixture.detectChanges()
+      fixture.detectChanges()
+      component.updateAddress()
 
-//     expect(component.formGroup.value['phone']).toEqual(defaultCurrentUser.person.phone)
-//     expect(component.phoneEdit).toBeFalse()
-//   })
+      component.formUpdates$.subscribe((person) => {
+        expect(person).toEqual(defaultCurrentUser.person)
+      })
+    }))
 
-//   it('should update information and emit on phone edit save', async () => {
-//     spyOn(localStorage, 'removeItem')
-//     spyOn(component.personalInfoUpdate, 'emit')
+    it('should change the Adress when Adress is empty', fakeAsync(() => {
+      tick(1000)
+      fixture.detectChanges()
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl(''),
+          streetNo: new UntypedFormControl(''),
+          postalCode: new UntypedFormControl(''),
+          city: new UntypedFormControl(''),
+          country: new UntypedFormControl('')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('')
+        })
+      })
 
-//     await component.ngOnInit()
+      spyOn(component.personalInfoUpdate, 'emit')
+      spyOn(localStorage, 'removeItem')
 
-//     component.togglePhoneEdit()
+      component.formUpdates$ = of({})
+      fixture.detectChanges()
+      component.updateAddress()
+      tick(1000)
 
-//     fixture.detectChanges()
+      component.formUpdates$.subscribe((person) => {
+        let p: any = person
+        expect(p.address).toEqual(defaultCurrentUser.person?.address)
+      })
 
-//     const newPhone = {
-//       type: PhoneType.LANDLINE,
-//       number: '111222333'
-//     }
+      expect(component.personalInfoUpdate.emit).toHaveBeenCalled()
+      expect(localStorage.removeItem).toHaveBeenCalled()
+    }))
 
-//     component.formGroup.value['phone'] = newPhone
+    it('should cancel the Address Edit', fakeAsync(() => {
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl('newStreet'),
+          streetNo: new UntypedFormControl('1'),
+          postalCode: new UntypedFormControl('80000'),
+          city: new UntypedFormControl('newCity'),
+          country: new UntypedFormControl('DE')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('+4916883930')
+        })
+      })
 
-//     component.updatePhone()
+      component.formUpdates$ = of({})
 
-//     fixture.detectChanges()
+      fixture.detectChanges()
+      component.cancelAddressEdit()
 
-//     expect(component.personalInfo.phone).toEqual(newPhone)
-//     expect(component.phoneEdit).toBeFalse()
-//     expect(localStorage.removeItem).toHaveBeenCalledOnceWith('tkit_user_profile')
-//     expect(component.personalInfoUpdate.emit).toHaveBeenCalledOnceWith(component.personalInfo)
-//   })
+      component.formUpdates$.subscribe((person) => {
+        expect(person).toEqual(defaultCurrentUser.person)
+      })
 
-//   it('should update form based on inputs', async () => {
-//     await component.ngOnInit()
+      expect(component.addressEdit).toBeFalse()
+    }))
 
-//     expect(component.formGroup.value).toEqual({
-//       address: defaultCurrentUser.person.address,
-//       phone: defaultCurrentUser.person.phone
-//     })
+    it('should toggle address edit mode', () => {
+      component.toggleAddressEdit()
+      expect(component.addressEdit).toBe(true)
+    })
 
-//     const newProfile: UserPerson = {
-//       firstName: 'John',
-//       lastName: 'Doe',
-//       displayName: 'John Doe Display Name',
-//       email: 'john.doe@example.com',
-//       address: {
-//         street: 'Candy Lane',
-//         streetNo: '12',
-//         city: 'Candy Town',
-//         postalCode: '80-243',
-//         country: 'EN'
-//       },
-//       phone: {
-//         type: PhoneType.MOBILE,
-//         number: '123456789'
-//       }
-//     }
+    xit('should revert address form fields to original values on cancel', () => {
+      // Mock personalInfo with sample address data
+      const personalInfo = {
+        address: {
+          street: '123 Main St',
+          streetNo: 'Apt 4B',
+          postalCode: '12345',
+          city: 'Sample City',
+          country: 'DE'
+        }
+      }
 
-//     component.personalInfo = newProfile
+      // Set initial form values (modify as needed)
+      component.formGroup.patchValue({
+        address: {
+          street: 'Modified Street',
+          streetNo: 'Modified Apt',
+          postalCode: '54321',
+          city: 'Modified City',
+          country: 'US'
+        }
+      })
 
-//     component.ngOnChanges()
+      // Call the cancelAddressEdit method
+      component.cancelAddressEdit()
 
-//     expect(component.formGroup.value).toEqual({
-//       address: newProfile.address,
-//       phone: newProfile.phone
-//     })
-//   })
-// })
+      // Check if form values are reverted to original personalInfo values
+      expect(component.formGroup.value.address.street).toBe(personalInfo.address.street)
+      expect(component.formGroup.value.address.streetNo).toBe(personalInfo.address.streetNo)
+      expect(component.formGroup.value.address.postalCode).toBe(personalInfo.address.postalCode)
+      expect(component.formGroup.value.address.city).toBe(personalInfo.address.city)
+      expect(component.formGroup.value.address.country).toBe(personalInfo.address.country)
+    })
+  })
+
+  describe('Phone Number', () => {
+    it('should update phone details and emit personalInfo', fakeAsync(() => {
+      tick(1000)
+      fixture.detectChanges()
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl(''),
+          streetNo: new UntypedFormControl(''),
+          postalCode: new UntypedFormControl(''),
+          city: new UntypedFormControl(''),
+          country: new UntypedFormControl('')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl('+49016792030')
+        })
+      })
+
+      spyOn(component.personalInfoUpdate, 'emit')
+      spyOn(localStorage, 'removeItem')
+
+      component.formUpdates$ = of({})
+      component.phoneEdit = true
+      fixture.detectChanges()
+      component.updatePhone()
+
+      component.formUpdates$.subscribe((personalInfo) => {
+        let p: any = personalInfo
+        expect(p.phone).toEqual(component.formGroup.value.phone)
+      })
+
+      expect(component.phoneEdit).toBeFalse()
+      expect(component.personalInfoUpdate.emit).toHaveBeenCalled()
+      expect(localStorage.removeItem).toHaveBeenCalled()
+    }))
+
+    it('should set phone number to empty', fakeAsync(() => {
+      tick(1000)
+      fixture.detectChanges()
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl(''),
+          streetNo: new UntypedFormControl(''),
+          postalCode: new UntypedFormControl(''),
+          city: new UntypedFormControl(''),
+          country: new UntypedFormControl('')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Mobile),
+          number: new UntypedFormControl()
+        })
+      })
+
+      spyOn(component.personalInfoUpdate, 'emit')
+      spyOn(localStorage, 'removeItem')
+
+      component.formUpdates$ = of({})
+      component.phoneEdit = true
+      fixture.detectChanges()
+      component.updatePhone()
+
+      component.formUpdates$.subscribe((personalInfo) => {
+        let p: any = personalInfo
+        expect(p.phone).toEqual(component.formGroup.value.phone)
+      })
+
+      expect(component.phoneEdit).toBeFalse()
+      expect(component.personalInfoUpdate.emit).toHaveBeenCalled()
+      expect(localStorage.removeItem).toHaveBeenCalled()
+    }))
+
+    it('should choose a landline phone number', fakeAsync(() => {
+      tick(1000)
+      fixture.detectChanges()
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl(''),
+          streetNo: new UntypedFormControl(''),
+          postalCode: new UntypedFormControl(''),
+          city: new UntypedFormControl(''),
+          country: new UntypedFormControl('')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Landline),
+          number: new UntypedFormControl('08967821')
+        })
+      })
+
+      spyOn(component.personalInfoUpdate, 'emit')
+      spyOn(localStorage, 'removeItem')
+
+      component.formUpdates$ = of({})
+      component.phoneEdit = true
+      fixture.detectChanges()
+      component.updatePhone()
+
+      component.formUpdates$.subscribe((personalInfo) => {
+        let p: any = personalInfo
+        expect(p.phone).toEqual(component.formGroup.value.phone)
+      })
+
+      expect(component.phoneEdit).toBeFalse()
+      expect(component.personalInfoUpdate.emit).toHaveBeenCalled()
+      expect(localStorage.removeItem).toHaveBeenCalled()
+    }))
+
+    it('should cancelPhoneEdit', fakeAsync(() => {
+      component.formGroup = new UntypedFormGroup({
+        address: new UntypedFormGroup({
+          street: new UntypedFormControl(''),
+          streetNo: new UntypedFormControl(''),
+          postalCode: new UntypedFormControl(''),
+          city: new UntypedFormControl(''),
+          country: new UntypedFormControl('')
+        }),
+        phone: new UntypedFormGroup({
+          type: new UntypedFormControl(PhoneType.Landline),
+          number: new UntypedFormControl('08967821')
+        })
+      })
+
+      component.formUpdates$ = of({})
+      component.phoneEdit = true
+      fixture.detectChanges()
+      component.cancelPhoneEdit()
+
+      component.formUpdates$.subscribe((personalInfo) => {
+        let p: any = personalInfo
+        expect(p.phone).toEqual(component.formGroup.value.phone)
+      })
+      tick(1000)
+
+      expect(component.phoneEdit).toBeFalse()
+    }))
+
+    it('should cancelPhoneEdit', fakeAsync(() => {
+      component.phoneEdit = true
+      component.togglePhoneEdit()
+      expect(component.phoneEdit).toBeFalse()
+    }))
+  })
+
+  // fdescribe('createCountryList', () => {
+  // let countriesInfoMock: any;
+
+  // beforeEach(() => {
+
+  //     countriesInfoMock = jasmine.createSpyObj('countriesInfo', ['registerLocale', 'getNames']);
+  //     countriesInfoMock.getNames.and.returnValue({
+  //         "US": "United States",
+  //         "GB": "United Kingdom",
+  //         "DE": "Germany",
+  //     });
+
+  // });
+
+  // it('should create country list', async () => {
+  // const translateMock = { currentLang: 'en' };
+
+  // // Mock the response of dynamic import
+  // spyOn(window as any, 'import').and.returnValue(Promise.resolve({
+  //   default: {
+  //     "US": "United States",
+  //     "CA": "Canada",
+  //     "GB": "United Kingdom",
+  //     // Other country names...
+  //   }
+  // }));
+
+  // // Mock the registerLocale method
+  // spyOn(countriesInfo, 'registerLocale').and.returnValue(undefined);
+
+  // // Mock the getNames method
+  // spyOn(countriesInfo, 'getNames').and.returnValue({
+  //   "US": "United States",
+  //   "DE": "Germany",
+  // });
+
+  // const personalInfo: UserPerson = {}; // Mock user data
+
+  // await component.ngOnInit();
+
+  // // Assert registerLocale is called with the correct path
+  // expect(window.import).toHaveBeenCalledWith(`i18n-iso-countries/langs/${translateMock.currentLang}.json`);
+
+  // });
+  // })
+})
+
+describe('PersonalInformationComponent', () => {
+  let component: PersonalInformationComponent
+  let fixture: ComponentFixture<PersonalInformationComponent>
+
+  const userProfileServiceSpy = {
+    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
+    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
+  }
+
+  const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
+    'PortalMessageService',
+    ['success', 'error']
+  )
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [PersonalInformationComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: PortalMessageService, useValue: messageServiceMock },
+        { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
+      ]
+    }).compileComponents()
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
+  }))
+
+  beforeEach(waitForAsync(() => {
+    fixture = TestBed.createComponent(PersonalInformationComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }))
+
+  it('should create with empty user', async () => {
+    let personalInfoValue: UserPerson = {}
+    let userIdValue: string = ''
+
+    expect(component).toBeTruthy()
+    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
+    component.personalInfo$.subscribe((person) => (personalInfoValue = person))
+    component.userId$.subscribe((id) => (userIdValue = id))
+
+    expect(personalInfoValue).toEqual({})
+    expect(userIdValue).toEqual('')
+  })
+})
