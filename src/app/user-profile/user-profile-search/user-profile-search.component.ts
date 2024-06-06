@@ -1,7 +1,6 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { finalize, map } from 'rxjs/operators'
 import {
-  BreadcrumbService,
   ColumnType,
   DataTableColumn,
   PortalMessageService,
@@ -117,7 +116,6 @@ export class UserProfileSearchComponent implements OnInit {
 
   constructor(
     private userProfileAdminService: UserProfileAdminAPIService,
-    private breadcrumbService: BreadcrumbService,
     private fb: UntypedFormBuilder,
     private router: Router,
     private route: ActivatedRoute,
@@ -134,13 +132,6 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    this.breadcrumbService.setItems([
-      {
-        titleKey: 'USERPROFILE_SEARCH.USERPROFILE_MODULE',
-        labelKey: 'USERPROFILE_SEARCH.SEARCH',
-        routerLink: '/user'
-      }
-    ])
     this.sortField = 'displayName'
     this.filter = [
       {
