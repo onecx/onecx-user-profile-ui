@@ -17,6 +17,7 @@ import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/
 import { UserProfileComponent } from 'src/app/user-profile/user-profile/user-profile.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
+import { LabelResolver } from '../shared/label.resolver'
 
 const routes: Routes = [
   {
@@ -32,7 +33,14 @@ const routes: Routes = [
   {
     path: 'search',
     component: UserProfileSearchComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.SEARCH',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
   },
   {
     path: 'roles-and-perms',
