@@ -76,8 +76,8 @@ app:
     slot:
       enabled: true
       specs:
-        onecx-change-password:
-          name: 'onecx-change-password'
+        onecx-user-profile-change-password:
+          name: 'onecx-user-profile-change-password'
           description: 'User Profile change password'
 
 # PIPE Config
