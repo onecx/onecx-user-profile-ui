@@ -77,10 +77,10 @@ app:
       enabled: true
       specs:
         changePassword:
-          name: 'changePassword'
-          description: 'User Profile change password'
+          name: "onecx-user-profile-change-password"
+          description: "User Profile change password"
         userRolesAndPermissions:
-          name: 'user RolesAndPermissions'
-          description: 'User Profile show current user's roles and permissions'
+          name: "onecx-user-profile-permissions"
+          description: "User Profile show user roles and permissions"
 
 # PIPE Config
