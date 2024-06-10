@@ -77,7 +77,8 @@
     "TAKE_OVER": "Take Over",
     "EXIT_EDITING": "Exit Editing",
     "CLEAR_FORM": "Clear All",
-    "PHONE_TYPE": "Type",
+    "PHONE_TYPE": "Phone type",
+    "PHONE_TYPE.TOOLTIP": "The current user's phone type",
     "PHONE": {
       "MOBILE": "Mobile",
       "LANDLINE": "Landline"
