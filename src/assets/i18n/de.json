@@ -1,8 +1,8 @@
 {
   "DIALOG": {
     "SEARCH": {
-      "HEADER": "Benutzerprofil",
-      "SUBHEADER": "Benutzerprofile suchen"
+      "HEADER": "OCX User",
+      "SUBHEADER": "Suche nach OCX Benutzern"
     }
   },
   "ACTIONS": {
@@ -221,7 +221,7 @@
     "TAB_NAME_PREFERENCES": "Vorlieben"
   },
   "USERPROFILE_SEARCH": {
-    "USERPROFILE_MODULE": "Benutzerprofilmodul",
+    "USERPROFILE_MODULE": "onecx-user-profile",
     "SEARCH": "Suche",
     "EMPTY_RESULTS": "Keine Ergebnisse",
     "MSG_BEFORE_FIRST_SEARCH": "Beginnen Sie eine Suche, um Ereignisse zu finden",
@@ -253,5 +253,8 @@
     "MENU_ITEM": {
       "SHOW_HIDE_SUMMARY": "Zusammenfassung anzeigen/ausblenden"
     }
+  },
+  "BREADCRUMBS": {
+    "SEARCH": "Suche"
   }
 }

@@ -1,128 +1,138 @@
-// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-// import { UserProfileComponent } from './user-profile.component'
-// import { HttpClientTestingModule } from '@angular/common/http/testing'
-// import { HttpClient } from '@angular/common/http'
-// import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-// import { HttpLoaderFactory } from '../../shared/shared.module'
-// import { AUTH_SERVICE, PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
-// import { NO_ERRORS_SCHEMA } from '@angular/core'
-// import { of, throwError } from 'rxjs'
-// import { UserProfileService } from '../user-profile.service'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { UserProfileComponent } from './user-profile.component'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { map, of, throwError } from 'rxjs'
+import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
+import { TranslateTestingModule } from 'ngx-translate-testing'
 
-// describe('UserProfileComponent', () => {
-//   let component: UserProfileComponent
-//   let fixture: ComponentFixture<UserProfileComponent>
+describe('UserProfileComponent', () => {
+  let component: UserProfileComponent
+  let fixture: ComponentFixture<UserProfileComponent>
 
-//   const authServiceSpy = jasmine.createSpyObj('AUTH_SERVICE', ['getCurrentUser'])
+  const userProfileServiceSpy = {
+    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
+    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
+  }
 
-//   const defaultCurrentUser: UserProfile = {
-//     userId: '15',
-//     person: {
-//       firstName: 'John',
-//       lastName: 'Doe',
-//       displayName: 'John Doe Display Name',
-//       email: 'john.doe@example.com',
-//       address: {
-//         street: 'Candy Lane',
-//         streetNo: '12',
-//         city: 'Candy Town',
-//         postalCode: '80-243',
-//         country: 'EN'
-//       },
-//       phone: {
-//         type: PhoneType.MOBILE,
-//         number: '123456789'
-//       }
-//     }
-//   }
+  const defaultCurrentUser: UserProfile = {
+    userId: '15',
+    person: {
+      firstName: 'John',
+      lastName: 'Doe',
+      displayName: 'John Doe Display Name',
+      email: 'john.doe@example.com',
+      address: {
+        street: 'Candy Lane',
+        streetNo: '12',
+        city: 'Candy Town',
+        postalCode: '80-243',
+        country: 'EN'
+      },
+      phone: {
+        type: PhoneType.MOBILE,
+        number: '123456789'
+      }
+    }
+  }
 
-//   const newPerson = {
-//     firstName: 'newName',
-//     lastName: 'newLastName',
-//     displayName: 'newDisplayName',
-//     email: 'newmail@example.com',
-//     address: {
-//       street: 'newStreet',
-//       streetNo: 'newStreetNo',
-//       city: 'newCity',
-//       postalCode: 'newCode',
-//       country: 'newCountry'
-//     },
-//     phone: {
-//       type: PhoneType.LANDLINE,
-//       number: 'newPhoneNumber'
-//     }
-//   }
+  const updatedPerson: UserPerson = {
+    firstName: 'newName',
+    lastName: 'newLastName',
+    displayName: 'newDisplayName',
+    email: 'newmail@example.com',
+    address: {
+      street: 'newStreet',
+      streetNo: 'newStreetNo',
+      city: 'newCity',
+      postalCode: 'newCode',
+      country: 'newCountry'
+    },
+    phone: {
+      number: 'newPhoneNumber'
+    }
+  }
 
-//   const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
-//     'PortalMessageService',
-//     ['success', 'error']
-//   )
+  const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
+    'PortalMessageService',
+    ['success', 'error']
+  )
 
-//   const userProfileServiceSpy = jasmine.createSpyObj<UserProfileService>('UserProfileService', ['updatePersonalInfo'])
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [UserProfileComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: PortalMessageService, useValue: messageServiceMock },
+        { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
+      ]
+    }).compileComponents()
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+  }))
 
-//   beforeEach(waitForAsync(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [UserProfileComponent],
-//       imports: [
-//         HttpClientTestingModule,
-//         TranslateModule.forRoot({
-//           loader: {
-//             provide: TranslateLoader,
-//             useFactory: HttpLoaderFactory,
-//             deps: [HttpClient]
-//           }
-//         })
-//       ],
-//       schemas: [NO_ERRORS_SCHEMA],
-//       providers: [
-//         { provide: AUTH_SERVICE, useValue: authServiceSpy },
-//         { provide: PortalMessageService, useValue: messageServiceMock },
-//         { provide: UserProfileService, useValue: userProfileServiceSpy }
-//       ]
-//     }).compileComponents()
-//     authServiceSpy.getCurrentUser.and.returnValue(defaultCurrentUser)
-//     userProfileServiceSpy.updatePersonalInfo.and.returnValue(of({}))
-//     userProfileServiceSpy.updatePersonalInfo.calls.reset()
-//     messageServiceMock.success.calls.reset()
-//     messageServiceMock.error.calls.reset()
-//   }))
+  beforeEach(() => {
+    fixture = TestBed.createComponent(UserProfileComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+    userProfileServiceSpy.updateUserPerson.calls.reset()
+    userProfileServiceSpy.getMyUserProfile.calls.reset()
+  })
 
-//   beforeEach(() => {
-//     fixture = TestBed.createComponent(UserProfileComponent)
-//     component = fixture.componentInstance
-//     fixture.detectChanges()
-//   })
+  it('should create', () => {
+    expect(component).toBeTruthy()
+    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled
+  })
 
-//   it('should create', () => {
-//     expect(component).toBeTruthy()
-//     expect(component.personalInfo).toEqual(defaultCurrentUser.person)
-//     expect(component.userId).toBe(defaultCurrentUser.userId)
-//   })
+  describe('getMyUserProfile', () => {
+    it('should set personalInfo$ to defaultCurrentUser.person', () => {
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
 
-//   it('should create with empty user', () => {
-//     authServiceSpy.getCurrentUser.and.returnValue({})
+      component.personalInfo$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
 
-//     fixture = TestBed.createComponent(UserProfileComponent)
-//     component = fixture.componentInstance
-//     fixture.detectChanges()
+      component.personalInfo$.subscribe((test) => {
+        expect(test).toEqual(defaultCurrentUser.person as UserPerson)
+      })
+      //   expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
+    })
 
-//     expect(component.personalInfo).toEqual({})
-//     expect(component.userId).toEqual('')
-//   })
+    it('should set personalInfo$ empty when getMyUserProfile() returns empty UserProfile', () => {
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(of({ person: undefined }))
 
-//   it('should show success on successful personalInfo update', () => {
-//     component.onPersonalInfoUpdate(newPerson)
+      component.personalInfo$.pipe(map((person) => expect(person).toEqual(undefined!)))
+    })
+  })
 
-//     expect(userProfileServiceSpy.updatePersonalInfo).toHaveBeenCalledOnceWith(newPerson)
-//     expect(messageServiceMock.success).toHaveBeenCalledOnceWith({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_SUCCESS' })
-//   })
+  describe('onPersonalInfoUpdate', () => {
+    it('should call messageService success when updateUserPerson() was successful', () => {
+      spyOn(component, 'showMessage').and.callThrough()
+      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
 
-//   it('should show error on unsuccessful personalInfo update', () => {
-//     userProfileServiceSpy.updatePersonalInfo.and.returnValue(throwError(() => new Error()))
-//     component.onPersonalInfoUpdate(newPerson)
+      component.onPersonalInfoUpdate(updatedPerson)
+      expect(component.showMessage).toHaveBeenCalledOnceWith('success')
+    })
 
-//     expect(userProfileServiceSpy.updatePersonalInfo).toHaveBeenCalledOnceWith(newPerson)
-//     expect(messageServiceMock.error).toHaveBeenCalledOnceWith({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_ERROR' })
-//   })
-// })
+    it('should call messageService success when updateUserPerson() was successful with empty response', () => {
+      spyOn(component, 'showMessage').and.callThrough()
+      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
+
+      component.onPersonalInfoUpdate(updatedPerson)
+      expect(component.showMessage).toHaveBeenCalledOnceWith('success')
+    })
+
+    it('should call messageService error when updateUserPerson() not was successful', () => {
+      spyOn(component, 'showMessage').and.callThrough()
+      userProfileServiceSpy.updateUserPerson.and.returnValue(throwError(() => new Error('testErrorMessage')))
+
+      component.onPersonalInfoUpdate(updatedPerson)
+      expect(component.showMessage).toHaveBeenCalledOnceWith('error')
+    })
+  })
+})
