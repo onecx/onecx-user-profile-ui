@@ -15,8 +15,8 @@ import { from, map, mergeMap, Observable, of } from 'rxjs'
   styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent implements OnInit, OnChanges {
-  public personalInfo$: Observable<UserPerson>
-  public userId$: Observable<string>
+  public personalInfo$!: Observable<UserPerson>
+  public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
   public addressEdit = false
@@ -91,6 +91,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
           this.formGroup.patchValue({ address: personalInfo.address })
         }
         this.addressEdit = false
+        return personalInfo
       })
     )
   }
@@ -101,8 +102,8 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
         personalInfo.address = this.formGroup.value.address
         this.personalInfoUpdate.emit(personalInfo)
         this.addressEdit = false
-
         localStorage.removeItem('tkit_user_profile')
+        return personalInfo
       })
     )
   }
@@ -120,6 +121,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
           })
         }
         this.phoneEdit = false
+        return personalInfo
       })
     )
   }
@@ -132,6 +134,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
         this.phoneEdit = false
 
         localStorage.removeItem('tkit_user_profile')
+        return personalInfo
       })
     )
   }

@@ -76,8 +76,8 @@ app:
     slot:
       enabled: true
       specs:
-        changePassword:
-          name: 'changePassword'
+        onecx-user-profile-change-password:
+          name: 'onecx-user-profile-change-password'
           description: 'User Profile change password'
         userRolesAndPermissions:
           name: 'user RolesAndPermissions'
