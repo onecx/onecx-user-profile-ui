@@ -1,6 +1,6 @@
 <!--Personal Info-->
 <form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4">
+  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo$ | async as person">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel *ocxIfPermission="'PROFILE_PERSONAL_INFO#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">
@@ -19,7 +19,7 @@
                 readonly
                 class="w-full"
                 id="up_personal_info_first_name"
-                [value]="(personalInfo$ | async)?.firstName"
+                [value]="person.firstName"
                 title="{{ 'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_first_name">{{ 'PERSONAL_INFO_FORM.FIRST_NAME' | translate }}</label>
@@ -33,7 +33,7 @@
                 readonly
                 class="w-full"
                 id="up_personal_info_last_name"
-                [value]="(personalInfo$ | async)?.lastName"
+                [value]="person.lastName"
                 title="{{ 'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_last_name">{{ 'PERSONAL_INFO_FORM.LAST_NAME' | translate }}</label>
@@ -125,7 +125,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_street"
                 formControlName="street"
-                [value]="(personalInfo$ | async)?.address?.street"
+                [value]="person.address?.street"
                 title="{{ 'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_street">{{ 'PERSONAL_INFO_FORM.STREET' | translate }}</label>
@@ -138,7 +138,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
-                [value]="(personalInfo$ | async)?.address?.streetNo"
+                [value]="person.address?.streetNo"
                 title="{{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_street_no">
@@ -155,7 +155,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
-                [value]="(personalInfo$ | async)?.address?.postalCode"
+                [value]="person.address?.postalCode"
                 title="{{ 'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_postal_code">
@@ -173,7 +173,7 @@
                 [readonly]="!addressEdit"
                 id="up_personal_info_address_city"
                 formControlName="city"
-                [value]="(personalInfo$ | async)?.address?.city"
+                [value]="person.address?.city"
                 title="{{ 'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_address_city">{{ 'PERSONAL_INFO_FORM.CITY' | translate }}</label>
@@ -261,7 +261,7 @@
                 [readonly]="!phoneEdit"
                 id="up_personal_info_phone_number"
                 formControlName="number"
-                [value]="(personalInfo$ | async)?.phone?.number"
+                [value]="person.phone?.number"
                 title="{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate }}"
               />
               <label for="up_personal_info_phone_number">{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER' | translate }}</label>
