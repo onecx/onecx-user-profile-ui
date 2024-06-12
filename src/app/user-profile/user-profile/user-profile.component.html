@@ -1,4 +1,4 @@
-<ocx-portal-page *ocxIfPermission="'USERPROFILE#VIEW'" helpArticleId="PAGE_USER_PROFILE">
+<ocx-portal-page permission="USERPROFILE#VIEW" helpArticleId="PAGE_USER_PROFILE">
   <ocx-page-header
     *ngIf="personalInfo$ | async as person"
     [header]="person.firstName + ' ' + person.lastName"
