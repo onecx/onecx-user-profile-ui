@@ -1,4 +1,4 @@
-import { Component, Input, OnChanges, SimpleChanges } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core'
 import { map } from 'rxjs'
 
 import { AppStateService } from '@onecx/angular-integration-interface'
@@ -20,6 +20,7 @@ export class ImageContainerComponent implements OnChanges {
   @Input() public small = false
   @Input() public imageUrl: string | undefined
   @Input() public styleClass: string | undefined
+  @Output() imageUrlIsEmpty = new EventEmitter<boolean>()
 
   public displayImageUrl: string | undefined
   public defaultImageUrl = ''
@@ -38,6 +39,7 @@ export class ImageContainerComponent implements OnChanges {
 
   public onImageError(): void {
     this.displayDefaultLogo = true
+    this.imageUrlIsEmpty.emit(true)
     this.displayImageUrl = undefined
   }
 

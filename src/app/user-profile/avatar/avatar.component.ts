@@ -6,6 +6,7 @@ import { AvatarInfo, UserService, AppStateService, PortalMessageService } from '
 import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
 import { map, Observable, of } from 'rxjs'
 import { DOC_ORIENTATION, NgxImageCompressService } from 'ngx-image-compress'
+import { bffImageUrl } from 'src/app/shared/utils'
 // import base64
 
 @Component({
@@ -25,6 +26,7 @@ export class AvatarComponent implements OnInit {
   @ViewChild('avatarImage', { read: ElementRef, static: true })
   public avatarImage!: ElementRef
 
+  imageUrlIsEmpty: boolean | undefined
   imageUrl: string | undefined
   smallImgResultAfterCompression: string = ''
   mediumImgResultAfterCompression: string = ''
@@ -41,14 +43,8 @@ export class AvatarComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    // get image data from URL
-    this.imageUrl$ = this.avatarService.getUserAvatar({ refType: RefType.Large }).pipe(
-      map(async (img) => {
-        // this.imageUrl = bffImageUrl(this.bffImagePath,'avatar', RefType.Large)
-        // return bffImageUrl(this.bffImagePath,'avatar', RefType.Large)
-        this.imageUrl = await img.text()
-      })
-    )
+    this.imageUrlIsEmpty = false
+    this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
   }
 
   public onDeleteAvatarImage(): void {
@@ -131,16 +127,21 @@ export class AvatarComponent implements OnInit {
 
   /** Send compressed images to avatar ser */
   public sendImage(image: string, refType: RefType): void {
-    const blob = new Blob([image], { type: 'image/*' })
+    let base64Png = image.split(',').at(1)!
+    const decodedData = atob(base64Png)
+    const uint8Array = new Uint8Array(decodedData.length)
+    for (let i = 0; i < decodedData.length; ++i) {
+      uint8Array[i] = decodedData.charCodeAt(i)
+    }
+    const blob = new Blob([uint8Array], { type: 'image/*' })
 
-    if (this.imageUrl === undefined) {
+    if (this.imageUrlIsEmpty) {
       this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
         next: (data: any) => {
           this.showUploadSuccess()
           localStorage.removeItem('tkit_user_profile')
           window.location.reload()
 
-          // this.prepareAvatarImageUrl()
           if (refType === RefType.Large) {
             this.imageUrl$ = of(image)
           }
@@ -166,7 +167,6 @@ export class AvatarComponent implements OnInit {
           localStorage.removeItem('tkit_user_profile')
           window.location.reload()
 
-          // this.prepareAvatarImageUrl()
           if (refType === RefType.Large) {
             this.imageUrl$ = of(image)
           }
@@ -192,43 +192,7 @@ export class AvatarComponent implements OnInit {
     this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
   }
 
-  // private checkDimension(file: File): void {
-  //   const reader = new FileReader()
-  //   const img = new Image()
-
-  //   reader.onload = (e: any) => {
-  //     img.src = e.target.result.toString()
-
-  //     img.onload = () => {
-  //       const elem = document.createElement('canvas')
-  //       elem.width = 400
-  //       elem.height = 400
-  //       const ctx = elem.getContext('2d')
-  //       // eslint-disable-next-line @typescript-eslint/no-non-null-assertion
-  //       ctx!.drawImage(img, 0, 0, 400, 400)
-  //       elem.toBlob((blob) => {
-  //         if (blob) {
-  //           this.selectedFile = new File([blob], 'untitled', { type: blob.type })
-  //         }
-  //       })
-  //       this.previewSrc = elem.toDataURL()
-  //     }
-  //   }
-  //   reader.readAsDataURL(file)
-  // }
-
-  // /* Displays latest image in UI */
-  // private updateImage(): void {
-  //   if (this.selectedFile) {
-  //     const reader = new FileReader()
-  //     reader.readAsDataURL(this.selectedFile)
-  //     reader.onload = (): void => {
-  //       if (reader.result) {
-  //         this.userAvatar$ = this.userService.profile$.pipe(
-  //           map(() => ({smallImageUrl: reader.result?.toString(), imageUrl: reader.result?.toString()}))
-  //         )
-  //       }
-  //     }
-  //   }
-  // }
+  public onImageError(value: boolean): void {
+    this.imageUrlIsEmpty = value
+  }
 }

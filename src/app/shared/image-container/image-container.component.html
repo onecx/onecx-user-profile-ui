@@ -1,6 +1,6 @@
 <img
   [id]="id"
-  *ngIf="imageUrl"
+  *ngIf="!displayDefaultLogo"
   [class]="'avatar-image'"
   [ocxSrc]="imageUrl"
   (error)="onImageError()"
@@ -9,7 +9,7 @@
 />
 <img
   [id]="id"
-  *ngIf="!imageUrl"
+  *ngIf="displayDefaultLogo"
   [class]="'avatar-image'"
   [src]="defaultImageUrl"
   [alt]="'LOGO.LABEL' | translate"

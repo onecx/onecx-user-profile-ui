@@ -1,6 +1,11 @@
 <div class="mx-3 mb-1 sm:mb-2 md:mb-3 relative flex flex-wrap justify-content-start gap-4 row-gap-1">
   <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
-    <app-image-container #avatarImage [styleClass]="'w-5rem'" [imageUrl]="imageUrl"></app-image-container>
+    <app-image-container
+      #avatarImage
+      [styleClass]="'w-5rem'"
+      [imageUrl]="imageUrl"
+      (imageUrlIsEmpty)="onImageError($event)"
+    ></app-image-container>
   </div>
 
   <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
@@ -18,7 +23,7 @@
         [title]="'AVATAR.CHOOSE' | translate"
       ></button>
       <button
-        *ngIf="imageUrl$ | async"
+        *ngIf="!imageUrlIsEmpty"
         pButton
         pRipple
         type="button"
