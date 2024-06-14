@@ -105,6 +105,8 @@
   },
   "AVATAR": {
     "UPDATE": "Update Photo",
+    "IMAGE": "Current Photo",
+    "PLACEHOLDER": "Placeholder Photo",
     "CHOOSE": "Choose Photo",
     "REMOVE": "Remove Photo",
     "REMOVE.MESSAGE": "Do you want to remove the photo?",
