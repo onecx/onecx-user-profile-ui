@@ -1,0 +1,53 @@
+import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core'
+import { map } from 'rxjs'
+
+import { AppStateService } from '@onecx/angular-integration-interface'
+
+/**
+ * This component displays the image with given imageURL.
+ * A default image is displayed (stored in assets/images), if
+ *   - the image URL was not provided
+ *   - the image was not found (http status: 404)
+ */
+@Component({
+  selector: 'app-image-container',
+  styleUrls: ['./image-container.component.scss'],
+  templateUrl: './image-container.component.html'
+})
+export class ImageContainerComponent implements OnChanges {
+  @Input() public id = ''
+  @Input() public title = ''
+  @Input() public small = false
+  @Input() public imageUrl: string | undefined
+  @Input() public styleClass: string | undefined
+  @Output() imageUrlIsEmpty = new EventEmitter<boolean>()
+
+  public displayImageUrl: string | undefined
+  public defaultImageUrl = ''
+  public displayDefaultLogo = false
+
+  constructor(private appState: AppStateService) {
+    appState.currentMfe$
+      .pipe(
+        map((mfe) => {
+          this.defaultImageUrl = 'onecx-portal-lib/assets/images/default_avatar.png'
+          this.displayImageUrl = this.imageUrl
+        })
+      )
+      .subscribe()
+  }
+
+  public onImageError(): void {
+    this.displayDefaultLogo = true
+    this.imageUrlIsEmpty.emit(true)
+    this.displayImageUrl = undefined
+  }
+
+  ngOnChanges(changes: SimpleChanges): void {
+    this.displayDefaultLogo = false
+    if (changes['imageUrl']) {
+      if (this.imageUrl) this.displayImageUrl = this.imageUrl
+      else this.displayDefaultLogo = true
+    }
+  }
+}

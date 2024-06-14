@@ -1,5 +1,6 @@
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
+import { RefType } from './generated'
 
 export function limitText(text: string, limit: number): string {
   if (text) {
@@ -81,4 +82,8 @@ export function getTooltipContent(value: string, maxlength?: number) {
     return tooltipContent.length > truncatedLength ? tooltipContent : null
   }
   return null
+}
+
+export function bffImageUrl(basePath: string | undefined, name: string | undefined, refType: RefType): string {
+  return !name ? '' : basePath + '/userProfile/me/' + name + '?refType=' + refType
 }

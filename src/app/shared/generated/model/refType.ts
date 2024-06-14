@@ -13,6 +13,7 @@
 
 export enum RefType {
     Small = 'small',
-    Normal = 'normal'
+    Medium = 'medium',
+    Large = 'large'
 }
 

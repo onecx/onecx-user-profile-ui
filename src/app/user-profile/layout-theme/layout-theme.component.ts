@@ -33,9 +33,9 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
       //{ label: 'LAYOUT_THEME.MENU_MODES.SLIMPLUS', value: MenuMode.SLIMPLUS },
     ]
     this.colorSchemeSelectItems = [
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.AUTO', value: ColorScheme.Auto },
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.LIGHT', value: ColorScheme.Light },
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorScheme.Dark }
+      { label: 'LAYOUT_THEME.COLOR_SCHEMES.AUTO', value: ColorScheme.Auto, disabled: true },
+      { label: 'LAYOUT_THEME.COLOR_SCHEMES.LIGHT', value: ColorScheme.Light, disabled: true },
+      { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorScheme.Dark, disabled: true }
     ]
     this.formGroup = new UntypedFormGroup({
       menuMode: new UntypedFormControl(),
@@ -51,9 +51,7 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
     if (!this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
       this.formGroup.get('colorScheme')?.disable() // UI is not ready to offer it
     }
-    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_BREADCRUMBS#EDIT')) {
-      this.formGroup.get('breadcrumbs')?.disable()
-    }
+    this.formGroup.get('breadcrumbs')?.disable()
   }
 
   public ngOnChanges(): void {
