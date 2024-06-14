@@ -19,6 +19,8 @@ import {
 import { environment } from 'src/environments/environment'
 import { AppComponent } from './app.component'
 
+import { SharedModule } from 'src/app/shared/shared.module'
+
 const routes: Routes = [
   {
     path: '',
@@ -34,6 +36,7 @@ const routes: Routes = [
     HttpClientModule,
     KeycloakAuthModule,
     BrowserAnimationsModule,
+    SharedModule,
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking',
       enableTracing: true

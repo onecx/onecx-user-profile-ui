@@ -6,18 +6,22 @@ import { AvatarComponent } from './avatar.component'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { UserAvatarAPIService } from 'src/app/shared/generated'
+import { of } from 'rxjs'
 
 describe('AvatarComponent', () => {
   let component: AvatarComponent
   let fixture: ComponentFixture<AvatarComponent>
 
   const userServiceSpy = {
-    removeAvatar: jasmine.createSpy('removeAvatar')
+    removeAvatar: jasmine.createSpy('removeAvatar'),
+    profile$: jasmine.createSpy('profile$')
   }
 
   const avatarServiceSpy = {
     deleteUserAvatar: jasmine.createSpy('deleteUserAvatar'),
-    uploadAvatar: jasmine.createSpy('uploadAvatar')
+    uploadAvatar: jasmine.createSpy('uploadAvatar'),
+    getUserAvatar: jasmine.createSpy('getUserAvatar').and.returnValue(of({})),
+    configuration: jasmine.createSpy('configuration')
   }
 
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
@@ -63,6 +67,10 @@ describe('AvatarComponent', () => {
     msgServiceSpy.error.calls.reset()
     avatarServiceSpy.deleteUserAvatar.calls.reset()
     avatarServiceSpy.uploadAvatar.calls.reset()
+    avatarServiceSpy.getUserAvatar.calls.reset()
+    avatarServiceSpy.configuration.and.callFake(() => {
+      return { basePath: '/mocked-base-path' }
+    })
   }))
 
   beforeEach(() => {

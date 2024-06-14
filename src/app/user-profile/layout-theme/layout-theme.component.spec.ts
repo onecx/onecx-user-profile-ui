@@ -48,7 +48,7 @@ describe('LayoutThemeComponent', () => {
     expect(component).toBeTruthy()
     expect(component.formGroup.value['menuMode']).toBe(defaultLayoutAndTheme.menuMode)
     expect(component.formGroup.value['colorScheme']).toBe(defaultLayoutAndTheme.colorScheme)
-    expect(component.formGroup.value['breadcrumbs']).toBeNull()
+    expect(component.formGroup.value['breadcrumbs']).toBeUndefined()
   })
 
   it('should not disable menuMode edit if user has no permissions', () => {
@@ -56,7 +56,7 @@ describe('LayoutThemeComponent', () => {
 
     expect(component.formGroup.get('menuMode')?.disabled).toBe(false)
     expect(component.formGroup.get('colorScheme')?.disabled).toBe(false)
-    expect(component.formGroup.get('breadcrumbs')?.disabled).toBe(false)
+    expect(component.formGroup.get('breadcrumbs')?.disabled).toBe(true)
   })
 })
 

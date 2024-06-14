@@ -45,9 +45,9 @@ export interface UpdateAvatarRequestParams {
 }
 
 export interface UploadAvatarRequestParams {
+    refType: RefType;
     body: Blob;
     contentLength?: number;
-    refType?: RefType;
 }
 
 
@@ -321,12 +321,15 @@ export class UserAvatarAPIService {
     public uploadAvatar(requestParameters: UploadAvatarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<ImageInfo>>;
     public uploadAvatar(requestParameters: UploadAvatarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<ImageInfo>>;
     public uploadAvatar(requestParameters: UploadAvatarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const refType = requestParameters.refType;
+        if (refType === null || refType === undefined) {
+            throw new Error('Required parameter refType was null or undefined when calling uploadAvatar.');
+        }
         const body = requestParameters.body;
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling uploadAvatar.');
         }
         const contentLength = requestParameters.contentLength;
-        const refType = requestParameters.refType;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (refType !== undefined && refType !== null) {

@@ -20,7 +20,11 @@
             [enableSorting]="false"
             [enableFiltering]="true"
             (filterChange)="onFilterChange($event)"
-            [filterColumns]="['WORKSPACE.NAME' | translate, 'WORKSPACE.THEME' | translate]"
+            [filterColumns]="[
+              'USERPROFILE_SEARCH.FIRSTNAME' | translate,
+              'USERPROFILE_SEARCH.LASTNAME' | translate,
+              'USERPROFILE_SEARCH.EMAIL' | translate
+            ]"
             [translations]="dataViewControlsTranslations"
           >
           </ocx-data-view-controls>
