@@ -26,7 +26,7 @@ export class AccountSettingsComponent implements OnInit {
   public settings: UserProfileAccountSettings = {}
   public settingsInitial: UserProfileAccountSettings = {}
   public selectedTab = 0
-  public changePasswordSlotName = 'onecx-userProfile-changePassword'
+  public changePasswordSlotName = 'onecx-user-profile-change-password'
 
   private cacheItem = 'httpCache'
   // This is the local-cache-key for the user profile, containing the localization and timezone setting
