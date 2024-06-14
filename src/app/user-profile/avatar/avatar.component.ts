@@ -64,7 +64,7 @@ export class AvatarComponent implements OnInit {
     )
   }
 
-  uploadFile() {
+  onFileUpload() {
     this.imageCompress.uploadFile().then(({ image, orientation }) => {
       this.imageCompress.compressFile(image, orientation, 100, 100).then(async (compressedImage) => {
         if (this.imageCompress.byteCount(compressedImage) > 1000) {
