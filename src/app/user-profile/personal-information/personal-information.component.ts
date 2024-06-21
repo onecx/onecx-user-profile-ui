@@ -140,7 +140,11 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   private async createCountryList(personalInfo: UserPerson): Promise<UserPerson> {
-    countriesInfo.registerLocale(await import('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
+    if (this.translate.currentLang == undefined) {
+      this.translate.currentLang = 'en'
+    }
+    // countriesInfo.registerLocale(await import('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
+    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
     const countryList = countriesInfo.getNames(this.translate.currentLang)
     const countryCodes = Object.keys(countryList)
     const countryNames = Object.values(countryList)

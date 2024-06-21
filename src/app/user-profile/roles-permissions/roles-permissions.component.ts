@@ -10,8 +10,8 @@ import { SlotService } from '@onecx/angular-remote-components'
   styleUrls: ['./roles-permissions.component.scss']
 })
 export class RolesPermissionsComponent {
-  public personalInfo$: Observable<UserPerson>
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
+  public personalInfo$: Observable<UserPerson> | undefined
+  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
   public userRolesAndPermissionsSlotName = 'onecx-user-profile-permissions'
 
   constructor(private readonly userProfileService: UserProfileAPIService, private readonly slotService: SlotService) {

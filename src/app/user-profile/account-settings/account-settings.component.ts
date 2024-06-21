@@ -51,6 +51,7 @@ export class AccountSettingsComponent implements OnInit {
       },
       error: (error) => {
         console.error('Failed to load user profile', error)
+        this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
   }
@@ -75,13 +76,11 @@ export class AccountSettingsComponent implements OnInit {
   }
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public privacySettingsChange(ev: any) {
-    console.log('EV', ev)
     this.settings.hideMyProfile = ev.hideMyProfile
     this.saveUserSettingsInfo()
   }
 
   public saveUserSettingsInfo(): void {
-    console.log('SAVE', this.settings)
     this.userProfileService.updateUserSettings({ updateUserSettings: this.settings as UpdateUserSettings }).subscribe({
       next: (res) => {
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
