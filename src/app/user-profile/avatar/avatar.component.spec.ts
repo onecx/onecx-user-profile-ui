@@ -1,12 +1,14 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { AppStateService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 
 import { AvatarComponent } from './avatar.component'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { UserAvatarAPIService } from 'src/app/shared/generated'
-import { of } from 'rxjs'
+import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
+import { of, throwError } from 'rxjs'
+import { NgxImageCompressService } from 'ngx-image-compress'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 
 describe('AvatarComponent', () => {
   let component: AvatarComponent
@@ -18,10 +20,17 @@ describe('AvatarComponent', () => {
   }
 
   const avatarServiceSpy = {
-    deleteUserAvatar: jasmine.createSpy('deleteUserAvatar'),
-    uploadAvatar: jasmine.createSpy('uploadAvatar'),
+    deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({})),
+    uploadAvatar: jasmine.createSpy('uploadAvatar').and.returnValue(of({})),
+    updateAvatar: jasmine.createSpy('updateAvatar').and.returnValue(of({})),
     getUserAvatar: jasmine.createSpy('getUserAvatar').and.returnValue(of({})),
     configuration: jasmine.createSpy('configuration')
+  }
+
+  const imageCompressSpy = {
+    uploadFile: jasmine.createSpy('uploadFile').and.returnValue(of({})),
+    compressFile: jasmine.createSpy('compressFile').and.returnValue(of({})),
+    byteCount: jasmine.createSpy('byteCount').and.returnValue('testString')
   }
 
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
@@ -60,13 +69,17 @@ describe('AvatarComponent', () => {
         { provide: UserAvatarAPIService, useValue: avatarServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
         { provide: UserService },
-        { provide: AppStateService }
+        { provide: AppStateService },
+        { provide: NgxImageCompressService, useValue: imageCompressSpy }
       ]
     }).compileComponents()
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
+    imageCompressSpy.uploadFile.calls.reset()
+    imageCompressSpy.compressFile.calls.reset()
     avatarServiceSpy.deleteUserAvatar.calls.reset()
     avatarServiceSpy.uploadAvatar.calls.reset()
+    avatarServiceSpy.updateAvatar.calls.reset()
     avatarServiceSpy.getUserAvatar.calls.reset()
     avatarServiceSpy.configuration.and.callFake(() => {
       return { basePath: '/mocked-base-path' }
@@ -77,6 +90,7 @@ describe('AvatarComponent', () => {
     fixture = TestBed.createComponent(AvatarComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
+    spyOn(component, 'windowReload').and.returnValue()
   })
 
   describe('Save Avatar image', () => {
@@ -85,326 +99,303 @@ describe('AvatarComponent', () => {
     })
   })
 
-  describe('Delete Avatar image', () => {
-    it('should delete an existing Avatar image', () => {})
+  it('should delete an existing Avatar image', fakeAsync(() => {
+    // Create an jpg base 64 image
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')!
+    canvas.width = 500
+    canvas.height = 500
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    // Convert the canvas to a base64-encoded JPG
+    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
+
+    // Mock the response from the ImageCompress service
+    const mockImage = base64Image
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue('200')
+
+    avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+    avatarServiceSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
+
+    component.imageUrlIsEmpty = true
+    // Call the onFileUpload method
+    component.onFileUpload()
+    tick(1000)
+    component.onDeleteAvatarImage()
+
+    // Expect the necessary methods to have been called
+    expect(avatarServiceSpy.deleteUserAvatar).toHaveBeenCalled()
+    expect(component.showAvatarDeleteDialog).toBeFalse()
+    expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
+  }))
+
+  it('should return error when delete failure', fakeAsync(() => {
+    const deleteErrorResponse: HttpErrorResponse = {
+      status: 401,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: undefined,
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    avatarServiceSpy.deleteUserAvatar.and.returnValue(throwError(() => deleteErrorResponse))
+
+    component.onDeleteAvatarImage()
+
+    // Expect the necessary methods to have been called
+    expect(avatarServiceSpy.deleteUserAvatar).toHaveBeenCalled()
+    expect(component.showAvatarDeleteDialog).toBeFalse()
+    expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
+  }))
+
+  it('should call the update methods when file exists in image', async () => {
+    // Mock the response from the ImageCompress service
+    const mockImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue(of('2000'))
+
+    avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+    avatarServiceSpy.updateAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+
+    component.imageUrlIsEmpty = false
+    // Call the onFileUpload method
+    await component.onFileUpload()
+
+    // Expect the necessary methods to have been called
+    expect(imageCompressSpy.uploadFile).toHaveBeenCalled()
+    expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(3)
   })
+
+  it('should UPDATE failed', fakeAsync(() => {
+    // Create an jpg base 64 image
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')!
+    canvas.width = 500
+    canvas.height = 500
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    // Convert the canvas to a base64-encoded JPG
+    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
+
+    // Mock the response from the ImageCompress service
+    const mockImage = base64Image
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue('200')
+
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: { errorCode: 'WRONG_AVATAR_CONTENT_TYPE' },
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    avatarServiceSpy.updateAvatar.and.returnValue(throwError(() => updateErrorResponse))
+
+    component.imageUrlIsEmpty = false
+    // Call the onFileUpload method
+    component.onFileUpload()
+
+    tick(1000)
+
+    // Expect the necessary methods to have been called
+    expect(msgServiceSpy.error).toHaveBeenCalledWith({
+      summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
+      detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
+    })
+  }))
+
+  it('should UPDATE failed WRONG_AVATAR_CONTENT_TYPE', fakeAsync(() => {
+    // Create an jpg base 64 image
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')!
+    canvas.width = 500
+    canvas.height = 500
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    // Convert the canvas to a base64-encoded JPG
+    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
+
+    // Mock the response from the ImageCompress service
+    const mockImage = base64Image
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue('200')
+
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: undefined,
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    avatarServiceSpy.updateAvatar.and.returnValue(throwError(() => updateErrorResponse))
+
+    component.imageUrlIsEmpty = false
+    // Call the onFileUpload method
+    component.onFileUpload()
+
+    tick(1000)
+
+    // Expect the necessary methods to have been called
+    expect(msgServiceSpy.error).toHaveBeenCalledWith({
+      summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
+      detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
+    })
+  }))
+
+  it('should upload image to avatar service when compressed, image over 100 000 bytes', fakeAsync(() => {
+    // Create an jpg base 64 image
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')!
+    canvas.width = 500
+    canvas.height = 500
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    // Convert the canvas to a base64-encoded JPG
+    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
+
+    // Mock the response from the ImageCompress service
+    const mockImage = base64Image
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue('200')
+
+    avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+
+    component.imageUrlIsEmpty = true
+    // Call the onFileUpload method
+    component.onFileUpload()
+    tick(1000)
+
+    // Expect the necessary methods to have been called
+    expect(avatarServiceSpy.uploadAvatar).toHaveBeenCalled()
+  }))
+
+  it('should UPLOAD failed', fakeAsync(() => {
+    // Create an jpg base 64 image
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')!
+    canvas.width = 500
+    canvas.height = 500
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    // Convert the canvas to a base64-encoded JPG
+    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
+
+    // Mock the response from the ImageCompress service
+    const mockImage = base64Image
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue('200')
+
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: undefined,
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+
+    component.imageUrlIsEmpty = true
+    // Call the onFileUpload method
+    component.onFileUpload()
+
+    tick(1000)
+
+    // Expect the necessary methods to have been called
+    expect(msgServiceSpy.error).toHaveBeenCalledWith({
+      summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
+      detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
+    })
+  }))
+
+  it('should UPLOAD failed WRONG_AVATAR_CONTENT_TYPE', fakeAsync(() => {
+    // Create an jpg base 64 image
+    const canvas = document.createElement('canvas')
+    const context = canvas.getContext('2d')!
+    canvas.width = 500
+    canvas.height = 500
+    context.fillStyle = 'red'
+    context.fillRect(0, 0, canvas.width, canvas.height)
+    // Convert the canvas to a base64-encoded JPG
+    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
+
+    // Mock the response from the ImageCompress service
+    const mockImage = base64Image
+    const mockOrientation = 0
+    const mockCompressedImage =
+      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+    imageCompressSpy.byteCount.and.returnValue('200')
+
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: { errorCode: 'WRONG_AVATAR_CONTENT_TYPE' },
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+
+    component.imageUrlIsEmpty = true
+    // Call the onFileUpload method
+    component.onFileUpload()
+
+    tick(1000)
+
+    // Expect the necessary methods to have been called
+    expect(msgServiceSpy.error).toHaveBeenCalledWith({
+      summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
+      detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
+    })
+  }))
 })
-
-// import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-
-// import { HttpClient, HttpErrorResponse } from '@angular/common/http'
-// import { AvatarComponent } from './avatar.component'
-// import { AUTH_SERVICE, MFE_INFO, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
-// import { HttpClientTestingModule } from '@angular/common/http/testing'
-// import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-// import { HttpLoaderFactory } from '../../shared/shared.module'
-// import { of, throwError } from 'rxjs'
-// import { UserProfileService } from '../user-profile.service'
-// import { AvatarUploadService } from 'src/app/shared/avatar-upload.service'
-// import { By } from '@angular/platform-browser'
-// import { DialogModule } from 'primeng/dialog'
-// import { ButtonModule } from 'primeng/button'
-// import { MockIfPremissionDirective } from '../../test/mocks/if-permission-mock.directive'
-
-// describe('AvatarComponent', () => {
-//   let component: AvatarComponent
-//   let fixture: ComponentFixture<AvatarComponent>
-
-//   const userProfileServiceSpy = {
-//     removeAvatar: jasmine.createSpy('removeAvatar')
-//   }
-
-//   const avatarServiceSpy = {
-//     setUserAvatar: jasmine.createSpy('setUserAvatar')
-//   }
-
-//   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
-
-//   const authServiceSpy = jasmine.createSpyObj('AUTH_SERVICE', ['getCurrentUser', 'getAuthProviderName'])
-
-//   const avatarOnBackend = {
-//     avatar: {
-//       userUploaded: true,
-//       lastUpdateTime: undefined,
-//       imageUrl: 'mockUrl',
-//       smallImageUrl: 'smallUrl'
-//     }
-//   }
-
-//   const avatarHttp = {
-//     avatar: {
-//       userUploaded: true,
-//       lastUpdateTime: undefined,
-//       imageUrl: 'http://mockUrl',
-//       smallImageUrl: 'http://mockUrl'
-//     }
-//   }
-
-//   beforeEach(waitForAsync(() => {
-//     TestBed.configureTestingModule({
-//       declarations: [AvatarComponent, MockIfPremissionDirective],
-//       imports: [
-//         HttpClientTestingModule,
-//         DialogModule,
-//         ButtonModule,
-//         TranslateModule.forRoot({
-//           loader: {
-//             provide: TranslateLoader,
-//             useFactory: HttpLoaderFactory,
-//             deps: [HttpClient]
-//           }
-//         })
-//       ],
-//       providers: [
-//         { provide: AUTH_SERVICE, useValue: authServiceSpy },
-//         { provide: UserProfileService, useValue: userProfileServiceSpy },
-//         { provide: AvatarUploadService, useValue: avatarServiceSpy },
-//         { provide: PortalMessageService, useValue: msgServiceSpy }
-//       ]
-//     })
-//     msgServiceSpy.success.calls.reset()
-//     msgServiceSpy.error.calls.reset()
-//     authServiceSpy.getCurrentUser.and.returnValue(avatarOnBackend as UserProfile)
-//     userProfileServiceSpy.removeAvatar.calls.reset()
-//   }))
-
-//   describe('when MFE_INFO is not provided', () => {
-//     beforeEach(() => {
-//       TestBed.compileComponents()
-//       fixture = TestBed.createComponent(AvatarComponent)
-//       component = fixture.componentInstance
-//       fixture.detectChanges()
-//     })
-
-//     it('should create with backend avatar', () => {
-//       expect(component).toBeTruthy()
-//       expect(component.userAvatar).toEqual(avatarOnBackend.avatar)
-//       expect(component.imageUrl).toBe(component.apiPrefix + avatarOnBackend.avatar.imageUrl)
-//       const imgDebugEl = fixture.debugElement.query(By.css('img'))
-//       expect(imgDebugEl.nativeElement.getAttribute('aria-describedby')).toBe('Avatar image')
-//     })
-
-//     it('should create with http avatar', () => {
-//       authServiceSpy.getCurrentUser.and.returnValue(avatarHttp as UserProfile)
-
-//       component.ngOnInit()
-//       expect(component.userAvatar).toEqual(avatarHttp.avatar)
-//       expect(component.imageUrl).toBe(avatarHttp.avatar.imageUrl)
-//     })
-
-//     it('should use placeholder if avatar not provided', () => {
-//       authServiceSpy.getCurrentUser.and.returnValue({})
-
-//       component.ngOnInit()
-//       fixture.detectChanges()
-
-//       expect(component.imageUrl).toBe('./' + component.placeHolderPath)
-//       const imgDebugEl = fixture.debugElement.query(By.css('img'))
-//       expect(imgDebugEl.nativeElement.getAttribute('aria-describedby')).toBe('Avatar placeholder image')
-//       const deleteButton = fixture.debugElement.query(By.css('#up_avatar_button_remove'))
-//       expect(deleteButton).toBeNull()
-//     })
-
-//     it('should close dialog and use placehoder after onDeleteAvatarImage success', () => {
-//       const windowSpy = spyOn(component, 'reloadWindow')
-//       userProfileServiceSpy.removeAvatar.and.returnValue(of({}))
-//       component.showAvatarDeleteDialog = true
-
-//       expect(component.showAvatarDeleteDialog).toBeTrue()
-
-//       component.onDeleteAvatarImage()
-//       expect(component.userAvatar).toBeUndefined()
-//       expect(component.showAvatarDeleteDialog).toBeFalse()
-//       expect(msgServiceSpy.success).toHaveBeenCalledOnceWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-//       expect(windowSpy.calls.count()).toBe(1)
-//       expect(component.imageUrl).toBe('./' + component.placeHolderPath)
-//     })
-
-//     it('should close dialog and display error after onDeleteAvatarImage failure', () => {
-//       const windowSpy = spyOn(component, 'reloadWindow')
-//       userProfileServiceSpy.removeAvatar.and.returnValue(throwError(() => new Error()))
-//       component.showAvatarDeleteDialog = true
-
-//       expect(component.showAvatarDeleteDialog).toBeTrue()
-
-//       component.onDeleteAvatarImage()
-//       expect(component.userAvatar).toBeUndefined()
-//       expect(component.showAvatarDeleteDialog).toBeFalse()
-//       expect(msgServiceSpy.error).toHaveBeenCalledOnceWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
-//       expect(windowSpy.calls.count()).toBe(0)
-//       expect(component.imageUrl).toBe('./' + component.placeHolderPath)
-//     })
-
-//     it('should validate and uploadImage on onFileUpload', () => {
-//       authServiceSpy.getAuthProviderName.and.returnValue('mockAuthProvider')
-
-//       const dataTransfer = new DataTransfer()
-//       let blob = ''
-//       for (let i = 500 * 500; i > 0; i--) blob += 'b'
-//       dataTransfer.items.add(new File([blob], 'my-file.png'))
-
-//       const inputDebugEl = fixture.debugElement.query(By.css('input[type=file]'))
-//       // Select file from input
-//       inputDebugEl.nativeElement.files = dataTransfer.files
-
-//       // Fire change event of input
-//       inputDebugEl.nativeElement.dispatchEvent(new InputEvent('change'))
-
-//       fixture.detectChanges()
-
-//       // TODO: check if updateImage run correctly
-//       // TODO: check if checkDimension run correctly
-//       expect(msgServiceSpy.success).toHaveBeenCalledOnceWith({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-//     })
-
-//     it('should validate and uploadImage on onFileUpload with non-mock auth provider', () => {
-//       authServiceSpy.getAuthProviderName.and.returnValue('myProviderName')
-
-//       const newAvatarData = {
-//         userUploaded: true,
-//         lastUpdateTime: undefined,
-//         imageUrl: 'myUrl',
-//         smallImageUrl: 'mySmallUrl'
-//       }
-
-//       avatarServiceSpy.setUserAvatar.and.returnValue(of(newAvatarData))
-
-//       const windowSpy = spyOn(component, 'reloadWindow')
-
-//       const dataTransfer = new DataTransfer()
-//       let blob = ''
-//       for (let i = 500 * 500; i > 0; i--) blob += 'b'
-//       dataTransfer.items.add(new File([blob], 'my-file.png'))
-
-//       const inputDebugEl = fixture.debugElement.query(By.css('input[type=file]'))
-//       // Select file from input
-//       inputDebugEl.nativeElement.files = dataTransfer.files
-
-//       // Fire change event of input
-//       inputDebugEl.nativeElement.dispatchEvent(new InputEvent('change'))
-
-//       fixture.detectChanges()
-
-//       // Expected selectedFile prior to img.onload function fire
-//       expect(component.selectedFile?.name).toBe('my-file.png')
-//       expect(msgServiceSpy.success).toHaveBeenCalledOnceWith({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-//       expect(localStorage.getItem('tkit_user_profile')).toBeNull()
-//       expect(windowSpy.calls.count()).toBe(1)
-//       expect(component.userAvatar).toEqual(newAvatarData)
-//       expect(component.imageUrl).toBe(component.apiPrefix + newAvatarData.imageUrl)
-
-//       // TODO: check if img loads correctly via img.onload
-//       // expect(component.selectedFile?.size).toBe(400*400)
-//       // expect(component.selectedFile?.name).toBe('untitled')
-//     })
-
-//     it('should display approperiate message on wrong avatar content error', () => {
-//       authServiceSpy.getAuthProviderName.and.returnValue('myProviderName')
-
-//       avatarServiceSpy.setUserAvatar.and.returnValue(
-//         throwError(
-//           () =>
-//             new HttpErrorResponse({
-//               error: {
-//                 errorCode: 'WRONG_AVATAR_CONTENT_TYPE'
-//               }
-//             })
-//         )
-//       )
-
-//       const dataTransfer = new DataTransfer()
-//       let blob = ''
-//       for (let i = 4; i > 0; i--) blob += 'b'
-//       dataTransfer.items.add(new File([blob], 'my-file.png'))
-
-//       const inputDebugEl = fixture.debugElement.query(By.css('input[type=file]'))
-//       inputDebugEl.nativeElement.files = dataTransfer.files
-
-//       inputDebugEl.nativeElement.dispatchEvent(new InputEvent('change'))
-
-//       fixture.detectChanges()
-
-//       expect(msgServiceSpy.error).toHaveBeenCalledOnceWith({
-//         summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-//         detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-//       })
-//     })
-
-//     it('should display default upload error message on error with unknown status code', () => {
-//       authServiceSpy.getAuthProviderName.and.returnValue('myProviderName')
-
-//       avatarServiceSpy.setUserAvatar.and.returnValue(throwError(() => new HttpErrorResponse({})))
-
-//       const dataTransfer = new DataTransfer()
-//       let blob = ''
-//       for (let i = 4; i > 0; i--) blob += 'b'
-//       dataTransfer.items.add(new File([blob], 'my-file.png'))
-
-//       const inputDebugEl = fixture.debugElement.query(By.css('input[type=file]'))
-//       inputDebugEl.nativeElement.files = dataTransfer.files
-
-//       inputDebugEl.nativeElement.dispatchEvent(new InputEvent('change'))
-
-//       fixture.detectChanges()
-
-//       expect(msgServiceSpy.error).toHaveBeenCalledOnceWith({
-//         summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
-//         detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
-//       })
-//     })
-//   })
-
-//   describe('when MFE_INFO is provided', () => {
-//     beforeEach(() => {
-//       TestBed.overrideProvider(MFE_INFO, {
-//         useValue: {
-//           baseHref: '/base/path',
-//           mountPath: '/base/path',
-//           remoteBaseUrl: 'http://localhost:4200',
-//           shellName: 'shell'
-//         }
-//       })
-//       TestBed.compileComponents()
-//       fixture = TestBed.createComponent(AvatarComponent)
-//       component = fixture.componentInstance
-//       fixture.detectChanges()
-//     })
-
-//     it('should use placeholder if avatar not provided', () => {
-//       authServiceSpy.getCurrentUser.and.returnValue({})
-
-//       component.ngOnInit()
-//       expect(component.imageUrl).toBe('http://localhost:4200' + component.placeHolderPath)
-//     })
-
-//     it('should close dialog, reload and use placehoder after onDeleteAvatarImage success', () => {
-//       const windowSpy = spyOn(component, 'reloadWindow')
-//       userProfileServiceSpy.removeAvatar.and.returnValue(of({}))
-//       component.showAvatarDeleteDialog = true
-
-//       expect(component.showAvatarDeleteDialog).toBeTrue()
-
-//       component.onDeleteAvatarImage()
-//       expect(component.userAvatar).toBeUndefined()
-//       expect(component.showAvatarDeleteDialog).toBeFalse()
-//       expect(msgServiceSpy.success).toHaveBeenCalledOnceWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-//       expect(windowSpy.calls.count()).toBe(1)
-//       expect(component.imageUrl).toBe('http://localhost:4200' + component.placeHolderPath)
-//     })
-
-//     it('should close dialog and display error after onDeleteAvatarImage failure', () => {
-//       const windowSpy = spyOn(component, 'reloadWindow')
-//       userProfileServiceSpy.removeAvatar.and.returnValue(throwError(() => new Error()))
-//       component.showAvatarDeleteDialog = true
-
-//       expect(component.showAvatarDeleteDialog).toBeTrue()
-
-//       component.onDeleteAvatarImage()
-//       expect(component.userAvatar).toBeUndefined()
-//       expect(component.showAvatarDeleteDialog).toBeFalse()
-//       expect(msgServiceSpy.error).toHaveBeenCalledOnceWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
-//       expect(windowSpy.calls.count()).toBe(0)
-//       expect(component.imageUrl).toBe('http://localhost:4200' + component.placeHolderPath)
-//     })
-//   })
-// })

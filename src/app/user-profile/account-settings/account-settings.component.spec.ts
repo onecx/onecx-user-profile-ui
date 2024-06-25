@@ -1,3 +1,175 @@
+import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
+
+import { AccountSettingsComponent } from './account-settings.component'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { HttpClientTestingModule } from '@angular/common/http/testing'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import {
+  ColorScheme,
+  MenuMode,
+  UpdateUserSettings,
+  UserProfileAPIService,
+  UserProfileAccountSettings
+} from 'src/app/shared/generated'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { of, throwError } from 'rxjs'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+
+describe('AccountSettingsComponent', () => {
+  let component: AccountSettingsComponent
+  let fixture: ComponentFixture<AccountSettingsComponent>
+
+  const userProfileServiceSpy = {
+    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
+    getUserSettings: jasmine.createSpy('getUserSettings').and.returnValue(of({})),
+    updateUserSettings: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
+  }
+
+  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
+
+  /** DATA  PREP */
+  let profile: UserProfileAccountSettings = {
+    modificationCount: 1,
+    hideMyProfile: false,
+    locale: 'de-de',
+    timezone: 'UTC',
+    menuMode: MenuMode.Horizontal,
+    colorScheme: ColorScheme.Auto
+  }
+
+  let updatedProfile: UserProfileAccountSettings = {
+    modificationCount: 1,
+    hideMyProfile: false,
+    locale: 'de-de',
+    timezone: 'UTC',
+    menuMode: MenuMode.Horizontal,
+    colorScheme: ColorScheme.Auto
+  }
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AccountSettingsComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
+        { provide: PortalMessageService, useValue: msgServiceSpy }
+      ]
+    }).compileComponents()
+    msgServiceSpy.success.calls.reset()
+    msgServiceSpy.error.calls.reset()
+    userProfileServiceSpy.getMyUserProfile.calls.reset()
+    userProfileServiceSpy.getUserSettings.calls.reset()
+    userProfileServiceSpy.updateUserSettings.calls.reset()
+  }))
+
+  beforeEach(() => {
+    userProfileServiceSpy.getUserSettings.and.returnValue(of(profile))
+    fixture = TestBed.createComponent(AccountSettingsComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+    spyOn(component, 'reloadWindow').and.returnValue()
+  })
+
+  it('should create', fakeAsync(() => {
+    expect(component).toBeTruthy()
+    expect(component.settings).toBe(profile)
+    expect(component.settingsInitial).toEqual(profile)
+  }))
+
+  it('should create', fakeAsync(() => {
+    userProfileServiceSpy.getUserSettings.and.returnValue(of(profile))
+
+    expect(component).toBeTruthy()
+    expect(component.settings).toBe(profile)
+    expect(component.settingsInitial).toEqual(profile)
+  }))
+
+  it('should saveUserSettingsInfo', () => {
+    userProfileServiceSpy.updateUserSettings.and.returnValue(of(updatedProfile))
+
+    component.saveUserSettingsInfo()
+    expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
+    expect(component.settings).toEqual(updatedProfile)
+  })
+
+  it('should saveUserSettingsInfo', () => {
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: undefined,
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    userProfileServiceSpy.updateUserSettings.and.returnValue(throwError(() => updateErrorResponse))
+
+    component.saveUserSettingsInfo()
+    expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.ERROR' })
+  })
+
+  it('should reloadPage', () => {
+    localStorage.setItem('tkit_user_profile', 'testItem')
+    component.reloadPage()
+    expect(localStorage.getItem('tkit_user_profile')).toBeNull()
+    expect(msgServiceSpy.info).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.CLEAR_CACHE_INFO' })
+  })
+
+  it('should call localeChange', () => {
+    component.localeChange('DE')
+    expect(component.settings.locale).toEqual('DE')
+    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
+      updateUserSettings: component.settings as UpdateUserSettings
+    })
+  })
+
+  it('should call timezoneChange', () => {
+    component.settings.timezone = 'US'
+    component.timezoneChange('HST')
+    expect(component.settings.timezone).toEqual('HST')
+    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
+      updateUserSettings: component.settings as UpdateUserSettings
+    })
+  })
+
+  it('should call colorSchemeChange', () => {
+    component.settings.colorScheme = ColorScheme.Light
+    component.colorSchemeChange(ColorScheme.Dark)
+    expect(component.settings.colorScheme).toEqual(ColorScheme.Dark)
+    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
+      updateUserSettings: component.settings as UpdateUserSettings
+    })
+  })
+
+  it('should call menuModeChange', () => {
+    component.settings.menuMode = MenuMode.Horizontal
+    component.menuModeChange(MenuMode.Slim)
+    expect(component.settings.menuMode).toEqual(MenuMode.Slim)
+    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
+      updateUserSettings: component.settings as UpdateUserSettings
+    })
+  })
+
+  it('should call privacySettingsChange', () => {
+    component.settings.hideMyProfile = false
+    component.privacySettingsChange({ hideMyProfile: true })
+    expect(component.settings.hideMyProfile).toEqual(true)
+    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
+      updateUserSettings: component.settings as UpdateUserSettings
+    })
+  })
+})
+
 // import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
 // import { HttpClient } from '@angular/common/http'
@@ -257,3 +429,63 @@
 //     expect(component.preferences.find((p) => p.id == '2')).toBeUndefined()
 //   })
 // })
+
+describe('AccountSettingsComponent', () => {
+  let component: AccountSettingsComponent
+  let fixture: ComponentFixture<AccountSettingsComponent>
+
+  const userProfileServiceSpy = {
+    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
+    getUserSettings: jasmine.createSpy('getUserSettings').and.returnValue(of({})),
+    updateUserSettings: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
+  }
+
+  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
+
+  const initErrorResponse: HttpErrorResponse = {
+    status: 401,
+    statusText: 'Not Found',
+    name: 'HttpErrorResponse',
+    message: '',
+    error: undefined,
+    ok: false,
+    headers: new HttpHeaders(),
+    url: null,
+    type: HttpEventType.ResponseHeader
+  }
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [AccountSettingsComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
+        { provide: PortalMessageService, useValue: msgServiceSpy }
+      ]
+    }).compileComponents()
+    msgServiceSpy.success.calls.reset()
+    msgServiceSpy.error.calls.reset()
+    userProfileServiceSpy.getMyUserProfile.calls.reset()
+    userProfileServiceSpy.getUserSettings.calls.reset()
+    userProfileServiceSpy.updateUserSettings.calls.reset()
+  }))
+
+  beforeEach(() => {
+    userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => initErrorResponse))
+    fixture = TestBed.createComponent(AccountSettingsComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
+
+  it('should create', fakeAsync(() => {
+    expect(component).toBeTruthy()
+    expect(msgServiceSpy.error).toHaveBeenCalled()
+  }))
+})

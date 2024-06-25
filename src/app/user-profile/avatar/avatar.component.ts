@@ -1,13 +1,12 @@
 import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 
-import { AvatarInfo, UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
-import { map, Observable, of } from 'rxjs'
+import { Observable, of } from 'rxjs'
 import { DOC_ORIENTATION, NgxImageCompressService } from 'ngx-image-compress'
 import { bffImageUrl } from 'src/app/shared/utils'
-// import base64
 
 @Component({
   selector: 'app-avatar',
@@ -17,7 +16,6 @@ import { bffImageUrl } from 'src/app/shared/utils'
 export class AvatarComponent implements OnInit {
   @ViewChild('selectedFileInput') selectedFileInput: ElementRef | undefined
   public selectedFile: File | undefined
-  public userAvatar$: Observable<AvatarInfo | undefined> | undefined
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
@@ -48,20 +46,16 @@ export class AvatarComponent implements OnInit {
   }
 
   public onDeleteAvatarImage(): void {
-    this.userAvatar$ = this.userService.profile$.pipe(map(() => undefined))
     this.showAvatarDeleteDialog = false
     this.avatarService.deleteUserAvatar({ refType: RefType.Medium }).subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-        window.location.reload()
+        this.windowReload()
       },
       error: () => {
         this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
       }
     })
-    this.imageUrl$ = this.appStateService.currentMfe$.pipe(
-      map((currentMfe) => (currentMfe.remoteBaseUrl ? currentMfe.remoteBaseUrl : './') + this.placeHolderPath)
-    )
   }
 
   onFileUpload() {
@@ -140,8 +134,7 @@ export class AvatarComponent implements OnInit {
         next: (data: any) => {
           this.showUploadSuccess()
           localStorage.removeItem('tkit_user_profile')
-          window.location.reload()
-
+          this.windowReload()
           if (refType === RefType.Large) {
             this.imageUrl$ = of(image)
           }
@@ -165,7 +158,7 @@ export class AvatarComponent implements OnInit {
         next: (data: any) => {
           this.showUploadSuccess()
           localStorage.removeItem('tkit_user_profile')
-          window.location.reload()
+          this.windowReload()
 
           if (refType === RefType.Large) {
             this.imageUrl$ = of(image)
@@ -194,5 +187,9 @@ export class AvatarComponent implements OnInit {
 
   public onImageError(value: boolean): void {
     this.imageUrlIsEmpty = value
+  }
+
+  public windowReload() {
+    window.location.reload()
   }
 }

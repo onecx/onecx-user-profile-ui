@@ -7,7 +7,10 @@ import {
   forceFormValidation,
   dropDownSortItemsByLabel,
   dropDownGetLabelByValue,
-  sortByLocale
+  sortByLocale,
+  getTooltipContent,
+  getLocale,
+  getDateFormat
 } from './utils'
 
 describe('util functions', () => {
@@ -104,6 +107,57 @@ describe('util functions', () => {
       const sortedStrings = strings.sort(sortByLocale)
 
       expect(sortedStrings[0]).toEqual('str1')
+    })
+  })
+
+  describe('getTooltipContent', () => {
+    it('should return null if value is empty', () => {
+      const result = getTooltipContent('')
+      expect(result).toBeNull()
+    })
+
+    it('should truncate long tooltip content', () => {
+      const longContent = 'This is a very long tooltip content that needs truncation. Please return this tooltip'
+      const result = getTooltipContent(longContent, 20)
+      expect(result).toEqual(null)
+    })
+
+    it('should not truncate short tooltip content', () => {
+      const shortContent = 'Short content'
+      const result = getTooltipContent(shortContent, 20)
+      expect(result).toEqual(shortContent)
+    })
+  })
+
+  describe('getLocale', () => {
+    it('should return the default locale if navigator language is empty', () => {
+      spyOnProperty(window.navigator, 'language').and.returnValue('en-US')
+      const result = getLocale()
+      expect(result).toEqual('en-US')
+    })
+
+    it('should return the lowercase navigator language if valid', () => {
+      spyOnProperty(window.navigator, 'language').and.returnValue('de-de')
+      const result = getLocale()
+      expect(result).toEqual('de-de')
+    })
+
+    it('should return the default locale if navigator language is invalid', () => {
+      spyOnProperty(window.navigator, 'language').and.returnValue('en-US')
+      const result = getLocale()
+      expect(result).toEqual('en-US')
+    })
+  })
+
+  describe('getDateFormat', () => {
+    it('should return "mm/dd/yy" for dateformat type', () => {
+      const result = getDateFormat('dateformat')
+      expect(result).toBe('mm/dd/yy')
+    })
+
+    it('should return "mm/dd/yyyy" for other types', () => {
+      const result = getDateFormat('other')
+      expect(result).toBe('mm/dd/yyyy')
     })
   })
 })

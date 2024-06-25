@@ -79,7 +79,7 @@ export function getTooltipContent(value: string, maxlength?: number) {
   if (value) {
     const tooltipContent = value.toString()
     const truncatedLength = maxlength ?? 30
-    return tooltipContent.length > truncatedLength ? tooltipContent : null
+    return tooltipContent.length < truncatedLength ? tooltipContent : null
   }
   return null
 }
