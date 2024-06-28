@@ -1,1 +1,9 @@
-<ocx-user-avatar id="user-avatar-image" [user$]="currentUser$"></ocx-user-avatar>
+<div style="height: 32px" *ngIf="imagePath$ | async as imagePath; else placeholder">
+  <img [ocxSrc]="imagePath" alt="avatar" class="user-avatar-image" />
+</div>
+
+<ng-template #placeholder>
+  <div class="flex align-items-center h-full justify-content-center" style="width: 56px">
+    <p-skeleton shape="circle" size="2.5rem" class="h-full flex align-items-center"></p-skeleton>
+  </div>
+</ng-template>

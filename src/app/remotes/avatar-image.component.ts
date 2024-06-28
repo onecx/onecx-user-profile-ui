@@ -10,14 +10,9 @@ import {
   RemoteComponentConfig,
   provideTranslateServiceForRoot
 } from '@onecx/angular-remote-components'
-import {
-  PortalCoreModule,
-  UserProfile,
-  UserService,
-  createRemoteComponentTranslateLoader
-} from '@onecx/portal-integration-angular'
+import { PortalCoreModule, createRemoteComponentTranslateLoader } from '@onecx/portal-integration-angular'
 import { SharedModule } from 'primeng/api'
-import { Observable, ReplaySubject, map } from 'rxjs'
+import { BehaviorSubject, ReplaySubject } from 'rxjs'
 import { SharedModule as SharedModuleUserProfile } from '../shared/shared.module'
 import { Configuration, RefType, UserAvatarAPIService } from '../shared/generated'
 import { bffImageUrl } from '../shared/utils'
@@ -27,6 +22,7 @@ import { environment } from 'src/environments/environment'
   selector: 'app-avatar-image',
   standalone: true,
   templateUrl: './avatar-image.component.html',
+  styleUrls: ['./avatar-image.component.scss'],
   providers: [
     {
       provide: BASE_URL,
@@ -53,31 +49,11 @@ import { environment } from 'src/environments/environment'
 })
 @UntilDestroy()
 export class OneCXAvatarImageComponent implements OnInit {
-  currentUser$: Observable<UserProfile>
+  imagePath$: BehaviorSubject<string> | undefined
+  public placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
 
-  constructor(
-    @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
-    private avatarService: UserAvatarAPIService,
-    private userService: UserService
-  ) {
-    this.currentUser$ = this.userService.profile$.pipe(
-      map((profile) => {
-        return profile
-      })
-    )
-  }
-
-  ngOnInit(): void {
-    this.currentUser$ = this.currentUser$.pipe(
-      map((profile) => {
-        profile.avatar = {
-          smallImageUrl:
-            bffImageUrl(this.avatarService.configuration.basePath, 'avatar', RefType.Small) ??
-            profile.avatar?.smallImageUrl
-        }
-        return profile
-      })
-    )
+  constructor(@Inject(BASE_URL) private baseUrl: ReplaySubject<string>, private avatarService: UserAvatarAPIService) {
+    this.imagePath$ = new BehaviorSubject<string>(this.placeHolderPath)
   }
 
   ocxInitRemoteComponent(remoteComponentConfig: RemoteComponentConfig) {
@@ -85,5 +61,11 @@ export class OneCXAvatarImageComponent implements OnInit {
     this.avatarService.configuration = new Configuration({
       basePath: Location.joinWithSlash(remoteComponentConfig.baseUrl, environment.apiPrefix)
     })
+  }
+
+  ngOnInit(): void {
+    this.imagePath$?.next(
+      bffImageUrl(this.avatarService.configuration.basePath, 'avatar', RefType.Small) ?? this.placeHolderPath
+    )
   }
 }
