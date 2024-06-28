@@ -88,11 +88,18 @@ describe('OneCXAvatarImageComponent', () => {
   })
 
   describe('user profile', () => {
-    it('should use correct image path', async () => {
+    it('should use correct image class', async () => {
       const { avatarImageHarness } = await setUpWithHarness()
 
       let imageClass = await avatarImageHarness.getAvatarImageClass()
       expect(imageClass).toEqual('user-avatar-image')
+    })
+
+    it('should use correct image path', async () => {
+      const { avatarImageHarness } = await setUpWithHarness()
+
+      let imagePath = await avatarImageHarness.getAvatarImageURL()
+      expect(imagePath).toEqual('base_url_avatar/bff/userProfile/me/avatar?refType=small')
     })
   })
 })

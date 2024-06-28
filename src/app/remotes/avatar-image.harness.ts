@@ -6,4 +6,8 @@ export class OneCXAvatarImageComponentHarness extends ComponentHarness {
   async getAvatarImageClass() {
     return await (await this.locatorFor('.user-avatar-image')()).getAttribute('class')
   }
+
+  async getAvatarImageURL() {
+    return await (await this.locatorFor('.user-avatar-image')()).getProperty('ocxSrc')
+  }
 }
