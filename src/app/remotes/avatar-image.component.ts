@@ -11,7 +11,7 @@ import {
 } from '@onecx/angular-remote-components'
 import { PortalCoreModule, createRemoteComponentTranslateLoader } from '@onecx/portal-integration-angular'
 import { SharedModule } from 'primeng/api'
-import { BehaviorSubject, Observable, ReplaySubject, of } from 'rxjs'
+import { Observable, ReplaySubject, of } from 'rxjs'
 import { SharedModule as SharedModuleUserProfile } from '../shared/shared.module'
 import { Configuration, RefType, UserAvatarAPIService } from '../shared/generated'
 import { bffImageUrl } from '../shared/utils'
@@ -48,12 +48,9 @@ import { environment } from 'src/environments/environment'
 })
 export class OneCXAvatarImageComponent implements OnInit {
   imagePath$: Observable<string> | undefined
-  displayDefaultLogo: boolean = false
   public placeHolderPath: string = ''
 
-  constructor(@Inject(BASE_URL) private baseUrl: ReplaySubject<string>, private avatarService: UserAvatarAPIService) {
-    this.imagePath$ = new BehaviorSubject<string>(this.placeHolderPath)
-  }
+  constructor(@Inject(BASE_URL) private baseUrl: ReplaySubject<string>, private avatarService: UserAvatarAPIService) {}
 
   ocxInitRemoteComponent(remoteComponentConfig: RemoteComponentConfig) {
     this.baseUrl.next(remoteComponentConfig.baseUrl)
@@ -64,13 +61,15 @@ export class OneCXAvatarImageComponent implements OnInit {
   }
 
   ngOnInit(): void {
-    // Set imagePath explicit, extend later when avatar of different user is set
+    // imagePath$ is an observable on purpose, so this component can be easily extended to
+    // also display avatars of other user where a call the bff is needed to get the url
+    // To do this, call the bff here and set the observable as imagePath$ here
     this.imagePath$ = of(
       bffImageUrl(this.avatarService.configuration.basePath, 'avatar', RefType.Small) ?? this.placeHolderPath
     )
   }
 
   public onImageError(): void {
-    this.displayDefaultLogo = true
+    this.imagePath$ = of(this.placeHolderPath)
   }
 }
