@@ -16,6 +16,10 @@ app:
           description: "OneCX User Profile UI"
           note: "OneCX User Profile UI auto import via MF operator"
           type: MODULE
+        avatar-image:
+          exposedModule: "./OneCXAvatarImageComponent"
+          description: "User avatar image component"
+          type: COMPONENT
     # Permission
     permission:
       enabled: true
