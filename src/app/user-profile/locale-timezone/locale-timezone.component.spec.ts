@@ -5,6 +5,10 @@ import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { ConfigurationService, UserService } from '@onecx/portal-integration-angular'
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { LocalAndTimezoneService } from './service/localAndTimezone.service'
+import { of, throwError } from 'rxjs'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { By } from '@angular/platform-browser'
 
 describe('LocaleTimezoneComponent', () => {
   let component: LocaleTimezoneComponent
@@ -33,6 +37,7 @@ describe('LocaleTimezoneComponent', () => {
         { provide: LOCALE_ID, useValue: 'de=DE' }
       ]
     }).compileComponents()
+
     configServiceSpy.getProperty.and.returnValue('en, de')
   }))
 
@@ -188,30 +193,86 @@ describe('LocaleTimezoneComponent', () => {
   //     expect(localeRefreshButtonDebugEl).toBeTruthy()
   //   })
 
-  //   xit('should emit formGroup value on saveTimezone', () => {
-  //     let timezoneRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_timezone_refresh'))
-  //     expect(timezoneRefreshButtonDebugEl).toBeNull()
+  it('should emit formGroup value on saveTimezone', () => {
+    let timezoneRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_timezone_refresh'))
+    expect(timezoneRefreshButtonDebugEl).toBeNull()
 
-  //     const localeTimezoneChangeSpy = spyOn(component.timezoneChange, 'emit')
-  //     const localeTimezoneValue: UserProfileAccountSettingsLocaleAndTimeSettings = {
-  //       locale: 'en',
-  //       timezone: 'Europe/Warsaw'
-  //     }
-  //     component.formGroup.patchValue(localeTimezoneValue)
+    const localeTimezoneChangeSpy = spyOn(component.timezoneChange, 'emit')
+    const localeTimezoneValue = {
+      locale: 'en',
+      timezone: 'Europe/Warsaw'
+    }
+    component.formGroup.patchValue(localeTimezoneValue)
 
-  //     component.saveTimezone()
-  //     fixture.detectChanges()
+    component.saveTimezone()
+    fixture.detectChanges()
 
-  //     expect(component.timezone).toBe(localeTimezoneValue.timezone!)
-  //     expect(localeTimezoneChangeSpy).toHaveBeenCalledOnceWith(localeTimezoneValue)
-  //     timezoneRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_timezone_refresh'))
-  //     expect(timezoneRefreshButtonDebugEl).toBeTruthy()
-  //   })
+    expect(component.timezone).toBe(localeTimezoneValue.timezone!)
+    expect(localeTimezoneChangeSpy).toHaveBeenCalled()
+    expect(component.changedTimezone).toBeTrue()
+  })
+})
 
-  //   it('should emit true on applyChange', () => {
-  //     const applyChangesSpy = spyOn(component.applyChanges, 'emit')
-  //     component.applyChange()
+describe('LocaleTimezoneComponent Error', () => {
+  let component: LocaleTimezoneComponent
+  let fixture: ComponentFixture<LocaleTimezoneComponent>
 
-  //     expect(applyChangesSpy).toHaveBeenCalledOnceWith(true)
-  //   })
+  const configServiceSpy = jasmine.createSpyObj(ConfigurationService, ['getProperty'])
+
+  const userServiceSpy = {
+    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(true)
+  }
+
+  const localeAndTimezoneServiceSpy = {
+    getTimezoneData: jasmine.createSpy('getTimezoneData').and.returnValue(of({}))
+  }
+
+  beforeEach(waitForAsync(() => {
+    TestBed.configureTestingModule({
+      declarations: [LocaleTimezoneComponent],
+      imports: [
+        HttpClientTestingModule,
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
+      ],
+      schemas: [NO_ERRORS_SCHEMA],
+      providers: [
+        { provide: ConfigurationService, useValue: configServiceSpy },
+        { provide: UserService, useValue: userServiceSpy },
+        { provide: LocalAndTimezoneService, useValue: localeAndTimezoneServiceSpy },
+        { provide: LOCALE_ID, useValue: 'de=DE' }
+      ]
+    }).compileComponents()
+    configServiceSpy.getProperty.and.returnValue('en, de')
+  }))
+
+  beforeEach(() => {
+    userServiceSpy.hasPermission.calls.reset()
+    userServiceSpy.hasPermission.and.returnValue(true)
+
+    fixture = TestBed.createComponent(LocaleTimezoneComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
+
+  it('should throw a timezone error', () => {
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: undefined,
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
+
+    localeAndTimezoneServiceSpy.getTimezoneData.and.returnValue(throwError(() => updateErrorResponse))
+
+    component.ngOnChanges()
+    expect(component.timezoneSelectItems).toEqual([])
+  })
 })

@@ -4,7 +4,6 @@ import { PrivacySettingsComponent } from './privacy-settings.component'
 import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { HttpClient } from '@angular/common/http'
 import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-// import { HttpLoaderFactory } from '../../shared/shared.module'
 import { AUTH_SERVICE, AppStateService, createTranslateLoader } from '@onecx/portal-integration-angular'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 
@@ -46,37 +45,16 @@ describe('PrivacySettingsComponent', () => {
     // expect(component.formGroup.get('hideMyProfile')?.disabled).toBeFalse()
   })
 
-  //   it('should have hideMyProfile disabled if no permissions', () => {
-  //     authServiceSpy.hasPermission.and.returnValue(false)
+  it('should save privacy settings', () => {
+    component.savePrivacySettings()
 
-  //     component.ngOnInit()
+    expect(component.changedPrivacySettings).toBeTruthy()
+  })
 
-  //     expect(component.formGroup.get('hideMyProfile')?.disabled).toBeTrue()
-  //   })
+  it('should emit applyChange', () => {
+    spyOn(component.applyChanges, 'emit')
+    component.applyChange()
 
-  //   it('should emit true on applyChange', () => {
-  //     const applyChangesSpy = spyOn(component.applyChanges, 'emit')
-  //     component.applyChange()
-
-  //     expect(applyChangesSpy).toHaveBeenCalledOnceWith(true)
-  //   })
-
-  //   it('should emit formGroup value on saveMenuMode', () => {
-  //     let privacySettingsRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_privacy_settings_refresh'))
-  //     expect(privacySettingsRefreshButtonDebugEl).toBeNull()
-
-  //     const privacySettingsChangeSpy = spyOn(component.privacySettingsChange, 'emit')
-  //     const newFormValue = {
-  //       hideMyProfile: 'true'
-  //     }
-  //     component.formGroup.patchValue(newFormValue)
-
-  //     component.savePrivacySettings()
-  //     fixture.detectChanges()
-
-  //     expect(privacySettingsChangeSpy).toHaveBeenCalledOnceWith(newFormValue)
-  //     privacySettingsRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_privacy_settings_refresh'))
-  //     expect(privacySettingsRefreshButtonDebugEl).toBeTruthy()
-  //   })
-  // })
+    expect(component.applyChanges.emit).toHaveBeenCalledWith(true)
+  })
 })

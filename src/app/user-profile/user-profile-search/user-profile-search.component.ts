@@ -164,9 +164,6 @@ export class UserProfileSearchComponent implements OnInit {
       .subscribe({
         next: (filteredData) => {
           this.filteredData$.next(filteredData)
-        },
-        error: () => {
-          console.error('Subscription failed')
         }
       })
   }
@@ -189,23 +186,23 @@ export class UserProfileSearchComponent implements OnInit {
         map((data: any) => data.stream)
       )
       .subscribe({
-        next: (data) => {
-          if (data.length === 0) {
+        next: (stream) => {
+          if (stream.length === 0) {
             this.portalMessageService.success({
               summaryKey: 'USERPROFILE_SEARCH.MESSAGE.SUCCESS',
               detailKey: 'USERPROFILE_SEARCH.MESSAGE.NO_RESULTS'
             })
           }
           clearTimeout(clearTable)
-          data = data.map((row: any) => ({
+          stream = stream.map((row: any) => ({
             ...row,
             lastName: row.person.lastName,
             firstName: row.person.firstName,
             displayName: row.person.displayName,
             email: row.person.email
           }))
-          this.resultData$.next(data)
-          this.filteredData$.next(data)
+          this.resultData$.next(stream)
+          this.filteredData$.next(stream)
           this.searchError = false
         },
         error: () => {
@@ -221,13 +218,4 @@ export class UserProfileSearchComponent implements OnInit {
     this.filterData = filter
     this.resultData$.next(this.resultData$.value)
   }
-
-  // public onBack() {
-  //   this.router.navigate(['../'], { relativeTo: this.route })
-  // }
-
-  // public onGotoProduct(ev: any, product: string) {
-  //   ev.stopPropagation()
-  //   this.router.navigate(['../', product], { relativeTo: this.route })
-  // }
 }
