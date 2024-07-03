@@ -70,6 +70,7 @@ export class OneCXAvatarImageComponent implements OnInit {
   }
 
   public onImageError(): void {
+    console.log('TEST###########', this.placeHolderPath)
     this.imagePath$ = of(this.placeHolderPath)
   }
 }

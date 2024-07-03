@@ -1,7 +1,9 @@
 import { Component, EventEmitter, Input, OnChanges, Output, SimpleChanges } from '@angular/core'
 import { map } from 'rxjs'
+import { Location } from '@angular/common'
 
 import { AppStateService } from '@onecx/angular-integration-interface'
+import { environment } from 'src/environments/environment'
 
 /**
  * This component displays the image with given imageURL.
@@ -30,7 +32,7 @@ export class ImageContainerComponent implements OnChanges {
     appState.currentMfe$
       .pipe(
         map((mfe) => {
-          this.defaultImageUrl = 'onecx-portal-lib/assets/images/default_avatar.png'
+          this.defaultImageUrl = Location.joinWithSlash(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
           this.displayImageUrl = this.imageUrl
         })
       )

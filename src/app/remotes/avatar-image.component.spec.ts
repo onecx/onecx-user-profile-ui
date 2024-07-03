@@ -87,6 +87,22 @@ describe('OneCXAvatarImageComponent', () => {
     })
   })
 
+  it('should set imagePath to placeholder onImageError', (done) => {
+    const { component } = setUp()
+
+    component.ocxInitRemoteComponent({
+      baseUrl: 'base_url_avatar'
+    } as RemoteComponentConfig)
+
+    component.onImageError()
+    expect(component.imagePath$).toBeDefined()
+
+    component.imagePath$?.subscribe((res) => {
+      expect(res).toEqual(component.placeHolderPath)
+      done()
+    })
+  })
+
   describe('user profile', () => {
     it('should use correct image class', async () => {
       const { avatarImageHarness } = await setUpWithHarness()

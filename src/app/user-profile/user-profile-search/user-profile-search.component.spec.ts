@@ -5,7 +5,9 @@ import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RouterTestingModule } from '@angular/router/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
-import { of } from 'rxjs'
+import { of, throwError } from 'rxjs'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
@@ -14,6 +16,8 @@ describe('UserProfileSearchComponent', () => {
   const apiServiceSpy = {
     searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({}))
   }
+
+  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
 
   let userProfilepageResult: UserProfilePageResult = {
     totalElements: 5,
@@ -85,9 +89,14 @@ describe('UserProfileSearchComponent', () => {
           en: require('src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      providers: [{ provide: UserProfileAdminAPIService, useValue: apiServiceSpy }],
+      providers: [
+        { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
+        { provide: PortalMessageService, useValue: msgServiceSpy }
+      ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents()
+    msgServiceSpy.success.calls.reset()
+    msgServiceSpy.error.calls.reset()
   })
 
   beforeEach(async () => {
@@ -117,6 +126,19 @@ describe('UserProfileSearchComponent', () => {
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
   })
 
+  it('should search user profiles - successful empty stream ', () => {
+    apiServiceSpy.searchUserProfile.and.returnValue(of({ stream: [] } as UserProfilePageResult))
+
+    component.search()
+    expect(component.resultData$.getValue()?.length).toEqual(0)
+
+    expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
+    expect(msgServiceSpy.success).toHaveBeenCalledWith({
+      summaryKey: 'USERPROFILE_SEARCH.MESSAGE.SUCCESS',
+      detailKey: 'USERPROFILE_SEARCH.MESSAGE.NO_RESULTS'
+    })
+  })
+
   it('should filter user profiles correctly by input (case insensitive)', () => {
     apiServiceSpy.searchUserProfile.and.returnValue(
       of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
@@ -138,10 +160,25 @@ describe('UserProfileSearchComponent', () => {
     expect(component.filteredData$.getValue()?.length).toEqual(0)
   })
 
-  // it('should sort user profiles correctly by sorted parameter', (done) => {
+  it('should search user profiles - errorResponse 404', () => {
+    const updateErrorResponse: HttpErrorResponse = {
+      status: 404,
+      statusText: 'Not Found',
+      name: 'HttpErrorResponse',
+      message: '',
+      error: undefined,
+      ok: false,
+      headers: new HttpHeaders(),
+      url: null,
+      type: HttpEventType.ResponseHeader
+    }
 
-  // })
+    apiServiceSpy.searchUserProfile.and.returnValue(throwError(() => updateErrorResponse))
 
-  // it('should allow switch between grid and table', (done) => {
-  // })
+    component.searchError = false
+    component.search()
+
+    expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
+    expect(component.searchError).toBeTruthy()
+  })
 })
