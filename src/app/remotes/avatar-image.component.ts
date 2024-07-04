@@ -1,12 +1,14 @@
 import { CommonModule, Location } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { Component, Inject, OnInit } from '@angular/core'
+import { Component, Inject, Input, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import {
   AngularRemoteComponentsModule,
   BASE_URL,
   RemoteComponentConfig,
+  ocxRemoteComponent,
+  ocxRemoteWebcomponent,
   provideTranslateServiceForRoot
 } from '@onecx/angular-remote-components'
 import { PortalCoreModule, createRemoteComponentTranslateLoader } from '@onecx/portal-integration-angular'
@@ -46,11 +48,15 @@ import { environment } from 'src/environments/environment'
     SharedModuleUserProfile
   ]
 })
-export class OneCXAvatarImageComponent implements OnInit {
+export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
   imagePath$: Observable<string> | undefined
   public placeHolderPath: string = ''
 
   constructor(@Inject(BASE_URL) private baseUrl: ReplaySubject<string>, private avatarService: UserAvatarAPIService) {}
+
+  @Input() set ocxRemoteComponentConfig(config: RemoteComponentConfig) {
+    this.ocxInitRemoteComponent(config)
+  }
 
   ocxInitRemoteComponent(remoteComponentConfig: RemoteComponentConfig) {
     this.baseUrl.next(remoteComponentConfig.baseUrl)
