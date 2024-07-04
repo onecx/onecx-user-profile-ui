@@ -16,10 +16,16 @@ app:
           description: "OneCX User Profile UI"
           note: "OneCX User Profile UI auto import via MF operator"
           type: MODULE
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-user-profile
+          tagName: ocx-user-profile-component
         avatar-image:
           exposedModule: "./OneCXAvatarImageComponent"
           description: "User avatar image component"
           type: COMPONENT
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-user-profile
+          tagName: ocx-avatar-image-component
     # Permission
     permission:
       enabled: true
