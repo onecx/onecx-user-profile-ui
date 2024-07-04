@@ -32,6 +32,7 @@ const config = withModuleFederationPlugin({
     rxjs: { requiredVersion: 'auto', includeSecondaries: true },
     '@ngx-translate/core': { singleton: true, requiredVersion: 'auto' },
     '@onecx/accelerator': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/angular-auth': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/angular-integration-interface': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/angular-remote-components': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/angular-webcomponents': { requiredVersion: 'auto', includeSecondaries: true },
