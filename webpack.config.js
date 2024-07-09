@@ -5,8 +5,8 @@ const config = withModuleFederationPlugin({
   name: 'onecx-user-profile-ui',
   filename: 'remoteEntry.js',
   exposes: {
-    './OneCXUserProfileModule': 'src/app/onecx-user-profile-remote.module.ts',
-    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.ts'
+    './OneCXUserProfileModule': 'src/bootstrap.ts',
+    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.bootstrap.ts'
   },
   shared: share({
     '@angular/core': { singleton: true, requiredVersion: 'auto' },
@@ -32,13 +32,15 @@ const config = withModuleFederationPlugin({
     rxjs: { requiredVersion: 'auto', includeSecondaries: true },
     '@ngx-translate/core': { singleton: true, requiredVersion: 'auto' },
     '@onecx/accelerator': { requiredVersion: 'auto', includeSecondaries: true },
-    '@onecx/angular-remote-components': {
-      requiredVersion: 'auto',
-      includeSecondaries: true
-    },
+    '@onecx/angular-auth': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/angular-integration-interface': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/angular-remote-components': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/angular-webcomponents': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/integration-interface': { requiredVersion: 'auto', includeSecondaries: true },
     '@onecx/keycloak-auth': { requiredVersion: 'auto', includeSecondaries: true },
-    '@onecx/portal-integration-angular': { requiredVersion: 'auto', includeSecondaries: true }
+    '@onecx/portal-integration-angular': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/portal-layout-styles': { requiredVersion: 'auto', includeSecondaries: true },
+    '@onecx/angular-accelerator': { requiredVersion: 'auto', includeSecondaries: true }
   }),
   sharedMappings: ['@onecx/portal-integration-angular']
 })
@@ -50,5 +52,17 @@ const plugins = config.plugins.filter((plugin) => !(plugin instanceof ModifyEntr
 
 module.exports = {
   ...config,
-  plugins
+  plugins,
+  output: {
+    uniqueName: 'onecx-user-profile-ui',
+    publicPath: 'auto'
+  },
+  experiments: {
+    ...config.experiments,
+    topLevelAwait: true
+  },
+  optimization: {
+    runtimeChunk: false,
+    splitChunks: false
+  }
 }
