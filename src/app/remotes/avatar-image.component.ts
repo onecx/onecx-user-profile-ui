@@ -11,7 +11,11 @@ import {
   ocxRemoteWebcomponent,
   provideTranslateServiceForRoot
 } from '@onecx/angular-remote-components'
-import { PortalCoreModule, createRemoteComponentTranslateLoader } from '@onecx/portal-integration-angular'
+import {
+  PortalCoreModule,
+  REMOTE_COMPONENT_ID,
+  createRemoteComponentTranslateLoader
+} from '@onecx/portal-integration-angular'
 import { SharedModule } from 'primeng/api'
 import { Observable, ReplaySubject, of } from 'rxjs'
 import { SharedModule as SharedModuleUserProfile } from '../shared/shared.module'
@@ -29,12 +33,16 @@ import { environment } from 'src/environments/environment'
       provide: BASE_URL,
       useValue: new ReplaySubject<string>(1)
     },
+    {
+      provide: REMOTE_COMPONENT_ID,
+      useValue: 'ocx-avatar-image-component'
+    },
     provideTranslateServiceForRoot({
       isolate: true,
       loader: {
         provide: TranslateLoader,
         useFactory: createRemoteComponentTranslateLoader,
-        deps: [HttpClient, BASE_URL]
+        deps: [HttpClient, BASE_URL, REMOTE_COMPONENT_ID]
       }
     })
   ],

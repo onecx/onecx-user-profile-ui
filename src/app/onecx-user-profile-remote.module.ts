@@ -10,6 +10,7 @@ import {
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
+  MFE_ID,
   PortalApiConfiguration,
   PortalCoreModule,
   PortalMissingTranslationHandler
@@ -46,7 +47,7 @@ const routes: Routes = [
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService]
+        deps: [HttpClient, AppStateService, MFE_ID]
       },
       missingTranslationHandler: { provide: MissingTranslationHandler, useClass: PortalMissingTranslationHandler }
     })
@@ -64,7 +65,11 @@ const routes: Routes = [
       multi: true,
       deps: [Router, AppStateService]
     },
-    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] }
+    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
+    {
+      provide: MFE_ID,
+      useValue: 'onecx-user-profile'
+    }
   ],
   schemas: []
 })
