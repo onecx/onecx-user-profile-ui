@@ -74,14 +74,6 @@ app:
             VIEW: View avatar
           ROLES_PERMISSIONS:
             VIEW: View roles and permissions
-          
-    # Keycloak
-    keycloak:
-      client:
-        enabled: true
-        spec:
-          kcConfig:
-            clientId: "onecx-product-store-ui"
 
     slot:
       enabled: true
