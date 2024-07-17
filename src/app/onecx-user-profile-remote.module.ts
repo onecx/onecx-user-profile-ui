@@ -1,6 +1,5 @@
 import { HttpClient, HttpClientModule } from '@angular/common/http'
 import { APP_INITIALIZER, DoBootstrap, Injector, NgModule } from '@angular/core'
-import { createCustomElement } from '@angular/elements'
 import { Router, RouterModule, Routes } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader, TranslateModule } from '@ngx-translate/core'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
@@ -10,12 +9,11 @@ import {
   AppStateService,
   ConfigurationService,
   createTranslateLoader,
-  MFE_ID,
   PortalApiConfiguration,
   PortalCoreModule,
   PortalMissingTranslationHandler
 } from '@onecx/portal-integration-angular'
-import { startsWith, initializeRouter } from '@onecx/angular-webcomponents'
+import { startsWith, initializeRouter, createAppEntrypoint } from '@onecx/angular-webcomponents'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -47,7 +45,7 @@ const routes: Routes = [
       loader: {
         provide: TranslateLoader,
         useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService, MFE_ID]
+        deps: [HttpClient, AppStateService]
       },
       missingTranslationHandler: { provide: MissingTranslationHandler, useClass: PortalMissingTranslationHandler }
     })
@@ -65,11 +63,7 @@ const routes: Routes = [
       multi: true,
       deps: [Router, AppStateService]
     },
-    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
-    {
-      provide: MFE_ID,
-      useValue: 'onecx-user-profile'
-    }
+    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] }
   ],
   schemas: []
 })
@@ -79,9 +73,6 @@ export class OneCXUserProfileModule implements DoBootstrap {
   }
 
   ngDoBootstrap(): void {
-    const appEntrypoint = createCustomElement(AppEntrypointComponent, {
-      injector: this.injector
-    })
-    customElements.define('ocx-user-profile-component', appEntrypoint)
+    createAppEntrypoint(AppEntrypointComponent, 'ocx-user-profile-component', this.injector)
   }
 }
