@@ -22,7 +22,7 @@ export class ImageContainerComponent implements OnChanges {
   @Input() public small = false
   @Input() public imageUrl: string | undefined
   @Input() public styleClass: string | undefined
-  @Output() imageUrlIsEmpty = new EventEmitter<boolean>()
+  @Output() imageLoadError = new EventEmitter<boolean>()
 
   public displayImageUrl: string | undefined
   public defaultImageUrl = ''
@@ -41,7 +41,7 @@ export class ImageContainerComponent implements OnChanges {
 
   public onImageError(): void {
     this.displayDefaultLogo = true
-    this.imageUrlIsEmpty.emit(true)
+    this.imageLoadError.emit(true)
     this.displayImageUrl = undefined
   }
 

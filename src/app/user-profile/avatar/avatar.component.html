@@ -1,21 +1,19 @@
 <div class="mx-3 mb-1 sm:mb-2 md:mb-3 relative flex flex-wrap justify-content-start gap-4 row-gap-1">
   <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
     <app-image-container
-      #avatarImage
       [styleClass]="'w-5rem'"
       [imageUrl]="imageUrl"
-      (imageUrlIsEmpty)="onImageError($event)"
+      (imageLoadError)="onImageError($event)"
     ></app-image-container>
   </div>
 
   <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
-    <input hidden type="file" #selectedFileInput (change)="onFileUpload()" />
     <div class="flex flex-row sm:flex-column flex-wrap gap-1 toolbar">
       <button
         pButton
         pRipple
         type="button"
-        icon="pi pi-camera"
+        icon="pi pi-upload"
         class="p-2 p-button-text"
         id="up_avatar_button_select"
         (click)="onFileUpload()"
@@ -23,7 +21,7 @@
         [title]="'AVATAR.CHOOSE' | translate"
       ></button>
       <button
-        *ngIf="!imageUrlIsEmpty"
+        *ngIf="!imageLoadError"
         pButton
         pRipple
         type="button"

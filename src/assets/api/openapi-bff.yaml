@@ -1,3 +1,4 @@
+---
 openapi: 3.0.3
 info:
   title: onecx-user-profile-bff
@@ -276,6 +277,7 @@ paths:
       parameters:
         - name: refType
           in: query
+          required: true
           schema:
             $ref: '#/components/schemas/RefType'
       responses:
@@ -290,48 +292,6 @@ paths:
                 format: binary
         '404':
           description: User avatar not found
-    put:
-      x-onecx:
-        permissions:
-          user-profile:
-            - write
-      tags:
-        - userAvatar
-      description: Update user avatar
-      operationId: updateAvatar
-      parameters:
-        - in: header
-          name: Content-Length
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 110000
-        - name: refType
-          in: query
-          schema:
-            $ref: '#/components/schemas/RefType'
-      requestBody:
-        required: true
-        content:
-          'image/*':
-            schema:
-              minimum: 1
-              maximum: 110000
-              type: string
-              format: binary
-      responses:
-        '200':
-          description: OK
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ImageInfo'
-        '400':
-          description: Bad request
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/ProblemDetailResponse'
     post:
       x-onecx:
         permissions:
@@ -342,12 +302,6 @@ paths:
       description: Upload user avatar
       operationId: uploadAvatar
       parameters:
-        - in: header
-          name: Content-Length
-          schema:
-            type: integer
-            minimum: 1
-            maximum: 110000
         - name: refType
           in: query
           required: true
@@ -384,11 +338,6 @@ paths:
         - userAvatar
       description: Delete user's avatar
       operationId: deleteUserAvatar
-      parameters:
-        - name: refType
-          in: query
-          schema:
-            $ref: '#/components/schemas/RefType'
       responses:
         '204':
           description: No Content

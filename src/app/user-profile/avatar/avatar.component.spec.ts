@@ -22,7 +22,6 @@ describe('AvatarComponent', () => {
   const avatarServiceSpy = {
     deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({})),
     uploadAvatar: jasmine.createSpy('uploadAvatar').and.returnValue(of({})),
-    updateAvatar: jasmine.createSpy('updateAvatar').and.returnValue(of({})),
     getUserAvatar: jasmine.createSpy('getUserAvatar').and.returnValue(of({})),
     configuration: jasmine.createSpy('configuration')
   }
@@ -79,7 +78,6 @@ describe('AvatarComponent', () => {
     imageCompressSpy.compressFile.calls.reset()
     avatarServiceSpy.deleteUserAvatar.calls.reset()
     avatarServiceSpy.uploadAvatar.calls.reset()
-    avatarServiceSpy.updateAvatar.calls.reset()
     avatarServiceSpy.getUserAvatar.calls.reset()
     avatarServiceSpy.configuration.and.callFake(() => {
       return { basePath: '/mocked-base-path' }
@@ -122,7 +120,7 @@ describe('AvatarComponent', () => {
     avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
     avatarServiceSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
     tick(1000)
@@ -169,110 +167,14 @@ describe('AvatarComponent', () => {
     imageCompressSpy.byteCount.and.returnValue(of('2000'))
 
     avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
-    avatarServiceSpy.updateAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
-    component.imageUrlIsEmpty = false
+    component.imageLoadError = false
     // Call the onFileUpload method
     await component.onFileUpload()
 
     // Expect the necessary methods to have been called
     expect(imageCompressSpy.uploadFile).toHaveBeenCalled()
-    expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(3)
   })
-
-  it('should UPDATE failed', fakeAsync(() => {
-    // Create an jpg base 64 image
-    const canvas = document.createElement('canvas')
-    const context = canvas.getContext('2d')!
-    canvas.width = 500
-    canvas.height = 500
-    context.fillStyle = 'red'
-    context.fillRect(0, 0, canvas.width, canvas.height)
-    // Convert the canvas to a base64-encoded JPG
-    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
-
-    // Mock the response from the ImageCompress service
-    const mockImage = base64Image
-    const mockOrientation = 0
-    const mockCompressedImage =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
-    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-    imageCompressSpy.byteCount.and.returnValue('200')
-
-    const updateErrorResponse: HttpErrorResponse = {
-      status: 404,
-      statusText: 'Not Found',
-      name: 'HttpErrorResponse',
-      message: '',
-      error: { errorCode: 'WRONG_AVATAR_CONTENT_TYPE' },
-      ok: false,
-      headers: new HttpHeaders(),
-      url: null,
-      type: HttpEventType.ResponseHeader
-    }
-
-    avatarServiceSpy.updateAvatar.and.returnValue(throwError(() => updateErrorResponse))
-
-    component.imageUrlIsEmpty = false
-    // Call the onFileUpload method
-    component.onFileUpload()
-
-    tick(1000)
-
-    // Expect the necessary methods to have been called
-    expect(msgServiceSpy.error).toHaveBeenCalledWith({
-      summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-      detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-    })
-  }))
-
-  it('should UPDATE failed WRONG_AVATAR_CONTENT_TYPE', fakeAsync(() => {
-    // Create an jpg base 64 image
-    const canvas = document.createElement('canvas')
-    const context = canvas.getContext('2d')!
-    canvas.width = 500
-    canvas.height = 500
-    context.fillStyle = 'red'
-    context.fillRect(0, 0, canvas.width, canvas.height)
-    // Convert the canvas to a base64-encoded JPG
-    const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
-
-    // Mock the response from the ImageCompress service
-    const mockImage = base64Image
-    const mockOrientation = 0
-    const mockCompressedImage =
-      'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-    imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
-    imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-    imageCompressSpy.byteCount.and.returnValue('200')
-
-    const updateErrorResponse: HttpErrorResponse = {
-      status: 404,
-      statusText: 'Not Found',
-      name: 'HttpErrorResponse',
-      message: '',
-      error: undefined,
-      ok: false,
-      headers: new HttpHeaders(),
-      url: null,
-      type: HttpEventType.ResponseHeader
-    }
-
-    avatarServiceSpy.updateAvatar.and.returnValue(throwError(() => updateErrorResponse))
-
-    component.imageUrlIsEmpty = false
-    // Call the onFileUpload method
-    component.onFileUpload()
-
-    tick(1000)
-
-    // Expect the necessary methods to have been called
-    expect(msgServiceSpy.error).toHaveBeenCalledWith({
-      summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
-      detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
-    })
-  }))
 
   it('should upload image to avatar service when compressed, image over 100 000 bytes', fakeAsync(() => {
     // Create an jpg base 64 image
@@ -296,7 +198,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
     tick(1000)
@@ -339,7 +241,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -386,7 +288,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -433,7 +335,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -480,7 +382,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -494,8 +396,8 @@ describe('AvatarComponent', () => {
   }))
 
   it('should test onImageError', () => {
-    component.imageUrlIsEmpty = false
+    component.imageLoadError = false
     component.onImageError(true)
-    expect(component.imageUrlIsEmpty).toBeTrue()
+    expect(component.imageLoadError).toBeTrue()
   })
 })
