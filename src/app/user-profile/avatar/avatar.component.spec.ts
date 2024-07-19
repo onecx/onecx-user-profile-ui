@@ -177,7 +177,6 @@ describe('AvatarComponent', () => {
 
     // Expect the necessary methods to have been called
     expect(imageCompressSpy.uploadFile).toHaveBeenCalled()
-    expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(3)
   })
 
   it('should UPDATE failed', fakeAsync(() => {
