@@ -1,11 +1,11 @@
-import { Component, ElementRef, OnInit, ViewChild } from '@angular/core'
+import { Component, OnInit } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
+import { Observable } from 'rxjs'
+import { NgxImageCompressService } from 'ngx-image-compress'
 
 import { UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
-import { Observable, of } from 'rxjs'
-import { DOC_ORIENTATION, NgxImageCompressService } from 'ngx-image-compress'
 import { bffImageUrl } from 'src/app/shared/utils'
 
 @Component({
@@ -14,21 +14,13 @@ import { bffImageUrl } from 'src/app/shared/utils'
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnInit {
-  @ViewChild('selectedFileInput') selectedFileInput: ElementRef | undefined
-  public selectedFile: File | undefined
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
   protected placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
 
-  @ViewChild('avatarImage', { read: ElementRef, static: true })
-  public avatarImage!: ElementRef
-
-  imageUrlIsEmpty: boolean | undefined
+  imageLoadError: boolean | undefined
   imageUrl: string | undefined
-  smallImgResultAfterCompression: string = ''
-  mediumImgResultAfterCompression: string = ''
-  largeImgResultAfterCompression: string = ''
 
   bffImagePath = this.avatarService.configuration.basePath!
 
@@ -41,13 +33,13 @@ export class AvatarComponent implements OnInit {
   ) {}
 
   public ngOnInit(): void {
-    this.imageUrlIsEmpty = false
+    this.imageLoadError = false
     this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
   }
 
   public onDeleteAvatarImage(): void {
     this.showAvatarDeleteDialog = false
-    this.avatarService.deleteUserAvatar({ refType: RefType.Medium }).subscribe({
+    this.avatarService.deleteUserAvatar().subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         this.windowReload()
@@ -59,64 +51,33 @@ export class AvatarComponent implements OnInit {
   }
 
   onFileUpload() {
-    this.imageCompress.uploadFile().then(({ image, orientation }) => {
-      this.imageCompress.compressFile(image, orientation, 100, 100).then(async (compressedImage) => {
-        if (this.imageCompress.byteCount(compressedImage) > 1000) {
-          this.smallImgResultAfterCompression = await this.compressBelowThreshold(
-            compressedImage,
-            1000,
-            orientation,
-            100
-          )
-        } else {
-          this.smallImgResultAfterCompression = compressedImage
+    this.imageCompress.uploadFile().then(({ image }) => {
+      this.imageCompress.compressFile(image, 0, 100, 100).then(async (compressedImage) => {
+        let bytes = this.imageCompress.byteCount(compressedImage)
+        let img = compressedImage
+        if (bytes > 100000) {
+          img = await this.compressBelowThreshold(img, 100000, 100)
+          bytes = this.imageCompress.byteCount(img)
         }
-        this.sendImage(this.smallImgResultAfterCompression, RefType.Small)
-      })
-
-      this.imageCompress.compressFile(image, orientation, 100, 100).then(async (compressedImage) => {
-        if (this.imageCompress.byteCount(compressedImage) > 10000) {
-          this.mediumImgResultAfterCompression = await this.compressBelowThreshold(
-            compressedImage,
-            10000,
-            orientation,
-            100
-          )
-        } else {
-          this.mediumImgResultAfterCompression = compressedImage
+        this.sendImage(img, RefType.Large)
+        if (bytes > 10000) {
+          img = await this.compressBelowThreshold(img, 10000, 100)
+          bytes = this.imageCompress.byteCount(img)
         }
-        this.sendImage(this.mediumImgResultAfterCompression, RefType.Medium)
-      })
-
-      this.imageCompress.compressFile(image, orientation, 100, 100).then(async (compressedImage) => {
-        if (this.imageCompress.byteCount(compressedImage) > 100000) {
-          this.largeImgResultAfterCompression = await this.compressBelowThreshold(
-            compressedImage,
-            100000,
-            orientation,
-            100
-          )
-        } else {
-          this.largeImgResultAfterCompression = compressedImage
+        this.sendImage(img, RefType.Medium)
+        if (bytes > 1000) {
+          img = await this.compressBelowThreshold(img, 1100, 100)
+          bytes = this.imageCompress.byteCount(img)
         }
-        this.sendImage(this.largeImgResultAfterCompression, RefType.Large)
-        this.selectedFile = new File([this.largeImgResultAfterCompression], 'untitled', { type: RefType.Large })
+        this.sendImage(img, RefType.Small)
       })
     })
   }
 
-  private async compressBelowThreshold(
-    image: string,
-    threshold: number,
-    orientation: DOC_ORIENTATION,
-    quality: number
-  ): Promise<string> {
-    const compressedImage = await this.imageCompress.compressFile(image, orientation, quality * 0.95, 100)
-
-    if (this.imageCompress.byteCount(compressedImage) > threshold) {
-      return this.compressBelowThreshold(compressedImage, threshold, orientation, quality * 0.95)
-    }
-    return compressedImage
+  private async compressBelowThreshold(image: string, limit: number, quality: number): Promise<string> {
+    const img = await this.imageCompress.compressFile(image, 0, quality * 0.95, 100)
+    if (this.imageCompress.byteCount(img) > limit) return this.compressBelowThreshold(img, limit, quality * 0.95)
+    return img
   }
 
   /** Send compressed images to avatar ser */
@@ -129,56 +90,28 @@ export class AvatarComponent implements OnInit {
     }
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
-    if (this.imageUrlIsEmpty) {
-      this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
-        next: (data: any) => {
-          this.showUploadSuccess()
+    this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
+      next: (data: any) => {
+        if (refType === RefType.Small) {
           localStorage.removeItem('tkit_user_profile')
-          this.windowReload()
-          if (refType === RefType.Large) {
-            this.imageUrl$ = of(image)
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.error?.errorCode === 'WRONG_AVATAR_CONTENT_TYPE') {
-            this.msgService.error({
-              summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-              detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-            })
-          } else {
-            this.msgService.error({
-              summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
-              detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
-            })
-          }
-        }
-      })
-    } else {
-      this.avatarService.updateAvatar({ refType: refType, body: blob }).subscribe({
-        next: (data: any) => {
           this.showUploadSuccess()
-          localStorage.removeItem('tkit_user_profile')
           this.windowReload()
-
-          if (refType === RefType.Large) {
-            this.imageUrl$ = of(image)
-          }
-        },
-        error: (error: HttpErrorResponse) => {
-          if (error.error?.errorCode === 'WRONG_AVATAR_CONTENT_TYPE') {
-            this.msgService.error({
-              summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-              detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-            })
-          } else {
-            this.msgService.error({
-              summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
-              detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
-            })
-          }
         }
-      })
-    }
+      },
+      error: (error: HttpErrorResponse) => {
+        if (error.error?.errorCode === 'WRONG_AVATAR_CONTENT_TYPE') {
+          this.msgService.error({
+            summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
+            detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
+          })
+        } else {
+          this.msgService.error({
+            summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
+            detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
+          })
+        }
+      }
+    })
   }
 
   public showUploadSuccess(): void {
@@ -186,7 +119,7 @@ export class AvatarComponent implements OnInit {
   }
 
   public onImageError(value: boolean): void {
-    this.imageUrlIsEmpty = value
+    this.imageLoadError = value
   }
 
   public windowReload() {

@@ -30,24 +30,13 @@ import { BASE_PATH, COLLECTION_FORMATS }                     from '../variables'
 import { Configuration }                                     from '../configuration';
 
 
-export interface DeleteUserAvatarRequestParams {
-    refType?: RefType;
-}
-
 export interface GetUserAvatarRequestParams {
-    refType?: RefType;
-}
-
-export interface UpdateAvatarRequestParams {
-    body: Blob;
-    contentLength?: number;
-    refType?: RefType;
+    refType: RefType;
 }
 
 export interface UploadAvatarRequestParams {
     refType: RefType;
     body: Blob;
-    contentLength?: number;
 }
 
 
@@ -117,21 +106,13 @@ export class UserAvatarAPIService {
 
     /**
      * Delete user\&#39;s avatar
-     * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
      */
-    public deleteUserAvatar(requestParameters: DeleteUserAvatarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
-    public deleteUserAvatar(requestParameters: DeleteUserAvatarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
-    public deleteUserAvatar(requestParameters: DeleteUserAvatarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
-    public deleteUserAvatar(requestParameters: DeleteUserAvatarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        const refType = requestParameters.refType;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (refType !== undefined && refType !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>refType, 'refType');
-        }
+    public deleteUserAvatar(observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any>;
+    public deleteUserAvatar(observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<any>>;
+    public deleteUserAvatar(observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<any>>;
+    public deleteUserAvatar(observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
 
         let localVarHeaders = this.defaultHeaders;
 
@@ -168,7 +149,6 @@ export class UserAvatarAPIService {
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                params: localVarQueryParameters,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
@@ -189,6 +169,9 @@ export class UserAvatarAPIService {
     public getUserAvatar(requestParameters: GetUserAvatarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'image/*', context?: HttpContext}): Observable<HttpEvent<Blob>>;
     public getUserAvatar(requestParameters: GetUserAvatarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'image/*', context?: HttpContext}): Observable<any> {
         const refType = requestParameters.refType;
+        if (refType === null || refType === undefined) {
+            throw new Error('Required parameter refType was null or undefined when calling getUserAvatar.');
+        }
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (refType !== undefined && refType !== null) {
@@ -231,87 +214,6 @@ export class UserAvatarAPIService {
     }
 
     /**
-     * Update user avatar
-     * @param requestParameters
-     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
-     * @param reportProgress flag to report request and response progress.
-     */
-    public updateAvatar(requestParameters: UpdateAvatarRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<ImageInfo>;
-    public updateAvatar(requestParameters: UpdateAvatarRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<ImageInfo>>;
-    public updateAvatar(requestParameters: UpdateAvatarRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<ImageInfo>>;
-    public updateAvatar(requestParameters: UpdateAvatarRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
-        const body = requestParameters.body;
-        if (body === null || body === undefined) {
-            throw new Error('Required parameter body was null or undefined when calling updateAvatar.');
-        }
-        const contentLength = requestParameters.contentLength;
-        const refType = requestParameters.refType;
-
-        let localVarQueryParameters = new HttpParams({encoder: this.encoder});
-        if (refType !== undefined && refType !== null) {
-          localVarQueryParameters = this.addToHttpParams(localVarQueryParameters,
-            <any>refType, 'refType');
-        }
-
-        let localVarHeaders = this.defaultHeaders;
-        if (contentLength !== undefined && contentLength !== null) {
-            localVarHeaders = localVarHeaders.set('Content-Length', String(contentLength));
-        }
-
-        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
-        if (localVarHttpHeaderAcceptSelected === undefined) {
-            // to determine the Accept header
-            const httpHeaderAccepts: string[] = [
-                'application/json'
-            ];
-            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
-        }
-        if (localVarHttpHeaderAcceptSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
-        }
-
-        let localVarHttpContext: HttpContext | undefined = options && options.context;
-        if (localVarHttpContext === undefined) {
-            localVarHttpContext = new HttpContext();
-        }
-
-
-        // to determine the Content-Type header
-        const consumes: string[] = [
-            'image/*'
-        ];
-        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
-        if (httpContentTypeSelected !== undefined) {
-            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
-        }
-
-        let responseType_: 'text' | 'json' | 'blob' = 'json';
-        if (localVarHttpHeaderAcceptSelected) {
-            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
-                responseType_ = 'text';
-            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
-                responseType_ = 'json';
-            } else {
-                responseType_ = 'blob';
-            }
-        }
-
-        let localVarPath = `/userProfile/me/avatar`;
-        return this.httpClient.request<ImageInfo>('put', `${this.configuration.basePath}${localVarPath}`,
-            {
-                context: localVarHttpContext,
-                body: body,
-                params: localVarQueryParameters,
-                responseType: <any>responseType_,
-                withCredentials: this.configuration.withCredentials,
-                headers: localVarHeaders,
-                observe: observe,
-                reportProgress: reportProgress
-            }
-        );
-    }
-
-    /**
      * Upload user avatar
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
@@ -329,7 +231,6 @@ export class UserAvatarAPIService {
         if (body === null || body === undefined) {
             throw new Error('Required parameter body was null or undefined when calling uploadAvatar.');
         }
-        const contentLength = requestParameters.contentLength;
 
         let localVarQueryParameters = new HttpParams({encoder: this.encoder});
         if (refType !== undefined && refType !== null) {
@@ -338,9 +239,6 @@ export class UserAvatarAPIService {
         }
 
         let localVarHeaders = this.defaultHeaders;
-        if (contentLength !== undefined && contentLength !== null) {
-            localVarHeaders = localVarHeaders.set('Content-Length', String(contentLength));
-        }
 
         let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
         if (localVarHttpHeaderAcceptSelected === undefined) {

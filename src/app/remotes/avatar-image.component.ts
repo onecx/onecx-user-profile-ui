@@ -76,7 +76,6 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   }
 
   public onImageError(): void {
-    console.log('TEST###########', this.placeHolderPath)
     this.imagePath$ = of(this.placeHolderPath)
   }
 }
