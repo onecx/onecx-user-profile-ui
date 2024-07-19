@@ -122,7 +122,7 @@ describe('AvatarComponent', () => {
     avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
     avatarServiceSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
     tick(1000)
@@ -171,7 +171,7 @@ describe('AvatarComponent', () => {
     avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
     avatarServiceSpy.updateAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
-    component.imageUrlIsEmpty = false
+    component.imageLoadError = false
     // Call the onFileUpload method
     await component.onFileUpload()
 
@@ -214,7 +214,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.updateAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = false
+    component.imageLoadError = false
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -261,7 +261,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.updateAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = false
+    component.imageLoadError = false
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -296,7 +296,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
     tick(1000)
@@ -339,7 +339,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -386,7 +386,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -433,7 +433,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -480,7 +480,7 @@ describe('AvatarComponent', () => {
 
     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-    component.imageUrlIsEmpty = true
+    component.imageLoadError = true
     // Call the onFileUpload method
     component.onFileUpload()
 
@@ -494,8 +494,8 @@ describe('AvatarComponent', () => {
   }))
 
   it('should test onImageError', () => {
-    component.imageUrlIsEmpty = false
+    component.imageLoadError = false
     component.onImageError(true)
-    expect(component.imageUrlIsEmpty).toBeTrue()
+    expect(component.imageLoadError).toBeTrue()
   })
 })
