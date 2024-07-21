@@ -301,7 +301,7 @@ describe('AvatarComponent', () => {
     })
   }))
 
-  it('should test recursive compressBelowThreshold', fakeAsync(() => {
+  it('should test recursive compression', fakeAsync(() => {
     // Create an jpg base 64 image
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')!
@@ -348,7 +348,7 @@ describe('AvatarComponent', () => {
     })
   }))
 
-  it('should test multiple recursive compressBelowThreshold', fakeAsync(() => {
+  it('should test multiple recursive compression', fakeAsync(() => {
     // Create an jpg base 64 image
     const canvas = document.createElement('canvas')
     const context = canvas.getContext('2d')!
