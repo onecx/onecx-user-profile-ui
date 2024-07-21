@@ -55,18 +55,21 @@ export class AvatarComponent implements OnInit {
       this.imageCompress.compressFile(image, 0, 100, 100).then(async (compressedImage) => {
         let bytes = this.imageCompress.byteCount(compressedImage)
         let img = compressedImage
+        // Large
         if (bytes > 100000) {
-          img = await this.compressBelowThreshold(img, 100000, 100)
+          img = await this.compressByRatio(img, 100000) // limit by service: 110.000
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Large)
+        // Medium
         if (bytes > 10000) {
-          img = await this.compressBelowThreshold(img, 10000, 100)
+          img = await this.compressByRatio(img, 10000)
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Medium)
-        if (bytes > 1000) {
-          img = await this.compressBelowThreshold(img, 1100, 100)
+        // Small (topbar icon)
+        if (bytes > 3000) {
+          img = await this.compressByRatio(img, 3000) // below 3000 the image has too low quality
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Small)
@@ -74,13 +77,22 @@ export class AvatarComponent implements OnInit {
     })
   }
 
-  private async compressBelowThreshold(image: string, limit: number, quality: number): Promise<string> {
-    const img = await this.imageCompress.compressFile(image, 0, quality * 0.95, 100)
-    if (this.imageCompress.byteCount(img) > limit) return this.compressBelowThreshold(img, limit, quality * 0.95)
-    return img
+  /* Rescale the image by suitable scale factor in a few steps */
+  private async compressByRatio(image: string, limit: number): Promise<string> {
+    const ratio = this.calculateRatio(this.imageCompress.byteCount(image), limit)
+    const img = await this.imageCompress.compressFile(image, 0, ratio, 100)
+    if (this.imageCompress.byteCount(img) > limit) {
+      return this.compressByRatio(img, limit)
+    } else return img
+  }
+  /* Calculate the scale factor due to avoid to many compression steps */
+  private calculateRatio(bytes: number, targetSize: number): number {
+    const proportion = parseFloat(parseFloat('' + bytes / targetSize).toFixed(1))
+    const ratio = Math.round(100 / proportion)
+    return ratio >= 100 ? 97 : ratio // a change by compression is mandatory
   }
 
-  /** Send compressed images to avatar ser */
+  /* Send compressed images to avatar service */
   public sendImage(image: string, refType: RefType): void {
     let base64Png = image.split(',').at(1)!
     const decodedData = atob(base64Png)
@@ -91,12 +103,12 @@ export class AvatarComponent implements OnInit {
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
     this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
-      next: (data: any) => {
-        if (refType === RefType.Small) {
+      next: () => {
+        if (refType === RefType.Large) {
           localStorage.removeItem('tkit_user_profile')
-          this.showUploadSuccess()
-          this.windowReload()
+          this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
         }
+        if (refType === RefType.Small) this.windowReload()
       },
       error: (error: HttpErrorResponse) => {
         if (error.error?.errorCode === 'WRONG_AVATAR_CONTENT_TYPE') {
@@ -112,10 +124,6 @@ export class AvatarComponent implements OnInit {
         }
       }
     })
-  }
-
-  public showUploadSuccess(): void {
-    this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
   }
 
   public onImageError(value: boolean): void {
