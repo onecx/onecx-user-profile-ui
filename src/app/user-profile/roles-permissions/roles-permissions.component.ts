@@ -14,7 +14,10 @@ export class RolesPermissionsComponent {
   public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
   public userRolesAndPermissionsSlotName = 'onecx-user-profile-permissions'
 
-  constructor(private readonly userProfileService: UserProfileAPIService, private readonly slotService: SlotService) {
+  constructor(
+    private readonly userProfileService: UserProfileAPIService,
+    private readonly slotService: SlotService
+  ) {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
     this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
       this.userRolesAndPermissionsSlotName

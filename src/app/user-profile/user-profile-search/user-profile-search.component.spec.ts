@@ -19,7 +19,7 @@ describe('UserProfileSearchComponent', () => {
 
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
 
-  let userProfilepageResult: UserProfilePageResult = {
+  const userProfilepageResult: UserProfilePageResult = {
     totalElements: 5,
     number: 0,
     size: 10,

@@ -183,7 +183,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/preferences`;
+        const localVarPath = `/userProfile/me/preferences`;
         return this.httpClient.request<UserPreference>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -238,7 +238,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me`;
+        const localVarPath = `/userProfile/me`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -297,7 +297,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/preferences/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const localVarPath = `/userProfile/me/preferences/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -351,7 +351,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me`;
+        const localVarPath = `/userProfile/me`;
         return this.httpClient.request<UserProfile>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -405,7 +405,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/person`;
+        const localVarPath = `/userProfile/me/person`;
         return this.httpClient.request<UserPerson>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -459,7 +459,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/preferences`;
+        const localVarPath = `/userProfile/me/preferences`;
         return this.httpClient.request<UserPreferences>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -513,7 +513,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/settings`;
+        const localVarPath = `/userProfile/me/settings`;
         return this.httpClient.request<UserProfileAccountSettings>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -581,7 +581,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/person`;
+        const localVarPath = `/userProfile/me/person`;
         return this.httpClient.request<UserPerson>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -654,7 +654,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/preferences/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const localVarPath = `/userProfile/me/preferences/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<UserPreference>('patch', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -723,7 +723,7 @@ export class UserProfileAPIService {
             }
         }
 
-        let localVarPath = `/userProfile/me/settings`;
+        const localVarPath = `/userProfile/me/settings`;
         return this.httpClient.request<UserProfileAccountSettings>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,

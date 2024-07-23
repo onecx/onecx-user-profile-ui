@@ -169,8 +169,8 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   search() {
-    let userPersonCriteria = this.criteriaGroup.value
-    let criteria = {
+    const userPersonCriteria = this.criteriaGroup.value
+    const criteria = {
       userPersonCriteria: userPersonCriteria
     }
     const clearTable = setTimeout(() => {

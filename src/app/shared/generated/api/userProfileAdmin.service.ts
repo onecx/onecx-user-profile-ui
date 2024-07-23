@@ -162,7 +162,7 @@ export class UserProfileAdminAPIService {
             }
         }
 
-        let localVarPath = `/userProfiles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const localVarPath = `/userProfiles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -221,7 +221,7 @@ export class UserProfileAdminAPIService {
             }
         }
 
-        let localVarPath = `/userProfiles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const localVarPath = `/userProfiles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<UserProfile>('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -289,7 +289,7 @@ export class UserProfileAdminAPIService {
             }
         }
 
-        let localVarPath = `/userProfiles/search`;
+        const localVarPath = `/userProfiles/search`;
         return this.httpClient.request<UserProfilePageResult>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -362,7 +362,7 @@ export class UserProfileAdminAPIService {
             }
         }
 
-        let localVarPath = `/userProfiles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
+        const localVarPath = `/userProfiles/${this.configuration.encodeParam({name: "id", value: id, in: "path", style: "simple", explode: false, dataType: "string", dataFormat: undefined})}`;
         return this.httpClient.request<any>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
