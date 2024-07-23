@@ -7,6 +7,7 @@ import { UserService, AppStateService, PortalMessageService } from '@onecx/porta
 
 import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
 import { bffImageUrl } from 'src/app/shared/utils'
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-avatar',
@@ -56,20 +57,20 @@ export class AvatarComponent implements OnInit {
         let bytes = this.imageCompress.byteCount(compressedImage)
         let img = compressedImage
         // Large
-        if (bytes > 100000) {
-          img = await this.compressByRatio(img, 100000) // limit by service: 110.000
+        if (bytes > environment.AVATAR_SIZE_LARGE) {
+          img = await this.compressByRatio(img, environment.AVATAR_SIZE_LARGE) // limit by service: 110.000
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Large)
         // Medium
-        if (bytes > 10000) {
-          img = await this.compressByRatio(img, 10000)
+        if (bytes > environment.AVATAR_SIZE_MEDIUM) {
+          img = await this.compressByRatio(img, environment.AVATAR_SIZE_MEDIUM)
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Medium)
         // Small (topbar icon)
-        if (bytes > 3000) {
-          img = await this.compressByRatio(img, 3000) // below 3000 the image has too low quality
+        if (bytes > environment.AVATAR_SIZE_SMALL) {
+          img = await this.compressByRatio(img, environment.AVATAR_SIZE_SMALL) // below 3000 the image has too low quality
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Small)
