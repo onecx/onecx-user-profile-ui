@@ -145,7 +145,7 @@ export class UserAvatarAPIService {
             }
         }
 
-        const localVarPath = `/userProfile/me/avatar`;
+        let localVarPath = `/userProfile/me/avatar`;
         return this.httpClient.request<any>('delete', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -199,7 +199,7 @@ export class UserAvatarAPIService {
         }
 
 
-        const localVarPath = `/userProfile/me/avatar`;
+        let localVarPath = `/userProfile/me/avatar`;
         return this.httpClient.request('get', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
@@ -278,7 +278,7 @@ export class UserAvatarAPIService {
             }
         }
 
-        const localVarPath = `/userProfile/me/avatar`;
+        let localVarPath = `/userProfile/me/avatar`;
         return this.httpClient.request<ImageInfo>('post', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
