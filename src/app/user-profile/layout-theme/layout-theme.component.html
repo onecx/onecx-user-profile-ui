@@ -11,7 +11,7 @@
         (onChange)="saveMenuMode()"
         title="{{ 'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate }}"
       >
-        <ng-template let-item>{{ item.label | translate }}</ng-template>
+        <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
       </p-selectButton>
       <button
         *ngIf="changedMenuMode"
@@ -36,7 +36,7 @@
         (onChange)="saveColorScheme()"
         title="{{ 'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate }}"
       >
-        <ng-template let-item>{{ item.label | translate }}</ng-template>
+        <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
       </p-selectButton>
       <button
         *ngIf="changedColorScheme"
