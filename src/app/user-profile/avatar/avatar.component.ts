@@ -95,7 +95,7 @@ export class AvatarComponent implements OnInit {
 
   /* Send compressed images to avatar service */
   public sendImage(image: string, refType: RefType): void {
-    let base64Png = image.split(',').at(1)!
+    const base64Png = image.split(',').at(1)!
     const decodedData = atob(base64Png)
     const uint8Array = new Uint8Array(decodedData.length)
     for (let i = 0; i < decodedData.length; ++i) {

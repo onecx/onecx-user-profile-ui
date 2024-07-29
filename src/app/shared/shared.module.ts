@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { ErrorTailorModule } from '@ngneat/error-tailor'
+import { provideErrorTailorConfig } from '@ngneat/error-tailor'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ColorSketchModule } from 'ngx-color/sketch'
 
@@ -71,28 +71,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     TabViewModule,
     ToastModule,
     TranslateModule,
-    ErrorTailorModule.forRoot({
-      controlErrorsOn: { async: true, blur: true, change: true },
-      errors: {
-        useFactory: (i18n: TranslateService) => {
-          return {
-            required: () => i18n.instant('VALIDATION.ERRORS.EMPTY_REQUIRED_FIELD'),
-            maxlength: ({ requiredLength }) =>
-              i18n.instant('VALIDATION.ERRORS.MAXIMUM_LENGTH').replace('{{chars}}', requiredLength),
-            minlength: ({ requiredLength }) =>
-              i18n.instant('VALIDATION.ERRORS.MINIMUM_LENGTH').replace('{{chars}}', requiredLength),
-            pattern: () => i18n.instant('VALIDATION.ERRORS.PATTERN_ERROR')
-          }
-        },
-        deps: [TranslateService]
-      },
-      //this is required because primeng calendar wraps things in an ugly way
-      blurPredicate: (element: Element) => {
-        return ['INPUT', 'TEXTAREA', 'SELECT', 'CUSTOM-DATE', 'P-CALENDAR', 'P-DROPDOWN'].some(
-          (selector) => element.tagName === selector
-        )
-      }
-    }),
     AngularRemoteComponentsModule
   ],
   exports: [
@@ -104,7 +82,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     DataViewModule,
     DialogModule,
     DropdownModule,
-    ErrorTailorModule,
     FormsModule,
     InputSwitchModule,
     InputTextModule,
@@ -127,7 +104,29 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
   providers: [
     ConfirmationService,
     LabelResolver,
-    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] }
+    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
+    provideErrorTailorConfig({
+      controlErrorsOn: { async: true, blur: true, change: true },
+      errors: {
+        useFactory: (i18n: TranslateService) => {
+          return {
+            required: () => i18n.instant('VALIDATION.ERRORS.EMPTY_REQUIRED_FIELD'),
+            maxlength: ({ requiredLength }) =>
+              i18n.instant('VALIDATION.ERRORS.MAXIMUM_LENGTH').replace('{{chars}}', requiredLength),
+            minlength: ({ requiredLength }) =>
+              i18n.instant('VALIDATION.ERRORS.MINIMUM_LENGTH').replace('{{chars}}', requiredLength),
+            pattern: () => i18n.instant('VALIDATION.ERRORS.PATTERN_ERROR')
+          }
+        },
+        deps: [TranslateService]
+      },
+      //this is required because primeng calendar wraps things in an ugly way
+      blurPredicate: (element: Element) => {
+        return ['INPUT', 'TEXTAREA', 'SELECT', 'CUSTOM-DATE', 'P-CALENDAR', 'P-DROPDOWN'].some(
+          (selector) => element.tagName === selector
+        )
+      }
+    })
   ]
 })
 export class SharedModule {}

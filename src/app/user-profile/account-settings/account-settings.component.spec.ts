@@ -28,7 +28,7 @@ describe('AccountSettingsComponent', () => {
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
 
   /** DATA  PREP */
-  let profile: UserProfileAccountSettings = {
+  const profile: UserProfileAccountSettings = {
     modificationCount: 1,
     hideMyProfile: false,
     locale: 'de-de',
@@ -37,7 +37,7 @@ describe('AccountSettingsComponent', () => {
     colorScheme: ColorScheme.Auto
   }
 
-  let updatedProfile: UserProfileAccountSettings = {
+  const updatedProfile: UserProfileAccountSettings = {
     modificationCount: 1,
     hideMyProfile: false,
     locale: 'de-de',

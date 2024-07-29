@@ -1,5 +1,5 @@
 import { CommonModule } from '@angular/common'
-import { HttpClient, HttpClientModule } from '@angular/common/http'
+import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { APP_INITIALIZER, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
@@ -33,7 +33,6 @@ const routes: Routes = [
   imports: [
     CommonModule,
     BrowserModule,
-    HttpClientModule,
     KeycloakAuthModule,
     BrowserAnimationsModule,
     SharedModule,
@@ -58,7 +57,8 @@ const routes: Routes = [
       useFactory: translateServiceInitializer,
       multi: true,
       deps: [UserService, TranslateService]
-    }
+    },
+    provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class AppModule {

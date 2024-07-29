@@ -194,7 +194,7 @@ describe('LocaleTimezoneComponent', () => {
   //   })
 
   it('should emit formGroup value on saveTimezone', () => {
-    let timezoneRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_timezone_refresh'))
+    const timezoneRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_timezone_refresh'))
     expect(timezoneRefreshButtonDebugEl).toBeNull()
 
     const localeTimezoneChangeSpy = spyOn(component.timezoneChange, 'emit')
