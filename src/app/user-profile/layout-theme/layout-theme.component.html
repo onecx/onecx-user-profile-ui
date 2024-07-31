@@ -55,12 +55,13 @@
     <div class="font-bold mt-4 sm:mt-5 mb-3">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</div>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
       <p-inputSwitch
-        id="up_layout_theme_breadcrumbs"
+        inputId="up_layout_theme_breadcrumbs"
         formControlName="breadcrumbs"
         (onChange)="saveBreadcrumbs()"
         title="{{ 'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate }}"
       >
       </p-inputSwitch>
+      <label for="up_layout_theme_breadcrumbs">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</label>
       <button
         *ngIf="changedBreadcrumbs"
         pButton

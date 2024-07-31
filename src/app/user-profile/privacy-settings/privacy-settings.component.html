@@ -3,12 +3,13 @@
     <div class="font-bold mt-2 mb-3">{{ 'PRIVACY_SETTINGS.HIDE_MY_PROFILE' | translate }}</div>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
       <p-inputSwitch
-        id="up_privacy_settings_hide_my_profile"
+        inputId="up_privacy_settings_hide_my_profile"
         formControlName="hideMyProfile"
         (onChange)="savePrivacySettings()"
         [(ngModel)]="privacySettings"
         title="{{ 'PRIVACY_SETTINGS.PRIVACY.TOOLTIP' | translate }}"
       ></p-inputSwitch>
+      <label for="up_privacy_settings_hide_my_profile">{{ 'PRIVACY_SETTINGS.HIDE_MY_PROFILE' | translate }}</label>
       <button
         *ngIf="changedPrivacySettings"
         pButton
