@@ -20,7 +20,7 @@
                 class="w-full"
                 id="up_personal_info_first_name"
                 [value]="person.firstName"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -36,7 +36,7 @@
                 class="w-full"
                 id="up_personal_info_last_name"
                 [value]="person.lastName"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -52,7 +52,7 @@
                 class="w-full"
                 id="up_personal_info_user_id"
                 [value]="userId$ | async"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.ID.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.ID.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -138,7 +138,7 @@
                 id="up_personal_info_address_street"
                 formControlName="street"
                 [value]="person.address?.street"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -153,7 +153,7 @@
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
                 [value]="person.address?.streetNo"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -172,7 +172,7 @@
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
                 [value]="person.address?.postalCode"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -192,7 +192,7 @@
                 id="up_personal_info_address_city"
                 formControlName="city"
                 [value]="person.address?.city"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
@@ -207,7 +207,7 @@
                 [readonly]="!addressEdit"
                 [options]="countries"
                 formControlName="country"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.COUNTRY.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.COUNTRY.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               >
@@ -286,7 +286,7 @@
                 id="up_personal_info_phone_number"
                 formControlName="number"
                 [value]="person.phone?.number"
-                [pTooltip]="{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate }}"
+                [pTooltip]="'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />

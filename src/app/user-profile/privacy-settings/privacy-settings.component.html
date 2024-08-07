@@ -7,7 +7,7 @@
         formControlName="hideMyProfile"
         (onChange)="savePrivacySettings()"
         [(ngModel)]="privacySettings"
-        [pTooltip]="{{ 'PRIVACY_SETTINGS.PRIVACY.TOOLTIP' | translate }}"
+        [pTooltip]="'PRIVACY_SETTINGS.PRIVACY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-inputSwitch>

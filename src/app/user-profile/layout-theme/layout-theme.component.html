@@ -9,7 +9,7 @@
         [options]="menuModeSelectItems"
         formControlName="menuMode"
         (onChange)="saveMenuMode()"
-        [pTooltip]="{{ 'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate }}"
+        [pTooltip]="'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       >
@@ -38,7 +38,7 @@
         [options]="colorSchemeSelectItems"
         formControlName="colorScheme"
         (onChange)="saveColorScheme()"
-        [pTooltip]="{{ 'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate }}"
+        [pTooltip]="'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       >
@@ -66,7 +66,7 @@
         inputId="up_layout_theme_breadcrumbs"
         formControlName="breadcrumbs"
         (onChange)="saveBreadcrumbs()"
-        [pTooltip]="{{ 'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate }}"
+        [pTooltip]="'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       >

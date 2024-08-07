@@ -14,7 +14,7 @@
         [options]="localeSelectItems"
         [filter]="true"
         (onChange)="saveLocale()"
-        [pTooltip]="{{ 'LANGUAGE_TIMEZONE.LANGUAGE.TOOLTIP' | translate }}"
+        [pTooltip]="'LANGUAGE_TIMEZONE.LANGUAGE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       >
@@ -57,7 +57,7 @@
         [filter]="true"
         placeholder="None"
         (onChange)="saveTimezone()"
-        [pTooltip]="{{ 'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate }}"
+        [pTooltip]="'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-dropdown>
@@ -84,7 +84,7 @@
         class="w-full xs:w-20rem"
         id="up_account_timezone_example"
         [value]="timezoneExampleDate | date: 'long' : timezoneUTC : locale"
-        [pTooltip]="{{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate }}"
+        [pTooltip]="'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       />
