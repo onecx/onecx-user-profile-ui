@@ -5,7 +5,9 @@
   [ocxSrc]="imageUrl"
   (error)="onImageError()"
   [alt]="title"
-  [title]="title ? title : ('AVATAR.IMAGE' | translate)"
+  [pTooltip]="title ? title : ('AVATAR.IMAGE' | translate)"
+  tooltipPosition="top"
+  tooltipEvent="hover"
 />
 <img
   [id]="id"
@@ -13,5 +15,7 @@
   [class]="'avatar-image'"
   [src]="defaultImageUrl"
   [alt]="'AVATAR.PLACEHOLDER' | translate"
-  [title]="title ? title : ('AVATAR.PLACEHOLDER' | translate)"
+  [pTooltip]="title ? title : ('AVATAR.PLACEHOLDER' | translate)"
+  tooltipPosition="top"
+  tooltipEvent="hover"
 />

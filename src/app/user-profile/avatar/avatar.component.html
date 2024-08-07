@@ -18,7 +18,9 @@
         id="up_avatar_button_select"
         (click)="onFileUpload()"
         [label]="'GENERAL.CHANGE' | translate"
-        [title]="'AVATAR.CHOOSE' | translate"
+        [pTooltip]="'AVATAR.CHOOSE' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
       <button
         *ngIf="!imageLoadError"
@@ -30,7 +32,9 @@
         id="up_avatar_button_remove"
         (click)="showAvatarDeleteDialog = true"
         [label]="'GENERAL.REMOVE' | translate"
-        [title]="'AVATAR.REMOVE' | translate"
+        [pTooltip]="'AVATAR.REMOVE' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
     </div>
   </ng-container>

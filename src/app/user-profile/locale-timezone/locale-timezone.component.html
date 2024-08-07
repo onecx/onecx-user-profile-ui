@@ -14,7 +14,9 @@
         [options]="localeSelectItems"
         [filter]="true"
         (onChange)="saveLocale()"
-        title="{{ 'LANGUAGE_TIMEZONE.LANGUAGE.TOOLTIP' | translate }}"
+        [pTooltip]="{{ 'LANGUAGE_TIMEZONE.LANGUAGE.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       >
         <ng-template pTemplate="item" let-item>
           <span [id]="item.value"> {{ item.label | translate }} </span>
@@ -33,7 +35,9 @@
         id="up_account_locale_refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
-        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+        [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
     </div>
 
@@ -53,7 +57,9 @@
         [filter]="true"
         placeholder="None"
         (onChange)="saveTimezone()"
-        title="{{ 'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate }}"
+        [pTooltip]="{{ 'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></p-dropdown>
       <button
         *ngIf="changedTimezone"
@@ -65,7 +71,9 @@
         id="up_account_timezone_refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
-        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+        [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
     </div>
     <span class="p-float-label mt-4">
@@ -76,7 +84,9 @@
         class="w-full xs:w-20rem"
         id="up_account_timezone_example"
         [value]="timezoneExampleDate | date: 'long' : timezoneUTC : locale"
-        title="{{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate }}"
+        [pTooltip]="{{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate }}"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       />
       <label for="up_account_timezone_example">Example</label>
     </span>

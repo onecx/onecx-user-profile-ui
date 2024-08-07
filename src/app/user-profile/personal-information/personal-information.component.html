@@ -20,7 +20,9 @@
                 class="w-full"
                 id="up_personal_info_first_name"
                 [value]="person.firstName"
-                title="{{ 'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_first_name">{{ 'PERSONAL_INFO_FORM.FIRST_NAME' | translate }}</label>
             </span>
@@ -34,7 +36,9 @@
                 class="w-full"
                 id="up_personal_info_last_name"
                 [value]="person.lastName"
-                title="{{ 'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_last_name">{{ 'PERSONAL_INFO_FORM.LAST_NAME' | translate }}</label>
             </span>
@@ -48,7 +52,9 @@
                 class="w-full"
                 id="up_personal_info_user_id"
                 [value]="userId$ | async"
-                title="{{ 'PERSONAL_INFO_FORM.ID.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.ID.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_user_id">{{ 'PERSONAL_INFO_FORM.ID' | translate }}</label>
             </span>
@@ -83,7 +89,9 @@
                 id="up_personal_info_address_edit"
                 (click)="toggleAddressEdit()"
                 [label]="'GENERAL.EDIT' | translate"
-                [title]="'GENERAL.EDIT.TOOLTIP' | translate"
+                [pTooltip]="'GENERAL.EDIT.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               ></button>
               <button
                 *ngIf="addressEdit"
@@ -95,7 +103,9 @@
                 id="up_personal_info_address_cancel"
                 (click)="cancelAddressEdit()"
                 [label]="'GENERAL.CANCEL' | translate"
-                [title]="'GENERAL.CANCEL.TOOLTIP' | translate"
+                [pTooltip]="'GENERAL.CANCEL.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               ></button>
               <button
                 *ngIf="addressEdit"
@@ -107,7 +117,9 @@
                 id="up_personal_info_address_save"
                 (click)="updateAddress()"
                 [label]="'GENERAL.SAVE' | translate"
-                [title]="'GENERAL.SAVE.TOOLTIP' | translate"
+                [pTooltip]="'GENERAL.SAVE.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               ></button>
             </div>
           </div>
@@ -126,7 +138,9 @@
                 id="up_personal_info_address_street"
                 formControlName="street"
                 [value]="person.address?.street"
-                title="{{ 'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_address_street">{{ 'PERSONAL_INFO_FORM.STREET' | translate }}</label>
             </span>
@@ -139,7 +153,9 @@
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
                 [value]="person.address?.streetNo"
-                title="{{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_address_street_no">
                 {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}
@@ -156,7 +172,9 @@
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
                 [value]="person.address?.postalCode"
-                title="{{ 'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_address_postal_code">
                 {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}
@@ -174,7 +192,9 @@
                 id="up_personal_info_address_city"
                 formControlName="city"
                 [value]="person.address?.city"
-                title="{{ 'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_address_city">{{ 'PERSONAL_INFO_FORM.CITY' | translate }}</label>
             </span>
@@ -187,7 +207,9 @@
                 [readonly]="!addressEdit"
                 [options]="countries"
                 formControlName="country"
-                title="{{ 'PERSONAL_INFO_FORM.COUNTRY.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.COUNTRY.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               >
               </p-dropdown>
               <label for="up_personal_info_address_country">{{ 'PERSONAL_INFO_FORM.COUNTRY' | translate }}</label>
@@ -211,8 +233,10 @@
                 class="p-2 p-button-text"
                 icon="pi pi-pencil"
                 label="{{ 'GENERAL.EDIT' | translate }}"
-                [title]="'GENERAL.EDIT.TOOLTIP' | translate"
                 (click)="togglePhoneEdit()"
+                [pTooltip]="'GENERAL.EDIT.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               ></button>
               <button
                 *ngIf="phoneEdit"
@@ -262,7 +286,9 @@
                 id="up_personal_info_phone_number"
                 formControlName="number"
                 [value]="person.phone?.number"
-                title="{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate }}"
+                [pTooltip]="{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate }}"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               />
               <label for="up_personal_info_phone_number">{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER' | translate }}</label>
             </span>
