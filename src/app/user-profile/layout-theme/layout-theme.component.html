@@ -9,7 +9,9 @@
         [options]="menuModeSelectItems"
         formControlName="menuMode"
         (onChange)="saveMenuMode()"
-        title="{{ 'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate }}"
+        [pTooltip]="'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       >
         <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
       </p-selectButton>
@@ -23,7 +25,9 @@
         id="up_layout_theme_menu_mode_refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
-        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+        [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
     </div>
 
@@ -34,7 +38,9 @@
         [options]="colorSchemeSelectItems"
         formControlName="colorScheme"
         (onChange)="saveColorScheme()"
-        title="{{ 'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate }}"
+        [pTooltip]="'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       >
         <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
       </p-selectButton>
@@ -48,7 +54,9 @@
         id="up_layout_theme_color_scheme_refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
-        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+        [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
     </div>
 
@@ -58,7 +66,9 @@
         inputId="up_layout_theme_breadcrumbs"
         formControlName="breadcrumbs"
         (onChange)="saveBreadcrumbs()"
-        title="{{ 'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate }}"
+        [pTooltip]="'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       >
       </p-inputSwitch>
       <label for="up_layout_theme_breadcrumbs">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</label>
@@ -73,7 +83,9 @@
         id="up_layout_theme_breadcrumbs_refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
-        [title]="'GENERAL.APPLY.TOOLTIP' | translate"
+        [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
       ></button>
     </div>
   </form>
