@@ -80,7 +80,6 @@ describe('AvatarComponent', () => {
   })
 
   describe('onFileUpload', () => {
-    // eslint-disable-next-line @typescript-eslint/no-unused-vars
     let base64Image: any
 
     beforeEach(() => {
@@ -92,6 +91,7 @@ describe('AvatarComponent', () => {
       context.fillStyle = 'red'
       context.fillRect(0, 0, canvas.width, canvas.height)
       // Convert the canvas to a base64-encoded JPG
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
       const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
     })
 
