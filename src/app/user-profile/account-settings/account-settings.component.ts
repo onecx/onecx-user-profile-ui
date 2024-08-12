@@ -55,17 +55,14 @@ export class AccountSettingsComponent implements OnInit {
       }
     })
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public localeChange(ev: any) {
     this.settings.locale = ev
     this.saveUserSettingsInfo()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public timezoneChange(ev: any) {
     this.settings.timezone = ev
     this.saveUserSettingsInfo()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public colorSchemeChange(ev: any) {
     this.settings.colorScheme = ev
     this.saveUserSettingsInfo()
@@ -74,7 +71,6 @@ export class AccountSettingsComponent implements OnInit {
     this.settings.menuMode = ev
     this.saveUserSettingsInfo()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public privacySettingsChange(ev: any) {
     this.settings.hideMyProfile = ev.hideMyProfile
     this.saveUserSettingsInfo()
