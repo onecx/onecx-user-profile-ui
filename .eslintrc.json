@@ -10,8 +10,7 @@
     "helm/**",
     "node_modules/**",
     "src/app/shared/generated/**",
-    "src/app/api/*",
-    "src/app/model/*",
+    "src/assets/api/*",
     "src/**/*.ico",
     "src/**/*.svg"
   ],
@@ -24,7 +23,7 @@
       },
       "parserOptions": {
         "ecmaVersion": "latest",
-        "project": "tsconfig.json",
+        "project": "**/tsconfig.json",
         "tsconfigRootDir": "",
         "createDefaultProgram": true,
         "EXPERIMENTAL_useProjectService": true
@@ -61,7 +60,7 @@
         ],
         "no-unused-vars": "off",
         "@typescript-eslint/no-unused-vars": ["error", { "vars": "all", "args": "none" }],
-        "@typescript-eslint/no-explicit-any": "warn",
+        "@typescript-eslint/no-explicit-any": "off",
         "@typescript-eslint/ban-types": [
           "error",
           {
