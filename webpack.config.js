@@ -5,8 +5,8 @@ const config = withModuleFederationPlugin({
   name: 'onecx-user-profile-ui',
   filename: 'remoteEntry.js',
   exposes: {
-    './OneCXUserProfileModule': 'src/bootstrap.ts',
-    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.bootstrap.ts'
+    './OneCXUserProfileModule': 'src/main.ts',
+    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.main.ts'
   },
   shared: share({
     '@angular/core': { requiredVersion: 'auto' },
