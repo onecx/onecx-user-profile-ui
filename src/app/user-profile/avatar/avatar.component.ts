@@ -86,7 +86,7 @@ export class AvatarComponent implements OnInit {
       return this.compressByRatio(img, limit)
     } else return img
   }
-  /* Calculate the scale factor due to avoid to many compression steps */
+  /* Calculate the scale factor to avoid to many compression steps */
   private calculateRatio(bytes: number, targetSize: number): number {
     const proportion = parseFloat(parseFloat('' + bytes / targetSize).toFixed(1))
     const ratio = Math.round(100 / proportion)
