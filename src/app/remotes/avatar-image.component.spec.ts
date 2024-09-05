@@ -87,6 +87,21 @@ describe('OneCXAvatarImageComponent', () => {
     })
   })
 
+  it('should call ocxInitRemoteComponent with the correct config', () => {
+    const mockConfig: RemoteComponentConfig = {
+      appId: 'appId',
+      productName: 'prodName',
+      permissions: ['permission'],
+      baseUrl: 'base'
+    }
+    const { component } = setUp()
+    spyOn(component, 'ocxInitRemoteComponent')
+
+    component.ocxRemoteComponentConfig = mockConfig
+
+    expect(component.ocxInitRemoteComponent).toHaveBeenCalledWith(mockConfig)
+  })
+
   it('should set imagePath to placeholder onImageError', (done) => {
     const { component } = setUp()
 
