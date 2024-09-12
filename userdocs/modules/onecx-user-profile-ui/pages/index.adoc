@@ -1,0 +1,3 @@
+== onecx-user-profile-ui
+
+include::onecx-user-profile-ui-userdocs.adoc[opts=optional]
