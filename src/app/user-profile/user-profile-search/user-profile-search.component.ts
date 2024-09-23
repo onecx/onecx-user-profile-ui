@@ -153,7 +153,7 @@ export class UserProfileSearchComponent implements OnInit {
             return array.filter((item) => {
               return ['firstName', 'lastName', 'displayName', 'email'].some((key) => {
                 const value = item[key]
-                return value && value.toString().toLowerCase().includes(lowerCaseFilter)
+                return value?.toString().toLowerCase().includes(lowerCaseFilter)
               })
             })
           } else {

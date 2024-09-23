@@ -71,7 +71,6 @@ export class AvatarComponent implements OnInit {
         // Small (topbar icon)
         if (bytes > environment.AVATAR_SIZE_SMALL) {
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_SMALL) // below 3000 the image has too low quality
-          bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Small)
       })
