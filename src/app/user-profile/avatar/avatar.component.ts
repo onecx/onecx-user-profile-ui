@@ -3,7 +3,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
-import { UserService, AppStateService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
 import { bffImageUrl } from 'src/app/shared/utils'
@@ -28,8 +28,6 @@ export class AvatarComponent implements OnInit {
   constructor(
     private avatarService: UserAvatarAPIService,
     private msgService: PortalMessageService,
-    private userService: UserService,
-    private appStateService: AppStateService,
     private imageCompress: NgxImageCompressService
   ) {}
 
@@ -58,18 +56,21 @@ export class AvatarComponent implements OnInit {
         let img = compressedImage
         // Large
         if (bytes > environment.AVATAR_SIZE_LARGE) {
+          console.log('BYTES 1', bytes)
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_LARGE) // limit by service: 110.000
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Large)
         // Medium
         if (bytes > environment.AVATAR_SIZE_MEDIUM) {
+          console.log('BYTES 2', bytes)
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_MEDIUM)
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Medium)
         // Small (topbar icon)
         if (bytes > environment.AVATAR_SIZE_SMALL) {
+          console.log('BYTES 3', bytes)
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_SMALL) // below 3000 the image has too low quality
         }
         this.sendImage(img, RefType.Small)
@@ -108,10 +109,10 @@ export class AvatarComponent implements OnInit {
           localStorage.removeItem('tkit_user_profile')
           this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
         }
-        if (refType === RefType.Small) this.windowReload()
+        // if (refType === RefType.Small) this.windowReload()
       },
       error: (error: HttpErrorResponse) => {
-        if (error.error?.errorCode === 'WRONG_AVATAR_CONTENT_TYPE') {
+        if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
           this.msgService.error({
             summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
             detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
