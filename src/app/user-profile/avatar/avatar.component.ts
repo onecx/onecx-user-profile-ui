@@ -56,21 +56,18 @@ export class AvatarComponent implements OnInit {
         let img = compressedImage
         // Large
         if (bytes > environment.AVATAR_SIZE_LARGE) {
-          console.log('BYTES 1', bytes)
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_LARGE) // limit by service: 110.000
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Large)
         // Medium
         if (bytes > environment.AVATAR_SIZE_MEDIUM) {
-          console.log('BYTES 2', bytes)
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_MEDIUM)
           bytes = this.imageCompress.byteCount(img)
         }
         this.sendImage(img, RefType.Medium)
         // Small (topbar icon)
         if (bytes > environment.AVATAR_SIZE_SMALL) {
-          console.log('BYTES 3', bytes)
           img = await this.compressByRatio(img, environment.AVATAR_SIZE_SMALL) // below 3000 the image has too low quality
         }
         this.sendImage(img, RefType.Small)
