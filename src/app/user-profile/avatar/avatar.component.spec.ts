@@ -34,24 +34,6 @@ describe('AvatarComponent', () => {
 
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
 
-  //   const avatarOnBackend = {
-  //     avatar: {
-  //       userUploaded: true,
-  //       lastUpdateTime: undefined,
-  //       imageUrl: 'mockUrl',
-  //       smallImageUrl: 'smallUrl'
-  //     }
-  //   }
-
-  //   const avatarHttp = {
-  //     avatar: {
-  //       userUploaded: true,
-  //       lastUpdateTime: undefined,
-  //       imageUrl: 'http://mockUrl',
-  //       smallImageUrl: 'http://mockUrl'
-  //     }
-  //   }
-
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [AvatarComponent],
@@ -136,7 +118,7 @@ describe('AvatarComponent', () => {
   })
 
   describe('onFileUpload', () => {
-    it('should call the update methods when file exists in image', async () => {
+    it('should compress img for large type', async () => {
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -144,16 +126,16 @@ describe('AvatarComponent', () => {
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
       imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
       imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-      imageCompressSpy.byteCount.and.returnValue(of('2000'))
+      imageCompressSpy.byteCount.and.returnValues(300001, 30001)
       avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
       component.imageLoadError = false
 
       await component.onFileUpload()
 
-      expect(imageCompressSpy.uploadFile).toHaveBeenCalled()
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
     })
 
-    xit('should upload image to avatar service when compressed, image over 100 000 bytes', async () => {
+    it('should compress img for medium type', async () => {
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -161,13 +143,28 @@ describe('AvatarComponent', () => {
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
-      imageCompressSpy.byteCount.and.returnValue('400000')
+      imageCompressSpy.byteCount.and.returnValues(30001, 3001)
       avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
-      // spyOn(component as any, 'compressByRatio').and.returnValue(mockCompressedImage)
 
       await component.onFileUpload()
 
-      expect(avatarServiceSpy.uploadAvatar).toHaveBeenCalled()
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
+    })
+
+    it('should compress img for small type', async () => {
+      const mockImage =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
+      const mockOrientation = 0
+      const mockCompressedImage =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+      imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
+      imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
+      imageCompressSpy.byteCount.and.returnValues(3001, 3000)
+      avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+
+      await component.onFileUpload()
+
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
     })
 
     it('should compress the image within the limit in one step', async () => {
@@ -180,7 +177,7 @@ describe('AvatarComponent', () => {
     })
 
     it('should compress the image exceeding the limit in several steps', async () => {
-      imageCompressSpy.byteCount.and.returnValues(1500, 800)
+      imageCompressSpy.byteCount.and.returnValues(300000, 800)
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve('compressed-image'))
 
       const result = await component['compressByRatio']('image', 500)
@@ -226,7 +223,7 @@ describe('AvatarComponent', () => {
         name: 'HttpErrorResponse',
         message: '',
         error: {
-          errorCode: 'WRONG_AVATAR_CONTENT_TYPE'
+          errorCode: 'WRONG_CONTENT_TYPE'
         },
         ok: false,
         headers: new HttpHeaders(),
@@ -244,147 +241,6 @@ describe('AvatarComponent', () => {
       })
     })
   })
-
-  //   it('should UPLOAD failed WRONG_AVATAR_CONTENT_TYPE', fakeAsync(() => {
-  //     // Create an jpg base 64 image
-  //     const canvas = document.createElement('canvas')
-  //     const context = canvas.getContext('2d')!
-  //     canvas.width = 500
-  //     canvas.height = 500
-  //     context.fillStyle = 'red'
-  //     context.fillRect(0, 0, canvas.width, canvas.height)
-  //     // Convert the canvas to a base64-encoded JPG
-  //     const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
-
-  //     // Mock the response from the ImageCompress service
-  //     const mockImage = base64Image
-  //     const mockOrientation = 0
-  //     const mockCompressedImage =
-  //       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-  //     imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
-  //     imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-  //     imageCompressSpy.byteCount.and.returnValue('200')
-
-  //     const updateErrorResponse: HttpErrorResponse = {
-  //       status: 404,
-  //       statusText: 'Not Found',
-  //       name: 'HttpErrorResponse',
-  //       message: '',
-  //       error: { errorCode: 'WRONG_AVATAR_CONTENT_TYPE' },
-  //       ok: false,
-  //       headers: new HttpHeaders(),
-  //       url: null,
-  //       type: HttpEventType.ResponseHeader
-  //     }
-
-  //     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
-
-  //     component.imageLoadError = true
-  //     // Call the onFileUpload method
-  //     component.onFileUpload()
-
-  //     tick(1000)
-
-  //     // Expect the necessary methods to have been called
-  //     expect(msgServiceSpy.error).toHaveBeenCalledWith({
-  //       summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-  //       detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-  //     })
-  //   }))
-
-  //   it('should test recursive compression', fakeAsync(() => {
-  //     // Create an jpg base 64 image
-  //     const canvas = document.createElement('canvas')
-  //     const context = canvas.getContext('2d')!
-  //     canvas.width = 500
-  //     canvas.height = 500
-  //     context.fillStyle = 'red'
-  //     context.fillRect(0, 0, canvas.width, canvas.height)
-  //     // Convert the canvas to a base64-encoded JPG
-  //     const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
-
-  //     // Mock the response from the ImageCompress service
-  //     const mockImage = base64Image
-  //     const mockOrientation = 0
-  //     const mockCompressedImage =
-  //       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-  //     imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
-  //     imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-  //     imageCompressSpy.byteCount.and.returnValues(2000, 20000, 200000, 500, 5000, 50000)
-
-  //     const updateErrorResponse: HttpErrorResponse = {
-  //       status: 404,
-  //       statusText: 'Not Found',
-  //       name: 'HttpErrorResponse',
-  //       message: '',
-  //       error: { errorCode: 'WRONG_AVATAR_CONTENT_TYPE' },
-  //       ok: false,
-  //       headers: new HttpHeaders(),
-  //       url: null,
-  //       type: HttpEventType.ResponseHeader
-  //     }
-
-  //     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
-
-  //     component.imageLoadError = true
-  //     // Call the onFileUpload method
-  //     component.onFileUpload()
-
-  //     tick(1000)
-
-  //     // Expect the necessary methods to have been called
-  //     expect(msgServiceSpy.error).toHaveBeenCalledWith({
-  //       summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-  //       detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-  //     })
-  //   }))
-
-  //   it('should test multiple recursive compression', fakeAsync(() => {
-  //     // Create an jpg base 64 image
-  //     const canvas = document.createElement('canvas')
-  //     const context = canvas.getContext('2d')!
-  //     canvas.width = 500
-  //     canvas.height = 500
-  //     context.fillStyle = 'red'
-  //     context.fillRect(0, 0, canvas.width, canvas.height)
-  //     // Convert the canvas to a base64-encoded JPG
-  //     const base64Image = canvas.toDataURL('image/jpeg', 0.8) // Adjust quality (0.8 is just an example)
-
-  //     // Mock the response from the ImageCompress service
-  //     const mockImage = base64Image
-  //     const mockOrientation = 0
-  //     const mockCompressedImage =
-  //       'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-  //     imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
-  //     imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-  //     imageCompressSpy.byteCount.and.returnValues(2000, 20000, 200000, 1200, 5000, 50000)
-
-  //     const updateErrorResponse: HttpErrorResponse = {
-  //       status: 404,
-  //       statusText: 'Not Found',
-  //       name: 'HttpErrorResponse',
-  //       message: '',
-  //       error: { errorCode: 'WRONG_AVATAR_CONTENT_TYPE' },
-  //       ok: false,
-  //       headers: new HttpHeaders(),
-  //       url: null,
-  //       type: HttpEventType.ResponseHeader
-  //     }
-
-  //     avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
-
-  //     component.imageLoadError = true
-  //     // Call the onFileUpload method
-  //     component.onFileUpload()
-
-  //     tick(1000)
-
-  //     // Expect the necessary methods to have been called
-  //     expect(msgServiceSpy.error).toHaveBeenCalledWith({
-  //       summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-  //       detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-  //     })
-  //   }))
 
   it('should test onImageError', () => {
     component.imageLoadError = false
