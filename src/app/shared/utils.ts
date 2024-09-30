@@ -53,7 +53,8 @@ export function sortByLocale(a: any, b: any): number {
 /***************** Time functions for calendar */
 export function getLocale(): string {
   const locale: string = navigator.language
-  return locale?.toLocaleLowerCase().match(/^(en|en-.+|de|de-.+)$/) ? locale : 'en-US'
+  const regex = /^(en|en-.+|de|de-.+)$/
+  return regex.exec(locale?.toLowerCase()) ? locale : 'en-US'
 }
 
 export function getDateFormat(type: string): string {
