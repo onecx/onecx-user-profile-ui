@@ -85,9 +85,6 @@ export class AccountSettingsComponent implements OnInit {
       next: (res) => {
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
         this.settings = res
-        if (this.settings.locale) {
-          //TODO what exactly should we reload now? SHould we notify shell/parent?
-        }
       },
       error: () => {
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
