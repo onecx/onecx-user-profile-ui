@@ -117,7 +117,7 @@ describe('PersonalInformationComponent', () => {
 
   it('should create', async () => {
     let personalInfoValue: UserPerson = {}
-    let userIdValue: string = ''
+    let userIdValue = ''
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
@@ -605,7 +605,7 @@ describe('PersonalInformationComponent', () => {
 
   it('should create with empty user', async () => {
     let personalInfoValue: UserPerson = {}
-    let userIdValue: string = ''
+    let userIdValue = ''
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()

@@ -60,7 +60,7 @@
           (applyChanges)="reloadPage()"
         ></app-privacy-settings>
       </p-tabPanel>
-      <p-tabPanel>
+      <p-tabPanel *ocxIfPermission="'ROLES_PERMISSIONS#VIEW'">
         <ng-template pTemplate="header">
           <span
             [pTooltip]="'PASSWORD.TAB_NAME_PASSWORD.TOOLTIP' | translate"
@@ -73,7 +73,7 @@
         <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
           <ocx-slot
             *ngIf="isChangePasswordComponentDefined$ | async; else changePasswordPlaceholder"
-            name="{{ changePasswordSlotName }}"
+            [name]="changePasswordSlotName"
           >
           </ocx-slot>
           <ng-template #changePasswordPlaceholder>

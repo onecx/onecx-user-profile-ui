@@ -115,13 +115,15 @@ describe('UserProfileSearchComponent', () => {
     )
 
     component.search()
-    expect(component.resultData$.getValue()?.length).toEqual(userProfilepageResult.stream!.length)
-    expect(component.resultData$.getValue()?.at(0)?.['firstName']).toEqual(
-      userProfilepageResult.stream!.at(0)?.person?.firstName
-    )
-    expect(component.resultData$.getValue()?.at(1)?.['firstName']).toEqual(
-      userProfilepageResult.stream!.at(1)?.person?.firstName
-    )
+    if (userProfilepageResult.stream) {
+      expect(component.resultData$.getValue()?.length).toEqual(userProfilepageResult.stream.length)
+      expect(component.resultData$.getValue()?.at(0)?.['firstName']).toEqual(
+        userProfilepageResult.stream.at(0)?.person?.firstName
+      )
+      expect(component.resultData$.getValue()?.at(1)?.['firstName']).toEqual(
+        userProfilepageResult.stream!.at(1)?.person?.firstName
+      )
+    }
 
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
   })

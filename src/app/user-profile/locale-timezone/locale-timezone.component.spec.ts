@@ -207,7 +207,7 @@ describe('LocaleTimezoneComponent', () => {
     component.saveTimezone()
     fixture.detectChanges()
 
-    expect(component.timezone).toBe(localeTimezoneValue.timezone!)
+    expect(component.timezone).toBe(localeTimezoneValue.timezone)
     expect(localeTimezoneChangeSpy).toHaveBeenCalled()
     expect(component.changedTimezone).toBeTrue()
   })
