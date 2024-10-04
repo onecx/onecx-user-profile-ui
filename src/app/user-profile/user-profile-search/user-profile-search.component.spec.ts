@@ -121,7 +121,7 @@ describe('UserProfileSearchComponent', () => {
         userProfilepageResult.stream.at(0)?.person?.firstName
       )
       expect(component.resultData$.getValue()?.at(1)?.['firstName']).toEqual(
-        userProfilepageResult.stream!.at(1)?.person?.firstName
+        userProfilepageResult.stream.at(1)?.person?.firstName
       )
     }
 
