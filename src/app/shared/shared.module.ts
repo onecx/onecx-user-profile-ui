@@ -1,5 +1,5 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { ColorSketchModule } from 'ngx-color/sketch'
@@ -19,12 +19,12 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
 import { KeyFilterModule } from 'primeng/keyfilter'
 import { ListboxModule } from 'primeng/listbox'
 import { MultiSelectModule } from 'primeng/multiselect'
+import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
-import { PanelModule } from 'primeng/panel'
 
 import {
   AppStateService,
