@@ -52,7 +52,10 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   imagePath$: Observable<string> | undefined
   public placeHolderPath = ''
 
-  constructor(@Inject(BASE_URL) private baseUrl: ReplaySubject<string>, private avatarService: UserAvatarAPIService) {}
+  constructor(
+    @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
+    private avatarService: UserAvatarAPIService
+  ) {}
 
   @Input() set ocxRemoteComponentConfig(config: RemoteComponentConfig) {
     this.ocxInitRemoteComponent(config)

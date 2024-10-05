@@ -61,20 +61,21 @@ app:
           ACCOUNT_SETTINGS_PRIVACY:
             EDIT: Edit privacy setting
             VIEW: View privacy setting
-          PROFILE_PERSONAL_INFO:
-            VIEW: View personal info
           PROFILE_ADDRESS:
             EDIT: Edit address
             VIEW: View address
           PROFILE_AVATAR:
             EDIT: Edit avatar
             VIEW: View avatar
+          PROFILE_PERSONAL_INFO:
+            VIEW: View personal info
           PROFILE_PHONE:
             EDIT: Edit avatar
             VIEW: View avatar
           ROLES_PERMISSIONS:
             VIEW: View roles and permissions
-
+          CHANGE_PASSWORD:
+            VIEW: Change password in IAM
     slot:
       enabled: true
       specs:
