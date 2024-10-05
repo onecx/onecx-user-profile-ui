@@ -109,7 +109,7 @@ export class UserProfileSearchComponent implements OnInit {
   selectedStatusOptions: SelectItem[] = []
   columnId = 'status'
   column = this.columns.find((e) => e.id === this.columnId)
-  sortField: string = ''
+  sortField = ''
   filter: Filter[] = []
   getTooltipContent = getTooltipContent
   supportedDiagramTypes: DiagramType[] = [DiagramType.PIE, DiagramType.HORIZONTAL_BAR, DiagramType.VERTICAL_BAR]

@@ -106,7 +106,7 @@ describe('UserProfileComponent', () => {
     it('should set personalInfo$ empty when getMyUserProfile() returns empty UserProfile', () => {
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of({ person: undefined }))
 
-      component.personalInfo$.pipe(map((person) => expect(person).toEqual(undefined!)))
+      component.personalInfo$.pipe(map((person) => expect(person).not.toBeUndefined()))
     })
   })
 

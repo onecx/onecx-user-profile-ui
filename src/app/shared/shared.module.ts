@@ -1,9 +1,8 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { FormsModule, ReactiveFormsModule } from '@angular/forms'
-import { provideErrorTailorConfig } from '@ngneat/error-tailor'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { ColorSketchModule } from 'ngx-color/sketch'
+import { provideErrorTailorConfig } from '@ngneat/error-tailor'
 
 import { ConfirmationService } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
@@ -19,12 +18,12 @@ import { InputTextareaModule } from 'primeng/inputtextarea'
 import { KeyFilterModule } from 'primeng/keyfilter'
 import { ListboxModule } from 'primeng/listbox'
 import { MultiSelectModule } from 'primeng/multiselect'
+import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
-import { PanelModule } from 'primeng/panel'
 
 import {
   AppStateService,
@@ -49,7 +48,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     PortalCoreModule.forMicroFrontend(),
     AutoCompleteModule,
     CalendarModule,
-    ColorSketchModule,
     CommonModule,
     ConfirmDialogModule,
     ConfirmPopupModule,

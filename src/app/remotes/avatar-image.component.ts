@@ -50,7 +50,7 @@ import { environment } from 'src/environments/environment'
 })
 export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
   imagePath$: Observable<string> | undefined
-  public placeHolderPath: string = ''
+  public placeHolderPath = ''
 
   constructor(
     @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
