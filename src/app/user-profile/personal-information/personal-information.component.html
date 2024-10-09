@@ -50,13 +50,13 @@
                 type="text"
                 readonly
                 class="w-full"
-                id="up_personal_info_user_id"
-                [value]="userId$ | async"
-                [pTooltip]="'PERSONAL_INFO_FORM.ID.TOOLTIP' | translate"
+                id="up_personal_info_email"
+                [value]="person.email"
+                [pTooltip]="'PERSONAL_INFO_FORM.EMAIL.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_user_id">{{ 'PERSONAL_INFO_FORM.ID' | translate }}</label>
+              <label for="up_personal_info_email">{{ 'PERSONAL_INFO_FORM.EMAIL' | translate }}</label>
             </span>
           </div>
         </div>

@@ -38,7 +38,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   ) {
     // get data and init form only
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
-    this.userId$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.id || ''))
+    //this.userId$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.id || ''))
     this.formGroup = this.initFormGroup()
   }
 
