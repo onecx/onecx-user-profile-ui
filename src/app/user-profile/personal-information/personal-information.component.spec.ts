@@ -14,7 +14,6 @@ describe('PersonalInformationComponent', () => {
   let fixture: ComponentFixture<PersonalInformationComponent>
 
   const defaultCurrentUser: UserProfile = {
-    userId: '15',
     id: 'testId',
     person: {
       firstName: 'John',
@@ -117,7 +116,6 @@ describe('PersonalInformationComponent', () => {
 
   it('should create', async () => {
     let personalInfoValue: UserPerson = {}
-    let userIdValue = ''
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
@@ -604,7 +602,6 @@ describe('PersonalInformationComponent', () => {
 
   it('should create with empty user', async () => {
     let personalInfoValue: UserPerson = {}
-    let userIdValue = ''
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
