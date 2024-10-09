@@ -14,7 +14,7 @@ export class PrivacySettingsComponent implements OnInit {
   public changedPrivacySettings = false
   public formGroup: UntypedFormGroup
 
-  constructor(private userService: UserService) {
+  constructor(private readonly userService: UserService) {
     this.formGroup = new UntypedFormGroup({
       hideMyProfile: new UntypedFormControl()
     })

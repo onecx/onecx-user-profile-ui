@@ -14,9 +14,9 @@ export class UserProfileComponent {
   public messages: { [key: string]: string } = {}
 
   constructor(
-    public translate: TranslateService,
+    public readonly translate: TranslateService,
     private readonly userProfileService: UserProfileAPIService,
-    private msgService: PortalMessageService
+    private readonly msgService: PortalMessageService
   ) {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
   }

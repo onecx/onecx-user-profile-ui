@@ -115,13 +115,13 @@ export class UserProfileSearchComponent implements OnInit {
   supportedDiagramTypes: DiagramType[] = [DiagramType.PIE, DiagramType.HORIZONTAL_BAR, DiagramType.VERTICAL_BAR]
 
   constructor(
-    private userProfileAdminService: UserProfileAdminAPIService,
-    private fb: UntypedFormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private portalMessageService: PortalMessageService,
+    private readonly userProfileAdminService: UserProfileAdminAPIService,
+    private readonly fb: UntypedFormBuilder,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly portalMessageService: PortalMessageService,
     private readonly exportDataService: ExportDataService,
-    @Inject(LOCALE_ID) public locale: string
+    @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({
       firstName: null,

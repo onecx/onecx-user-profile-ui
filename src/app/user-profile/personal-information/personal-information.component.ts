@@ -32,9 +32,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   public formUpdates$: Observable<unknown> | undefined
 
   constructor(
-    public http: HttpClient,
-    public translate: TranslateService,
-    private userProfileService: UserProfileAPIService
+    public readonly http: HttpClient,
+    public readonly translate: TranslateService,
+    private readonly userProfileService: UserProfileAPIService
   ) {
     // get data and init form only
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))

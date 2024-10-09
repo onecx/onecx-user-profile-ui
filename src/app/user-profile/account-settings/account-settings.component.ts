@@ -33,8 +33,8 @@ export class AccountSettingsComponent implements OnInit {
   private profileCacheItem = 'tkit_user_profile'
 
   constructor(
-    private msgService: PortalMessageService,
-    private userProfileService: UserProfileAPIService,
+    private readonly msgService: PortalMessageService,
+    private readonly userProfileService: UserProfileAPIService,
     private readonly router: Router,
     private readonly confService: ConfigurationService, // private readonly stateService: StateService
     private readonly slotService: SlotService

@@ -35,7 +35,7 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   constructor(
     private readonly localAndTimezoneService: LocalAndTimezoneService,
     private readonly configService: ConfigurationService,
-    private userService: UserService
+    private readonly userService: UserService
   ) {
     this.formGroup = new UntypedFormGroup({
       timezone: new FormControl(''),
