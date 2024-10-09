@@ -13,7 +13,7 @@ import {
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { of, throwError } from 'rxjs'
 import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent
@@ -44,6 +44,18 @@ describe('AccountSettingsComponent', () => {
     timezone: 'UTC',
     menuMode: MenuMode.Horizontal,
     colorScheme: ColorScheme.Auto
+  }
+
+  const initErrorResponse: HttpErrorResponse = {
+    status: 401,
+    statusText: 'Not Found',
+    name: 'HttpErrorResponse',
+    message: '',
+    error: undefined,
+    ok: false,
+    headers: new HttpHeaders(),
+    url: null,
+    type: HttpEventType.ResponseHeader
   }
 
   beforeEach(waitForAsync(() => {
@@ -79,17 +91,14 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should create', fakeAsync(() => {
-    expect(component).toBeTruthy()
-    expect(component.settings).toBe(profile)
-    expect(component.settingsInitial).toEqual(profile)
-  }))
+    userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => initErrorResponse))
 
-  it('should create', fakeAsync(() => {
-    userProfileServiceSpy.getUserSettings.and.returnValue(of(profile))
+    component.ngOnInit()
 
     expect(component).toBeTruthy()
     expect(component.settings).toBe(profile)
     expect(component.settingsInitial).toEqual(profile)
+    expect(msgServiceSpy.error).toHaveBeenCalled()
   }))
 
   it('should saveUserSettingsInfo', () => {
@@ -100,7 +109,7 @@ describe('AccountSettingsComponent', () => {
     expect(component.settings).toEqual(updatedProfile)
   })
 
-  it('should saveUserSettingsInfo', () => {
+  it('should handle error on update in saveUserSettingsInfo', () => {
     const updateErrorResponse: HttpErrorResponse = {
       status: 404,
       statusText: 'Not Found',
@@ -431,62 +440,62 @@ describe('AccountSettingsComponent', () => {
 //   })
 // })
 
-describe('AccountSettingsComponent', () => {
-  let component: AccountSettingsComponent
-  let fixture: ComponentFixture<AccountSettingsComponent>
+// describe('AccountSettingsComponent', () => {
+//   let component: AccountSettingsComponent
+//   let fixture: ComponentFixture<AccountSettingsComponent>
 
-  const userProfileServiceSpy = {
-    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
-    getUserSettings: jasmine.createSpy('getUserSettings').and.returnValue(of({})),
-    updateUserSettings: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
-  }
+//   const userProfileServiceSpy = {
+//     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
+//     getUserSettings: jasmine.createSpy('getUserSettings').and.returnValue(of({})),
+//     updateUserSettings: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
+//   }
 
-  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
+//   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
 
-  const initErrorResponse: HttpErrorResponse = {
-    status: 401,
-    statusText: 'Not Found',
-    name: 'HttpErrorResponse',
-    message: '',
-    error: undefined,
-    ok: false,
-    headers: new HttpHeaders(),
-    url: null,
-    type: HttpEventType.ResponseHeader
-  }
+//   const initErrorResponse: HttpErrorResponse = {
+//     status: 401,
+//     statusText: 'Not Found',
+//     name: 'HttpErrorResponse',
+//     message: '',
+//     error: undefined,
+//     ok: false,
+//     headers: new HttpHeaders(),
+//     url: null,
+//     type: HttpEventType.ResponseHeader
+//   }
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [AccountSettingsComponent],
-      imports: [
-        HttpClientTestingModule,
-        TranslateTestingModule.withTranslations({
-          de: require('src/assets/i18n/de.json'),
-          en: require('src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
-        { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
-        { provide: PortalMessageService, useValue: msgServiceSpy }
-      ]
-    }).compileComponents()
-    msgServiceSpy.success.calls.reset()
-    msgServiceSpy.error.calls.reset()
-    userProfileServiceSpy.getMyUserProfile.calls.reset()
-    userProfileServiceSpy.getUserSettings.calls.reset()
-    userProfileServiceSpy.updateUserSettings.calls.reset()
-  }))
+//   beforeEach(waitForAsync(() => {
+//     TestBed.configureTestingModule({
+//       declarations: [AccountSettingsComponent],
+//       imports: [
+//         HttpClientTestingModule,
+//         TranslateTestingModule.withTranslations({
+//           de: require('src/assets/i18n/de.json'),
+//           en: require('src/assets/i18n/en.json')
+//         }).withDefaultLanguage('en')
+//       ],
+//       schemas: [NO_ERRORS_SCHEMA],
+//       providers: [
+//         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
+//         { provide: PortalMessageService, useValue: msgServiceSpy }
+//       ]
+//     }).compileComponents()
+//     msgServiceSpy.success.calls.reset()
+//     msgServiceSpy.error.calls.reset()
+//     userProfileServiceSpy.getMyUserProfile.calls.reset()
+//     userProfileServiceSpy.getUserSettings.calls.reset()
+//     userProfileServiceSpy.updateUserSettings.calls.reset()
+//   }))
 
-  beforeEach(() => {
-    userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => initErrorResponse))
-    fixture = TestBed.createComponent(AccountSettingsComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  })
+//   beforeEach(() => {
+//     userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => initErrorResponse))
+//     fixture = TestBed.createComponent(AccountSettingsComponent)
+//     component = fixture.componentInstance
+//     fixture.detectChanges()
+//   })
 
-  it('should create', fakeAsync(() => {
-    expect(component).toBeTruthy()
-    expect(msgServiceSpy.error).toHaveBeenCalled()
-  }))
-})
+//   it('should create', fakeAsync(() => {
+//     expect(component).toBeTruthy()
+//     expect(msgServiceSpy.error).toHaveBeenCalled()
+//   }))
+// })

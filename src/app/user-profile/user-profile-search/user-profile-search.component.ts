@@ -35,7 +35,6 @@ export class UserProfileSearchComponent implements OnInit {
 
   /* ocx-data-view-controls settings*/
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
-  // public viewMode = 'grid'
   public quickFilterValue = 'ALL'
   public quickFilterItems: SelectItem[] = []
   public filterValue: string | undefined
