@@ -55,36 +55,37 @@
       "PHONE": "Phone number"
     },
     "FIRST_NAME": "First name",
-    "FIRST_NAME.TOOLTIP": "The current user's first name",
+    "FIRST_NAME.TOOLTIP": "The user's first name",
     "LAST_NAME": "Surname",
-    "LAST_NAME.TOOLTIP": "The current user's last name",
+    "LAST_NAME.TOOLTIP": "The user's last name",
     "DISPLAY_NAME": "Display Name",
     "ID": "User ID",
-    "ID.TOOLTIP": "The current user's ID",
+    "ID.TOOLTIP": "The user's ID",
     "USERNAME": "Username",
     "EMAIL": "Email",
+    "EMAIL.TOOLTIP": "Email Address",
     "COUNTRY": "Country",
-    "COUNTRY.TOOLTIP": "The current user's country",
+    "COUNTRY.TOOLTIP": "The user's country",
     "CITY": "City",
-    "CITY.TOOLTIP": "The current user's city",
+    "CITY.TOOLTIP": "The user's city",
     "POSTAL_CODE": "Postcode",
-    "POSTAL_CODE.TOOLTIP": "The current user's postcode",
+    "POSTAL_CODE.TOOLTIP": "The user's postcode",
     "STREET": "Street",
-    "STREET.TOOLTIP": "The current user's street",
+    "STREET.TOOLTIP": "The user's street",
     "HOUSE_NUMBER": "House Number",
-    "HOUSE_NUMBER.TOOLTIP": "The current user's house number",
+    "HOUSE_NUMBER.TOOLTIP": "The user's house number",
     "NUMBER": "Number",
     "TAKE_OVER": "Take Over",
     "EXIT_EDITING": "Exit Editing",
     "CLEAR_FORM": "Clear All",
     "PHONE_TYPE": "Phone type",
-    "PHONE_TYPE.TOOLTIP": "The current user's phone type",
+    "PHONE_TYPE.TOOLTIP": "The user's phone type",
     "PHONE": {
       "MOBILE": "Mobile",
       "LANDLINE": "Landline"
     },
     "PHONE_NUMBER": "Phone Number",
-    "PHONE_NUMBER.TOOLTIP": "The current user's phone number",
+    "PHONE_NUMBER.TOOLTIP": "The user's phone number",
     "MSG": {
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data"
@@ -114,7 +115,7 @@
     "CANCEL": "Cancel",
     "CHOOSE_ANOTHER": "Choose another photo",
     "REMOVE_CONFIRM": "Remove Photo",
-    "REMOVE_CANCEL": "Keep current photo",
+    "REMOVE_CANCEL": "Keep photo",
     "MSG": {
       "FILE_TOO_LARGE": {
         "SUMMARY": "File too large",
@@ -144,9 +145,9 @@
   "ROLE_PERMISSIONS": {
     "HEADLINE": "Roles and Permissions granted",
     "TAB_NAME_ROLES": "Roles",
-    "TAB_NAME_ROLES.TOOLTIP": "The current user's roles",
+    "TAB_NAME_ROLES.TOOLTIP": "The user's roles",
     "TAB_NAME_PERMISSIONS": "Permissions",
-    "TAB_NAME_PERMISSIONS.TOOLTIP": "The current user's permissions",
+    "TAB_NAME_PERMISSIONS.TOOLTIP": "The user's permissions",
     "TITLE_ROLES": "My Roles",
     "TITLE_PERMISSIONS": "My Permissions",
     "NO_RESULTS": "No data",
@@ -167,7 +168,7 @@
   },
   "LANGUAGE_TIMEZONE": {
     "TAB_NAME_LANGUAGE_TIMEZONE": "Language & Timezone",
-    "TAB_NAME_LANGUAGE_TIMEZONE.TOOLTIP": "The current user's language and timezone settings",
+    "TAB_NAME_LANGUAGE_TIMEZONE.TOOLTIP": "The user's language and timezone settings",
     "LANGUAGE": "Language",
     "TIMEZONE": "Timezone",
     "LANGUAGE.TOOLTIP": "Language in which the pages are displayed",
@@ -183,13 +184,13 @@
   },
   "PRIVACY_SETTINGS": {
     "TAB_NAME_PRIVACY": "Privacy",
-    "TAB_NAME_PRIVACY.TOOLTIP": "The current user's privacy settings",
+    "TAB_NAME_PRIVACY.TOOLTIP": "The user's privacy settings",
     "HIDE_MY_PROFILE": "Hide my profile",
     "PRIVACY.TOOLTIP": "Enable/Disable hiding the profile"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Password",
-    "TAB_NAME_PASSWORD.TOOLTIP": "The current user's password",
+    "TAB_NAME_PASSWORD.TOOLTIP": "The user's password",
     "NOT_AVAILABLE": "Password change functionality is not available"
   },
   "LAYOUT_THEME": {

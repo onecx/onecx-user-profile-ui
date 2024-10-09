@@ -14,7 +14,6 @@ describe('PersonalInformationComponent', () => {
   let fixture: ComponentFixture<PersonalInformationComponent>
 
   const defaultCurrentUser: UserProfile = {
-    userId: '15',
     id: 'testId',
     person: {
       firstName: 'John',
@@ -117,15 +116,12 @@ describe('PersonalInformationComponent', () => {
 
   it('should create', async () => {
     let personalInfoValue: UserPerson = {}
-    let userIdValue = ''
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
     component.personalInfo$.subscribe((person) => (personalInfoValue = person))
-    component.userId$.subscribe((id) => (userIdValue = id))
 
     expect(personalInfoValue).toEqual(defaultCurrentUser.person as UserPerson)
-    expect(userIdValue).toEqual('testId')
   })
 
   describe('initialization and changes', () => {
@@ -606,14 +602,11 @@ describe('PersonalInformationComponent', () => {
 
   it('should create with empty user', async () => {
     let personalInfoValue: UserPerson = {}
-    let userIdValue = ''
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
     component.personalInfo$.subscribe((person) => (personalInfoValue = person))
-    component.userId$.subscribe((id) => (userIdValue = id))
 
     expect(personalInfoValue).toEqual({})
-    expect(userIdValue).toEqual('')
   })
 })
