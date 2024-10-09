@@ -122,10 +122,8 @@ describe('PersonalInformationComponent', () => {
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
     component.personalInfo$.subscribe((person) => (personalInfoValue = person))
-    component.userId$.subscribe((id) => (userIdValue = id))
 
     expect(personalInfoValue).toEqual(defaultCurrentUser.person as UserPerson)
-    expect(userIdValue).toEqual('testId')
   })
 
   describe('initialization and changes', () => {
@@ -611,9 +609,7 @@ describe('PersonalInformationComponent', () => {
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
     component.personalInfo$.subscribe((person) => (personalInfoValue = person))
-    component.userId$.subscribe((id) => (userIdValue = id))
 
     expect(personalInfoValue).toEqual({})
-    expect(userIdValue).toEqual('')
   })
 })
