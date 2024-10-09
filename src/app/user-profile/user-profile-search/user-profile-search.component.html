@@ -70,7 +70,20 @@
         [emptyResultsMessage]="'USERPROFILE_SEARCH.EMPTY_RESULTS' | translate"
         [supportedViewLayouts]="['grid', 'table']"
         [defaultGroupKey]="'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT'"
+        (viewItem)="onDetail($event)"
+        (deleteItem)="onDelete($event)"
+        [viewPermission]="'USERPROFILE#DELETE'"
+        [deletePermission]="'USERPROFILE#DELETE'"
+        [actionColumnPosition]="'left'"
       >
+        <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
+          <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
+        </ng-template>
+
+        <ng-template pTemplate="dateTableFilterCell" let-rowObject="rowObject" let-column="column">
+          <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
+        </ng-template>
+
         <ng-template #topCenter>
           <ocx-data-view-controls
             [enableSorting]="false"

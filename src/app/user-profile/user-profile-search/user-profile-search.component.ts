@@ -16,7 +16,8 @@ import {
   Filter,
   DataViewControlTranslations,
   InteractiveDataViewComponent,
-  Action
+  Action,
+  UserService
 } from '@onecx/portal-integration-angular'
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
 
@@ -47,6 +48,7 @@ export class UserProfileSearchComponent implements OnInit {
   public sortOrder = 1
   public defaultSortField = 'displayName'
   public dataViewControlsTranslations: DataViewControlTranslations = {}
+  public dateFormat: string
 
   columns: DataTableColumn[] = [
     {
@@ -96,7 +98,7 @@ export class UserProfileSearchComponent implements OnInit {
       ]
     },
     {
-      columnType: ColumnType.STRING,
+      columnType: ColumnType.DATE,
       id: 'creationDate',
       nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.CREATION_DATE',
       filterable: true,
@@ -107,7 +109,7 @@ export class UserProfileSearchComponent implements OnInit {
       ]
     },
     {
-      columnType: ColumnType.STRING,
+      columnType: ColumnType.DATE,
       id: 'modificationDate',
       nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.MODIFICATION_DATE',
       filterable: true,
@@ -138,6 +140,7 @@ export class UserProfileSearchComponent implements OnInit {
 
   constructor(
     private readonly userProfileAdminService: UserProfileAdminAPIService,
+    private readonly user: UserService,
     private readonly fb: UntypedFormBuilder,
     private readonly router: Router,
     private readonly route: ActivatedRoute,
@@ -151,6 +154,7 @@ export class UserProfileSearchComponent implements OnInit {
       userId: null,
       size: 50
     })
+    this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
   }
 
   ngOnInit() {
@@ -243,5 +247,13 @@ export class UserProfileSearchComponent implements OnInit {
   public onFilterChange(filter: string): void {
     this.filterData = filter
     this.resultData$.next(this.resultData$.value)
+  }
+
+  public onDetail(ev: RowListGridData) {
+    console.log('DETAIL EV', ev)
+  }
+
+  public onDelete(ev: RowListGridData) {
+    console.log('DELETE EV', ev)
   }
 }
