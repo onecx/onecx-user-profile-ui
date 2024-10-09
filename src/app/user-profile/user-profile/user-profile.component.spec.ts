@@ -1,11 +1,13 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { UserProfileComponent } from './user-profile.component'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { map, of, throwError } from 'rxjs'
-import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+
+import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
+import { UserProfileComponent } from './user-profile.component'
+import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 
 describe('UserProfileComponent', () => {
   let component: UserProfileComponent
@@ -63,7 +65,6 @@ describe('UserProfileComponent', () => {
     TestBed.configureTestingModule({
       declarations: [UserProfileComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -71,6 +72,8 @@ describe('UserProfileComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
       ]

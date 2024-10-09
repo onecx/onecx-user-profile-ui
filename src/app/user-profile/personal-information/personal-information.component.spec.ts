@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
 import { PersonalInformationComponent } from './personal-information.component'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -8,6 +7,8 @@ import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/a
 import { of } from 'rxjs'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
 
 describe('PersonalInformationComponent', () => {
   let component: PersonalInformationComponent
@@ -72,7 +73,6 @@ describe('PersonalInformationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PersonalInformationComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -80,6 +80,8 @@ describe('PersonalInformationComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: TranslateService, useValue: translateServiceSpy }

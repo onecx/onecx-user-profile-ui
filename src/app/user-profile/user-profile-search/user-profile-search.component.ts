@@ -5,7 +5,6 @@ import {
   DataTableColumn,
   PortalMessageService,
   DiagramType,
-  ExportDataService,
   RowListGridData,
   DiagramColumn,
   Filter,
@@ -120,7 +119,6 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly router: Router,
     private readonly route: ActivatedRoute,
     private readonly portalMessageService: PortalMessageService,
-    private readonly exportDataService: ExportDataService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({

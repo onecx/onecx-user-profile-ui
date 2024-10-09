@@ -2,7 +2,6 @@ import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/cor
 
 import { AccountSettingsComponent } from './account-settings.component'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import {
   ColorScheme,
@@ -13,7 +12,8 @@ import {
 } from 'src/app/shared/generated'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { of, throwError } from 'rxjs'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent
@@ -50,7 +50,6 @@ describe('AccountSettingsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [AccountSettingsComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -58,6 +57,8 @@ describe('AccountSettingsComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy }
       ]

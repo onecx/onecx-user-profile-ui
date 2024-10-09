@@ -2,13 +2,13 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { TestBed } from '@angular/core/testing'
-import { RouterTestingModule } from '@angular/router/testing'
 import { BASE_URL, RemoteComponentConfig } from '@onecx/angular-remote-components'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject } from 'rxjs'
-import { UserAvatarAPIService } from '../shared/generated'
 import { CommonModule } from '@angular/common'
-import { RouterModule } from '@angular/router'
+import { provideRouter, RouterModule } from '@angular/router'
+
+import { UserAvatarAPIService } from '../shared/generated'
 import { OneCXAvatarImageComponent } from './avatar-image.component'
 import { OneCXAvatarImageComponentHarness } from './avatar-image.harness'
 
@@ -40,13 +40,7 @@ describe('OneCXAvatarImageComponent', () => {
       imports: [
         TranslateTestingModule.withTranslations({
           en: require('../../assets/i18n/en.json')
-        }).withDefaultLanguage('en'),
-        RouterTestingModule.withRoutes([
-          {
-            path: 'admin/user',
-            component: {} as any
-          }
-        ])
+        }).withDefaultLanguage('en')
       ],
       providers: [
         provideHttpClient(),
@@ -54,7 +48,8 @@ describe('OneCXAvatarImageComponent', () => {
         {
           provide: BASE_URL,
           useValue: baseUrlSubject
-        }
+        },
+        provideRouter([{ path: '', component: OneCXAvatarImageComponent }])
       ]
     })
       .overrideComponent(OneCXAvatarImageComponent, {

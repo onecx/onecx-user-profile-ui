@@ -1,26 +1,20 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { Router } from '@angular/router'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { of } from 'rxjs'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { TableModule } from 'primeng/table'
 
 import { RolesPermissionsComponent } from './roles-permissions.component'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { HttpClient } from '@angular/common/http'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
-
 import { PortalMessageService } from '@onecx/portal-integration-angular'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
-// import { UserProfileService } from '../user-profile.service'
-import { TableModule } from 'primeng/table'
-import { Router } from '@angular/router'
-import { map, of } from 'rxjs'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { profile } from 'console'
 import { PhoneType, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 
 describe('RolesPermissionsComponent', () => {
   let component: RolesPermissionsComponent
   let fixture: ComponentFixture<RolesPermissionsComponent>
-
-  const authServiceSpy = jasmine.createSpyObj('AUTH_SERVICE', ['getCurrentUser', 'getUserRoles'])
 
   const defaultCurrentUser: UserProfile = {
     userId: '15',
@@ -43,8 +37,6 @@ describe('RolesPermissionsComponent', () => {
     }
   }
 
-  const defaultUserRoles: string[] = ['secondRole', 'firstRole']
-
   const userProfileServiceSpy = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
   }
@@ -60,7 +52,6 @@ describe('RolesPermissionsComponent', () => {
     TestBed.configureTestingModule({
       declarations: [RolesPermissionsComponent],
       imports: [
-        HttpClientTestingModule,
         TableModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -69,6 +60,8 @@ describe('RolesPermissionsComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: Router, useValue: routerMock }
