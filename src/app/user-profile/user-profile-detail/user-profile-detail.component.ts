@@ -1,24 +1,28 @@
-import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
+import { Component, Input, OnInit, OnChanges } from '@angular/core'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
-import { SelectItem } from 'primeng/api'
 import { TranslateService } from '@ngx-translate/core'
+import { SelectItem } from 'primeng/api'
+import { Observable, from, map, mergeMap, of } from 'rxjs'
 import * as countriesInfo from 'i18n-iso-countries'
 
-import { PhoneType } from '@onecx/portal-integration-angular'
-import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
-import { from, map, mergeMap, Observable, of } from 'rxjs'
+import { PhoneType, PortalMessageService } from '@onecx/portal-integration-angular'
+import {
+  UpdateUserPerson,
+  UserProfileAPIService,
+  UserPerson,
+  UserProfileAdminAPIService
+} from 'src/app/shared/generated'
 
 @Component({
-  selector: 'app-personal-info-form',
-  templateUrl: './personal-information.component.html',
-  styleUrls: ['./personal-information.component.scss']
+  selector: 'app-user-profile-detail',
+  templateUrl: './user-profile-detail.component.html'
 })
-export class PersonalInformationComponent implements OnInit, OnChanges {
+export class UserProfileDetailComponent implements OnInit, OnChanges {
+  @Input() public userProfileId: any
   public personalInfo$!: Observable<UserPerson>
+  public messages: { [key: string]: string } = {}
   public userId$!: Observable<string>
-  @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
-
   public addressEdit = false
   public phoneEdit = false
   public countries: SelectItem[] = new Array<SelectItem>()
@@ -32,13 +36,13 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   public formUpdates$: Observable<unknown> | undefined
 
   constructor(
-    public http: HttpClient,
-    public translate: TranslateService,
-    private userProfileService: UserProfileAPIService
+    public readonly http: HttpClient,
+    public readonly translate: TranslateService,
+    private readonly userProfileService: UserProfileAPIService,
+    private readonly userProfileAdminService: UserProfileAdminAPIService,
+    private readonly msgService: PortalMessageService
   ) {
-    // get data and init form only
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
-    //this.userId$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.id || ''))
     this.formGroup = this.initFormGroup()
   }
 
@@ -54,6 +58,13 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(): void {
+    if (this.userProfileId) {
+      console.log('UP ID', this.userProfileId)
+      console.log('Type of userProfileId:', typeof this.userProfileId)
+      this.personalInfo$ = this.userProfileAdminService
+        .getUserProfile({ id: this.userProfileId })
+        .pipe(map((profile) => profile.person || {}))
+    }
     this.formUpdates$ = this.personalInfo$.pipe(
       map((personalInfo) => {
         if (this.formGroup && personalInfo) {
@@ -62,6 +73,22 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
         return undefined
       })
     )
+  }
+  public onPersonalInfoUpdate(person: UserPerson): void {
+    this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
+      next: () => {
+        this.showMessage('success')
+      },
+      error: () => {
+        this.showMessage('error')
+      }
+    })
+  }
+
+  public showMessage(severity: 'success' | 'error'): void {
+    severity === 'success'
+      ? this.msgService.success({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_SUCCESS' })
+      : this.msgService.error({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_ERROR' })
   }
 
   private initFormGroup(): UntypedFormGroup {
@@ -100,7 +127,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
     this.formUpdates$ = this.personalInfo$.pipe(
       map((personalInfo) => {
         personalInfo.address = this.formGroup.value.address
-        this.personalInfoUpdate.emit(personalInfo)
+        this.onPersonalInfoUpdate(personalInfo)
         this.addressEdit = false
         localStorage.removeItem('tkit_user_profile')
         return personalInfo
@@ -130,7 +157,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
     this.formUpdates$ = this.personalInfo$.pipe(
       map((personalInfo) => {
         personalInfo.phone = this.formGroup.value.phone
-        this.personalInfoUpdate.emit(personalInfo)
+        this.onPersonalInfoUpdate(personalInfo)
         this.phoneEdit = false
 
         localStorage.removeItem('tkit_user_profile')

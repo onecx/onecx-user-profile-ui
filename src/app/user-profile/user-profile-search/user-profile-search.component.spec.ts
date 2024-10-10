@@ -1,13 +1,14 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { UserProfileSearchComponent } from './user-profile-search.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { of, throwError } from 'rxjs'
+
+import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { UserProfileSearchComponent } from './user-profile-search.component'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
@@ -82,14 +83,15 @@ describe('UserProfileSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [UserProfileSearchComponent],
       imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
+        provideRouter([{ path: '', component: UserProfileSearchComponent }]),
         { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy }
       ],

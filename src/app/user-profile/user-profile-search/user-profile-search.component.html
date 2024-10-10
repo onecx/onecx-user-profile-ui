@@ -1,10 +1,66 @@
 <ocx-portal-page permission="USERPROFILE#SEARCH">
-  <ocx-page-header
+  <ocx-search-header
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
+    (searched)="search()"
+    (resetted)="resetCriteria()"
     [manualBreadcrumbs]="false"
   >
-  </ocx-page-header>
+    <div [formGroup]="criteriaGroup" class="flex flex-wrap gap-3">
+      <span class="p-float-label">
+        <input
+          id="pm_parameter_search_criteria_first_name"
+          pInputText
+          type="text"
+          formControlName="firstName"
+          class="w-15rem text-responsive"
+          [pTooltip]="'USER_PROFILE.TOOLTIPS.FIRST_NAME' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="parameter_search_criteria_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
+      </span>
+      <span class="p-float-label">
+        <input
+          id="pm_parameter_search_criteria_last_name"
+          pInputText
+          type="text"
+          formControlName="lastName"
+          class="w-15rem text-responsive"
+          [pTooltip]="'USER_PROFILE.TOOLTIPS.LAST_NAME' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="parameter_search_criteria_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
+      </span>
+      <span class="p-float-label">
+        <input
+          id="pm_parameter_search_criteria_email"
+          pInputText
+          type="text"
+          formControlName="email"
+          class="w-15rem text-responsive"
+          [pTooltip]="'USER_PROFILE.TOOLTIPS.EMAIL' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="parameter_search_criteria_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
+      </span>
+      <span class="p-float-label">
+        <input
+          id="pm_parameter_search_criteria_user_id"
+          pInputText
+          type="text"
+          formControlName="userId"
+          class="w-15rem text-responsive"
+          [pTooltip]="'USER_PROFILE.TOOLTIPS.USER_ID' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        />
+        <label for="parameter_search_criteria_user_id">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
+      </span>
+    </div>
+  </ocx-search-header>
 
   <ocx-content-container layout="horizontal" breakpoint="lg">
     <ocx-content class="w-full" [ngClass]="'lg:w-12'" *ngIf="(resultData$ | async)!.length > 0 && !searchError">
@@ -14,7 +70,20 @@
         [emptyResultsMessage]="'USERPROFILE_SEARCH.EMPTY_RESULTS' | translate"
         [supportedViewLayouts]="['grid', 'table']"
         [defaultGroupKey]="'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT'"
+        (viewItem)="onDetail($event)"
+        (deleteItem)="onDelete($event)"
+        [viewPermission]="'USERPROFILE#DELETE'"
+        [deletePermission]="'USERPROFILE#DELETE'"
+        [actionColumnPosition]="'left'"
       >
+        <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
+          <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
+        </ng-template>
+
+        <ng-template pTemplate="dateTableFilterCell" let-rowObject="rowObject" let-column="column">
+          <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
+        </ng-template>
+
         <ng-template #topCenter>
           <ocx-data-view-controls
             [enableSorting]="false"
@@ -81,3 +150,53 @@
     </ocx-content>
   </ocx-content-container>
 </ocx-portal-page>
+
+<p-dialog
+  [(visible)]="displayDeleteDialog"
+  [header]="'ACTIONS.DELETE.USER' | translate"
+  [modal]="true"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ 'max-width': '500px' }"
+>
+  <div class="flex column-gap-3 row-gap-1 justify-content-start align-items-center">
+    <div class="pi pi-question-circle text-3xl danger-action-text"></div>
+    <div>
+      <div id="up_user_delete_message_text" class="font-bold">{{ 'ACTIONS.DELETE.MESSAGE_TEXT' | translate }}</div>
+      <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_INFO' | translate }}</div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-content-end column-gap-2 row-gap-1">
+      <p-button
+        id="up_user_delete_button_no"
+        icon="pi pi-times"
+        (onClick)="displayDeleteDialog = false"
+        [label]="'ACTIONS.CONFIRMATION.NO' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.NO.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+      <p-button
+        id="up_user_delete_button_yes"
+        icon="pi pi-check"
+        (onClick)="onDeleteConfirmation()"
+        [label]="'ACTIONS.CONFIRMATION.YES' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.YES.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayDetailDialog"
+  [header]="'ACTIONS.VIEW.USER' | translate"
+  [modal]="true"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ 'max-width': '800px' }"
+>
+  <app-user-profile-detail [userProfileId]="userProfile?.id"></app-user-profile-detail>
+</p-dialog>

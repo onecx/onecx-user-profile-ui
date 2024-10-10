@@ -53,8 +53,8 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   public placeHolderPath = ''
 
   constructor(
-    @Inject(BASE_URL) private baseUrl: ReplaySubject<string>,
-    private avatarService: UserAvatarAPIService
+    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    private readonly avatarService: UserAvatarAPIService
   ) {}
 
   @Input() set ocxRemoteComponentConfig(config: RemoteComponentConfig) {

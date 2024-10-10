@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 
 import { LocaleTimezoneComponent } from './locale-timezone.component'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { ConfigurationService, UserService } from '@onecx/portal-integration-angular'
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { of, throwError } from 'rxjs'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
 import { By } from '@angular/platform-browser'
+import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
 
 describe('LocaleTimezoneComponent', () => {
   let component: LocaleTimezoneComponent
@@ -24,7 +24,6 @@ describe('LocaleTimezoneComponent', () => {
     TestBed.configureTestingModule({
       declarations: [LocaleTimezoneComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -32,6 +31,8 @@ describe('LocaleTimezoneComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: ConfigurationService, useValue: configServiceSpy },
         { provide: UserService, useValue: userServiceSpy },
         { provide: LOCALE_ID, useValue: 'de=DE' }

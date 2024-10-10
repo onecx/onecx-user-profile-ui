@@ -1,23 +1,25 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
+import { SelectItem } from 'primeng/api'
+import { ActivatedRoute, Router } from '@angular/router'
+
 import {
   ColumnType,
   DataTableColumn,
   PortalMessageService,
   DiagramType,
-  ExportDataService,
   RowListGridData,
   DiagramColumn,
   Filter,
   DataViewControlTranslations,
-  InteractiveDataViewComponent
+  InteractiveDataViewComponent,
+  Action,
+  UserService
 } from '@onecx/portal-integration-angular'
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
-import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
-import { SelectItem } from 'primeng/api'
-import { ActivatedRoute, Router } from '@angular/router'
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { BehaviorSubject, combineLatest } from 'rxjs'
 
 @Component({
   selector: 'app-user-profile-search',
@@ -33,10 +35,11 @@ export class UserProfileSearchComponent implements OnInit {
   criteriaGroup: UntypedFormGroup
   sumKey = 'USERPROFILE_SEARCH.DIAGRAM.SUM'
   subtitleLineIds: string[] = ['firstName', 'lastName', 'email']
+  public actions$: Observable<Action[]> | undefined
 
   /* ocx-data-view-controls settings*/
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
-  // public viewMode = 'grid'
+  public userProfile: RowListGridData | undefined
   public quickFilterValue = 'ALL'
   public quickFilterItems: SelectItem[] = []
   public filterValue: string | undefined
@@ -46,25 +49,16 @@ export class UserProfileSearchComponent implements OnInit {
   public sortOrder = 1
   public defaultSortField = 'displayName'
   public dataViewControlsTranslations: DataViewControlTranslations = {}
+  public dateFormat: string
+  public displayDeleteDialog = false
+  public displayDetailDialog = false
 
   columns: DataTableColumn[] = [
     {
       columnType: ColumnType.STRING,
-      id: 'displayName',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.DISPLAYNAME',
-      filterable: true,
-      sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.FULL'
-      ]
-    },
-    {
-      columnType: ColumnType.STRING,
       id: 'firstName',
       nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.FIRSTNAME',
-      filterable: true,
+      filterable: false,
       sortable: true,
       predefinedGroupKeys: [
         'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
@@ -76,7 +70,7 @@ export class UserProfileSearchComponent implements OnInit {
       columnType: ColumnType.STRING,
       id: 'lastName',
       nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.LASTNAME',
-      filterable: true,
+      filterable: false,
       sortable: true,
       predefinedGroupKeys: [
         'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
@@ -88,6 +82,39 @@ export class UserProfileSearchComponent implements OnInit {
       columnType: ColumnType.STRING,
       id: 'email',
       nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.EMAIL',
+      filterable: false,
+      sortable: true,
+      predefinedGroupKeys: [
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
+      ]
+    },
+    {
+      columnType: ColumnType.STRING,
+      id: 'userId',
+      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.ID',
+      filterable: false,
+      sortable: true,
+      predefinedGroupKeys: [
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
+      ]
+    },
+    {
+      columnType: ColumnType.DATE,
+      id: 'creationDate',
+      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.CREATION_DATE',
+      filterable: true,
+      sortable: true,
+      predefinedGroupKeys: [
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
+      ]
+    },
+    {
+      columnType: ColumnType.DATE,
+      id: 'modificationDate',
+      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.MODIFICATION_DATE',
       filterable: true,
       sortable: true,
       predefinedGroupKeys: [
@@ -115,20 +142,22 @@ export class UserProfileSearchComponent implements OnInit {
   supportedDiagramTypes: DiagramType[] = [DiagramType.PIE, DiagramType.HORIZONTAL_BAR, DiagramType.VERTICAL_BAR]
 
   constructor(
-    private userProfileAdminService: UserProfileAdminAPIService,
-    private fb: UntypedFormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private portalMessageService: PortalMessageService,
-    private readonly exportDataService: ExportDataService,
-    @Inject(LOCALE_ID) public locale: string
+    private readonly userProfileAdminService: UserProfileAdminAPIService,
+    private readonly user: UserService,
+    private readonly fb: UntypedFormBuilder,
+    private readonly router: Router,
+    private readonly route: ActivatedRoute,
+    private readonly portalMessageService: PortalMessageService,
+    @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
       email: null,
+      userId: null,
       size: 50
     })
+    this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
   }
 
   ngOnInit() {
@@ -151,7 +180,7 @@ export class UserProfileSearchComponent implements OnInit {
           if (this.filterData.trim()) {
             const lowerCaseFilter = this.filterData.toLowerCase()
             return array.filter((item) => {
-              return ['firstName', 'lastName', 'displayName', 'email'].some((key) => {
+              return ['firstName', 'lastName', 'displayName', 'userId'].some((key) => {
                 const value = item[key]
                 return value?.toString().toLowerCase().includes(lowerCaseFilter)
               })
@@ -211,11 +240,59 @@ export class UserProfileSearchComponent implements OnInit {
       })
   }
 
+  public resetCriteria(): void {
+    this.criteriaGroup.reset()
+  }
+
   /**
    * UI EVENTS
    */
   public onFilterChange(filter: string): void {
     this.filterData = filter
     this.resultData$.next(this.resultData$.value)
+  }
+
+  public onDetail(ev: RowListGridData) {
+    this.resultData$
+      .pipe(
+        map((results) => {
+          results.forEach((result) => {
+            if (result.id === ev.id) this.userProfile = result
+          })
+          console.log('SEARCH UP ID', this.userProfile)
+        })
+      )
+      .subscribe()
+    this.displayDetailDialog = true
+  }
+  public onCloseDetail(): void {
+    this.displayDetailDialog = false
+  }
+
+  public onDelete(ev: RowListGridData): void {
+    this.resultData$
+      .pipe(
+        map((results) => {
+          results.forEach((result) => {
+            if (result.id === ev.id) this.userProfile = result
+          })
+        })
+      )
+      .subscribe()
+    this.displayDeleteDialog = true
+  }
+  public onDeleteConfirmation(): void {
+    const id: any = this.userProfile?.id
+    if (id) {
+      this.userProfileAdminService.deleteUserProfile({ id: id?.toString() }).subscribe({
+        next: () => {
+          this.displayDeleteDialog = false
+          this.userProfile = undefined
+          this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
+        },
+        error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
+      })
+    }
+    this.search()
   }
 }
