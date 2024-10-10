@@ -150,3 +150,57 @@
     </ocx-content>
   </ocx-content-container>
 </ocx-portal-page>
+
+<p-dialog
+  [(visible)]="displayDeleteDialog"
+  [header]="'ACTIONS.DELETE.USER' | translate"
+  [modal]="true"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ 'max-width': '500px' }"
+>
+  <div class="flex column-gap-3 row-gap-1 justify-content-start align-items-center">
+    <div class="pi pi-question-circle text-3xl danger-action-text"></div>
+    <div>
+      <div id="up_user_delete_message_text" class="font-bold">{{ 'ACTIONS.DELETE.MESSAGE_TEXT' | translate }}</div>
+      <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_INFO' | translate }}</div>
+    </div>
+  </div>
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-content-end column-gap-2 row-gap-1">
+      <p-button
+        id="up_user_delete_button_no"
+        icon="pi pi-times"
+        (onClick)="displayDeleteDialog = false"
+        [label]="'ACTIONS.CONFIRMATION.NO' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.NO.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+      <p-button
+        id="up_user_delete_button_yes"
+        icon="pi pi-check"
+        (onClick)="onDeleteConfirmation()"
+        [label]="'ACTIONS.CONFIRMATION.YES' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.YES.TOOLTIP' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<p-dialog
+  [(visible)]="displayDetailDialog"
+  [header]="'ACTIONS.VIEW.USER' | translate"
+  [modal]="true"
+  [resizable]="false"
+  [dismissableMask]="true"
+  [style]="{ 'max-width': '800px' }"
+>
+  <app-user-profile-detail
+    [displayDetailDialog]="displayDetailDialog"
+    (hideDialog)="onCloseDetail()"
+    [userProfileId]="userProfile?.['userId']"
+  ></app-user-profile-detail>
+</p-dialog>

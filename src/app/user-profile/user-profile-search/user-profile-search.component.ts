@@ -39,6 +39,7 @@ export class UserProfileSearchComponent implements OnInit {
 
   /* ocx-data-view-controls settings*/
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
+  public userProfile: RowListGridData | undefined
   public quickFilterValue = 'ALL'
   public quickFilterItems: SelectItem[] = []
   public filterValue: string | undefined
@@ -49,6 +50,8 @@ export class UserProfileSearchComponent implements OnInit {
   public defaultSortField = 'displayName'
   public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
+  public displayDeleteDialog = false
+  public displayDetailDialog = false
 
   columns: DataTableColumn[] = [
     {
@@ -250,10 +253,45 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public onDetail(ev: RowListGridData) {
-    console.log('DETAIL EV', ev)
+    this.resultData$
+      .pipe(
+        map((results) => {
+          results.forEach((result) => {
+            if (result.id === ev.id) this.userProfile = result
+          })
+        })
+      )
+      .subscribe()
+    this.displayDetailDialog = true
+  }
+  public onCloseDetail(): void {
+    this.displayDetailDialog = false
   }
 
-  public onDelete(ev: RowListGridData) {
-    console.log('DELETE EV', ev)
+  public onDelete(ev: RowListGridData): void {
+    this.resultData$
+      .pipe(
+        map((results) => {
+          results.forEach((result) => {
+            if (result.id === ev.id) this.userProfile = result
+          })
+        })
+      )
+      .subscribe()
+    this.displayDeleteDialog = true
+  }
+  public onDeleteConfirmation(): void {
+    const id: any = this.userProfile?.['userId']
+    if (id) {
+      this.userProfileAdminService.deleteUserProfile({ id: id?.toString() }).subscribe({
+        next: () => {
+          this.displayDeleteDialog = false
+          this.userProfile = undefined
+          this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
+        },
+        error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
+      })
+    }
+    this.search()
   }
 }

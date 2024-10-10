@@ -22,6 +22,17 @@
       "SORT_BY": "Sortieren nach",
       "SORT_DIRECTION_ASC": "aufsteigend",
       "SORT_DIRECTION_DESC": "absteigend"
+    },
+    "DELETE": {
+      "LABEL": "Löschen",
+      "ANNOUNCEMENT": "Nutzerprofil löschen",
+      "ANNOUNCEMENT.TOOLTIP": "Diese Nutzerprofil löschen",
+      "MESSAGE_TEXT": "Möchten Sie dieses Nutzerprofil löschen?",
+      "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
+      "MESSAGE": {
+        "OK": "Die Nutzerprofil wurde erfolgreich gelöscht",
+        "NOK": "Ein Fehler ist aufgetreten. Die Nutzerprofil wurde nicht gelöscht."
+      }
     }
   },
   "GENERAL": {
@@ -241,6 +252,7 @@
       "LASTNAME": "Nachname",
       "DISPLAYNAME": "Angezeigter Name",
       "EMAIL": "E-Mail",
+      "CREATION_DATE": "Erstellungsdatum",
       "MODIFICATION_DATE": "Änderungsdatum",
       "CREATION_USER": "Erstellungsbenutzer"
     },

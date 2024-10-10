@@ -1,24 +1,40 @@
-import { Component } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { Observable, map } from 'rxjs'
-import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+import {
+  UpdateUserPerson,
+  UserProfileAPIService,
+  UserPerson,
+  UserProfileAdminAPIService
+} from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-profile-detail',
   templateUrl: './user-profile-detail.component.html'
 })
-export class UserProfileDetailComponent {
-  public personalInfo$: Observable<UserPerson>
+export class UserProfileDetailComponent implements OnChanges {
+  public personalInfo$!: Observable<UserPerson>
   public messages: { [key: string]: string } = {}
+  @Input() public displayDetailDialog = false
+  @Input() public userProfileId: any
+  @Output() public hideDialog = new EventEmitter<boolean>()
 
   constructor(
     public readonly translate: TranslateService,
     private readonly userProfileService: UserProfileAPIService,
+    private readonly userProfileAdminService: UserProfileAdminAPIService,
     private readonly msgService: PortalMessageService
-  ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+  ) {}
+
+  ngOnChanges(): void {
+    if (this.userProfileId) {
+      console.log('UP', this.userProfileId)
+      this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId?.toString() })
+    } else {
+      this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+    }
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {
