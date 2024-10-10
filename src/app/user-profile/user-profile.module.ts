@@ -12,7 +12,6 @@ import { AccountSettingsComponent } from 'src/app/user-profile/account-settings/
 import { AvatarComponent } from 'src/app/user-profile/avatar/avatar.component'
 import { LayoutThemeComponent } from 'src/app/user-profile/layout-theme/layout-theme.component'
 import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/locale-timezone.component'
-import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
 import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
 import { UserProfileDetailComponent } from 'src/app/user-profile/user-profile-detail/user-profile-detail.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
@@ -51,7 +50,6 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     UserProfileDetailComponent,
-    PersonalInformationComponent,
     AvatarComponent,
     AccountSettingsComponent,
     LayoutThemeComponent,
