@@ -6,7 +6,7 @@
   >
   </ocx-page-header>
 
-  <!-- if userProfileId empty, then show header -->
+  <!-- if userProfileId empty, show header -->
 
   <form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
     <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo$ | async as person">
