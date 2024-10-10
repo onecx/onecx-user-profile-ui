@@ -6,10 +6,10 @@ import { Observable, map } from 'rxjs'
 import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 
 @Component({
-  selector: 'app-user-profile',
-  templateUrl: './user-profile.component.html'
+  selector: 'app-user-profile-detail',
+  templateUrl: './user-profile-detail.component.html'
 })
-export class UserProfileComponent {
+export class UserProfileDetailComponent {
   public personalInfo$: Observable<UserPerson>
   public messages: { [key: string]: string } = {}
 

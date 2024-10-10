@@ -6,12 +6,12 @@ import { map, of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
-import { UserProfileComponent } from './user-profile.component'
+import { UserProfileDetailComponent } from './user-profile-detail.component'
 import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 
-describe('UserProfileComponent', () => {
-  let component: UserProfileComponent
-  let fixture: ComponentFixture<UserProfileComponent>
+describe('UserProfileDetailComponent', () => {
+  let component: UserProfileDetailComponent
+  let fixture: ComponentFixture<UserProfileDetailComponent>
 
   const userProfileServiceSpy = {
     updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
@@ -63,7 +63,7 @@ describe('UserProfileComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserProfileComponent],
+      declarations: [UserProfileDetailComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -82,7 +82,7 @@ describe('UserProfileComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserProfileComponent)
+    fixture = TestBed.createComponent(UserProfileDetailComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
     userProfileServiceSpy.updateUserPerson.calls.reset()
