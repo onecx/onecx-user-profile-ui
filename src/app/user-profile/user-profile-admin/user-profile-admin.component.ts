@@ -3,12 +3,7 @@ import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { map, Observable, tap } from 'rxjs'
-import {
-  UpdateUserPerson,
-  UserProfileAPIService,
-  UserPerson,
-  UserProfileAdminAPIService
-} from 'src/app/shared/generated'
+import { UpdateUserPerson, UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-profile-admin',
@@ -24,15 +19,14 @@ export class UserProfileAdminComponent implements OnChanges {
 
   constructor(
     public readonly translate: TranslateService,
-    private readonly userProfileService: UserProfileAPIService,
     private readonly userProfileAdminService: UserProfileAdminAPIService,
     private readonly msgService: PortalMessageService
   ) {}
 
   ngOnChanges(): void {
     if (this.userProfileId) {
-      this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId?.toString() }).pipe(
-        tap((profile) => (this.tenantId = profile.tenantId!)),
+      this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId.toString() }).pipe(
+        tap((profile) => (this.tenantId = profile.tenantId ?? '')),
         map((profile) => {
           return profile.person || {}
         })
@@ -41,14 +35,16 @@ export class UserProfileAdminComponent implements OnChanges {
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {
-    this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
-      next: () => {
-        this.showMessage('success')
-      },
-      error: () => {
-        this.showMessage('error')
-      }
-    })
+    this.userProfileAdminService
+      .updateUserProfile({ id: this.userProfileId, updateUserPersonRequest: person as UpdateUserPerson })
+      .subscribe({
+        next: () => {
+          this.showMessage('success')
+        },
+        error: () => {
+          this.showMessage('error')
+        }
+      })
   }
 
   public showMessage(severity: 'success' | 'error'): void {

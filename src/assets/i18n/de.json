@@ -259,8 +259,8 @@
     "FIRSTNAME": "Vorname",
     "LASTNAME": "Nachname",
     "EMAIL": "E-Mail",
-    "MODIFICATION_DATE": "Änderungsdatum",
-    "CREATION_USER": "Erstellungsbenutzer",
+    "MODIFICATION_DATE": "Geändert am",
+    "CREATION_USER": "Erstellt von",
     "COLUMN_HEADER_NAME": {
       "ID": "Benutzer-ID",
       "FIRSTNAME": "Vorname",
@@ -268,9 +268,9 @@
       "DISPLAYNAME": "Angezeigter Name",
       "EMAIL": "E-Mail",
       "TENANT": "Tenant-ID",
-      "CREATION_DATE": "Erstellungsdatum",
-      "MODIFICATION_DATE": "Änderungsdatum",
-      "CREATION_USER": "Erstellungsbenutzer"
+      "CREATION_DATE": "Erstellt am",
+      "MODIFICATION_DATE": "Geändert am",
+      "CREATION_USER": "Erstellt von"
     },
     "PREDEFINED_GROUP": {
       "DEFAULT": "Standard",
