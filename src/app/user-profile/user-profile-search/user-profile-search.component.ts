@@ -56,81 +56,66 @@ export class UserProfileSearchComponent implements OnInit {
     {
       columnType: ColumnType.STRING,
       id: 'firstName',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.FIRSTNAME',
+      nameKey: 'USER_PROFILE.FIRST_NAME',
       filterable: false,
       sortable: true,
       predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.FULL'
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
       ]
     },
     {
       columnType: ColumnType.STRING,
       id: 'lastName',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.LASTNAME',
+      nameKey: 'USER_PROFILE.LAST_NAME',
       filterable: false,
       sortable: true,
       predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.FULL'
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
       ]
     },
     {
       columnType: ColumnType.STRING,
       id: 'email',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.EMAIL',
+      nameKey: 'USER_PROFILE.EMAIL',
       filterable: false,
       sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
-      ]
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     },
     {
       columnType: ColumnType.STRING,
       id: 'tenantId',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.TENANT',
+      nameKey: 'USER_PROFILE.TENANT',
       filterable: false,
       sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
-      ]
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     },
     {
       columnType: ColumnType.STRING,
       id: 'userId',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.ID',
+      nameKey: 'USER_PROFILE.USER_ID',
       filterable: false,
       sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
-      ]
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     },
     {
       columnType: ColumnType.DATE,
       id: 'creationDate',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.CREATION_DATE',
+      nameKey: 'INTERNAL.CREATION_DATE',
       filterable: true,
       sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
-      ]
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     },
     {
       columnType: ColumnType.DATE,
       id: 'modificationDate',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.MODIFICATION_DATE',
+      nameKey: 'INTERNAL.MODIFICATION_DATE',
       filterable: true,
       sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
-      ]
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     }
   ]
 
@@ -226,8 +211,8 @@ export class UserProfileSearchComponent implements OnInit {
         next: (stream) => {
           if (stream.length === 0) {
             this.portalMessageService.success({
-              summaryKey: 'USERPROFILE_SEARCH.MESSAGE.SUCCESS',
-              detailKey: 'USERPROFILE_SEARCH.MESSAGE.NO_RESULTS'
+              summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
+              detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_RESULTS'
             })
           }
           clearTimeout(clearTable)

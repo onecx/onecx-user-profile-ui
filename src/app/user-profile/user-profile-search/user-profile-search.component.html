@@ -69,7 +69,7 @@
         [columns]="columns"
         [emptyResultsMessage]="'USERPROFILE_SEARCH.EMPTY_RESULTS' | translate"
         [supportedViewLayouts]="['grid', 'table']"
-        [defaultGroupKey]="'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT'"
+        [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
         (viewItem)="onDetail($event)"
         (deleteItem)="onDelete($event)"
         [viewPermission]="'USERPROFILE#VIEW'"
@@ -90,9 +90,9 @@
             [enableFiltering]="true"
             (filterChange)="onFilterChange($event)"
             [filterColumns]="[
-              'USERPROFILE_SEARCH.FIRSTNAME' | translate,
-              'USERPROFILE_SEARCH.LASTNAME' | translate,
-              'USERPROFILE_SEARCH.EMAIL' | translate
+              'USER_PROFILE.FIRST_NAME' | translate,
+              'USER_PROFILE.LAST_NAME' | translate,
+              'USER_PROFILE.EMAIL' | translate
             ]"
             [translations]="dataViewControlsTranslations"
           >
@@ -125,28 +125,6 @@
           </div>
         </ng-template>
       </ocx-interactive-data-view>
-    </ocx-content>
-
-    <ocx-content *ngIf="!searchExecuted" class="w-full">
-      <div class="flex justify-content-center">
-        <p-message
-          *ngIf="!searchExecuted"
-          severity="info"
-          text="{{ 'USERPROFILE_SEARCH.MSG_BEFORE_FIRST_SEARCH' | translate }}"
-        ></p-message>
-      </div>
-    </ocx-content>
-
-    <ocx-content *ngIf="searchExecuted && !searchError && resultData$ === null" class="w-full">
-      <div class="flex justify-content-center">
-        <p-message severity="info" text="{{ 'USERPROFILE_SEARCH.MSG_NO_RESULTS' | translate }}"></p-message>
-      </div>
-    </ocx-content>
-
-    <ocx-content *ngIf="searchError" class="w-full">
-      <div class="flex justify-content-center">
-        <p-message severity="error" text="{{ 'USERPROFILE_SEARCH.MSG_SEARCH_FAILED' | translate }}"></p-message>
-      </div>
     </ocx-content>
   </ocx-content-container>
 </ocx-portal-page>

@@ -21,12 +21,21 @@
       "RELOAD": "Daten neu laden",
       "SORT_BY": "Sortieren nach",
       "SORT_DIRECTION_ASC": "aufsteigend",
-      "SORT_DIRECTION_DESC": "absteigend"
+      "SORT_DIRECTION_DESC": "absteigend",
+      "PREDEFINED_GROUP": {
+        "DEFAULT": "Standard",
+        "EXTENDED": "Erweitert",
+        "FULL": "Voll"
+      },
+      "MESSAGE": {
+        "SUCCESS": "Erfolg",
+        "NO_RESULTS": "Keine Ergebnisse"
+      }
     },
     "DELETE": {
       "LABEL": "Löschen",
-      "ANNOUNCEMENT": "Nutzerprofil löschen",
-      "ANNOUNCEMENT.TOOLTIP": "Diese Nutzerprofil löschen",
+      "USER": "Nutzerprofil löschen",
+      "USER.TOOLTIP": "Diese Nutzerprofil löschen",
       "MESSAGE_TEXT": "Möchten Sie dieses Nutzerprofil löschen?",
       "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
       "MESSAGE": {
@@ -35,24 +44,24 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "View user profile"
+      "USER_PROFILE": "Nutzerprofil ansehen"
+    },
+    "GENERAL": {
+      "APPLY": "Anwenden",
+      "APPLY.TOOLTIP": "Die Seite neu laden, um die Änderung sofort zu sehen",
+      "EDIT": "Bearbeiten",
+      "EDIT.TOOLTIP": "In den Bearbeitungsmodus wechseln",
+      "FILTER_CLEAR": "Filter löschen",
+      "CHANGE": "Ändern",
+      "REMOVE": "Entfernen",
+      "RELOAD": "Neu laden",
+      "SAVE": "Speichern",
+      "SAVE.TOOLTIP": "Speichern",
+      "CLOSE": "Schließen",
+      "CLOSE.TOOLTIP": "Schließen",
+      "CANCEL": "Abbrechen",
+      "CANCEL.TOOLTIP": "Bearbeitung abbrechen, ohne zu speichern"
     }
-  },
-  "GENERAL": {
-    "APPLY": "Anwenden",
-    "APPLY.TOOLTIP": "Die Seite neu laden um die Änderung sofort zu sehen",
-    "EDIT": "Bearbeiten",
-    "EDIT.TOOLTIP": "In den Bearbeitungsmodus wechseln",
-    "FILTER_CLEAR": "Filter löschen",
-    "CHANGE": "Ändern",
-    "REMOVE": "Entfernen",
-    "RELOAD": "Neu laden",
-    "SAVE": "Speichern",
-    "SAVE.TOOLTIP": "Speichern",
-    "CLOSE": "Schließen",
-    "CLOSE.TOOLTIP": "Schließen",
-    "CANCEL": "Abbrechen",
-    "CANCEL.TOOLTIP": "Bearbeitung abbrechen, ohne zu speichern"
   },
   "PROFILE": {
     "SUBHEADER": "Persönliche Daten verwalten",
@@ -62,17 +71,19 @@
       "PERMISSIONS": "Berechtigungen"
     }
   },
-  "USER_PROFILE": {
-    "FIRST_NAME": "Vorname",
-    "FIRST_NAME.TOOLTIP": "Vorname des Nutzers",
-    "LAST_NAME": "Nachname",
-    "LAST_NAME.TOOLTIP": "Nachname des Nutzers",
-    "USER_ID": "Benutzer-ID",
-    "USER_ID.TOOLTIP": "Benutzer-ID aus dem IAM-Service",
-    "EMAIL": "E-Mail-Adresse",
-    "EMAIL.TOOLTIP": "E-Mail-Adresse"
+  "INTERNAL": {
+    "CREATION_DATE": "Created on",
+    "CREATION_USER": "Created by",
+    "MODIFICATION_DATE": "Changed on",
+    "MODIFICATION_USER": "Changed by",
+    "TOOLTIPS": {
+      "CREATION_DATE": "Timestamp of the creation",
+      "CREATION_USER": "ID of the user of the creation",
+      "MODIFICATION_DATE": "Timestamp of the last change",
+      "MODIFICATION_USER": "ID of the user of the last change"
+    }
   },
-  "PERSONAL_INFO_FORM": {
+  "USER_PROFILE": {
     "HEADER": {
       "GENERAL": "Persönliche Informationen",
       "ADDRESS": "Adresse",
@@ -82,10 +93,8 @@
     "FIRST_NAME.TOOLTIP": "Vorname des Nutzers",
     "LAST_NAME": "Nachname",
     "LAST_NAME.TOOLTIP": "Nachname des Nutzers",
-    "DISPLAY_NAME": "Anzeigename",
-    "ID": "Benutzer-ID",
-    "ID.TOOLTIP": "Benutzer-ID des Nutzers",
-    "USERNAME": "Benutzername",
+    "USER_ID": "Benutzer-ID",
+    "USER_ID.TOOLTIP": "Benutzer-ID aus dem IAM-Service",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse",
     "TENANT": "Tenant-ID",
@@ -101,9 +110,6 @@
     "HOUSE_NUMBER": "Hausnummer",
     "HOUSE_NUMBER.TOOLTIP": "Hausnummer des Nutzers",
     "NUMBER": "Nummer",
-    "TAKE_OVER": "Übernehmen",
-    "EXIT_EDITING": "Bearbeitung beenden",
-    "CLEAR_FORM": "Alle löschen",
     "PHONE_TYPE": "Telefontyp",
     "PHONE_TYPE.TOOLTIP": "Typ der Telefonnummer",
     "PHONE": {
@@ -116,10 +122,6 @@
       "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
       "SAVE_ERROR": "Daten konnten nicht gespeichert werden"
     }
-  },
-  "SEARCH": {
-    "ACTION": "Aktion",
-    "NO_DATA": "Keine Daten"
   },
   "SETTINGS": {
     "SUBHEADER": "Meine Einstellungen",
@@ -248,42 +250,6 @@
   },
   "PREFERENCES": {
     "TAB_NAME_PREFERENCES": "Vorlieben"
-  },
-  "USERPROFILE_SEARCH": {
-    "USERPROFILE_MODULE": "onecx-user-profile",
-    "SEARCH": "Suche",
-    "EMPTY_RESULTS": "Keine Ergebnisse",
-    "MSG_BEFORE_FIRST_SEARCH": "Beginnen Sie eine Suche, um Ereignisse zu finden",
-    "CHANGE_CRITERIA": "Suchkriterien wechseln",
-    "ID": "Benutzer-ID",
-    "FIRSTNAME": "Vorname",
-    "LASTNAME": "Nachname",
-    "EMAIL": "E-Mail",
-    "MODIFICATION_DATE": "Geändert am",
-    "CREATION_USER": "Erstellt von",
-    "COLUMN_HEADER_NAME": {
-      "ID": "Benutzer-ID",
-      "FIRSTNAME": "Vorname",
-      "LASTNAME": "Nachname",
-      "DISPLAYNAME": "Angezeigter Name",
-      "EMAIL": "E-Mail",
-      "TENANT": "Tenant-ID",
-      "CREATION_DATE": "Erstellt am",
-      "MODIFICATION_DATE": "Geändert am",
-      "CREATION_USER": "Erstellt von"
-    },
-    "PREDEFINED_GROUP": {
-      "DEFAULT": "Standard",
-      "EXTENDED": "Erweitert",
-      "FULL": "Voll"
-    },
-    "MESSAGE": {
-      "SUCCESS": "Erfolg",
-      "NO_RESULTS": "Keine Ergebnisse"
-    },
-    "MENU_ITEM": {
-      "SHOW_HIDE_SUMMARY": "Zusammenfassung anzeigen/ausblenden"
-    }
   },
   "BREADCRUMBS": {
     "SEARCH": "Suche"

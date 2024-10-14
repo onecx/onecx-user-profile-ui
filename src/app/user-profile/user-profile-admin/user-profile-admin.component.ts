@@ -49,7 +49,7 @@ export class UserProfileAdminComponent implements OnChanges {
 
   public showMessage(severity: 'success' | 'error'): void {
     severity === 'success'
-      ? this.msgService.success({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_SUCCESS' })
-      : this.msgService.error({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_ERROR' })
+      ? this.msgService.success({ summaryKey: 'USER_PROFILE.MSG.SAVE_SUCCESS' })
+      : this.msgService.error({ summaryKey: 'USER_PROFILE.MSG.SAVE_ERROR' })
   }
 }
