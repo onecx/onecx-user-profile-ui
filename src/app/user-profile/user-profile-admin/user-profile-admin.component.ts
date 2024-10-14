@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
-import { Observable, map } from 'rxjs'
+import { map, Observable } from 'rxjs'
 import {
   UpdateUserPerson,
   UserProfileAPIService,
@@ -11,10 +11,10 @@ import {
 } from 'src/app/shared/generated'
 
 @Component({
-  selector: 'app-user-profile-detail',
-  templateUrl: './user-profile-detail.component.html'
+  selector: 'app-user-profile-admin',
+  templateUrl: './user-profile-admin.component.html'
 })
-export class UserProfileDetailComponent {
+export class UserProfileAdminComponent implements OnChanges {
   public personalInfo$!: Observable<UserPerson>
   public messages: { [key: string]: string } = {}
   @Input() public displayDetailDialog = false
@@ -26,8 +26,18 @@ export class UserProfileDetailComponent {
     private readonly userProfileService: UserProfileAPIService,
     private readonly userProfileAdminService: UserProfileAdminAPIService,
     private readonly msgService: PortalMessageService
-  ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+  ) {}
+
+  ngOnChanges(): void {
+    console.log('UP', this.userProfileId)
+    this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId?.toString() })
+    this.personalInfo$
+      .pipe(
+        map((info) => {
+          console.log('INFO', info)
+        })
+      )
+      .subscribe()
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {

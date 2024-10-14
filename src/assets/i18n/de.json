@@ -33,6 +33,9 @@
         "OK": "Die Nutzerprofil wurde erfolgreich gelöscht",
         "NOK": "Ein Fehler ist aufgetreten. Die Nutzerprofil wurde nicht gelöscht."
       }
+    },
+    "VIEW": {
+      "USER_PROFILE": "View user profile"
     }
   },
   "GENERAL": {
@@ -58,6 +61,16 @@
       "SETTINGS": "Einstellungen",
       "PERMISSIONS": "Berechtigungen"
     }
+  },
+  "USER_PROFILE": {
+    "FIRST_NAME": "Vorname",
+    "FIRST_NAME.TOOLTIP": "Vorname des Nutzers",
+    "LAST_NAME": "Nachname",
+    "LAST_NAME.TOOLTIP": "Nachname des Nutzers",
+    "USER_ID": "Benutzer-ID",
+    "USER_ID.TOOLTIP": "Benutzer-ID des Nutzers",
+    "EMAIL": "E-Mail-Adresse",
+    "EMAIL.TOOLTIP": "E-Mail-Adresse"
   },
   "PERSONAL_INFO_FORM": {
     "HEADER": {
@@ -240,14 +253,14 @@
     "EMPTY_RESULTS": "Keine Ergebnisse",
     "MSG_BEFORE_FIRST_SEARCH": "Beginnen Sie eine Suche, um Ereignisse zu finden",
     "CHANGE_CRITERIA": "Suchkriterien wechseln",
-    "ID": "Id",
+    "ID": "Benutzer-ID",
     "FIRSTNAME": "Vorname",
     "LASTNAME": "Nachname",
     "EMAIL": "E-Mail",
     "MODIFICATION_DATE": "Änderungsdatum",
     "CREATION_USER": "Erstellungsbenutzer",
     "COLUMN_HEADER_NAME": {
-      "ID": "Id",
+      "ID": "Benutzer-ID",
       "FIRSTNAME": "Vorname",
       "LASTNAME": "Nachname",
       "DISPLAYNAME": "Angezeigter Name",

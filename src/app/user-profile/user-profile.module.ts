@@ -15,6 +15,7 @@ import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/lo
 import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
 import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
 import { UserProfileDetailComponent } from 'src/app/user-profile/user-profile-detail/user-profile-detail.component'
+import { UserProfileAdminComponent } from 'src/app/user-profile/user-profile-admin/user-profile-admin.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
 import { LabelResolver } from '../shared/label.resolver'
@@ -50,14 +51,15 @@ const routes: Routes = [
 ]
 @NgModule({
   declarations: [
+    UserProfileSearchComponent,
     UserProfileDetailComponent,
+    UserProfileAdminComponent,
     PersonalInformationComponent,
     AvatarComponent,
     AccountSettingsComponent,
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacySettingsComponent,
-    UserProfileSearchComponent,
     RolesPermissionsComponent
   ],
   imports: [

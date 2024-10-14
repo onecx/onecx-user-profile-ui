@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
@@ -6,16 +6,16 @@ import { TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType } from '@onecx/portal-integration-angular'
-import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+import { UserPerson } from 'src/app/shared/generated'
 import { from, map, mergeMap, Observable, of } from 'rxjs'
 
 @Component({
-  selector: 'app-personal-info-form',
+  selector: 'app-personal-info',
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent implements OnInit, OnChanges {
-  public personalInfo$!: Observable<UserPerson>
+  @Input() personalInfo$!: Observable<UserPerson>
   public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
@@ -33,11 +33,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
 
   constructor(
     public readonly http: HttpClient,
-    public readonly translate: TranslateService,
-    private readonly userProfileService: UserProfileAPIService
+    public readonly translate: TranslateService
   ) {
     // get data and init form only
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
     this.formGroup = this.initFormGroup()
   }
 

@@ -9,55 +9,55 @@
     <div [formGroup]="criteriaGroup" class="flex flex-wrap gap-3">
       <span class="p-float-label">
         <input
-          id="pm_parameter_search_criteria_first_name"
+          id="up_user_profile_search_criteria_first_name"
           pInputText
           type="text"
           formControlName="firstName"
           class="w-15rem text-responsive"
-          [pTooltip]="'USER_PROFILE.TOOLTIPS.FIRST_NAME' | translate"
+          [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="parameter_search_criteria_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
+        <label for="user_profile_search_criteria_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
       </span>
       <span class="p-float-label">
         <input
-          id="pm_parameter_search_criteria_last_name"
+          id="up_user_profile_search_criteria_last_name"
           pInputText
           type="text"
           formControlName="lastName"
           class="w-15rem text-responsive"
-          [pTooltip]="'USER_PROFILE.TOOLTIPS.LAST_NAME' | translate"
+          [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="parameter_search_criteria_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
+        <label for="user_profile_search_criteria_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
       </span>
       <span class="p-float-label">
         <input
-          id="pm_parameter_search_criteria_email"
+          id="up_user_profile_search_criteria_email"
           pInputText
           type="text"
           formControlName="email"
           class="w-15rem text-responsive"
-          [pTooltip]="'USER_PROFILE.TOOLTIPS.EMAIL' | translate"
+          [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="parameter_search_criteria_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
+        <label for="user_profile_search_criteria_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
       </span>
       <span class="p-float-label">
         <input
-          id="pm_parameter_search_criteria_key"
+          id="up_user_profile_search_criteria_key"
           pInputText
           type="text"
           formControlName="key"
           class="w-15rem text-responsive"
-          [pTooltip]="'USER_PROFILE.TOOLTIPS.ID' | translate"
+          [pTooltip]="'USER_PROFILE.USER_ID.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="parameter_search_criteria_key">{{ 'USER_PROFILE.ID' | translate }}</label>
+        <label for="user_profile_search_criteria_key">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
       </span>
     </div>
   </ocx-search-header>
@@ -173,7 +173,7 @@
         icon="pi pi-times"
         (onClick)="displayDeleteDialog = false"
         [label]="'ACTIONS.CONFIRMATION.NO' | translate"
-        [pTooltip]="'ACTIONS.CONFIRMATION.NO.TOOLTIP' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.NO' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-button>
@@ -182,7 +182,7 @@
         icon="pi pi-check"
         (onClick)="onDeleteConfirmation()"
         [label]="'ACTIONS.CONFIRMATION.YES' | translate"
-        [pTooltip]="'ACTIONS.CONFIRMATION.YES.TOOLTIP' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.YES' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-button>
@@ -192,15 +192,15 @@
 
 <p-dialog
   [(visible)]="displayDetailDialog"
-  [header]="'ACTIONS.VIEW.USER' | translate"
+  [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
   [modal]="true"
   [resizable]="false"
   [dismissableMask]="true"
   [style]="{ 'max-width': '800px' }"
 >
-  <app-user-profile-detail
+  <app-user-profile-admin
     [displayDetailDialog]="displayDetailDialog"
     (hideDialog)="onCloseDetail()"
     [userProfileId]="userProfile?.['userId']"
-  ></app-user-profile-detail>
+  ></app-user-profile-admin>
 </p-dialog>
