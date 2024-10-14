@@ -68,7 +68,7 @@
     "LAST_NAME": "Nachname",
     "LAST_NAME.TOOLTIP": "Nachname des Nutzers",
     "USER_ID": "Benutzer-ID",
-    "USER_ID.TOOLTIP": "Benutzer-ID des Nutzers",
+    "USER_ID.TOOLTIP": "Benutzer-ID aus dem IAM-Service",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse"
   },
@@ -88,6 +88,8 @@
     "USERNAME": "Benutzername",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse",
+    "TENANT": "Tenant-ID",
+    "TENANT.TOOLTIP": "Tenant-Id des Nutzers",
     "COUNTRY": "Land",
     "COUNTRY.TOOLTIP": "Land des Nutzers",
     "CITY": "Ort",
@@ -265,6 +267,7 @@
       "LASTNAME": "Nachname",
       "DISPLAYNAME": "Angezeigter Name",
       "EMAIL": "E-Mail",
+      "TENANT": "Tenant-ID",
       "CREATION_DATE": "Erstellungsdatum",
       "MODIFICATION_DATE": "Änderungsdatum",
       "CREATION_USER": "Erstellungsbenutzer"

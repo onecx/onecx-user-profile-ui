@@ -16,6 +16,8 @@ import { from, map, mergeMap, Observable, of } from 'rxjs'
 })
 export class PersonalInformationComponent implements OnInit, OnChanges {
   @Input() personalInfo!: UserPerson | null
+  @Input() tenantId: string = ''
+  @Input() admin: boolean = false
   public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 

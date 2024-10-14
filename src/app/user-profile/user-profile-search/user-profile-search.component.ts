@@ -90,6 +90,17 @@ export class UserProfileSearchComponent implements OnInit {
     },
     {
       columnType: ColumnType.STRING,
+      id: 'tenantId',
+      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.TENANT',
+      filterable: false,
+      sortable: true,
+      predefinedGroupKeys: [
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
+      ]
+    },
+    {
+      columnType: ColumnType.STRING,
       id: 'userId',
       nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.ID',
       filterable: false,

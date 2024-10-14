@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core
 import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
-import { map, Observable } from 'rxjs'
+import { map, Observable, tap } from 'rxjs'
 import {
   UpdateUserPerson,
   UserProfileAPIService,
@@ -16,6 +16,7 @@ import {
 })
 export class UserProfileAdminComponent implements OnChanges {
   public personalInfo$!: Observable<UserPerson>
+  public tenantId: string = ''
   public messages: { [key: string]: string } = {}
   @Input() public displayDetailDialog = false
   @Input() public userProfileId: any
@@ -30,9 +31,12 @@ export class UserProfileAdminComponent implements OnChanges {
 
   ngOnChanges(): void {
     if (this.userProfileId) {
-      this.personalInfo$ = this.userProfileAdminService
-        .getUserProfile({ id: this.userProfileId?.toString() })
-        .pipe(map((profile) => profile.person || {}))
+      this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId?.toString() }).pipe(
+        tap((profile) => (this.tenantId = profile.tenantId!)),
+        map((profile) => {
+          return profile.person || {}
+        })
+      )
     }
   }
 

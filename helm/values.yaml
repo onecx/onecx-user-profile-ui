@@ -38,7 +38,8 @@ app:
             SAVE: Update and save user profile
             SEARCH: Search user profile
             VIEW: View mode for user profile
-            USERPROFILE#ADMIN_VIEW: View permission for admin
+            ADMIN_VIEW: View other user profiles for admin
+            ADMIN_EDIT: Edit other user profiles for admin
             EXPORT: Export user profile
             IMPORT: Import user profile
           ACCOUNT_SETTINGS:

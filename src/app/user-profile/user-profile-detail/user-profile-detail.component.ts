@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
-import { Observable, map } from 'rxjs'
+import { Observable, map, tap } from 'rxjs'
 import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 
 @Component({
@@ -11,6 +11,7 @@ import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/sha
 })
 export class UserProfileDetailComponent {
   public personalInfo$!: Observable<UserPerson>
+  public tenantId: string = ''
   public messages: { [key: string]: string } = {}
   @Input() public displayDetailDialog = false
   @Input() public userProfileId: any
@@ -21,7 +22,12 @@ export class UserProfileDetailComponent {
     private readonly userProfileService: UserProfileAPIService,
     private readonly msgService: PortalMessageService
   ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
+      tap((profile) => (this.tenantId = profile.tenantId!)),
+      map((profile) => {
+        return profile.person || {}
+      })
+    )
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {

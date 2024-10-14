@@ -59,6 +59,22 @@
               <label for="up_personal_info_email">{{ 'PERSONAL_INFO_FORM.EMAIL' | translate }}</label>
             </span>
           </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                id="up_personal_info_tenant"
+                [value]="tenantId"
+                [pTooltip]="'PERSONAL_INFO_FORM.TENANT.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="up_personal_info_tenant">{{ 'PERSONAL_INFO_FORM.TENANT' | translate }}</label>
+            </span>
+          </div>
         </div>
       </p-panel>
     </div>

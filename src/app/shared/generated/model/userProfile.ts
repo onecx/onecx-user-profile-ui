@@ -20,6 +20,7 @@ export interface UserProfile {
     creationUser?: string;
     modificationDate?: string;
     modificationUser?: string;
+    tenantId?: string;
     userId?: string;
     identityProvider?: string;
     identityProviderId?: string;

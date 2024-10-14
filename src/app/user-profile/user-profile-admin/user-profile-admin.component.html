@@ -1,8 +1,5 @@
-<ocx-portal-page permission="USERPROFILE#VIEW" helpArticleId="PAGE_USER_PROFILE">
-  <ocx-page-content>
-    <app-personal-info
-      [personalInfo]="personalInfo$ | async"
-      (personalInfoUpdate)="onPersonalInfoUpdate($event)"
-    ></app-personal-info>
-  </ocx-page-content>
-</ocx-portal-page>
+<app-personal-info
+  [personalInfo]="personalInfo$ | async"
+  [tenantId]="tenantId"
+  (personalInfoUpdate)="onPersonalInfoUpdate($event)"
+></app-personal-info>
