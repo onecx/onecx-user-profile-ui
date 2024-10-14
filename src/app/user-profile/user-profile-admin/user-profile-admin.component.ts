@@ -29,15 +29,11 @@ export class UserProfileAdminComponent implements OnChanges {
   ) {}
 
   ngOnChanges(): void {
-    console.log('UP', this.userProfileId)
-    this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId?.toString() })
-    this.personalInfo$
-      .pipe(
-        map((info) => {
-          console.log('INFO', info)
-        })
-      )
-      .subscribe()
+    if (this.userProfileId) {
+      this.personalInfo$ = this.userProfileAdminService
+        .getUserProfile({ id: this.userProfileId?.toString() })
+        .pipe(map((profile) => profile.person || {}))
+    }
   }
 
   public onPersonalInfoUpdate(person: UserPerson): void {

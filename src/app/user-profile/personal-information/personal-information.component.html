@@ -1,6 +1,6 @@
 <!--Personal Info-->
 <form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo$ | async as person">
+  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo as person">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel *ocxIfPermission="'PROFILE_PERSONAL_INFO#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">

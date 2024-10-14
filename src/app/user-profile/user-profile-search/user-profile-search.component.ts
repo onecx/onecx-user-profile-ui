@@ -4,7 +4,6 @@ import { finalize, map } from 'rxjs/operators'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
 import { SelectItem } from 'primeng/api'
-import { ActivatedRoute, Router } from '@angular/router'
 
 import {
   ColumnType,
@@ -145,8 +144,6 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly userProfileAdminService: UserProfileAdminAPIService,
     private readonly user: UserService,
     private readonly fb: UntypedFormBuilder,
-    private readonly router: Router,
-    private readonly route: ActivatedRoute,
     private readonly portalMessageService: PortalMessageService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {

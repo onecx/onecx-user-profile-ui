@@ -3,12 +3,7 @@ import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { Observable, map } from 'rxjs'
-import {
-  UpdateUserPerson,
-  UserProfileAPIService,
-  UserPerson,
-  UserProfileAdminAPIService
-} from 'src/app/shared/generated'
+import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-profile-detail',
@@ -24,7 +19,6 @@ export class UserProfileDetailComponent {
   constructor(
     public readonly translate: TranslateService,
     private readonly userProfileService: UserProfileAPIService,
-    private readonly userProfileAdminService: UserProfileAdminAPIService,
     private readonly msgService: PortalMessageService
   ) {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))

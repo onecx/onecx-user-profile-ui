@@ -15,7 +15,7 @@ import { from, map, mergeMap, Observable, of } from 'rxjs'
   styleUrls: ['./personal-information.component.scss']
 })
 export class PersonalInformationComponent implements OnInit, OnChanges {
-  @Input() personalInfo$!: Observable<UserPerson>
+  @Input() personalInfo!: UserPerson | null
   public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
@@ -40,7 +40,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       mergeMap((personalInfo) => {
         if (personalInfo) {
           return from(this.createCountryList(personalInfo)) // get countries and fill the form if ready
@@ -51,7 +51,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
         if (this.formGroup && personalInfo) {
           return personalInfo
@@ -82,9 +82,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public cancelAddressEdit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        if (personalInfo.address) {
+        if (personalInfo?.address) {
           this.formGroup.patchValue({ address: personalInfo.address })
         }
         this.addressEdit = false
@@ -94,12 +94,14 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public updateAddress(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        personalInfo.address = this.formGroup.value.address
-        this.personalInfoUpdate.emit(personalInfo)
-        this.addressEdit = false
-        localStorage.removeItem('tkit_user_profile')
+        if (personalInfo?.address) {
+          personalInfo.address = this.formGroup.value.address
+          this.personalInfoUpdate.emit(personalInfo)
+          this.addressEdit = false
+          localStorage.removeItem('tkit_user_profile')
+        }
         return personalInfo
       })
     )
@@ -110,11 +112,11 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public cancelPhoneEdit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        if (personalInfo.phone) {
+        if (personalInfo?.phone) {
           this.formGroup.patchValue({
-            phone: personalInfo.phone
+            phone: personalInfo?.phone
           })
         }
         this.phoneEdit = false
@@ -124,12 +126,13 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public updatePhone(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        personalInfo.phone = this.formGroup.value.phone
-        this.personalInfoUpdate.emit(personalInfo)
-        this.phoneEdit = false
-
+        if (personalInfo?.phone) {
+          personalInfo.phone = this.formGroup.value.phone
+          this.personalInfoUpdate.emit(personalInfo!)
+          this.phoneEdit = false
+        }
         localStorage.removeItem('tkit_user_profile')
         return personalInfo
       })
