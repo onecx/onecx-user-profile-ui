@@ -32,6 +32,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   public formGroup: UntypedFormGroup
   public booleanOptions!: SelectItem[]
   public formUpdates$: Observable<unknown> | undefined
+  public editPermission: string = ''
 
   constructor(
     public readonly http: HttpClient,
@@ -61,6 +62,7 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
         return undefined
       })
     )
+    this.editPermission = this.admin ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
   }
 
   private initFormGroup(): UntypedFormGroup {

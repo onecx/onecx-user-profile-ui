@@ -1,5 +1,6 @@
 <app-personal-info
   [personalInfo]="personalInfo$ | async"
   [tenantId]="tenantId"
+  [admin]="true"
   (personalInfoUpdate)="onPersonalInfoUpdate($event)"
 ></app-personal-info>
