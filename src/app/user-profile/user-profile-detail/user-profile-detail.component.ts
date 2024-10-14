@@ -1,5 +1,5 @@
 import { HttpClient } from '@angular/common/http'
-import { Component, Input, OnInit, OnChanges } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnInit, OnChanges } from '@angular/core'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
@@ -19,9 +19,12 @@ import {
   templateUrl: './user-profile-detail.component.html'
 })
 export class UserProfileDetailComponent implements OnInit, OnChanges {
-  @Input() public userProfileId: any
   public personalInfo$!: Observable<UserPerson>
   public messages: { [key: string]: string } = {}
+  @Input() public displayDetailDialog = false
+  @Input() public userProfileId: any
+  @Output() public hideDialog = new EventEmitter<boolean>()
+
   public userId$!: Observable<string>
   public addressEdit = false
   public phoneEdit = false
@@ -42,38 +45,14 @@ export class UserProfileDetailComponent implements OnInit, OnChanges {
     private readonly userProfileAdminService: UserProfileAdminAPIService,
     private readonly msgService: PortalMessageService
   ) {
+    // if (this.userProfileId) {
+    //   this.userProfileAdminService.getUserProfile()
+    // } else {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+    // }
     this.formGroup = this.initFormGroup()
   }
 
-  public ngOnInit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
-      mergeMap((personalInfo) => {
-        if (personalInfo) {
-          return from(this.createCountryList(personalInfo)) // get countries and fill the form if ready
-        }
-        return of()
-      })
-    )
-  }
-
-  public ngOnChanges(): void {
-    if (this.userProfileId) {
-      console.log('UP ID', this.userProfileId)
-      console.log('Type of userProfileId:', typeof this.userProfileId)
-      this.personalInfo$ = this.userProfileAdminService
-        .getUserProfile({ id: this.userProfileId })
-        .pipe(map((profile) => profile.person || {}))
-    }
-    this.formUpdates$ = this.personalInfo$.pipe(
-      map((personalInfo) => {
-        if (this.formGroup && personalInfo) {
-          return personalInfo
-        }
-        return undefined
-      })
-    )
-  }
   public onPersonalInfoUpdate(person: UserPerson): void {
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: () => {
@@ -89,6 +68,28 @@ export class UserProfileDetailComponent implements OnInit, OnChanges {
     severity === 'success'
       ? this.msgService.success({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_SUCCESS' })
       : this.msgService.error({ summaryKey: 'PERSONAL_INFO_FORM.MSG.SAVE_ERROR' })
+  }
+
+  public ngOnInit(): void {
+    this.formUpdates$ = this.personalInfo$.pipe(
+      mergeMap((personalInfo) => {
+        if (personalInfo) {
+          return from(this.createCountryList(personalInfo)) // get countries and fill the form if ready
+        }
+        return of()
+      })
+    )
+  }
+
+  public ngOnChanges(): void {
+    this.formUpdates$ = this.personalInfo$.pipe(
+      map((personalInfo) => {
+        if (this.formGroup && personalInfo) {
+          return personalInfo
+        }
+        return undefined
+      })
+    )
   }
 
   private initFormGroup(): UntypedFormGroup {

@@ -59,16 +59,6 @@
       "PERMISSIONS": "Permissions"
     }
   },
-  "USER_PROFILE": {
-    "FIRST_NAME": "First name",
-    "FIRST_NAME.TOOLTIP": "The user's first name",
-    "LAST_NAME": "Surname",
-    "LAST_NAME.TOOLTIP": "The user's last name",
-    "USER_ID": "User ID",
-    "USER_ID.TOOLTIP": "The user's ID",
-    "EMAIL": "Email",
-    "EMAIL.TOOLTIP": "Email Address"
-  },
   "PERSONAL_INFO_FORM": {
     "HEADER": {
       "GENERAL": "Personal Information",
@@ -250,14 +240,14 @@
     "EMPTY_RESULTS": "Keine Ergebnisse",
     "MSG_BEFORE_FIRST_SEARCH": "Start a search to find events",
     "CHANGE_CRITERIA": "Switch search criteria schema",
-    "ID": "User Id",
+    "ID": "Id",
     "FIRSTNAME": "First name",
     "LASTNAME": "Last name",
     "EMAIL": "Email",
     "CREATION_USER": "Creation User",
     "MODIFICATION_DATE": "Modification Date",
     "COLUMN_HEADER_NAME": {
-      "ID": "User Id",
+      "ID": "Id",
       "FIRSTNAME": "First name",
       "LASTNAME": "Last name",
       "DISPLAYNAME": "Display Name",

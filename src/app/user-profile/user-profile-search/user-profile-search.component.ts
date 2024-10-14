@@ -180,7 +180,7 @@ export class UserProfileSearchComponent implements OnInit {
           if (this.filterData.trim()) {
             const lowerCaseFilter = this.filterData.toLowerCase()
             return array.filter((item) => {
-              return ['firstName', 'lastName', 'displayName', 'userId'].some((key) => {
+              return ['firstName', 'lastName', 'displayName', 'email'].some((key) => {
                 const value = item[key]
                 return value?.toString().toLowerCase().includes(lowerCaseFilter)
               })
@@ -259,7 +259,6 @@ export class UserProfileSearchComponent implements OnInit {
           results.forEach((result) => {
             if (result.id === ev.id) this.userProfile = result
           })
-          console.log('SEARCH UP ID', this.userProfile)
         })
       )
       .subscribe()
@@ -282,7 +281,7 @@ export class UserProfileSearchComponent implements OnInit {
     this.displayDeleteDialog = true
   }
   public onDeleteConfirmation(): void {
-    const id: any = this.userProfile?.id
+    const id: any = this.userProfile?.['userId']
     if (id) {
       this.userProfileAdminService.deleteUserProfile({ id: id?.toString() }).subscribe({
         next: () => {

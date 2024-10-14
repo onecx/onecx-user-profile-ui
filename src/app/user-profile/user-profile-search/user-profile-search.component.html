@@ -48,16 +48,16 @@
       </span>
       <span class="p-float-label">
         <input
-          id="pm_parameter_search_criteria_user_id"
+          id="pm_parameter_search_criteria_key"
           pInputText
           type="text"
-          formControlName="userId"
+          formControlName="key"
           class="w-15rem text-responsive"
-          [pTooltip]="'USER_PROFILE.TOOLTIPS.USER_ID' | translate"
+          [pTooltip]="'USER_PROFILE.TOOLTIPS.ID' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="parameter_search_criteria_user_id">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
+        <label for="parameter_search_criteria_key">{{ 'USER_PROFILE.ID' | translate }}</label>
       </span>
     </div>
   </ocx-search-header>
@@ -198,5 +198,9 @@
   [dismissableMask]="true"
   [style]="{ 'max-width': '800px' }"
 >
-  <app-user-profile-detail [userProfileId]="userProfile?.id"></app-user-profile-detail>
+  <app-user-profile-detail
+    [displayDetailDialog]="displayDetailDialog"
+    (hideDialog)="onCloseDetail()"
+    [userProfileId]="userProfile?.['userId']"
+  ></app-user-profile-detail>
 </p-dialog>
