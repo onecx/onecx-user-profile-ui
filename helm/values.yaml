@@ -19,6 +19,9 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile
           tagName: ocx-user-profile-component
+          endpoints:
+            - name: search
+              path: /search          
         avatar-image:
           exposedModule: "./OneCXAvatarImageComponent"
           description: "User avatar image component"
