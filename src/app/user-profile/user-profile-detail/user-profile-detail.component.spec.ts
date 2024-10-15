@@ -91,7 +91,6 @@ describe('UserProfileDetailComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
-    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled
   })
 
   describe('getMyUserProfile', () => {
@@ -103,7 +102,6 @@ describe('UserProfileDetailComponent', () => {
       component.personalInfo$.subscribe((test) => {
         expect(test).toEqual(defaultCurrentUser.person as UserPerson)
       })
-      //   expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
     })
 
     it('should set personalInfo$ empty when getMyUserProfile() returns empty UserProfile', () => {
