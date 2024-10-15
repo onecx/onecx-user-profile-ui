@@ -1,6 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
 import { PersonalInformationComponent } from './personal-information.component'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -8,6 +7,8 @@ import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/a
 import { of } from 'rxjs'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 
 describe('PersonalInformationComponent', () => {
   let component: PersonalInformationComponent
@@ -72,7 +73,6 @@ describe('PersonalInformationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PersonalInformationComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -80,6 +80,8 @@ describe('PersonalInformationComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: TranslateService, useValue: translateServiceSpy }
@@ -89,17 +91,6 @@ describe('PersonalInformationComponent', () => {
     userProfileServiceSpy.getMyUserProfile.calls.reset()
     userProfileServiceSpy.updateUserPerson.calls.reset()
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
-
-    // spyOnProperty(component.translate, 'currentLang', 'get').and.returnValue(mockCurrentLang);
-    // // Mock the response of dynamic import
-    // spyOn(globalThis, 'import')
-    // spyOn(component, 'registerLocaleData').and.callFake(async () => {});
-    // countriesInfoMock.registerLocale.and.returnValue(of(localeData))
-    // countriesInfoMock.getNames.and.returnValue({
-    //   US: 'United States',
-    //   GB: 'United Kingdom',
-    //   DE: 'Germany'
-    // })
 
     countriesInfoMock.getNames.and.returnValue({
       US: 'United States',
@@ -115,18 +106,13 @@ describe('PersonalInformationComponent', () => {
   }))
 
   it('should create', async () => {
-    let personalInfoValue: UserPerson = {}
-
     expect(component).toBeTruthy()
-    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
-    component.personalInfo$.subscribe((person) => (personalInfoValue = person))
-
-    expect(personalInfoValue).toEqual(defaultCurrentUser.person as UserPerson)
   })
 
   describe('initialization and changes', () => {
     it('should call createCountryList', fakeAsync(() => {
       component.formUpdates$ = of({})
+      component.personalInfo = testUserPerson
 
       component.formGroup = new UntypedFormGroup({
         address: new UntypedFormGroup({
@@ -149,13 +135,13 @@ describe('PersonalInformationComponent', () => {
       })
 
       fixture.detectChanges()
-      component.ngOnInit()
+      component.ngOnChanges()
       tick(2000)
 
       component.formUpdates$.subscribe((person) => {
         const p: any = person
         console.log(p)
-        expect(p.firstName).toEqual(undefined)
+        expect(p.firstName).toEqual('newName')
       })
       tick(2000)
       expect(spyCreateCountry).toHaveBeenCalled()
@@ -163,7 +149,7 @@ describe('PersonalInformationComponent', () => {
 
     it('should call createCountryList empty personalInfo', fakeAsync(() => {
       component.formUpdates$ = of({})
-      component.personalInfo$ = of()
+      component.personalInfo = {}
 
       component.formGroup = new UntypedFormGroup({
         address: new UntypedFormGroup({
@@ -185,22 +171,22 @@ describe('PersonalInformationComponent', () => {
         })
       })
 
-      // spy = spyOn(component.createCountryList).and.returnValue(false);
-
       fixture.detectChanges()
-      component.ngOnInit()
+      component.ngOnChanges()
       tick(2000)
 
       component.formUpdates$.subscribe((person) => {
         const p: any = person
-        expect(p.firstName).toEqual(null)
+        expect(p.firstName).toEqual(undefined)
       })
       tick(2000)
-      expect(spyCreateCountry).not.toHaveBeenCalled()
+      expect(spyCreateCountry).toHaveBeenCalled()
     }))
 
-    it('should call onChanges personalInfo', fakeAsync(() => {
+    it('should call onChanges as admin with empty personal info', fakeAsync(() => {
       component.formUpdates$ = of({})
+      component.admin = true
+      component.personalInfo = {}
 
       component.formGroup = new UntypedFormGroup({
         address: new UntypedFormGroup({
@@ -222,26 +208,9 @@ describe('PersonalInformationComponent', () => {
 
       component.formUpdates$.subscribe((person) => {
         const p: any = person
-        expect(p.firstName).toEqual(defaultCurrentUser.person?.firstName)
-        expect(p.lastName).toEqual(defaultCurrentUser.person?.lastName)
+        expect(p.firstName).toEqual(undefined)
+        expect(p.lastName).toEqual(undefined)
       })
-    }))
-
-    xit('should call onChanges empty formGroup', fakeAsync(() => {
-      component.formUpdates$ = of({})
-
-      // the following needs a different solution
-      //component.formGroup = undefined!
-
-      fixture.detectChanges()
-      component.ngOnChanges()
-      tick(2000)
-
-      component.formUpdates$.subscribe((person) => {
-        const p: any = person
-        expect(p).toBeUndefined()
-      })
-      tick(1000)
     }))
   })
 
@@ -260,6 +229,7 @@ describe('PersonalInformationComponent', () => {
           number: new UntypedFormControl('+4916883930')
         })
       })
+      component.personalInfo = testUserPerson
 
       component.formUpdates$ = of({})
 
@@ -267,42 +237,8 @@ describe('PersonalInformationComponent', () => {
       component.updateAddress()
 
       component.formUpdates$.subscribe((person) => {
-        expect(person).toEqual(defaultCurrentUser.person)
+        expect(person).toEqual(testUserPerson)
       })
-    }))
-
-    it('should change the Adress when Adress is empty', fakeAsync(() => {
-      tick(1000)
-      fixture.detectChanges()
-      component.formGroup = new UntypedFormGroup({
-        address: new UntypedFormGroup({
-          street: new UntypedFormControl(''),
-          streetNo: new UntypedFormControl(''),
-          postalCode: new UntypedFormControl(''),
-          city: new UntypedFormControl(''),
-          country: new UntypedFormControl('')
-        }),
-        phone: new UntypedFormGroup({
-          type: new UntypedFormControl(PhoneType.Mobile),
-          number: new UntypedFormControl('')
-        })
-      })
-
-      spyOn(component.personalInfoUpdate, 'emit')
-      spyOn(localStorage, 'removeItem')
-
-      component.formUpdates$ = of({})
-      fixture.detectChanges()
-      component.updateAddress()
-      tick(1000)
-
-      component.formUpdates$.subscribe((person) => {
-        const p: any = person
-        expect(p.address).toEqual(defaultCurrentUser.person?.address)
-      })
-
-      expect(component.personalInfoUpdate.emit).toHaveBeenCalled()
-      expect(localStorage.removeItem).toHaveBeenCalled()
     }))
 
     it('should cancel the Address Edit', fakeAsync(() => {
@@ -319,56 +255,21 @@ describe('PersonalInformationComponent', () => {
           number: new UntypedFormControl('+4916883930')
         })
       })
-
+      component.personalInfo = testUserPerson
       component.formUpdates$ = of({})
 
       fixture.detectChanges()
       component.cancelAddressEdit()
 
       component.formUpdates$.subscribe((person) => {
-        expect(person).toEqual(defaultCurrentUser.person)
+        expect(person).toEqual(testUserPerson)
       })
-
       expect(component.addressEdit).toBeFalse()
     }))
 
     it('should toggle address edit mode', () => {
       component.toggleAddressEdit()
       expect(component.addressEdit).toBe(true)
-    })
-
-    xit('should revert address form fields to original values on cancel', () => {
-      // Mock personalInfo with sample address data
-      const personalInfo = {
-        address: {
-          street: '123 Main St',
-          streetNo: 'Apt 4B',
-          postalCode: '12345',
-          city: 'Sample City',
-          country: 'DE'
-        }
-      }
-
-      // Set initial form values (modify as needed)
-      component.formGroup.patchValue({
-        address: {
-          street: 'Modified Street',
-          streetNo: 'Modified Apt',
-          postalCode: '54321',
-          city: 'Modified City',
-          country: 'US'
-        }
-      })
-
-      // Call the cancelAddressEdit method
-      component.cancelAddressEdit()
-
-      // Check if form values are reverted to original personalInfo values
-      expect(component.formGroup.value.address.street).toBe(personalInfo.address.street)
-      expect(component.formGroup.value.address.streetNo).toBe(personalInfo.address.streetNo)
-      expect(component.formGroup.value.address.postalCode).toBe(personalInfo.address.postalCode)
-      expect(component.formGroup.value.address.city).toBe(personalInfo.address.city)
-      expect(component.formGroup.value.address.country).toBe(personalInfo.address.country)
     })
   })
 
@@ -389,7 +290,7 @@ describe('PersonalInformationComponent', () => {
           number: new UntypedFormControl('+49016792030')
         })
       })
-
+      component.personalInfo = testUserPerson
       spyOn(component.personalInfoUpdate, 'emit')
       spyOn(localStorage, 'removeItem')
 
@@ -424,7 +325,7 @@ describe('PersonalInformationComponent', () => {
           number: new UntypedFormControl()
         })
       })
-
+      component.personalInfo = testUserPerson
       spyOn(component.personalInfoUpdate, 'emit')
       spyOn(localStorage, 'removeItem')
 
@@ -459,7 +360,7 @@ describe('PersonalInformationComponent', () => {
           number: new UntypedFormControl('08967821')
         })
       })
-
+      component.personalInfo = testUserPerson
       spyOn(component.personalInfoUpdate, 'emit')
       spyOn(localStorage, 'removeItem')
 
@@ -492,7 +393,7 @@ describe('PersonalInformationComponent', () => {
           number: new UntypedFormControl('08967821')
         })
       })
-
+      component.personalInfo = testUserPerson
       component.formUpdates$ = of({})
       component.phoneEdit = true
       fixture.detectChanges()
@@ -559,54 +460,4 @@ describe('PersonalInformationComponent', () => {
 
   // });
   // })
-})
-
-describe('PersonalInformationComponent', () => {
-  let component: PersonalInformationComponent
-  let fixture: ComponentFixture<PersonalInformationComponent>
-
-  const userProfileServiceSpy = {
-    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
-    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
-  }
-
-  const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
-    'PortalMessageService',
-    ['success', 'error']
-  )
-
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [PersonalInformationComponent],
-      imports: [
-        HttpClientTestingModule,
-        TranslateTestingModule.withTranslations({
-          de: require('src/assets/i18n/de.json'),
-          en: require('src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [
-        { provide: PortalMessageService, useValue: messageServiceMock },
-        { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
-      ]
-    }).compileComponents()
-    userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
-  }))
-
-  beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(PersonalInformationComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
-  }))
-
-  it('should create with empty user', async () => {
-    let personalInfoValue: UserPerson = {}
-
-    expect(component).toBeTruthy()
-    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
-    component.personalInfo$.subscribe((person) => (personalInfoValue = person))
-
-    expect(personalInfoValue).toEqual({})
-  })
 })

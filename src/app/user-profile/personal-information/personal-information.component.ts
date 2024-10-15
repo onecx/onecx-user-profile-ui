@@ -1,4 +1,4 @@
-import { Component, EventEmitter, OnChanges, OnInit, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
@@ -6,16 +6,18 @@ import { TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType } from '@onecx/portal-integration-angular'
-import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
-import { from, map, mergeMap, Observable, of } from 'rxjs'
+import { UserPerson } from 'src/app/shared/generated'
+import { from, map, Observable, of, switchMap } from 'rxjs'
 
 @Component({
-  selector: 'app-personal-info-form',
+  selector: 'app-personal-info',
   templateUrl: './personal-information.component.html',
   styleUrls: ['./personal-information.component.scss']
 })
-export class PersonalInformationComponent implements OnInit, OnChanges {
-  public personalInfo$!: Observable<UserPerson>
+export class PersonalInformationComponent implements OnChanges {
+  @Input() personalInfo!: UserPerson | null
+  @Input() tenantId: string = ''
+  @Input() admin: boolean = false
   public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
@@ -27,41 +29,27 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
     { value: PhoneType.MOBILE, label: 'Mobile' },
     { value: PhoneType.LANDLINE, label: 'Landline' }
   ]
-  public formGroup: UntypedFormGroup
+  public formGroup!: UntypedFormGroup
   public booleanOptions!: SelectItem[]
   public formUpdates$: Observable<unknown> | undefined
+  public editPermission: string = ''
 
   constructor(
-    public http: HttpClient,
-    public translate: TranslateService,
-    private userProfileService: UserProfileAPIService
-  ) {
-    // get data and init form only
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
-    //this.userId$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.id || ''))
-    this.formGroup = this.initFormGroup()
-  }
-
-  public ngOnInit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
-      mergeMap((personalInfo) => {
-        if (personalInfo) {
-          return from(this.createCountryList(personalInfo)) // get countries and fill the form if ready
-        }
-        return of()
-      })
-    )
-  }
+    public readonly http: HttpClient,
+    public readonly translate: TranslateService
+  ) {}
 
   public ngOnChanges(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
-      map((personalInfo) => {
+    this.formGroup = this.initFormGroup()
+    this.formUpdates$ = of(this.personalInfo).pipe(
+      switchMap((personalInfo) => {
         if (this.formGroup && personalInfo) {
-          return personalInfo
+          return from(this.createCountryList(personalInfo)).pipe(map(() => personalInfo))
         }
-        return undefined
+        return of(undefined)
       })
     )
+    this.editPermission = this.admin ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
   }
 
   private initFormGroup(): UntypedFormGroup {
@@ -85,9 +73,9 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public cancelAddressEdit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        if (personalInfo.address) {
+        if (personalInfo?.address) {
           this.formGroup.patchValue({ address: personalInfo.address })
         }
         this.addressEdit = false
@@ -97,12 +85,14 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public updateAddress(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        personalInfo.address = this.formGroup.value.address
-        this.personalInfoUpdate.emit(personalInfo)
-        this.addressEdit = false
-        localStorage.removeItem('tkit_user_profile')
+        if (personalInfo) {
+          personalInfo.address = this.formGroup.value.address
+          this.personalInfoUpdate.emit(personalInfo)
+          this.addressEdit = false
+          localStorage.removeItem('tkit_user_profile')
+        }
         return personalInfo
       })
     )
@@ -113,11 +103,11 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public cancelPhoneEdit(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        if (personalInfo.phone) {
+        if (personalInfo?.phone) {
           this.formGroup.patchValue({
-            phone: personalInfo.phone
+            phone: personalInfo?.phone
           })
         }
         this.phoneEdit = false
@@ -127,12 +117,13 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
   }
 
   public updatePhone(): void {
-    this.formUpdates$ = this.personalInfo$.pipe(
+    this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
-        personalInfo.phone = this.formGroup.value.phone
-        this.personalInfoUpdate.emit(personalInfo)
-        this.phoneEdit = false
-
+        if (personalInfo) {
+          personalInfo.phone = this.formGroup.value.phone
+          this.personalInfoUpdate.emit(personalInfo!)
+          this.phoneEdit = false
+        }
         localStorage.removeItem('tkit_user_profile')
         return personalInfo
       })
@@ -143,7 +134,6 @@ export class PersonalInformationComponent implements OnInit, OnChanges {
     if (this.translate.currentLang == undefined) {
       this.translate.currentLang = 'en'
     }
-    // countriesInfo.registerLocale(await import('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
     countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
     const countryList = countriesInfo.getNames(this.translate.currentLang)
     const countryCodes = Object.keys(countryList)

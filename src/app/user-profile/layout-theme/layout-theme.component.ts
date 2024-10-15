@@ -24,7 +24,7 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
   public menuModeSelectItems: SelectItem[]
   public colorSchemeSelectItems: SelectItem[]
 
-  constructor(private userService: UserService) {
+  constructor(private readonly userService: UserService) {
     this.menuModeSelectItems = [
       { label: 'LAYOUT_THEME.MENU_MODES.HORIZONTAL', value: MenuMode.Horizontal },
       { label: 'LAYOUT_THEME.MENU_MODES.STATIC', value: MenuMode.Static },

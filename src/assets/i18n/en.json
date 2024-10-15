@@ -21,24 +21,47 @@
       "RELOAD": "Reload data",
       "SORT_BY": "Sort By",
       "SORT_DIRECTION_ASC": "ascending",
-      "SORT_DIRECTION_DESC": "descending"
+      "SORT_DIRECTION_DESC": "descending",
+      "PREDEFINED_GROUP": {
+        "DEFAULT": "Default",
+        "EXTENDED": "Extended",
+        "FULL": "Full"
+      },
+      "MESSAGE": {
+        "SUCCESS": "Success",
+        "NO_RESULTS": "No results"
+      }
+    },
+    "DELETE": {
+      "LABEL": "Delete",
+      "USER": "Delete User Profile",
+      "USER.TOOLTIP": "Delete this User Profile",
+      "MESSAGE_TEXT": "Do you want to delete this User Profile?",
+      "MESSAGE_INFO": "This action cannot be undone!",
+      "MESSAGE": {
+        "OK": "The User Profile was deleted successfully",
+        "NOK": "An error has occurred. The User Profile was not deleted."
+      }
+    },
+    "VIEW": {
+      "USER_PROFILE": "View user profile"
+    },
+    "GENERAL": {
+      "APPLY": "Apply",
+      "APPLY.TOOLTIP": "Reload page to apply the change immediately",
+      "EDIT": "Edit",
+      "EDIT.TOOLTIP": "Switch to edit mode",
+      "FILTER_CLEAR": "Clear Filter",
+      "CHANGE": "Change",
+      "REMOVE": "Remove",
+      "RELOAD": "Reload",
+      "SAVE": "Save",
+      "SAVE.TOOLTIP": "Save",
+      "CLOSE": "Close",
+      "CLOSE.TOOLTIP": "Close",
+      "CANCEL": "Cancel",
+      "CANCEL.TOOLTIP": "Cancel editing without saving"
     }
-  },
-  "GENERAL": {
-    "APPLY": "Apply",
-    "APPLY.TOOLTIP": "Reload page to apply the change immediately",
-    "EDIT": "Edit",
-    "EDIT.TOOLTIP": "Switch to edit mode",
-    "FILTER_CLEAR": "Clear Filter",
-    "CHANGE": "Change",
-    "REMOVE": "Remove",
-    "RELOAD": "Reload",
-    "SAVE": "Save",
-    "SAVE.TOOLTIP": "Save",
-    "CLOSE": "Close",
-    "CLOSE.TOOLTIP": "Close",
-    "CANCEL": "Cancel",
-    "CANCEL.TOOLTIP": "Cancel editing without saving"
   },
   "PROFILE": {
     "SUBHEADER": "Manage personal data",
@@ -48,7 +71,19 @@
       "PERMISSIONS": "Permissions"
     }
   },
-  "PERSONAL_INFO_FORM": {
+  "INTERNAL": {
+    "CREATION_DATE": "Created on",
+    "CREATION_USER": "Created by",
+    "MODIFICATION_DATE": "Changed on",
+    "MODIFICATION_USER": "Changed by",
+    "TOOLTIPS": {
+      "CREATION_DATE": "Timestamp of the creation",
+      "CREATION_USER": "ID of the user of the creation",
+      "MODIFICATION_DATE": "Timestamp of the last change",
+      "MODIFICATION_USER": "ID of the user of the last change"
+    }
+  },
+  "USER_PROFILE": {
     "HEADER": {
       "GENERAL": "Personal Information",
       "ADDRESS": "Address",
@@ -56,14 +91,14 @@
     },
     "FIRST_NAME": "First name",
     "FIRST_NAME.TOOLTIP": "The user's first name",
-    "LAST_NAME": "Surname",
+    "LAST_NAME": "Last name",
     "LAST_NAME.TOOLTIP": "The user's last name",
-    "DISPLAY_NAME": "Display Name",
-    "ID": "User ID",
-    "ID.TOOLTIP": "The user's ID",
-    "USERNAME": "Username",
+    "USER_ID": "User ID",
+    "USER_ID.TOOLTIP": "The user's ID provided in the IAM Service",
     "EMAIL": "Email",
-    "EMAIL.TOOLTIP": "Email Address",
+    "EMAIL.TOOLTIP": "Email adress",
+    "TENANT": "Tenant Id",
+    "TENANT.TOOLTIP": " The user's Tenant Id",
     "COUNTRY": "Country",
     "COUNTRY.TOOLTIP": "The user's country",
     "CITY": "City",
@@ -75,9 +110,6 @@
     "HOUSE_NUMBER": "House Number",
     "HOUSE_NUMBER.TOOLTIP": "The user's house number",
     "NUMBER": "Number",
-    "TAKE_OVER": "Take Over",
-    "EXIT_EDITING": "Exit Editing",
-    "CLEAR_FORM": "Clear All",
     "PHONE_TYPE": "Phone type",
     "PHONE_TYPE.TOOLTIP": "The user's phone type",
     "PHONE": {
@@ -90,10 +122,6 @@
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data"
     }
-  },
-  "SEARCH": {
-    "ACTION": "Action",
-    "NO_DATA": "No Data"
   },
   "SETTINGS": {
     "SUBHEADER": "My Settings & Preferences",
@@ -222,41 +250,6 @@
   },
   "PREFERENCES": {
     "TAB_NAME_PREFERENCES": "Preferences"
-  },
-  "USERPROFILE_SEARCH": {
-    "USERPROFILE_MODULE": "onecx-user-profile",
-    "SEARCH": "Search",
-    "EMPTY_RESULTS": "Keine Ergebnisse",
-    "MSG_BEFORE_FIRST_SEARCH": "Start a search to find events",
-    "CHANGE_CRITERIA": "Switch search criteria schema",
-    "ID": "Id",
-    "FIRSTNAME": "First name",
-    "LASTNAME": "Last name",
-    "EMAIL": "Email",
-    "MODIFICATION_DATE": "Modification Date",
-    "CREATION_USER": "Creation User",
-    "COLUMN_HEADER_NAME": {
-      "ID": "Id",
-      "FIRSTNAME": "First name",
-      "LASTNAME": "Last name",
-      "DISPLAYNAME": "Display Name",
-      "EMAIL": "Email",
-      "MODIFICATION_DATE": "Modification Date",
-      "CREATION_USER": "Creation User"
-    },
-    "PREDEFINED_GROUP": {
-      "DEFAULT": "Default",
-      "EXTENDED": "Extended",
-      "FULL": "Full"
-    },
-
-    "MESSAGE": {
-      "SUCESS": "Success",
-      "NO_RESULTS": "No results"
-    },
-    "MENU_ITEM": {
-      "SHOW_HIDE_SUMMARY": "Show/Hide Summary"
-    }
   },
   "BREADCRUMBS": {
     "SEARCH": "Search"

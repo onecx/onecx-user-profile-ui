@@ -1,23 +1,24 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { BehaviorSubject, combineLatest, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
+import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
+import { SelectItem } from 'primeng/api'
+
 import {
   ColumnType,
   DataTableColumn,
   PortalMessageService,
   DiagramType,
-  ExportDataService,
   RowListGridData,
   DiagramColumn,
   Filter,
   DataViewControlTranslations,
-  InteractiveDataViewComponent
+  InteractiveDataViewComponent,
+  Action,
+  UserService
 } from '@onecx/portal-integration-angular'
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
-import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
-import { SelectItem } from 'primeng/api'
-import { ActivatedRoute, Router } from '@angular/router'
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { BehaviorSubject, combineLatest } from 'rxjs'
 
 @Component({
   selector: 'app-user-profile-search',
@@ -31,12 +32,12 @@ export class UserProfileSearchComponent implements OnInit {
   filterValueSubject = new BehaviorSubject<string>('')
   diagramColumn: DiagramColumn | undefined
   criteriaGroup: UntypedFormGroup
-  sumKey = 'USERPROFILE_SEARCH.DIAGRAM.SUM'
   subtitleLineIds: string[] = ['firstName', 'lastName', 'email']
+  public actions$: Observable<Action[]> | undefined
 
   /* ocx-data-view-controls settings*/
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
-  // public viewMode = 'grid'
+  public userProfile: RowListGridData | undefined
   public quickFilterValue = 'ALL'
   public quickFilterItems: SelectItem[] = []
   public filterValue: string | undefined
@@ -46,54 +47,74 @@ export class UserProfileSearchComponent implements OnInit {
   public sortOrder = 1
   public defaultSortField = 'displayName'
   public dataViewControlsTranslations: DataViewControlTranslations = {}
+  public dateFormat: string
+  public displayDeleteDialog = false
+  public displayDetailDialog = false
 
   columns: DataTableColumn[] = [
     {
       columnType: ColumnType.STRING,
-      id: 'displayName',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.DISPLAYNAME',
-      filterable: true,
-      sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.FULL'
-      ]
-    },
-    {
-      columnType: ColumnType.STRING,
       id: 'firstName',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.FIRSTNAME',
-      filterable: true,
+      nameKey: 'USER_PROFILE.FIRST_NAME',
+      filterable: false,
       sortable: true,
       predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.FULL'
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
       ]
     },
     {
       columnType: ColumnType.STRING,
       id: 'lastName',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.LASTNAME',
-      filterable: true,
+      nameKey: 'USER_PROFILE.LAST_NAME',
+      filterable: false,
       sortable: true,
       predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.FULL'
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+        'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
       ]
     },
     {
       columnType: ColumnType.STRING,
       id: 'email',
-      nameKey: 'USERPROFILE_SEARCH.COLUMN_HEADER_NAME.EMAIL',
+      nameKey: 'USER_PROFILE.EMAIL',
+      filterable: false,
+      sortable: true,
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+    },
+    {
+      columnType: ColumnType.STRING,
+      id: 'tenantId',
+      nameKey: 'USER_PROFILE.TENANT',
+      filterable: false,
+      sortable: true,
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+    },
+    {
+      columnType: ColumnType.STRING,
+      id: 'userId',
+      nameKey: 'USER_PROFILE.USER_ID',
+      filterable: false,
+      sortable: true,
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+    },
+    {
+      columnType: ColumnType.DATE,
+      id: 'creationDate',
+      nameKey: 'INTERNAL.CREATION_DATE',
       filterable: true,
       sortable: true,
-      predefinedGroupKeys: [
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'USERPROFILE_SEARCH.PREDEFINED_GROUP.EXTENDED'
-      ]
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+    },
+    {
+      columnType: ColumnType.DATE,
+      id: 'modificationDate',
+      nameKey: 'INTERNAL.MODIFICATION_DATE',
+      filterable: true,
+      sortable: true,
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     }
   ]
 
@@ -115,20 +136,20 @@ export class UserProfileSearchComponent implements OnInit {
   supportedDiagramTypes: DiagramType[] = [DiagramType.PIE, DiagramType.HORIZONTAL_BAR, DiagramType.VERTICAL_BAR]
 
   constructor(
-    private userProfileAdminService: UserProfileAdminAPIService,
-    private fb: UntypedFormBuilder,
-    private router: Router,
-    private route: ActivatedRoute,
-    private portalMessageService: PortalMessageService,
-    private readonly exportDataService: ExportDataService,
-    @Inject(LOCALE_ID) public locale: string
+    private readonly userProfileAdminService: UserProfileAdminAPIService,
+    private readonly user: UserService,
+    private readonly fb: UntypedFormBuilder,
+    private readonly portalMessageService: PortalMessageService,
+    @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
       email: null,
+      userId: null,
       size: 50
     })
+    this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
   }
 
   ngOnInit() {
@@ -189,8 +210,8 @@ export class UserProfileSearchComponent implements OnInit {
         next: (stream) => {
           if (stream.length === 0) {
             this.portalMessageService.success({
-              summaryKey: 'USERPROFILE_SEARCH.MESSAGE.SUCCESS',
-              detailKey: 'USERPROFILE_SEARCH.MESSAGE.NO_RESULTS'
+              summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
+              detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_RESULTS'
             })
           }
           clearTimeout(clearTable)
@@ -211,11 +232,58 @@ export class UserProfileSearchComponent implements OnInit {
       })
   }
 
+  public resetCriteria(): void {
+    this.criteriaGroup.reset()
+  }
+
   /**
    * UI EVENTS
    */
   public onFilterChange(filter: string): void {
     this.filterData = filter
     this.resultData$.next(this.resultData$.value)
+  }
+
+  public onDetail(ev: RowListGridData) {
+    this.resultData$
+      .pipe(
+        map((results) => {
+          results.forEach((result) => {
+            if (result.id === ev.id) this.userProfile = result
+          })
+        })
+      )
+      .subscribe()
+    this.displayDetailDialog = true
+  }
+  public onCloseDetail(): void {
+    this.displayDetailDialog = false
+  }
+
+  public onDelete(ev: RowListGridData): void {
+    this.resultData$
+      .pipe(
+        map((results) => {
+          results.forEach((result) => {
+            if (result.id === ev.id) this.userProfile = result
+          })
+        })
+      )
+      .subscribe()
+    this.displayDeleteDialog = true
+  }
+  public onDeleteConfirmation(): void {
+    const id: any = this.userProfile?.['userId']
+    if (id) {
+      this.userProfileAdminService.deleteUserProfile({ id: id?.toString() }).subscribe({
+        next: () => {
+          this.displayDeleteDialog = false
+          this.userProfile = undefined
+          this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
+        },
+        error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
+      })
+    }
+    this.search()
   }
 }

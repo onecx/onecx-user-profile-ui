@@ -1,11 +1,11 @@
 <!--Personal Info-->
 <form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo$ | async as person">
+  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo as person">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
-      <p-panel *ocxIfPermission="'PROFILE_PERSONAL_INFO#VIEW'" styleClass="surface-50">
+      <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
-            <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.GENERAL' | translate }}</div>
+            <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.GENERAL' | translate }}</div>
           </div>
         </ng-template>
         <div
@@ -20,11 +20,11 @@
                 class="w-full"
                 id="up_personal_info_first_name"
                 [value]="person.firstName"
-                [pTooltip]="'PERSONAL_INFO_FORM.FIRST_NAME.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_first_name">{{ 'PERSONAL_INFO_FORM.FIRST_NAME' | translate }}</label>
+              <label for="up_personal_info_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -36,11 +36,11 @@
                 class="w-full"
                 id="up_personal_info_last_name"
                 [value]="person.lastName"
-                [pTooltip]="'PERSONAL_INFO_FORM.LAST_NAME.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_last_name">{{ 'PERSONAL_INFO_FORM.LAST_NAME' | translate }}</label>
+              <label for="up_personal_info_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -52,11 +52,27 @@
                 class="w-full"
                 id="up_personal_info_email"
                 [value]="person.email"
-                [pTooltip]="'PERSONAL_INFO_FORM.EMAIL.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_email">{{ 'PERSONAL_INFO_FORM.EMAIL' | translate }}</label>
+              <label for="up_personal_info_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
+            </span>
+          </div>
+          <div class="max-w-25rem">
+            <span class="p-float-label">
+              <input
+                pInputText
+                type="text"
+                readonly
+                class="w-full"
+                id="up_personal_info_tenant"
+                [value]="tenantId"
+                [pTooltip]="'USER_PROFILE.TENANT.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="up_personal_info_tenant">{{ 'USER_PROFILE.TENANT' | translate }}</label>
             </span>
           </div>
         </div>
@@ -77,8 +93,8 @@
       <p-panel *ocxIfPermission="'PROFILE_ADDRESS#VIEW'" formGroupName="address" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-1 sm:mb-2 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
-            <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.ADDRESS' | translate }}</div>
-            <div *ocxIfPermission="'PROFILE_ADDRESS#EDIT'">
+            <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.ADDRESS' | translate }}</div>
+            <div *ocxIfPermission="editPermission">
               <button
                 *ngIf="!addressEdit"
                 pButton
@@ -88,8 +104,8 @@
                 class="p-2 p-button-text"
                 id="up_personal_info_address_edit"
                 (click)="toggleAddressEdit()"
-                [label]="'GENERAL.EDIT' | translate"
-                [pTooltip]="'GENERAL.EDIT.TOOLTIP' | translate"
+                [label]="'ACTIONS.GENERAL.EDIT' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               ></button>
@@ -102,8 +118,8 @@
                 class="p-2 p-button-text"
                 id="up_personal_info_address_cancel"
                 (click)="cancelAddressEdit()"
-                [label]="'GENERAL.CANCEL' | translate"
-                [pTooltip]="'GENERAL.CANCEL.TOOLTIP' | translate"
+                [label]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               ></button>
@@ -116,8 +132,8 @@
                 class="p-2 p-button-text"
                 id="up_personal_info_address_save"
                 (click)="updateAddress()"
-                [label]="'GENERAL.SAVE' | translate"
-                [pTooltip]="'GENERAL.SAVE.TOOLTIP' | translate"
+                [label]="'ACTIONS.GENERAL.SAVE' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               ></button>
@@ -138,11 +154,11 @@
                 id="up_personal_info_address_street"
                 formControlName="street"
                 [value]="person.address?.street"
-                [pTooltip]="'PERSONAL_INFO_FORM.STREET.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.STREET.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_street">{{ 'PERSONAL_INFO_FORM.STREET' | translate }}</label>
+              <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
             </span>
             <span class="p-float-label">
               <input
@@ -153,13 +169,11 @@
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
                 [value]="person.address?.streetNo"
-                [pTooltip]="'PERSONAL_INFO_FORM.HOUSE_NUMBER.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.HOUSE_NUMBER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_street_no">
-                {{ 'PERSONAL_INFO_FORM.HOUSE_NUMBER' | translate }}
-              </label>
+              <label for="up_personal_info_address_street_no"> {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }} </label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -172,13 +186,11 @@
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
                 [value]="person.address?.postalCode"
-                [pTooltip]="'PERSONAL_INFO_FORM.POSTAL_CODE.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.POSTAL_CODE.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_postal_code">
-                {{ 'PERSONAL_INFO_FORM.POSTAL_CODE' | translate }}
-              </label>
+              <label for="up_personal_info_address_postal_code"> {{ 'USER_PROFILE.POSTAL_CODE' | translate }} </label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -192,11 +204,11 @@
                 id="up_personal_info_address_city"
                 formControlName="city"
                 [value]="person.address?.city"
-                [pTooltip]="'PERSONAL_INFO_FORM.CITY.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.CITY.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_city">{{ 'PERSONAL_INFO_FORM.CITY' | translate }}</label>
+              <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
             </span>
           </div>
           <div class="max-w-25rem">
@@ -207,12 +219,12 @@
                 [readonly]="!addressEdit"
                 [options]="countries"
                 formControlName="country"
-                [pTooltip]="'PERSONAL_INFO_FORM.COUNTRY.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               >
               </p-dropdown>
-              <label for="up_personal_info_address_country">{{ 'PERSONAL_INFO_FORM.COUNTRY' | translate }}</label>
+              <label for="up_personal_info_address_country">{{ 'USER_PROFILE.COUNTRY' | translate }}</label>
             </span>
           </div>
         </div>
@@ -223,8 +235,8 @@
       <p-panel *ocxIfPermission="'PROFILE_PHONE#VIEW'" formGroupName="phone" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
-            <div class="font-bold text-2xl">{{ 'PERSONAL_INFO_FORM.HEADER.PHONE' | translate }}</div>
-            <div *ocxIfPermission="'PROFILE_PHONE#EDIT'">
+            <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.PHONE' | translate }}</div>
+            <div *ocxIfPermission="editPermission">
               <button
                 *ngIf="!this.phoneEdit"
                 pButton
@@ -232,9 +244,9 @@
                 id="up_personal_info_phone_edit"
                 class="p-2 p-button-text"
                 icon="pi pi-pencil"
-                label="{{ 'GENERAL.EDIT' | translate }}"
+                label="{{ 'ACTIONS.GENERAL.EDIT' | translate }}"
                 (click)="togglePhoneEdit()"
-                [pTooltip]="'GENERAL.EDIT.TOOLTIP' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               ></button>
@@ -245,7 +257,7 @@
                 id="up_personal_info_phone_cancel"
                 icon="pi pi-times"
                 class="p-2 p-button-text"
-                label="{{ 'GENERAL.CANCEL' | translate }}"
+                label="{{ 'ACTIONS.GENERAL.CANCEL' | translate }}"
                 (click)="cancelPhoneEdit()"
               ></button>
               <button
@@ -255,7 +267,7 @@
                 id="up_personal_info_phone_save"
                 class="p-2 p-button-text"
                 icon="pi pi-save"
-                label="{{ 'GENERAL.SAVE' | translate }}"
+                label="{{ 'ACTIONS.GENERAL.SAVE' | translate }}"
                 (click)="this.updatePhone()"
               ></button>
             </div>
@@ -272,7 +284,7 @@
                 [readonly]="!phoneEdit"
               >
               </p-dropdown>
-              <label for="up_personal_info_phone_type"> {{ 'PERSONAL_INFO_FORM.PHONE_TYPE' | translate }} </label>
+              <label for="up_personal_info_phone_type"> {{ 'USER_PROFILE.PHONE_TYPE' | translate }} </label>
             </span>
           </div>
           <div class="w-20rem">
@@ -286,11 +298,11 @@
                 id="up_personal_info_phone_number"
                 formControlName="number"
                 [value]="person.phone?.number"
-                [pTooltip]="'PERSONAL_INFO_FORM.PHONE_NUMBER.TOOLTIP' | translate"
+                [pTooltip]="'USER_PROFILE.PHONE_NUMBER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_phone_number">{{ 'PERSONAL_INFO_FORM.PHONE_NUMBER' | translate }}</label>
+              <label for="up_personal_info_phone_number">{{ 'USER_PROFILE.PHONE_NUMBER' | translate }}</label>
             </span>
           </div>
         </div>

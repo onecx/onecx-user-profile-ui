@@ -1,20 +1,23 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { HttpClientTestingModule } from '@angular/common/http/testing'
-import { UserProfileSearchComponent } from './user-profile-search.component'
-import { RouterTestingModule } from '@angular/router/testing'
+import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { BehaviorSubject, of, throwError } from 'rxjs'
+
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
-import { of, throwError } from 'rxjs'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
-import { HttpErrorResponse, HttpEventType, HttpHeaders } from '@angular/common/http'
+import { UserProfileSearchComponent } from './user-profile-search.component'
+import { RowListGridData } from '@onecx/angular-accelerator'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
   let fixture: ComponentFixture<UserProfileSearchComponent>
 
   const apiServiceSpy = {
-    searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({}))
+    searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({})),
+    deleteUserProfile: jasmine.createSpy('deleteUserProfile').and.returnValue(of({}))
   }
 
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
@@ -82,14 +85,15 @@ describe('UserProfileSearchComponent', () => {
     await TestBed.configureTestingModule({
       declarations: [UserProfileSearchComponent],
       imports: [
-        RouterTestingModule,
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
+        provideRouter([{ path: '', component: UserProfileSearchComponent }]),
         { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy }
       ],
@@ -97,6 +101,8 @@ describe('UserProfileSearchComponent', () => {
     }).compileComponents()
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
+    apiServiceSpy.searchUserProfile.calls.reset()
+    apiServiceSpy.deleteUserProfile.calls.reset()
   })
 
   beforeEach(async () => {
@@ -109,7 +115,7 @@ describe('UserProfileSearchComponent', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should search user profiles - successful found', () => {
+  it('should search user profiles - successfully found', () => {
     apiServiceSpy.searchUserProfile.and.returnValue(
       of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
     )
@@ -136,11 +142,22 @@ describe('UserProfileSearchComponent', () => {
 
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
     expect(msgServiceSpy.success).toHaveBeenCalledWith({
-      summaryKey: 'USERPROFILE_SEARCH.MESSAGE.SUCCESS',
-      detailKey: 'USERPROFILE_SEARCH.MESSAGE.NO_RESULTS'
+      summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
+      detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_RESULTS'
     })
   })
 
+  it('should reset search criteria', () => {
+    spyOn(component.criteriaGroup, 'reset')
+
+    component.resetCriteria()
+
+    expect(component.criteriaGroup.reset).toHaveBeenCalled()
+  })
+
+  /**
+   * UI EVENTS
+   */
   it('should filter user profiles correctly by input (case insensitive)', () => {
     apiServiceSpy.searchUserProfile.and.returnValue(
       of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
@@ -160,6 +177,97 @@ describe('UserProfileSearchComponent', () => {
 
     component.onFilterChange('Does_not_exist')
     expect(component.filteredData$.getValue()?.length).toEqual(0)
+  })
+
+  describe('onDetail', () => {
+    it('should display detail dialog', () => {
+      const mockEvent = { id: '123' } as RowListGridData
+      const mockResults: RowListGridData[] = [
+        { id: '123', imagePath: '' },
+        { id: '456', imagePath: '' }
+      ]
+      component.resultData$ = new BehaviorSubject(mockResults)
+
+      component.onDetail(mockEvent)
+
+      expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
+      expect(component.displayDetailDialog).toBeTrue()
+    })
+
+    it('should not set userProfile when id does not match', () => {
+      const mockEvent = { id: '789' } as RowListGridData
+      const mockResults: RowListGridData[] = [
+        { id: '123', imagePath: '' },
+        { id: '456', imagePath: '' }
+      ]
+      component.resultData$ = new BehaviorSubject(mockResults)
+      component.userProfile = undefined
+
+      component.onDetail(mockEvent)
+
+      expect(component.userProfile).toBeUndefined()
+      expect(component.displayDetailDialog).toBeTrue()
+    })
+  })
+
+  it('should close detail dialog', () => {
+    component.displayDetailDialog = true
+
+    component.onCloseDetail()
+
+    expect(component.displayDetailDialog).toBeFalse()
+  })
+
+  describe('onDelete', () => {
+    it('should display delete dialog', () => {
+      const mockEvent = { id: '123' } as RowListGridData
+      const mockResults: RowListGridData[] = [
+        { id: '123', imagePath: '' },
+        { id: '456', imagePath: '' }
+      ]
+      component.resultData$ = new BehaviorSubject(mockResults)
+
+      component.onDelete(mockEvent)
+
+      expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
+      expect(component.displayDeleteDialog).toBeTrue()
+    })
+
+    it('should not set userProfile when id does not match', () => {
+      const mockEvent = { id: '789' } as RowListGridData
+      const mockResults: RowListGridData[] = [
+        { id: '123', imagePath: '' },
+        { id: '456', imagePath: '' }
+      ]
+      component.resultData$ = new BehaviorSubject(mockResults)
+      component.userProfile = undefined
+
+      component.onDelete(mockEvent)
+
+      expect(component.userProfile).toBeUndefined()
+      expect(component.displayDeleteDialog).toBeTrue()
+    })
+  })
+
+  describe('onDeleteConfirmation', () => {
+    it('should delete a user profile', () => {
+      apiServiceSpy.deleteUserProfile.and.returnValue(of({}))
+      component.userProfile = userProfilepageResult.stream![0] as RowListGridData
+
+      component.onDeleteConfirmation()
+
+      expect(component.userProfile).toBeUndefined()
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
+    })
+
+    it('should display error', () => {
+      apiServiceSpy.deleteUserProfile.and.returnValue(throwError(() => new Error()))
+      component.userProfile = userProfilepageResult.stream![0] as RowListGridData
+
+      component.onDeleteConfirmation()
+
+      expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
+    })
   })
 
   it('should search user profiles - errorResponse 404', () => {

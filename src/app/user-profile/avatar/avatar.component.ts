@@ -26,9 +26,9 @@ export class AvatarComponent implements OnInit {
   bffImagePath = this.avatarService.configuration.basePath
 
   constructor(
-    private avatarService: UserAvatarAPIService,
-    private msgService: PortalMessageService,
-    private imageCompress: NgxImageCompressService
+    private readonly avatarService: UserAvatarAPIService,
+    private readonly msgService: PortalMessageService,
+    private readonly imageCompress: NgxImageCompressService
   ) {}
 
   public ngOnInit(): void {
