@@ -32,7 +32,6 @@ export class UserProfileSearchComponent implements OnInit {
   filterValueSubject = new BehaviorSubject<string>('')
   diagramColumn: DiagramColumn | undefined
   criteriaGroup: UntypedFormGroup
-  sumKey = 'USERPROFILE_SEARCH.DIAGRAM.SUM'
   subtitleLineIds: string[] = ['firstName', 'lastName', 'email']
   public actions$: Observable<Action[]> | undefined
 

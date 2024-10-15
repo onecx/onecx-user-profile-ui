@@ -7,15 +7,15 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
 import { UserProfileAdminComponent } from './user-profile-admin.component'
-import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
+import { UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 describe('UserProfileAdminComponent', () => {
   let component: UserProfileAdminComponent
   let fixture: ComponentFixture<UserProfileAdminComponent>
 
-  const userProfileServiceSpy = {
-    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
-    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
+  const adminServiceSpy = {
+    updateUserProfile: jasmine.createSpy('updateUserProfile').and.returnValue(of({})),
+    getUserProfile: jasmine.createSpy('getUserProfile').and.returnValue(of({}))
   }
 
   const defaultCurrentUser: UserProfile = {
@@ -75,63 +75,69 @@ describe('UserProfileAdminComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
-        { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
+        { provide: UserProfileAdminAPIService, useValue: adminServiceSpy }
       ]
     }).compileComponents()
-    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+    adminServiceSpy.getUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
   }))
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserProfileAdminComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    userProfileServiceSpy.updateUserPerson.calls.reset()
-    userProfileServiceSpy.getMyUserProfile.calls.reset()
+    adminServiceSpy.updateUserProfile.calls.reset()
+    adminServiceSpy.getUserProfile.calls.reset()
   })
 
   it('should create', () => {
     expect(component).toBeTruthy()
-    expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled
+    expect(adminServiceSpy.getUserProfile).toHaveBeenCalled
   })
 
-  describe('getMyUserProfile', () => {
+  describe('getUserProfile', () => {
     it('should set personalInfo$ to defaultCurrentUser.person', () => {
-      userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+      adminServiceSpy.getUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+      component.userProfileId = 'id'
+      component.userProfileId = 'id'
+
+      component.ngOnChanges()
 
       component.personalInfo$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
-
       component.personalInfo$.subscribe((test) => {
         expect(test).toEqual(defaultCurrentUser.person as UserPerson)
       })
     })
 
-    it('should set personalInfo$ empty when getMyUserProfile() returns empty UserProfile', () => {
-      userProfileServiceSpy.getMyUserProfile.and.returnValue(of({ person: undefined }))
+    it('should set personalInfo$ empty when getUserProfile() returns empty UserProfile', () => {
+      adminServiceSpy.getUserProfile.and.returnValue(of({ person: undefined }))
+      component.userProfileId = 'id'
+
+      component.ngOnChanges()
 
       component.personalInfo$.pipe(map((person) => expect(person).not.toBeUndefined()))
     })
   })
 
   describe('onPersonalInfoUpdate', () => {
-    it('should call messageService success when updateUserPerson() was successful', () => {
+    it('should call messageService success when updateUserProfile() was successful', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
+      adminServiceSpy.updateUserProfile.and.returnValue(of(updatedPerson as UserPerson))
 
       component.onPersonalInfoUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
     })
 
-    it('should call messageService success when updateUserPerson() was successful with empty response', () => {
+    it('should call messageService success when updateUserProfile() was successful with empty response', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
+      adminServiceSpy.updateUserProfile.and.returnValue(of(updatedPerson as UserPerson))
 
       component.onPersonalInfoUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
     })
 
-    it('should call messageService error when updateUserPerson() not was successful', () => {
+    it('should call messageService error when updateUserProfile() not was successful', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(throwError(() => new Error('testErrorMessage')))
+      adminServiceSpy.updateUserProfile.and.returnValue(throwError(() => new Error('testErrorMessage')))
 
       component.onPersonalInfoUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')

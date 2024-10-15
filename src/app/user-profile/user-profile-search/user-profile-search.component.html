@@ -1,4 +1,4 @@
-<ocx-portal-page permission="USERPROFILE#SEARCH">
+<ocx-portal-page permission="USERPROFILE#SEARCH" helpArticleId="PAGE_USER_SEARCH">
   <ocx-search-header
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
@@ -67,7 +67,7 @@
       <ocx-interactive-data-view
         [data]="(filteredData$ | async) ?? []"
         [columns]="columns"
-        [emptyResultsMessage]="'USERPROFILE_SEARCH.EMPTY_RESULTS' | translate"
+        [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
         [supportedViewLayouts]="['grid', 'table']"
         [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
         (viewItem)="onDetail($event)"

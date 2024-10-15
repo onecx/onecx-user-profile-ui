@@ -7,7 +7,7 @@ import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType } from '@onecx/portal-integration-angular'
 import { UserPerson } from 'src/app/shared/generated'
-import { from, map, mergeMap, Observable, of } from 'rxjs'
+import { from, map, Observable, of, switchMap } from 'rxjs'
 
 @Component({
   selector: 'app-personal-info',
@@ -42,19 +42,11 @@ export class PersonalInformationComponent implements OnChanges {
   public ngOnChanges(): void {
     this.formGroup = this.initFormGroup()
     this.formUpdates$ = of(this.personalInfo).pipe(
-      map((personalInfo) => {
+      switchMap((personalInfo) => {
         if (this.formGroup && personalInfo) {
-          return personalInfo
+          return from(this.createCountryList(personalInfo)).pipe(map(() => personalInfo))
         }
-        return undefined
-      })
-    )
-    this.formUpdates$ = of(this.personalInfo).pipe(
-      mergeMap((personalInfo) => {
-        if (personalInfo) {
-          return from(this.createCountryList(personalInfo)) // get countries and fill the form if ready
-        }
-        return of()
+        return of(undefined)
       })
     )
     this.editPermission = this.admin ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
@@ -142,7 +134,6 @@ export class PersonalInformationComponent implements OnChanges {
     if (this.translate.currentLang == undefined) {
       this.translate.currentLang = 'en'
     }
-    // countriesInfo.registerLocale(await import('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
     countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
     const countryList = countriesInfo.getNames(this.translate.currentLang)
     const countryCodes = Object.keys(countryList)
