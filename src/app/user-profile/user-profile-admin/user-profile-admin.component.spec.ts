@@ -6,12 +6,12 @@ import { map, of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
-import { UserProfileDetailComponent } from './user-profile-admin.component'
+import { UserProfileAdminComponent } from './user-profile-admin.component'
 import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 
-describe('UserProfileDetailComponent', () => {
-  let component: UserProfileDetailComponent
-  let fixture: ComponentFixture<UserProfileDetailComponent>
+describe('UserProfileAdminComponent', () => {
+  let component: UserProfileAdminComponent
+  let fixture: ComponentFixture<UserProfileAdminComponent>
 
   const userProfileServiceSpy = {
     updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
@@ -63,7 +63,7 @@ describe('UserProfileDetailComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserProfileDetailComponent],
+      declarations: [UserProfileAdminComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -82,7 +82,7 @@ describe('UserProfileDetailComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserProfileDetailComponent)
+    fixture = TestBed.createComponent(UserProfileAdminComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
     userProfileServiceSpy.updateUserPerson.calls.reset()
@@ -103,7 +103,6 @@ describe('UserProfileDetailComponent', () => {
       component.personalInfo$.subscribe((test) => {
         expect(test).toEqual(defaultCurrentUser.person as UserPerson)
       })
-      //   expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
     })
 
     it('should set personalInfo$ empty when getMyUserProfile() returns empty UserProfile', () => {

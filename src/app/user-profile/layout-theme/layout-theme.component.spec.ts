@@ -7,7 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
 import { ColorScheme, MenuMode } from 'src/app/shared/generated'
 import { provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 
 describe('LayoutThemeComponent', () => {
   let component: LayoutThemeComponent
@@ -77,14 +77,13 @@ describe('LayoutThemeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [LayoutThemeComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: UserService, useValue: userServiceSpy }]
+      providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: userServiceSpy }]
     }).compileComponents()
     userServiceSpy.hasPermission.and.returnValue(false)
   }))
@@ -282,14 +281,13 @@ describe('LayoutThemeComponent', () => {
     TestBed.configureTestingModule({
       declarations: [LayoutThemeComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [{ provide: UserService, useValue: userServiceSpy }]
+      providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: userServiceSpy }]
     }).compileComponents()
     userServiceSpy.hasPermission.and.returnValue(false)
   }))

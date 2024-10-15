@@ -8,7 +8,7 @@ import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { of, throwError } from 'rxjs'
 import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
 import { By } from '@angular/platform-browser'
-import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 
 describe('LocaleTimezoneComponent', () => {
   let component: LocaleTimezoneComponent
@@ -232,7 +232,6 @@ describe('LocaleTimezoneComponent Error', () => {
     TestBed.configureTestingModule({
       declarations: [LocaleTimezoneComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -240,6 +239,8 @@ describe('LocaleTimezoneComponent Error', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: ConfigurationService, useValue: configServiceSpy },
         { provide: UserService, useValue: userServiceSpy },
         { provide: LocalAndTimezoneService, useValue: localeAndTimezoneServiceSpy },

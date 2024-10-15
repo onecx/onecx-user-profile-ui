@@ -8,7 +8,7 @@ import { of } from 'rxjs'
 import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core'
 import { provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting, HttpClientTestingModule } from '@angular/common/http/testing'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 
 describe('PersonalInformationComponent', () => {
   let component: PersonalInformationComponent
@@ -121,7 +121,7 @@ describe('PersonalInformationComponent', () => {
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
-    component.personalInfo$.subscribe((person) => (personalInfoValue = person))
+    personalInfoValue = component.personalInfo!
 
     expect(personalInfoValue).toEqual(defaultCurrentUser.person as UserPerson)
   })
@@ -151,7 +151,7 @@ describe('PersonalInformationComponent', () => {
       })
 
       fixture.detectChanges()
-      component.ngOnInit()
+      component.ngOnChanges()
       tick(2000)
 
       component.formUpdates$.subscribe((person) => {
@@ -165,7 +165,7 @@ describe('PersonalInformationComponent', () => {
 
     it('should call createCountryList empty personalInfo', fakeAsync(() => {
       component.formUpdates$ = of({})
-      component.personalInfo$ = of()
+      component.personalInfo = {}
 
       component.formGroup = new UntypedFormGroup({
         address: new UntypedFormGroup({
@@ -190,7 +190,7 @@ describe('PersonalInformationComponent', () => {
       // spy = spyOn(component.createCountryList).and.returnValue(false);
 
       fixture.detectChanges()
-      component.ngOnInit()
+      component.ngOnChanges()
       tick(2000)
 
       component.formUpdates$.subscribe((person) => {
@@ -581,7 +581,6 @@ describe('PersonalInformationComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PersonalInformationComponent],
       imports: [
-        HttpClientTestingModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -589,6 +588,8 @@ describe('PersonalInformationComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
+        provideHttpClientTesting(),
+        provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
       ]
@@ -607,7 +608,7 @@ describe('PersonalInformationComponent', () => {
 
     expect(component).toBeTruthy()
     expect(userProfileServiceSpy.getMyUserProfile).toHaveBeenCalled()
-    component.personalInfo$.subscribe((person) => (personalInfoValue = person))
+    personalInfoValue = component.personalInfo!
 
     expect(personalInfoValue).toEqual({})
   })
