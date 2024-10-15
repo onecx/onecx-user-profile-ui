@@ -63,14 +63,6 @@
       "CANCEL.TOOLTIP": "Cancel editing without saving"
     }
   },
-  "PROFILE": {
-    "SUBHEADER": "Manage personal data",
-    "BREADCRUMBS": {
-      "PROFILE": "Profil",
-      "SETTINGS": "Settings",
-      "PERMISSIONS": "Permissions"
-    }
-  },
   "INTERNAL": {
     "CREATION_DATE": "Created on",
     "CREATION_USER": "Created by",
@@ -84,8 +76,10 @@
     }
   },
   "USER_PROFILE": {
-    "HEADER": {
-      "GENERAL": "Personal Information",
+    "HEADERS": {
+      "GENERAL": "Personal information",
+      "SUBHEADER": "Manage personal data",
+      "BASIC": "Basic Information",
       "ADDRESS": "Address",
       "PHONE": "Phone number"
     },
