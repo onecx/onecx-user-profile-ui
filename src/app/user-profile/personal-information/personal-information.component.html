@@ -1,6 +1,6 @@
 <!--Personal Info-->
 <form [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="mx-2 my-3 grid grid-nogutter row-gap-1 md:row-gap-4" *ngIf="personalInfo as person">
+  <div *ngIf="personalInfo as person" class="mx-1 my-3 grid grid-nogutter row-gap-1 sm:row-gap-2 md:row-gap-4">
     <div class="col-12 md:col-6 px-3 py-1 md:py-0">
       <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">
@@ -20,6 +20,7 @@
                 class="w-full"
                 id="up_personal_info_first_name"
                 [value]="person.firstName"
+                [ariaLabel]="'USER_PROFILE.FIRST_NAME' | translate"
                 [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -36,6 +37,7 @@
                 class="w-full"
                 id="up_personal_info_last_name"
                 [value]="person.lastName"
+                [ariaLabel]="'USER_PROFILE.LAST_NAME' | translate"
                 [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -52,6 +54,7 @@
                 class="w-full"
                 id="up_personal_info_email"
                 [value]="person.email"
+                [ariaLabel]="'USER_PROFILE.EMAIL' | translate"
                 [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -68,6 +71,7 @@
                 class="w-full"
                 id="up_personal_info_tenant"
                 [value]="tenantId"
+                [ariaLabel]="'USER_PROFILE.TENANT' | translate"
                 [pTooltip]="'USER_PROFILE.TENANT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -105,6 +109,7 @@
                 id="up_personal_info_address_edit"
                 (click)="toggleAddressEdit()"
                 [label]="'ACTIONS.GENERAL.EDIT' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.EDIT' | translate"
                 [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -119,6 +124,7 @@
                 id="up_personal_info_address_cancel"
                 (click)="cancelAddressEdit()"
                 [label]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
                 [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -133,6 +139,7 @@
                 id="up_personal_info_address_save"
                 (click)="updateAddress()"
                 [label]="'ACTIONS.GENERAL.SAVE' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
                 [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -144,16 +151,17 @@
         <div
           class="mx-1 sm:mx-2 md:mx-3 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4"
         >
-          <div class="max-w-32rem flex flex-wrap gap-2 row-gap-3">
+          <div class="max-w-32rem flex flex-row flex-wrap gap-3">
             <span class="p-float-label flex-grow-1">
               <input
                 pInputText
                 type="text"
-                class="w-full"
-                [readonly]="!addressEdit"
+                class="w-full pt-3 pb-2 text-responsive"
                 id="up_personal_info_address_street"
                 formControlName="street"
                 [value]="person.address?.street"
+                [readonly]="!addressEdit"
+                [ariaLabel]="'USER_PROFILE.STREET' | translate"
                 [pTooltip]="'USER_PROFILE.STREET.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -164,11 +172,12 @@
               <input
                 pInputText
                 type="text"
-                class="max-w-8rem pt-3 pb-2"
-                [readonly]="!addressEdit"
+                class="w-8rem pt-3 pb-2 text-responsive"
                 id="up_personal_info_address_street_no"
                 formControlName="streetNo"
                 [value]="person.address?.streetNo"
+                [readonly]="!addressEdit"
+                [ariaLabel]="'USER_PROFILE.HOUSE_NUMBER' | translate"
                 [pTooltip]="'USER_PROFILE.HOUSE_NUMBER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -176,16 +185,33 @@
               <label for="up_personal_info_address_street_no"> {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }} </label>
             </span>
           </div>
-          <div class="max-w-25rem">
+          <div class="max-w-32rem flex flex-row flex-wrap gap-3">
+            <span class="p-float-label flex-grow-1">
+              <input
+                pInputText
+                type="text"
+                class="w-full pt-3 pb-2 text-responsive"
+                id="up_personal_info_address_city"
+                formControlName="city"
+                [value]="person.address?.city"
+                [readonly]="!addressEdit"
+                [ariaLabel]="'USER_PROFILE.CITY' | translate"
+                [pTooltip]="'USER_PROFILE.CITY.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
+            </span>
             <span class="p-float-label">
               <input
                 pInputText
                 type="text"
-                class="w-full"
-                [readonly]="!addressEdit"
+                class="w-8rem pt-3 pb-2 text-responsive"
                 id="up_personal_info_address_postal_code"
                 formControlName="postalCode"
                 [value]="person.address?.postalCode"
+                [readonly]="!addressEdit"
+                [ariaLabel]="'USER_PROFILE.POSTAL_CODE' | translate"
                 [pTooltip]="'USER_PROFILE.POSTAL_CODE.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -193,40 +219,21 @@
               <label for="up_personal_info_address_postal_code"> {{ 'USER_PROFILE.POSTAL_CODE' | translate }} </label>
             </span>
           </div>
-          <div class="max-w-25rem">
-            <span class="p-float-label">
-              <input
-                pInputText
-                type="text"
-                readonly
-                class="w-full"
-                [readonly]="!addressEdit"
-                id="up_personal_info_address_city"
-                formControlName="city"
-                [value]="person.address?.city"
-                [pTooltip]="'USER_PROFILE.CITY.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              />
-              <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
-            </span>
-          </div>
-          <div class="max-w-25rem">
-            <span class="p-float-label">
-              <p-dropdown
-                styleClass="w-full"
-                id="up_personal_info_address_country"
-                [readonly]="!addressEdit"
-                [options]="countries"
-                formControlName="country"
-                [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-              </p-dropdown>
-              <label for="up_personal_info_address_country">{{ 'USER_PROFILE.COUNTRY' | translate }}</label>
-            </span>
-          </div>
+          <span class="p-float-label">
+            <p-dropdown
+              styleClass="w-full"
+              id="up_personal_info_address_country"
+              [options]="countries"
+              formControlName="country"
+              [readonly]="!addressEdit"
+              [ariaLabel]="'USER_PROFILE.COUNTRY' | translate"
+              [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+            </p-dropdown>
+            <label for="up_personal_info_address_country">{{ 'USER_PROFILE.COUNTRY' | translate }}</label>
+          </span>
         </div>
       </p-panel>
     </div>
@@ -244,8 +251,9 @@
                 id="up_personal_info_phone_edit"
                 class="p-2 p-button-text"
                 icon="pi pi-pencil"
-                label="{{ 'ACTIONS.GENERAL.EDIT' | translate }}"
                 (click)="togglePhoneEdit()"
+                [label]="'ACTIONS.GENERAL.EDIT' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                 [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -257,8 +265,12 @@
                 id="up_personal_info_phone_cancel"
                 icon="pi pi-times"
                 class="p-2 p-button-text"
-                label="{{ 'ACTIONS.GENERAL.CANCEL' | translate }}"
                 (click)="cancelPhoneEdit()"
+                [label]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               ></button>
               <button
                 *ngIf="this.phoneEdit"
@@ -267,8 +279,12 @@
                 id="up_personal_info_phone_save"
                 class="p-2 p-button-text"
                 icon="pi pi-save"
-                label="{{ 'ACTIONS.GENERAL.SAVE' | translate }}"
                 (click)="this.updatePhone()"
+                [label]="'ACTIONS.GENERAL.SAVE' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               ></button>
             </div>
           </div>
@@ -282,6 +298,10 @@
                 [options]="phoneTypes"
                 formControlName="type"
                 [readonly]="!phoneEdit"
+                [ariaLabel]="'USER_PROFILE.PHONE_TYPE' | translate"
+                [pTooltip]="'USER_PROFILE.PHONE_TYPE.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
               >
               </p-dropdown>
               <label for="up_personal_info_phone_type"> {{ 'USER_PROFILE.PHONE_TYPE' | translate }} </label>
@@ -294,10 +314,11 @@
                 type="text"
                 readonly
                 class="w-full"
-                [readonly]="!phoneEdit"
                 id="up_personal_info_phone_number"
                 formControlName="number"
                 [value]="person.phone?.number"
+                [readonly]="!phoneEdit"
+                [ariaLabel]="'USER_PROFILE.PHONE_NUMBER' | translate"
                 [pTooltip]="'USER_PROFILE.PHONE_NUMBER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"

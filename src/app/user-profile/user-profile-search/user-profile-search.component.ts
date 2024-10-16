@@ -233,7 +233,7 @@ export class UserProfileSearchComponent implements OnInit {
       })
   }
 
-  public resetCriteria(): void {
+  public onResetCriteria(): void {
     this.criteriaGroup.reset()
   }
 

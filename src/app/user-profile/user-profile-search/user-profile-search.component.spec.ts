@@ -150,7 +150,7 @@ describe('UserProfileSearchComponent', () => {
   it('should reset search criteria', () => {
     spyOn(component.criteriaGroup, 'reset')
 
-    component.resetCriteria()
+    component.onResetCriteria()
 
     expect(component.criteriaGroup.reset).toHaveBeenCalled()
   })

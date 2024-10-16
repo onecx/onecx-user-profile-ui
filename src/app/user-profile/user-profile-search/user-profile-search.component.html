@@ -3,7 +3,7 @@
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
     (searched)="onSearch()"
-    (resetted)="resetCriteria()"
+    (resetted)="onResetCriteria()"
     [manualBreadcrumbs]="false"
     [actions]="(actions$ | async) ?? []"
   >
