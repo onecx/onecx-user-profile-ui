@@ -106,7 +106,7 @@ export class AvatarComponent implements OnInit {
           localStorage.removeItem('tkit_user_profile')
           this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
         }
-        // if (refType === RefType.Small) this.windowReload()
+        if (refType === RefType.Small) this.windowReload()
       },
       error: (error: HttpErrorResponse) => {
         if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
