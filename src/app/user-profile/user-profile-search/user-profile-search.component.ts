@@ -6,29 +6,30 @@ import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
 import { SelectItem } from 'primeng/api'
 
 import {
+  Action,
   ColumnType,
   DataTableColumn,
-  PortalMessageService,
   DiagramType,
-  RowListGridData,
   DiagramColumn,
-  Filter,
   DataViewControlTranslations,
+  Filter,
   InteractiveDataViewComponent,
-  Action,
+  PortalMessageService,
+  RowListGridData,
   UserService
 } from '@onecx/portal-integration-angular'
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-profile-search',
-  templateUrl: './user-profile-search.component.html'
+  templateUrl: './user-profile-search.component.html',
+  styleUrls: ['./user-profile-search.component.scss']
 })
 export class UserProfileSearchComponent implements OnInit {
-  resultData$ = new BehaviorSubject<RowListGridData[]>([])
-  filteredData$ = new BehaviorSubject<RowListGridData[]>([])
-  filterData = ''
-  combined$ = combineLatest([this.resultData$, this.filteredData$])
+  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
+  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
+  private filterData = ''
+  combined$ = combineLatest([this.resultData$, this.filteredData$]) // TODO
   filterValueSubject = new BehaviorSubject<string>('')
   diagramColumn: DiagramColumn | undefined
   criteriaGroup: UntypedFormGroup
@@ -161,7 +162,7 @@ export class UserProfileSearchComponent implements OnInit {
       }
     ]
     this.statusOptions = []
-    this.search()
+    this.onSearch()
     this.initFilter()
   }
 
@@ -189,7 +190,7 @@ export class UserProfileSearchComponent implements OnInit {
       })
   }
 
-  search() {
+  public onSearch(): void {
     const userPersonCriteria = this.criteriaGroup.value
     const criteria = {
       userPersonCriteria: userPersonCriteria
@@ -284,6 +285,6 @@ export class UserProfileSearchComponent implements OnInit {
         error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
       })
     }
-    this.search()
+    this.onSearch()
   }
 }

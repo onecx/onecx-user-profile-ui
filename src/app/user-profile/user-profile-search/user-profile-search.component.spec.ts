@@ -120,7 +120,7 @@ describe('UserProfileSearchComponent', () => {
       of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
     )
 
-    component.search()
+    component.onSearch()
     if (userProfilepageResult.stream) {
       expect(component.resultData$.getValue()?.length).toEqual(userProfilepageResult.stream.length)
       expect(component.resultData$.getValue()?.at(0)?.['firstName']).toEqual(
@@ -137,7 +137,7 @@ describe('UserProfileSearchComponent', () => {
   it('should search user profiles - successful empty stream ', () => {
     apiServiceSpy.searchUserProfile.and.returnValue(of({ stream: [] } as UserProfilePageResult))
 
-    component.search()
+    component.onSearch()
     expect(component.resultData$.getValue()?.length).toEqual(0)
 
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
@@ -163,7 +163,7 @@ describe('UserProfileSearchComponent', () => {
       of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
     )
 
-    component.search()
+    component.onSearch()
     expect(component.filteredData$.getValue()?.length).toEqual(2)
 
     component.onFilterChange('Admin')
@@ -286,7 +286,7 @@ describe('UserProfileSearchComponent', () => {
     apiServiceSpy.searchUserProfile.and.returnValue(throwError(() => updateErrorResponse))
 
     component.searchError = false
-    component.search()
+    component.onSearch()
 
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
     expect(component.searchError).toBeTruthy()

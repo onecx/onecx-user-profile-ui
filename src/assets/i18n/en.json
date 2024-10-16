@@ -1,10 +1,4 @@
 {
-  "DIALOG": {
-    "SEARCH": {
-      "HEADER": "User Profile",
-      "SUBHEADER": "Search User Profiles"
-    }
-  },
   "ACTIONS": {
     "CONFIRMATION": {
       "NO": "No",
@@ -73,6 +67,12 @@
       "CREATION_USER": "ID of the user of the creation",
       "MODIFICATION_DATE": "Timestamp of the last change",
       "MODIFICATION_USER": "ID of the user of the last change"
+    }
+  },
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "User Profiles",
+      "SUBHEADER": "Search and manage User Profiles"
     }
   },
   "USER_PROFILE": {

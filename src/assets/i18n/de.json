@@ -1,10 +1,4 @@
 {
-  "DIALOG": {
-    "SEARCH": {
-      "HEADER": "OCX User",
-      "SUBHEADER": "Suche nach OCX Benutzern"
-    }
-  },
   "ACTIONS": {
     "CONFIRMATION": {
       "NO": "Nein",
@@ -73,6 +67,12 @@
       "CREATION_USER": "ID of the user of the creation",
       "MODIFICATION_DATE": "Timestamp of the last change",
       "MODIFICATION_USER": "ID of the user of the last change"
+    }
+  },
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "Benutzerprofile",
+      "SUBHEADER": "Suche und verwalten von Benutzerprofilen"
     }
   },
   "USER_PROFILE": {
