@@ -6,6 +6,18 @@
       "NO.TOOLTIP": "Aktion abbrechen",
       "YES.TOOLTIP": "Mit der Aktion fortfahren"
     },
+    "DELETE": {
+      "LABEL": "Löschen",
+      "USER": "Nutzerprofil löschen",
+      "USER.TOOLTIP": "Diese Nutzerprofil löschen",
+      "MESSAGE_TEXT": "Möchten Sie das folgende Nutzerprofil löschen?",
+      "MESSAGE_HINT": "Wenn der Benutzer sich das nächste Mal anmeldet wird ein neues Profil erzeugt.",
+      "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
+      "MESSAGE": {
+        "OK": "Die Nutzerprofil wurde erfolgreich gelöscht",
+        "NOK": "Ein Fehler ist aufgetreten. Die Nutzerprofil wurde nicht gelöscht."
+      }
+    },
     "SEARCH": {
       "ERROR": "Daten nicht verfügbar",
       "FILTER": "Filtern",
@@ -24,17 +36,6 @@
       "MESSAGE": {
         "SUCCESS": "Erfolg",
         "NO_RESULTS": "Keine Ergebnisse"
-      }
-    },
-    "DELETE": {
-      "LABEL": "Löschen",
-      "USER": "Nutzerprofil löschen",
-      "USER.TOOLTIP": "Diese Nutzerprofil löschen",
-      "MESSAGE_TEXT": "Möchten Sie dieses Nutzerprofil löschen?",
-      "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-      "MESSAGE": {
-        "OK": "Die Nutzerprofil wurde erfolgreich gelöscht",
-        "NOK": "Ein Fehler ist aufgetreten. Die Nutzerprofil wurde nicht gelöscht."
       }
     },
     "VIEW": {

@@ -4,6 +4,7 @@
 @include dialog-footer-buttons;
 @include table-zebra-rows;
 @include table-inline-buttons;
+@include displaying-text-responsive;
 
 :host ::ng-deep {
   .correct-ocx-interactive-data-view > ocx-interactive-data-view > div {

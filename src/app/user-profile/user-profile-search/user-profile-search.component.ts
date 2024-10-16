@@ -35,6 +35,7 @@ export class UserProfileSearchComponent implements OnInit {
   criteriaGroup: UntypedFormGroup
   subtitleLineIds: string[] = ['firstName', 'lastName', 'email']
   public actions$: Observable<Action[]> | undefined
+  public selectedUserName: string | undefined
 
   /* ocx-data-view-controls settings*/
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
@@ -261,7 +262,8 @@ export class UserProfileSearchComponent implements OnInit {
     this.displayDetailDialog = false
   }
 
-  public onDelete(ev: RowListGridData): void {
+  public onDelete(ev: any): void {
+    this.selectedUserName = ev.displayName
     this.resultData$
       .pipe(
         map((results) => {
@@ -280,6 +282,7 @@ export class UserProfileSearchComponent implements OnInit {
         next: () => {
           this.displayDeleteDialog = false
           this.userProfile = undefined
+          this.selectedUserName = undefined
           this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
         },
         error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
