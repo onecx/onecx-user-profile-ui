@@ -17,7 +17,7 @@ import { from, map, Observable, of, switchMap } from 'rxjs'
 export class PersonalInformationComponent implements OnChanges {
   @Input() personalInfo!: UserPerson | null
   @Input() tenantId: string = ''
-  @Input() admin: boolean = false
+  @Input() adminView: boolean = false
   public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
@@ -49,7 +49,7 @@ export class PersonalInformationComponent implements OnChanges {
         return of(undefined)
       })
     )
-    this.editPermission = this.admin ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
+    this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
   }
 
   private initFormGroup(): UntypedFormGroup {

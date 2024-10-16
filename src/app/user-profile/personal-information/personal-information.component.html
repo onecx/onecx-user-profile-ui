@@ -1,6 +1,6 @@
 <!--Personal Info-->
 <form *ngIf="personalInfo as person" [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="m-4 flex flex-column row-gap-2 sm:row-gap-3 md:row-gap-4">
+  <div class="p-4 flex flex-column row-gap-2 sm:row-gap-3 md:row-gap-4" [ngClass]="{ 'pt-0': adminView }">
     <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5">
       <div class="flex-1">
         <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
@@ -9,15 +9,13 @@
               {{ 'USER_PROFILE.HEADERS.BASIC' | translate }}
             </div>
           </ng-template>
-          <div
-            class="mx-1 sm:mx-2 md:mx-3 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4"
-          >
+          <div class="mx-1 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
             <span class="p-float-label">
               <input
                 pInputText
                 type="text"
                 readonly
-                class="w-full pt-3 pb-2"
+                class="w-full pt-3 pb-2 text-responsive"
                 id="up_personal_info_first_name"
                 [value]="person.firstName"
                 [ariaLabel]="'USER_PROFILE.FIRST_NAME' | translate"
@@ -32,7 +30,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full pt-3 pb-2"
+                class="w-full pt-3 pb-2 text-responsive"
                 id="up_personal_info_last_name"
                 [value]="person.lastName"
                 [ariaLabel]="'USER_PROFILE.LAST_NAME' | translate"
@@ -47,7 +45,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full pt-3 pb-2"
+                class="w-full pt-3 pb-2 text-responsive"
                 id="up_personal_info_email"
                 [value]="person.email"
                 [ariaLabel]="'USER_PROFILE.EMAIL' | translate"
@@ -62,7 +60,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full pt-3 pb-2"
+                class="w-full pt-3 pb-2 text-responsive"
                 id="up_personal_info_tenant"
                 [value]="tenantId"
                 [ariaLabel]="'USER_PROFILE.TENANT' | translate"
@@ -144,9 +142,7 @@
             </div>
           </ng-template>
 
-          <div
-            class="mx-1 sm:mx-2 md:mx-3 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4"
-          >
+          <div class="mx-1 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
             <div class="flex flex-row flex-wrap gap-3">
               <span class="p-float-label flex-grow-1" controlErrorAnchor>
                 <input
@@ -168,7 +164,7 @@
                 <input
                   pInputText
                   type="text"
-                  class="w-8rem pt-3 pb-2 text-responsive"
+                  class="w-full sm:w-8rem pt-3 pb-2 text-responsive"
                   id="up_personal_info_address_street_no"
                   formControlName="streetNo"
                   [value]="person.address?.streetNo"
@@ -202,7 +198,7 @@
                 <input
                   pInputText
                   type="text"
-                  class="w-8rem pt-3 pb-2 text-responsive"
+                  class="w-full sm:w-8rem pt-3 pb-2 text-responsive"
                   id="up_personal_info_address_postal_code"
                   formControlName="postalCode"
                   [value]="person.address?.postalCode"
@@ -289,7 +285,7 @@
             </div>
           </ng-template>
 
-          <div class="mx-1 sm:mx-2 md:mx-3 mb-3 flex flex-row flex-wrap justify-content-start gap-3">
+          <div class="mx-1mb-3 flex flex-row flex-wrap justify-content-start gap-3">
             <span class="p-float-label" controlErrorAnchor>
               <p-dropdown
                 id="up_personal_info_phone_type"

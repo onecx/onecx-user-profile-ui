@@ -113,7 +113,6 @@
   [draggable]="true"
   [resizable]="true"
   [dismissableMask]="true"
-  [style]="{ 'max-width': '500px' }"
 >
   <div class="flex column-gap-3 row-gap-1 justify-content-start align-items-center">
     <div class="pi pi-question-circle text-3xl danger-action-text"></div>
@@ -157,7 +156,8 @@
   [draggable]="true"
   [resizable]="true"
   [dismissableMask]="true"
-  [style]="{ width: '800px' }"
+  contentStyleClass="p-0"
+  [style]="{ width: '860px' }"
 >
   <app-user-profile-admin
     [displayDetailDialog]="displayDetailDialog"
