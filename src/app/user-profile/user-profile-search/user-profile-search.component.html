@@ -181,4 +181,17 @@
     (hideDialog)="onCloseDetail()"
     [userProfileId]="userProfile?.['userId']"
   ></app-user-profile-admin>
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-content-end column-gap-2">
+      <p-button
+        id="up_user_delete_button_close"
+        icon="pi pi-times"
+        (onClick)="onCloseDetail()"
+        [label]="'ACTIONS.GENERAL.CLOSE' | translate"
+        [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+    </div>
+  </ng-template>
 </p-dialog>
