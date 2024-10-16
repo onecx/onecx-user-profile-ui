@@ -1,4 +1,4 @@
-@import '/src/app/_mixins.scss';
+@import '/src/app/_up-mixins.scss';
 
 @include danger-action;
 @include dialog-footer-buttons;
@@ -11,6 +11,9 @@
     &.surface-border {
       border-bottom: var(--table-header-border) !important;
     }
+  }
+  .p-datatable .p-datatable-thead > tr > th {
+    border-bottom-width: 2px;
   }
   .p-datatable .p-datatable-thead > tr > th,
   .p-datatable .p-datatable-tbody > tr > td {

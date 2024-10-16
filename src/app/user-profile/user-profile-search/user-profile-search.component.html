@@ -66,16 +66,13 @@
       </span>
     </div>
   </ocx-search-header>
-  <!--
-  <ocx-content-container layout="horizontal" breakpoint="lg">
-    <ocx-content *ngIf="(resultData$ | async)!.length > 0 && !searchError" class="w-full">
-    -->
+
   <div *ngIf="(resultData$ | async)!.length > 0 && !searchError" class="card pt-2 correct-ocx-interactive-data-view">
     <ocx-interactive-data-view
       [data]="(filteredData$ | async) ?? []"
       [columns]="columns"
       [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
-      [supportedViewLayouts]="['grid', 'table']"
+      [supportedViewLayouts]="['table']"
       [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
       (viewItem)="onDetail($event)"
       (deleteItem)="onDelete($event)"
@@ -86,7 +83,6 @@
       <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
         <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
       </ng-template>
-
       <ng-template pTemplate="dateTableFilterCell" let-rowObject="rowObject" let-column="column">
         <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
       </ng-template>
@@ -105,36 +101,8 @@
         >
         </ocx-data-view-controls>
       </ng-template>
-      <ng-template #listItemSubtitleLines let-item>
-        <div *ngFor="let subtitleLineId of subtitleLineIds" class="edit-time text-xl my-3">
-          {{ item[subtitleLineId] }}
-        </div>
-      </ng-template>
-      <ng-template #gridItem let-item>
-        <div class="col-12 lg:col-6 xl:col-4 flex">
-          <div
-            class="data-grid-item card flex flex-column justify-content-between w-12 lg:w-11 mb-4 mt-4 align-self-stretch"
-          >
-            <div class="flex flex-row justify-content-between align-items-center">
-              <div class="data-grid-items flex-row">
-                <div class="text-xl my-3 font-bold">{{ item['displayName'] }}</div>
-                <div *ngFor="let subtitleLineId of subtitleLineIds" class="text-xl my-3">
-                  {{ item[subtitleLineId] }}
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </ng-template>
-      <ng-template #gridItemSubtitleLines let-item>
-        <div *ngFor="let subtitleLineId of subtitleLineIds" class="edit-time text-xl my-3">
-          {{ item[subtitleLineId] }}
-        </div>
-      </ng-template>
     </ocx-interactive-data-view>
   </div>
-  <!--/ocx-content>
-  </ocx-content-container-->
 </ocx-portal-page>
 
 <!-- DELETE -->
