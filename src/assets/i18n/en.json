@@ -1,16 +1,22 @@
 {
-  "DIALOG": {
-    "SEARCH": {
-      "HEADER": "User Profile",
-      "SUBHEADER": "Search User Profiles"
-    }
-  },
   "ACTIONS": {
     "CONFIRMATION": {
       "NO": "No",
       "YES": "Yes",
       "NO.TOOLTIP": "Cancel the action",
       "YES.TOOLTIP": "Proceed with the action"
+    },
+    "DELETE": {
+      "LABEL": "Delete",
+      "USER": "Delete User Profile",
+      "USER.TOOLTIP": "Delete this User Profile",
+      "MESSAGE_TEXT": "Do you want to delete this User Profile?",
+      "MESSAGE_HINT": "The next time the user logs in, a new profile is created.",
+      "MESSAGE_INFO": "This action cannot be undone!",
+      "MESSAGE": {
+        "OK": "The User Profile was deleted successfully",
+        "NOK": "An error has occurred. The User Profile was not deleted."
+      }
     },
     "SEARCH": {
       "ERROR": "Data not available",
@@ -30,17 +36,6 @@
       "MESSAGE": {
         "SUCCESS": "Success",
         "NO_RESULTS": "No results"
-      }
-    },
-    "DELETE": {
-      "LABEL": "Delete",
-      "USER": "Delete User Profile",
-      "USER.TOOLTIP": "Delete this User Profile",
-      "MESSAGE_TEXT": "Do you want to delete this User Profile?",
-      "MESSAGE_INFO": "This action cannot be undone!",
-      "MESSAGE": {
-        "OK": "The User Profile was deleted successfully",
-        "NOK": "An error has occurred. The User Profile was not deleted."
       }
     },
     "VIEW": {
@@ -75,43 +70,49 @@
       "MODIFICATION_USER": "ID of the user of the last change"
     }
   },
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "User Profiles",
+      "SUBHEADER": "Search and manage User Profiles"
+    }
+  },
   "USER_PROFILE": {
     "HEADERS": {
-      "GENERAL": "Personal information",
+      "GENERAL": "Personal Information",
       "SUBHEADER": "Manage personal data",
-      "BASIC": "Basic Information",
+      "BASIC": "Person",
       "ADDRESS": "Address",
-      "PHONE": "Phone number"
+      "PHONE": "Phone"
     },
     "FIRST_NAME": "First name",
-    "FIRST_NAME.TOOLTIP": "The user's first name",
+    "FIRST_NAME.TOOLTIP": "First names",
     "LAST_NAME": "Last name",
-    "LAST_NAME.TOOLTIP": "The user's last name",
+    "LAST_NAME.TOOLTIP": "Last name",
     "USER_ID": "User ID",
     "USER_ID.TOOLTIP": "The user's ID provided in the IAM Service",
-    "EMAIL": "Email",
-    "EMAIL.TOOLTIP": "Email adress",
+    "EMAIL": "E-mail",
+    "EMAIL.TOOLTIP": "E-mail Adress",
     "TENANT": "Tenant Id",
-    "TENANT.TOOLTIP": " The user's Tenant Id",
+    "TENANT.TOOLTIP": " Tenant Id, derived from IAM identifier",
     "COUNTRY": "Country",
-    "COUNTRY.TOOLTIP": "The user's country",
+    "COUNTRY.TOOLTIP": "Name of the country",
     "CITY": "City",
-    "CITY.TOOLTIP": "The user's city",
-    "POSTAL_CODE": "Postcode",
-    "POSTAL_CODE.TOOLTIP": "The user's postcode",
+    "CITY.TOOLTIP": "City name",
+    "POSTAL_CODE": "Zip Code",
+    "POSTAL_CODE.TOOLTIP": "Zip/Postal code",
     "STREET": "Street",
-    "STREET.TOOLTIP": "The user's street",
+    "STREET.TOOLTIP": "Name of the street",
     "HOUSE_NUMBER": "House Number",
     "HOUSE_NUMBER.TOOLTIP": "The user's house number",
     "NUMBER": "Number",
     "PHONE_TYPE": "Phone type",
-    "PHONE_TYPE.TOOLTIP": "The user's phone type",
+    "PHONE_TYPE.TOOLTIP": "Type of the Phone number",
     "PHONE": {
       "MOBILE": "Mobile",
       "LANDLINE": "Landline"
     },
     "PHONE_NUMBER": "Phone Number",
-    "PHONE_NUMBER.TOOLTIP": "The user's phone number",
+    "PHONE_NUMBER.TOOLTIP": "Phone number",
     "MSG": {
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data"

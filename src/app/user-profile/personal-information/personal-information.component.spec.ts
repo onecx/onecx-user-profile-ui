@@ -185,7 +185,7 @@ describe('PersonalInformationComponent', () => {
 
     it('should call onChanges as admin with empty personal info', fakeAsync(() => {
       component.formUpdates$ = of({})
-      component.admin = true
+      component.adminView = true
       component.personalInfo = {}
 
       component.formGroup = new UntypedFormGroup({

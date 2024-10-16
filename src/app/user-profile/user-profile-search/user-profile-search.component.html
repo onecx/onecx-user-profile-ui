@@ -2,23 +2,25 @@
   <ocx-search-header
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
-    (searched)="search()"
-    (resetted)="resetCriteria()"
+    (searched)="onSearch()"
+    (resetted)="onResetCriteria()"
     [manualBreadcrumbs]="false"
+    [actions]="(actions$ | async) ?? []"
   >
-    <div [formGroup]="criteriaGroup" class="flex flex-wrap gap-3">
+    <div [formGroup]="criteriaGroup" class="flex flex-row flex-wrap gap-3">
       <span class="p-float-label">
         <input
           id="up_user_profile_search_criteria_first_name"
           pInputText
           type="text"
           formControlName="firstName"
-          class="w-15rem text-responsive"
+          class="w-12rem sm:w-15rem text-responsive"
+          [ariaLabel]="'USER_PROFILE.FIRST_NAME' | translate"
           [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="user_profile_search_criteria_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
+        <label for="up_user_profile_search_criteria_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
       </span>
       <span class="p-float-label">
         <input
@@ -26,12 +28,13 @@
           pInputText
           type="text"
           formControlName="lastName"
-          class="w-15rem text-responsive"
+          class="w-12rem sm:w-15rem text-responsive"
+          [ariaLabel]="'USER_PROFILE.LAST_NAME' | translate"
           [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="user_profile_search_criteria_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
+        <label for="up_user_profile_search_criteria_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
       </span>
       <span class="p-float-label">
         <input
@@ -39,108 +42,87 @@
           pInputText
           type="text"
           formControlName="email"
-          class="w-15rem text-responsive"
+          class="w-12rem sm:w-15rem text-responsive"
+          [ariaLabel]="'USER_PROFILE.EMAIL' | translate"
           [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="user_profile_search_criteria_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
+        <label for="up_user_profile_search_criteria_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
       </span>
-      <span class="p-float-label">
+      <span *ocxAdvanced class="p-float-label">
         <input
           id="up_user_profile_search_criteria_user_id"
           pInputText
           type="text"
           formControlName="userId"
-          class="w-15rem text-responsive"
+          class="w-12rem sm:w-15rem text-responsive"
+          [ariaLabel]="'USER_PROFILE.USER_ID' | translate"
           [pTooltip]="'USER_PROFILE.USER_ID.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="user_profile_search_criteria_key">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
+        <label for="up_user_profile_search_criteria_key">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
       </span>
     </div>
   </ocx-search-header>
 
-  <ocx-content-container layout="horizontal" breakpoint="lg">
-    <ocx-content class="w-full" [ngClass]="'lg:w-12'" *ngIf="(resultData$ | async)!.length > 0 && !searchError">
-      <ocx-interactive-data-view
-        [data]="(filteredData$ | async) ?? []"
-        [columns]="columns"
-        [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
-        [supportedViewLayouts]="['grid', 'table']"
-        [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
-        (viewItem)="onDetail($event)"
-        (deleteItem)="onDelete($event)"
-        [viewPermission]="'USERPROFILE#VIEW'"
-        [deletePermission]="'USERPROFILE#DELETE'"
-        [actionColumnPosition]="'left'"
-      >
-        <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
-          <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
-        </ng-template>
+  <div *ngIf="(resultData$ | async)!.length > 0 && !searchError" class="card pt-2 correct-ocx-interactive-data-view">
+    <ocx-interactive-data-view
+      [data]="(filteredData$ | async) ?? []"
+      [columns]="columns"
+      [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
+      [supportedViewLayouts]="['table']"
+      [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
+      (viewItem)="onDetail($event)"
+      (deleteItem)="onDelete($event)"
+      [viewPermission]="'USERPROFILE#VIEW'"
+      [deletePermission]="'USERPROFILE#DELETE'"
+      [actionColumnPosition]="'left'"
+    >
+      <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
+        <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
+      </ng-template>
+      <ng-template pTemplate="dateTableFilterCell" let-rowObject="rowObject" let-column="column">
+        <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
+      </ng-template>
 
-        <ng-template pTemplate="dateTableFilterCell" let-rowObject="rowObject" let-column="column">
-          <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
-        </ng-template>
-
-        <ng-template #topCenter>
-          <ocx-data-view-controls
-            [enableSorting]="false"
-            [enableFiltering]="true"
-            (filterChange)="onFilterChange($event)"
-            [filterColumns]="[
-              'USER_PROFILE.FIRST_NAME' | translate,
-              'USER_PROFILE.LAST_NAME' | translate,
-              'USER_PROFILE.EMAIL' | translate
-            ]"
-            [translations]="dataViewControlsTranslations"
-          >
-          </ocx-data-view-controls>
-        </ng-template>
-        <ng-template #listItemSubtitleLines let-item>
-          <div *ngFor="let subtitleLineId of subtitleLineIds" class="edit-time text-xl my-3">
-            {{ item[subtitleLineId] }}
-          </div>
-        </ng-template>
-        <ng-template #gridItem let-item>
-          <div class="col-12 lg:col-6 xl:col-4 flex">
-            <div
-              class="data-grid-item card flex flex-column justify-content-between w-12 lg:w-11 mb-4 mt-4 align-self-stretch"
-            >
-              <div class="flex flex-row justify-content-between align-items-center">
-                <div class="data-grid-items flex-row">
-                  <div class="text-xl my-3 font-bold">{{ item['displayName'] }}</div>
-                  <div *ngFor="let subtitleLineId of subtitleLineIds" class="text-xl my-3">
-                    {{ item[subtitleLineId] }}
-                  </div>
-                </div>
-              </div>
-            </div>
-          </div>
-        </ng-template>
-        <ng-template #gridItemSubtitleLines let-item>
-          <div *ngFor="let subtitleLineId of subtitleLineIds" class="edit-time text-xl my-3">
-            {{ item[subtitleLineId] }}
-          </div>
-        </ng-template>
-      </ocx-interactive-data-view>
-    </ocx-content>
-  </ocx-content-container>
+      <ng-template #topCenter>
+        <ocx-data-view-controls
+          [enableSorting]="false"
+          [enableFiltering]="true"
+          (filterChange)="onFilterChange($event)"
+          [filterColumns]="[
+            'USER_PROFILE.FIRST_NAME' | translate,
+            'USER_PROFILE.LAST_NAME' | translate,
+            'USER_PROFILE.EMAIL' | translate
+          ]"
+          [translations]="dataViewControlsTranslations"
+        >
+        </ocx-data-view-controls>
+      </ng-template>
+    </ocx-interactive-data-view>
+  </div>
 </ocx-portal-page>
 
+<!-- DELETE -->
 <p-dialog
   [(visible)]="displayDeleteDialog"
   [header]="'ACTIONS.DELETE.USER' | translate"
-  [modal]="true"
-  [resizable]="false"
+  [closable]="true"
+  [draggable]="true"
+  [resizable]="true"
   [dismissableMask]="true"
-  [style]="{ 'max-width': '500px' }"
+  [style]="{ width: '400px' }"
 >
   <div class="flex column-gap-3 row-gap-1 justify-content-start align-items-center">
     <div class="pi pi-question-circle text-3xl danger-action-text"></div>
     <div>
       <div id="up_user_delete_message_text" class="font-bold">{{ 'ACTIONS.DELETE.MESSAGE_TEXT' | translate }}</div>
+      <div id="up_user_delete_user_display_name" class="mt-2 text-center font-bold danger-action-text">
+        {{ selectedUserName ?? '' }}
+      </div>
+      <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_HINT' | translate }}</div>
       <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_INFO' | translate }}</div>
     </div>
   </div>
@@ -151,7 +133,8 @@
         icon="pi pi-times"
         (onClick)="displayDeleteDialog = false"
         [label]="'ACTIONS.CONFIRMATION.NO' | translate"
-        [pTooltip]="'ACTIONS.CONFIRMATION.NO' | translate"
+        [ariaLabel]="'ACTIONS.CONFIRMATION.NO' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.NO.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-button>
@@ -160,7 +143,8 @@
         icon="pi pi-check"
         (onClick)="onDeleteConfirmation()"
         [label]="'ACTIONS.CONFIRMATION.YES' | translate"
-        [pTooltip]="'ACTIONS.CONFIRMATION.YES' | translate"
+        [ariaLabel]="'ACTIONS.CONFIRMATION.YES' | translate"
+        [pTooltip]="'ACTIONS.CONFIRMATION.YES.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-button>
@@ -168,13 +152,17 @@
   </ng-template>
 </p-dialog>
 
+<!-- DETAIL -->
 <p-dialog
   [(visible)]="displayDetailDialog"
   [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
   [modal]="true"
+  [closable]="true"
+  [draggable]="true"
   [resizable]="true"
   [dismissableMask]="true"
-  [style]="{ width: '800px' }"
+  contentStyleClass="p-0"
+  [style]="{ width: '860px' }"
 >
   <app-user-profile-admin
     [displayDetailDialog]="displayDetailDialog"
@@ -188,6 +176,7 @@
         icon="pi pi-times"
         (onClick)="onCloseDetail()"
         [label]="'ACTIONS.GENERAL.CLOSE' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
         [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"

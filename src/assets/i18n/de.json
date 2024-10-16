@@ -1,16 +1,22 @@
 {
-  "DIALOG": {
-    "SEARCH": {
-      "HEADER": "OCX User",
-      "SUBHEADER": "Suche nach OCX Benutzern"
-    }
-  },
   "ACTIONS": {
     "CONFIRMATION": {
       "NO": "Nein",
       "YES": "Ja",
       "NO.TOOLTIP": "Aktion abbrechen",
       "YES.TOOLTIP": "Mit der Aktion fortfahren"
+    },
+    "DELETE": {
+      "LABEL": "Löschen",
+      "USER": "Nutzerprofil löschen",
+      "USER.TOOLTIP": "Diese Nutzerprofil löschen",
+      "MESSAGE_TEXT": "Möchten Sie das folgende Nutzerprofil löschen?",
+      "MESSAGE_HINT": "Wenn der Benutzer sich das nächste Mal anmeldet wird ein neues Profil erzeugt.",
+      "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
+      "MESSAGE": {
+        "OK": "Die Nutzerprofil wurde erfolgreich gelöscht",
+        "NOK": "Ein Fehler ist aufgetreten. Die Nutzerprofil wurde nicht gelöscht."
+      }
     },
     "SEARCH": {
       "ERROR": "Daten nicht verfügbar",
@@ -30,17 +36,6 @@
       "MESSAGE": {
         "SUCCESS": "Erfolg",
         "NO_RESULTS": "Keine Ergebnisse"
-      }
-    },
-    "DELETE": {
-      "LABEL": "Löschen",
-      "USER": "Nutzerprofil löschen",
-      "USER.TOOLTIP": "Diese Nutzerprofil löschen",
-      "MESSAGE_TEXT": "Möchten Sie dieses Nutzerprofil löschen?",
-      "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",
-      "MESSAGE": {
-        "OK": "Die Nutzerprofil wurde erfolgreich gelöscht",
-        "NOK": "Ein Fehler ist aufgetreten. Die Nutzerprofil wurde nicht gelöscht."
       }
     },
     "VIEW": {
@@ -75,34 +70,40 @@
       "MODIFICATION_USER": "ID of the user of the last change"
     }
   },
+  "DIALOG": {
+    "SEARCH": {
+      "HEADER": "Nutzerprofile",
+      "SUBHEADER": "Suche und verwalten von Nutzerprofilen"
+    }
+  },
   "USER_PROFILE": {
     "HEADERS": {
       "GENERAL": "Persönliche Informationen",
       "SUBHEADER": "Persönliche Daten verwalten",
-      "BASIC": "Grundlegende Informationen",
+      "BASIC": "Person",
       "ADDRESS": "Adresse",
-      "PHONE": "Telefonnummer"
+      "PHONE": "Telefon"
     },
     "FIRST_NAME": "Vorname",
-    "FIRST_NAME.TOOLTIP": "Vorname des Nutzers",
+    "FIRST_NAME.TOOLTIP": "Vorname(n)",
     "LAST_NAME": "Nachname",
-    "LAST_NAME.TOOLTIP": "Nachname des Nutzers",
-    "USER_ID": "Benutzer-ID",
-    "USER_ID.TOOLTIP": "Benutzer-ID aus dem IAM-Service",
+    "LAST_NAME.TOOLTIP": "Nachname",
+    "USER_ID": "Nutzer-ID",
+    "USER_ID.TOOLTIP": "Nutzer-ID aus dem IAM-Service",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse",
     "TENANT": "Tenant-ID",
-    "TENANT.TOOLTIP": "Tenant-Id des Nutzers",
+    "TENANT.TOOLTIP": "Tenant-Id, abgeleitet aus der IAM-Kennung",
     "COUNTRY": "Land",
-    "COUNTRY.TOOLTIP": "Land des Nutzers",
+    "COUNTRY.TOOLTIP": "Name des Landes",
     "CITY": "Ort",
-    "CITY.TOOLTIP": "Ort des Nutzers",
+    "CITY.TOOLTIP": "Ortsname",
     "POSTAL_CODE": "PLZ",
-    "POSTAL_CODE.TOOLTIP": "Postleitzahl des Nutzers",
+    "POSTAL_CODE.TOOLTIP": "Postleitzahl",
     "STREET": "Straße",
-    "STREET.TOOLTIP": "Straße des Nutzers",
+    "STREET.TOOLTIP": "Straßenname",
     "HOUSE_NUMBER": "Hausnummer",
-    "HOUSE_NUMBER.TOOLTIP": "Hausnummer des Nutzers",
+    "HOUSE_NUMBER.TOOLTIP": "Hausnummer",
     "NUMBER": "Nummer",
     "PHONE_TYPE": "Telefontyp",
     "PHONE_TYPE.TOOLTIP": "Typ der Telefonnummer",

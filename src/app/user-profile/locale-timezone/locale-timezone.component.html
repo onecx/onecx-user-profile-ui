@@ -14,6 +14,7 @@
         [options]="localeSelectItems"
         [filter]="true"
         (onChange)="saveLocale()"
+        [ariaLabel]="'LANGUAGE_TIMEZONE.LANGUAGE' | translate"
         [pTooltip]="'LANGUAGE_TIMEZONE.LANGUAGE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
@@ -25,20 +26,18 @@
           <span [id]="item.value"> {{ item.label | translate }} </span>
         </ng-template>
       </p-dropdown>
-      <button
+      <p-button
         *ngIf="changedLanguage"
-        pButton
-        pRipple
-        type="button"
-        icon="pi pi-refresh"
-        class="ml-3 sm:ml-5 p-2 p-button-text"
         id="up_account_locale_refresh"
+        class="ml-3 sm:ml-5 p-2 p-button-text"
+        icon="pi pi-refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
+        [ariaLabel]="'GENERAL.APPLY' | translate"
         [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
-      ></button>
+      ></p-button>
     </div>
 
     <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</div>
@@ -57,24 +56,23 @@
         [filter]="true"
         placeholder="None"
         (onChange)="saveTimezone()"
+        [ariaLabel]="'LANGUAGE_TIMEZONE.TIMEZONE' | translate"
         [pTooltip]="'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-dropdown>
-      <button
+      <p-button
         *ngIf="changedTimezone"
-        pButton
-        pRipple
-        type="button"
-        icon="pi pi-refresh"
-        class="ml-3 sm:ml-5 p-2 p-button-text"
         id="up_account_timezone_refresh"
+        class="ml-3 sm:ml-5 p-2 p-button-text"
+        icon="pi pi-refresh"
         (click)="applyChange()"
         [label]="'GENERAL.RELOAD' | translate"
+        [ariaLabel]="'GENERAL.APPLY' | translate"
         [pTooltip]="'GENERAL.APPLY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
-      ></button>
+      ></p-button>
     </div>
     <span class="p-float-label mt-4">
       <input
@@ -84,6 +82,7 @@
         class="w-full xs:w-20rem"
         id="up_account_timezone_example"
         [value]="timezoneExampleDate | date: 'long' : timezoneUTC : locale"
+        [ariaLabel]="'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate"
         [pTooltip]="'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"

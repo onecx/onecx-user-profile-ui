@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
+import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 import { TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
@@ -17,7 +17,7 @@ import { from, map, Observable, of, switchMap } from 'rxjs'
 export class PersonalInformationComponent implements OnChanges {
   @Input() personalInfo!: UserPerson | null
   @Input() tenantId: string = ''
-  @Input() admin: boolean = false
+  @Input() adminView: boolean = false
   public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
@@ -49,21 +49,21 @@ export class PersonalInformationComponent implements OnChanges {
         return of(undefined)
       })
     )
-    this.editPermission = this.admin ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
+    this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
   }
 
   private initFormGroup(): UntypedFormGroup {
     return new UntypedFormGroup({
       address: new UntypedFormGroup({
-        street: new UntypedFormControl(''),
-        streetNo: new UntypedFormControl(''),
-        postalCode: new UntypedFormControl(''),
-        city: new UntypedFormControl(''),
+        street: new UntypedFormControl('', [Validators.maxLength(255)]),
+        streetNo: new UntypedFormControl('', [Validators.maxLength(255)]),
+        postalCode: new UntypedFormControl('', [Validators.maxLength(255)]),
+        city: new UntypedFormControl('', [Validators.maxLength(255)]),
         country: new UntypedFormControl('DE')
       }),
       phone: new UntypedFormGroup({
         type: new UntypedFormControl(PhoneType.MOBILE),
-        number: new UntypedFormControl('')
+        number: new UntypedFormControl('', [Validators.maxLength(255)])
       })
     })
   }

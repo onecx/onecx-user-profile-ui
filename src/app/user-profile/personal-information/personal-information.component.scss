@@ -1,3 +1,7 @@
+@import '/src/app/_up-mixins.scss';
+
+@include displaying-text-responsive;
+
 :host ::ng-deep {
   .p-panel {
     .p-panel-header,
@@ -7,18 +11,5 @@
   }
   .p-button-text .p-button-label {
     flex: unset;
-  }
-  .max-w-32rem {
-    max-width: 33.5rem;
-  }
-  .p-float-label {
-    .p-inputtext,
-    .p-dropdown .p-dropdown-label {
-      padding-top: 0.9rem;
-      padding-bottom: 0.6rem;
-    }
-    label {
-      white-space: nowrap;
-    }
   }
 }

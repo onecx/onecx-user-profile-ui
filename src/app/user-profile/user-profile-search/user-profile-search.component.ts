@@ -6,34 +6,36 @@ import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
 import { SelectItem } from 'primeng/api'
 
 import {
+  Action,
   ColumnType,
   DataTableColumn,
-  PortalMessageService,
   DiagramType,
-  RowListGridData,
   DiagramColumn,
-  Filter,
   DataViewControlTranslations,
+  Filter,
   InteractiveDataViewComponent,
-  Action,
+  PortalMessageService,
+  RowListGridData,
   UserService
 } from '@onecx/portal-integration-angular'
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-profile-search',
-  templateUrl: './user-profile-search.component.html'
+  templateUrl: './user-profile-search.component.html',
+  styleUrls: ['./user-profile-search.component.scss']
 })
 export class UserProfileSearchComponent implements OnInit {
-  resultData$ = new BehaviorSubject<RowListGridData[]>([])
-  filteredData$ = new BehaviorSubject<RowListGridData[]>([])
-  filterData = ''
-  combined$ = combineLatest([this.resultData$, this.filteredData$])
+  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
+  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
+  private filterData = ''
+  combined$ = combineLatest([this.resultData$, this.filteredData$]) // TODO
   filterValueSubject = new BehaviorSubject<string>('')
   diagramColumn: DiagramColumn | undefined
   criteriaGroup: UntypedFormGroup
   subtitleLineIds: string[] = ['firstName', 'lastName', 'email']
   public actions$: Observable<Action[]> | undefined
+  public selectedUserName: string | undefined
 
   /* ocx-data-view-controls settings*/
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
@@ -161,7 +163,7 @@ export class UserProfileSearchComponent implements OnInit {
       }
     ]
     this.statusOptions = []
-    this.search()
+    this.onSearch()
     this.initFilter()
   }
 
@@ -189,7 +191,7 @@ export class UserProfileSearchComponent implements OnInit {
       })
   }
 
-  search() {
+  public onSearch(): void {
     const userPersonCriteria = this.criteriaGroup.value
     const criteria = {
       userPersonCriteria: userPersonCriteria
@@ -232,7 +234,7 @@ export class UserProfileSearchComponent implements OnInit {
       })
   }
 
-  public resetCriteria(): void {
+  public onResetCriteria(): void {
     this.criteriaGroup.reset()
   }
 
@@ -260,7 +262,8 @@ export class UserProfileSearchComponent implements OnInit {
     this.displayDetailDialog = false
   }
 
-  public onDelete(ev: RowListGridData): void {
+  public onDelete(ev: any): void {
+    this.selectedUserName = ev.displayName
     this.resultData$
       .pipe(
         map((results) => {
@@ -279,11 +282,12 @@ export class UserProfileSearchComponent implements OnInit {
         next: () => {
           this.displayDeleteDialog = false
           this.userProfile = undefined
+          this.selectedUserName = undefined
           this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
         },
         error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
       })
     }
-    this.search()
+    this.onSearch()
   }
 }
