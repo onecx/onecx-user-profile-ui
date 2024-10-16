@@ -17,7 +17,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full"
+                class="w-full pt-3 pb-2"
                 id="up_personal_info_first_name"
                 [value]="person.firstName"
                 [ariaLabel]="'USER_PROFILE.FIRST_NAME' | translate"
@@ -32,7 +32,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full"
+                class="w-full pt-3 pb-2"
                 id="up_personal_info_last_name"
                 [value]="person.lastName"
                 [ariaLabel]="'USER_PROFILE.LAST_NAME' | translate"
@@ -47,7 +47,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full"
+                class="w-full pt-3 pb-2"
                 id="up_personal_info_email"
                 [value]="person.email"
                 [ariaLabel]="'USER_PROFILE.EMAIL' | translate"
@@ -62,7 +62,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full"
+                class="w-full pt-3 pb-2"
                 id="up_personal_info_tenant"
                 [value]="tenantId"
                 [ariaLabel]="'USER_PROFILE.TENANT' | translate"
@@ -133,6 +133,7 @@
                   class="p-2 p-button-text"
                   id="up_personal_info_address_save"
                   (click)="updateAddress()"
+                  [disabled]="formGroup.invalid"
                   [label]="'ACTIONS.GENERAL.SAVE' | translate"
                   [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
                   [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
@@ -146,8 +147,8 @@
           <div
             class="mx-1 sm:mx-2 md:mx-3 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4"
           >
-            <div class="max-w-32rem flex flex-row flex-wrap gap-3">
-              <span class="p-float-label flex-grow-1">
+            <div class="flex flex-row flex-wrap gap-3">
+              <span class="p-float-label flex-grow-1" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
@@ -163,7 +164,7 @@
                 />
                 <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
               </span>
-              <span class="p-float-label">
+              <span class="p-float-label" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
@@ -180,8 +181,8 @@
                 <label for="up_personal_info_address_street_no"> {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }} </label>
               </span>
             </div>
-            <div class="max-w-32rem flex flex-row flex-wrap gap-3">
-              <span class="p-float-label flex-grow-1">
+            <div class="flex flex-row flex-wrap gap-3">
+              <span class="p-float-label flex-grow-1" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
@@ -197,7 +198,7 @@
                 />
                 <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
               </span>
-              <span class="p-float-label">
+              <span class="p-float-label" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
@@ -214,7 +215,7 @@
                 <label for="up_personal_info_address_postal_code"> {{ 'USER_PROFILE.POSTAL_CODE' | translate }} </label>
               </span>
             </div>
-            <span class="p-float-label">
+            <span class="p-float-label" controlErrorAnchor>
               <p-dropdown
                 styleClass="w-full"
                 id="up_personal_info_address_country"
@@ -277,6 +278,7 @@
                   class="p-2 p-button-text"
                   icon="pi pi-save"
                   (click)="this.updatePhone()"
+                  [disabled]="formGroup.invalid"
                   [label]="'ACTIONS.GENERAL.SAVE' | translate"
                   [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
                   [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
@@ -288,7 +290,7 @@
           </ng-template>
 
           <div class="mx-1 sm:mx-2 md:mx-3 mb-3 flex flex-row flex-wrap justify-content-start gap-3">
-            <span class="p-float-label">
+            <span class="p-float-label" controlErrorAnchor>
               <p-dropdown
                 id="up_personal_info_phone_type"
                 [options]="phoneTypes"
@@ -302,7 +304,7 @@
               </p-dropdown>
               <label for="up_personal_info_phone_type"> {{ 'USER_PROFILE.PHONE_TYPE' | translate }} </label>
             </span>
-            <span class="p-float-label flex-grow-1">
+            <span class="p-float-label flex-grow-1" controlErrorAnchor>
               <input
                 pInputText
                 type="text"

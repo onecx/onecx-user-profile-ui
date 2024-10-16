@@ -81,7 +81,7 @@
       "SUBHEADER": "Manage personal data",
       "BASIC": "Person",
       "ADDRESS": "Address",
-      "PHONE": "Phone Number"
+      "PHONE": "Phone"
     },
     "FIRST_NAME": "First name",
     "FIRST_NAME.TOOLTIP": "First names",

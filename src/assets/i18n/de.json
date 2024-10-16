@@ -71,8 +71,8 @@
   },
   "DIALOG": {
     "SEARCH": {
-      "HEADER": "Benutzerprofile",
-      "SUBHEADER": "Suche und verwalten von Benutzerprofilen"
+      "HEADER": "Nutzerprofile",
+      "SUBHEADER": "Suche und verwalten von Nutzerprofilen"
     }
   },
   "USER_PROFILE": {
@@ -81,14 +81,14 @@
       "SUBHEADER": "Persönliche Daten verwalten",
       "BASIC": "Person",
       "ADDRESS": "Adresse",
-      "PHONE": "Telefonnummer"
+      "PHONE": "Telefon"
     },
     "FIRST_NAME": "Vorname",
     "FIRST_NAME.TOOLTIP": "Vorname(n)",
     "LAST_NAME": "Nachname",
     "LAST_NAME.TOOLTIP": "Nachname",
-    "USER_ID": "Benutzer-ID",
-    "USER_ID.TOOLTIP": "Benutzer-ID aus dem IAM-Service",
+    "USER_ID": "Nutzer-ID",
+    "USER_ID.TOOLTIP": "Nutzer-ID aus dem IAM-Service",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse",
     "TENANT": "Tenant-ID",
