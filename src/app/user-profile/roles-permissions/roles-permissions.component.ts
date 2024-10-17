@@ -36,6 +36,7 @@ export class RolesPermissionsComponent {
       this.userRolesAndPermissionsSlotName
     )
   }
+
   private prepareActionButtons(): void {
     this.actions$ = this.translate
       .get([
