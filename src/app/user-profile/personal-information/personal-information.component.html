@@ -148,7 +148,7 @@
                 <input
                   pInputText
                   type="text"
-                  class="w-full pt-3 pb-2 text-responsive"
+                  class="pt-3 pb-2 w-full min-w-15rem text-responsive"
                   id="up_personal_info_address_street"
                   formControlName="street"
                   [value]="person.address?.street"
@@ -160,11 +160,11 @@
                 />
                 <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
               </span>
-              <span class="p-float-label flex-grow-1 sm:flex-none" controlErrorAnchor>
+              <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
-                  class="w-full sm:w-8rem pt-3 pb-2 text-responsive"
+                  class="pt-3 pb-2 w-full text-responsive"
                   id="up_personal_info_address_street_no"
                   formControlName="streetNo"
                   [value]="person.address?.streetNo"
@@ -182,7 +182,7 @@
                 <input
                   pInputText
                   type="text"
-                  class="w-full pt-3 pb-2 text-responsive"
+                  class="pt-3 pb-2 w-full min-w-15rem text-responsive"
                   id="up_personal_info_address_city"
                   formControlName="city"
                   [value]="person.address?.city"
@@ -194,11 +194,11 @@
                 />
                 <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
               </span>
-              <span class="p-float-label flex-grow-1 sm:flex-none" controlErrorAnchor>
+              <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
-                  class="w-full sm:w-8rem pt-3 pb-2 text-responsive"
+                  class="pt-3 pb-2 w-full text-responsive"
                   id="up_personal_info_address_postal_code"
                   formControlName="postalCode"
                   [value]="person.address?.postalCode"
@@ -213,7 +213,7 @@
             </div>
             <span class="p-float-label" controlErrorAnchor>
               <p-dropdown
-                styleClass="w-full"
+                styleClass="w-full min-w-15rem"
                 id="up_personal_info_address_country"
                 [options]="countries"
                 formControlName="country"
@@ -286,7 +286,7 @@
           </ng-template>
 
           <div class="mx-1mb-3 flex flex-row flex-wrap justify-content-start gap-3">
-            <span class="p-float-label" controlErrorAnchor>
+            <span class="p-float-label flex-grow-0" controlErrorAnchor>
               <p-dropdown
                 id="up_personal_info_phone_type"
                 [options]="phoneTypes"
@@ -305,7 +305,7 @@
                 pInputText
                 type="text"
                 readonly
-                class="w-full pt-3 pb-2 text-responsive"
+                class="pt-3 pb-2 w-full min-w-15rem text-responsive"
                 id="up_personal_info_phone_number"
                 formControlName="number"
                 [value]="person.phone?.number"
