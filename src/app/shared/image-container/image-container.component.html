@@ -1,7 +1,7 @@
 <img
   [id]="id"
   *ngIf="!displayDefaultLogo"
-  [class]="'avatar-image ' + (styleClass ?? '')"
+  [class]="styleClass ?? ''"
   [ocxSrc]="imageUrl"
   (error)="onImageError()"
   [alt]="title"
@@ -12,7 +12,7 @@
 <img
   [id]="id"
   *ngIf="displayDefaultLogo"
-  [class]="'avatar-image ' + (styleClass ?? '')"
+  [class]="styleClass ?? ''"
   [src]="defaultImageUrl"
   [alt]="'AVATAR.PLACEHOLDER' | translate"
   [pTooltip]="title ? title : ('AVATAR.PLACEHOLDER' | translate)"

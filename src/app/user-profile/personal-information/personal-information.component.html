@@ -1,15 +1,15 @@
 <!--Personal Info-->
 <form *ngIf="personalInfo as person" [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="p-4 flex flex-column row-gap-2 sm:row-gap-3 md:row-gap-4" [ngClass]="{ 'pt-0': adminView }">
-    <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5">
-      <div class="flex-1">
+  <div class="p-3 sm:p-4 flex flex-column row-gap-3 md:row-gap-4" [ngClass]="{ 'pt-0': adminView }">
+    <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
+      <div class="flex-1 min-w-max">
         <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
           <ng-template pTemplate="header">
             <div class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full font-bold text-2xl">
               {{ 'USER_PROFILE.HEADERS.BASIC' | translate }}
             </div>
           </ng-template>
-          <div class="mx-1 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
+          <div class="mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
             <span class="p-float-label">
               <input
                 pInputText
@@ -83,7 +83,7 @@
       </div>
     </div>
 
-    <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5">
+    <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
       <div class="flex-1">
         <p-panel *ocxIfPermission="'PROFILE_ADDRESS#VIEW'" formGroupName="address" styleClass="surface-50">
           <ng-template pTemplate="header">
@@ -142,7 +142,7 @@
             </div>
           </ng-template>
 
-          <div class="mx-1 mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
+          <div class="mb-1 sm:mb-2 md:mb-3 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
             <div class="flex flex-row flex-wrap gap-3">
               <span class="p-float-label flex-grow-1" controlErrorAnchor>
                 <input
@@ -160,7 +160,7 @@
                 />
                 <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
               </span>
-              <span class="p-float-label" controlErrorAnchor>
+              <span class="p-float-label flex-grow-1 sm:flex-none" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
@@ -194,7 +194,7 @@
                 />
                 <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
               </span>
-              <span class="p-float-label" controlErrorAnchor>
+              <span class="p-float-label flex-grow-1 sm:flex-none" controlErrorAnchor>
                 <input
                   pInputText
                   type="text"
