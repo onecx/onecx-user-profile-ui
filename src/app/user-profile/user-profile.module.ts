@@ -47,6 +47,16 @@ const routes: Routes = [
     path: 'roles-and-perms',
     component: RolesPermissionsComponent,
     pathMatch: 'full'
+  },
+  {
+    path: 'permissions',
+    component: RolesPermissionsComponent,
+    pathMatch: 'full'
+  },
+  {
+    path: 'roles',
+    component: RolesPermissionsComponent,
+    pathMatch: 'full'
   }
 ]
 @NgModule({

@@ -77,8 +77,10 @@
     }
   },
   "USER_PROFILE": {
+    "NAVIGATION.LABEL": "Personal Data",
+    "NAVIGATION.TOOLTIP": "Switch to view Personal Data",
     "HEADERS": {
-      "GENERAL": "Personal Information",
+      "GENERAL": "Personal Data",
       "SUBHEADER": "Manage personal data",
       "BASIC": "Person",
       "ADDRESS": "Address",
@@ -119,6 +121,8 @@
     }
   },
   "SETTINGS": {
+    "NAVIGATION.LABEL": "Account Settings",
+    "NAVIGATION.TOOLTIP": "Go to Account Settings",
     "SUBHEADER": "My Settings & Preferences",
     "PREFERENCE_ITEM": {
       "APPLICATION_ID": "Application ID",
@@ -166,6 +170,8 @@
     }
   },
   "ROLE_PERMISSIONS": {
+    "NAVIGATION.LABEL": "Permissions",
+    "NAVIGATION.TOOLTIP": "Switch to view assigned Roles and Permissions",
     "HEADLINE": "Roles and Permissions granted",
     "TAB_NAME_ROLES": "Roles",
     "TAB_NAME_ROLES.TOOLTIP": "The user's roles",
