@@ -1,10 +1,14 @@
-<div class="mx-1 sm:mx-2 md:mx-3 relative flex flex-wrap justify-content-start column-gap-2 row-gap-0">
+<div class="relative flex flex-wrap justify-content-center sm:justify-content-start column-gap-2 row-gap-0">
   <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
-    <app-image-container [imageUrl]="imageUrl" (imageLoadError)="onImageError($event)"></app-image-container>
+    <app-image-container
+      [imageUrl]="imageUrl"
+      (imageLoadError)="onImageError($event)"
+      styleClass="avatar-image sm:avatar-image md:avatar-image"
+    ></app-image-container>
   </div>
 
   <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
-    <div class="flex flex-row sm:flex-column flex-nowrap row-gap-1 toolbar">
+    <div class="flex flex-row sm:flex-column flex-nowrap align-items-start row-gap-1 toolbar">
       <button
         pButton
         pRipple

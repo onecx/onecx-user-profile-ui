@@ -13,7 +13,6 @@ import { environment } from 'src/environments/environment'
  */
 @Component({
   selector: 'app-image-container',
-  styleUrls: ['./image-container.component.scss'],
   templateUrl: './image-container.component.html'
 })
 export class ImageContainerComponent implements OnChanges {
