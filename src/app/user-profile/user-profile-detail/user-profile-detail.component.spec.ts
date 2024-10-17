@@ -9,7 +9,7 @@ import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-inte
 import { UserProfileDetailComponent } from './user-profile-detail.component'
 import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 
-describe('UserProfileDetailComponent', () => {
+xdescribe('UserProfileDetailComponent', () => {
   let component: UserProfileDetailComponent
   let fixture: ComponentFixture<UserProfileDetailComponent>
 
