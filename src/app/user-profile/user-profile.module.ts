@@ -24,12 +24,26 @@ const routes: Routes = [
   {
     path: '',
     component: UserProfileDetailComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.PROFILE',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
   },
   {
     path: 'account',
     component: AccountSettingsComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.SETTINGS',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
   },
   {
     path: 'search',
@@ -46,17 +60,38 @@ const routes: Routes = [
   {
     path: 'roles-and-perms',
     component: RolesPermissionsComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
   },
   {
     path: 'permissions',
     component: RolesPermissionsComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
   },
   {
     path: 'roles',
     component: RolesPermissionsComponent,
-    pathMatch: 'full'
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
   }
 ]
 @NgModule({

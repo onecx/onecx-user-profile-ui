@@ -45,9 +45,11 @@
     "GENERAL": {
       "APPLY": "Apply",
       "APPLY.TOOLTIP": "Reload page to apply the change immediately",
+      "CHANGE": "Change",
       "EDIT": "Edit",
       "EDIT.TOOLTIP": "Switch to edit mode",
       "LOADING": "Loading...",
+      "REMOVE": "Remove",
       "RELOAD": "Reload",
       "SAVE": "Save",
       "SAVE.TOOLTIP": "Save",
@@ -231,6 +233,9 @@
     "TAB_NAME_PREFERENCES": "Preferences"
   },
   "BREADCRUMBS": {
-    "SEARCH": "Search"
+    "SEARCH": "Search",
+    "SETTINGS": "Settings",
+    "PROFILE": "User Profile",
+    "ROLES_PERMISSIONS": "Permissions"
   }
 }
