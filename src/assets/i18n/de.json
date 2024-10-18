@@ -169,31 +169,10 @@
       "REMOVE_ERROR": "Dateientfernung fehlgeschlagen"
     }
   },
-  "ROLE_PERMISSIONS": {
-    "NAVIGATION.LABEL": "Zugriffsrechte",
-    "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Zugriffsrechte wechseln",
-    "HEADLINE": "Rollen und Berechtigungen gewährt",
-    "TAB_NAME_ROLES": "Rollen",
-    "TAB_NAME_ROLES.TOOLTIP": "Rollen des Nutzers",
-    "TAB_NAME_PERMISSIONS": "Berechtigungen",
-    "TAB_NAME_PERMISSIONS.TOOLTIP": "Berechtigungen des Nutzers",
-    "TITLE_ROLES": "Meine Rollen",
-    "TITLE_PERMISSIONS": "Meine Berechtigungen",
-    "NO_RESULTS": "Keine Daten",
-    "PERMISSION": "Berechtigung",
-    "APPLICATION": "Anwendung",
-    "NAME": "Name",
-    "ACTION": "Aktion",
-    "RESOURCE": "Ressource",
-    "ROLE": "Rolle",
-    "TABS": {
-      "ROLES": "Rollen",
-      "PERMISSIONS": "Berechtigungen"
-    },
-    "MSG": {
-      "PERMISSIONS_REFRESH_INFO": "Berechtigungen wurden aktualisiert",
-      "PERMISSIONS_REFRESH_ERROR": "Fehler beim Aktualisieren der Berechtigungen"
-    }
+  "ROLES_PERMISSIONS": {
+    "NAVIGATION.LABEL": "Berechtigungen",
+    "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Berechtigungen wechseln",
+    "SUBHEADER": "Zugewiesene Rollen und Berechtigungen"
   },
   "LANGUAGE_TIMEZONE": {
     "TAB_NAME_LANGUAGE_TIMEZONE": "Sprache & Zeitzone",

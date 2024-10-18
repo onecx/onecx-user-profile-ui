@@ -5,13 +5,13 @@
 >
   <ocx-page-header
     [header]="person.firstName + ' ' + person.lastName"
-    [subheader]="'ROLE_PERMISSIONS.HEADLINE' | translate"
+    [subheader]="'ROLES_PERMISSIONS.SUBHEADER' | translate"
     [actions]="(actions$ | async) ?? []"
   >
   </ocx-page-header>
 
   <ocx-page-content>
-    <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
+    <div class="p-2 sm:p-3">
       <ocx-slot *ngIf="isUserRolesAndPermissionsComponentDefined$ | async" name="{{ userRolesAndPermissionsSlotName }}">
       </ocx-slot>
     </div>

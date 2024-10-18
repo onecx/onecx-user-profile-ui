@@ -1,13 +1,13 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
+import { from, map, Observable, of, switchMap } from 'rxjs'
 import { SelectItem } from 'primeng/api'
 import { TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType } from '@onecx/portal-integration-angular'
 import { UserPerson } from 'src/app/shared/generated'
-import { from, map, Observable, of, switchMap } from 'rxjs'
 
 @Component({
   selector: 'app-personal-info',

@@ -169,31 +169,10 @@
       "REMOVE_ERROR": "File removing failed"
     }
   },
-  "ROLE_PERMISSIONS": {
+  "ROLES_PERMISSIONS": {
     "NAVIGATION.LABEL": "Permissions",
     "NAVIGATION.TOOLTIP": "Switch to view assigned Roles and Permissions",
-    "HEADLINE": "Roles and Permissions granted",
-    "TAB_NAME_ROLES": "Roles",
-    "TAB_NAME_ROLES.TOOLTIP": "The user's roles",
-    "TAB_NAME_PERMISSIONS": "Permissions",
-    "TAB_NAME_PERMISSIONS.TOOLTIP": "The user's permissions",
-    "TITLE_ROLES": "My Roles",
-    "TITLE_PERMISSIONS": "My Permissions",
-    "NO_RESULTS": "No data",
-    "PERMISSION": "Permission",
-    "APPLICATION": "Application",
-    "NAME": "Name",
-    "ACTION": "Action",
-    "RESOURCE": "Resource",
-    "ROLE": "Role",
-    "TABS": {
-      "ROLES": "Roles",
-      "PERMISSIONS": "Permissions"
-    },
-    "MSG": {
-      "PERMISSIONS_REFRESH_INFO": "Permissions were refreshed",
-      "PERMISSIONS_REFRESH_ERROR": "Error while upating permissions"
-    }
+    "SUBHEADER": "Roles and Permissions granted"
   },
   "LANGUAGE_TIMEZONE": {
     "TAB_NAME_LANGUAGE_TIMEZONE": "Language & Timezone",
