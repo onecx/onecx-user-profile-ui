@@ -2,15 +2,12 @@ import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
-import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
-import { SelectItem } from 'primeng/api'
 
 import {
   Action,
   ColumnType,
   DataTableColumn,
   DataViewControlTranslations,
-  Filter,
   InteractiveDataViewComponent,
   PortalMessageService,
   RowListGridData,
@@ -24,111 +21,28 @@ import { UserProfileAdminAPIService } from 'src/app/shared/generated'
   styleUrls: ['./user-profile-search.component.scss']
 })
 export class UserProfileSearchComponent implements OnInit {
+  public actions$: Observable<Action[]> | undefined
   private filterData = ''
   public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
   public resultData$ = new BehaviorSubject<RowListGridData[]>([])
   public criteriaGroup: UntypedFormGroup
-  public actions$: Observable<Action[]> | undefined
   public selectedUserName: string | undefined //used in deletion dialog
 
   /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
   public userProfile: RowListGridData | undefined
-  public quickFilterValue = 'ALL'
-  public quickFilterItems: SelectItem[] = []
   public filterValue: string | undefined
   public filterValueDefault = 'displayName,firstName,lastName'
   public filterBy = this.filterValueDefault
   public filterDataView: string | undefined
-  public sortOrder = 1
-  public defaultSortField = 'displayName'
   public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
   public displayDeleteDialog = false
   public displayDetailDialog = false
 
-  columns: DataTableColumn[] = [
-    {
-      columnType: ColumnType.STRING,
-      id: 'firstName',
-      nameKey: 'USER_PROFILE.FIRST_NAME',
-      filterable: false,
-      sortable: true,
-      predefinedGroupKeys: [
-        'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
-      ]
-    },
-    {
-      columnType: ColumnType.STRING,
-      id: 'lastName',
-      nameKey: 'USER_PROFILE.LAST_NAME',
-      filterable: false,
-      sortable: true,
-      predefinedGroupKeys: [
-        'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
-        'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
-        'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
-      ]
-    },
-    {
-      columnType: ColumnType.STRING,
-      id: 'email',
-      nameKey: 'USER_PROFILE.EMAIL',
-      filterable: false,
-      sortable: true,
-      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
-    },
-    {
-      columnType: ColumnType.STRING,
-      id: 'tenantId',
-      nameKey: 'USER_PROFILE.TENANT',
-      filterable: false,
-      sortable: true,
-      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
-    },
-    {
-      columnType: ColumnType.STRING,
-      id: 'userId',
-      nameKey: 'USER_PROFILE.USER_ID',
-      filterable: false,
-      sortable: true,
-      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
-    },
-    {
-      columnType: ColumnType.DATE,
-      id: 'creationDate',
-      nameKey: 'INTERNAL.CREATION_DATE',
-      filterable: true,
-      sortable: true,
-      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
-    },
-    {
-      columnType: ColumnType.DATE,
-      id: 'modificationDate',
-      nameKey: 'INTERNAL.MODIFICATION_DATE',
-      filterable: true,
-      sortable: true,
-      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
-    }
-  ]
-
-  createDialogVisible = false
-  searchExecuted = false
-  searchError = false
-  getDateFormat = getDateFormat
-  statusOptions!: any[]
-  selectedStatus: SelectItem[] | undefined
-  deleteDialogVisible: boolean | undefined
-  deleteEventId: string | undefined
-  deleteEventName: string | undefined
-  selectedStatusOptions: SelectItem[] = []
-  columnId = 'status'
-  column = this.columns.find((e) => e.id === this.columnId)
-  sortField = ''
-  filter: Filter[] = []
-  getTooltipContent = getTooltipContent
+  public columns: DataTableColumn[]
+  private searchExecuted = false
+  public searchError = false
 
   constructor(
     private readonly userProfileAdminService: UserProfileAdminAPIService,
@@ -145,19 +59,77 @@ export class UserProfileSearchComponent implements OnInit {
       size: 50
     })
     this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
+    this.columns = [
+      {
+        columnType: ColumnType.STRING,
+        id: 'firstName',
+        nameKey: 'USER_PROFILE.FIRST_NAME',
+        filterable: false,
+        sortable: true,
+        predefinedGroupKeys: [
+          'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+          'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+          'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
+        ]
+      },
+      {
+        columnType: ColumnType.STRING,
+        id: 'lastName',
+        nameKey: 'USER_PROFILE.LAST_NAME',
+        filterable: false,
+        sortable: true,
+        predefinedGroupKeys: [
+          'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+          'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+          'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
+        ]
+      },
+      {
+        columnType: ColumnType.STRING,
+        id: 'email',
+        nameKey: 'USER_PROFILE.EMAIL',
+        filterable: false,
+        sortable: true,
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      },
+      {
+        columnType: ColumnType.STRING,
+        id: 'tenantId',
+        nameKey: 'USER_PROFILE.TENANT',
+        filterable: false,
+        sortable: true,
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      },
+      {
+        columnType: ColumnType.STRING,
+        id: 'userId',
+        nameKey: 'USER_PROFILE.USER_ID',
+        filterable: false,
+        sortable: true,
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      },
+      {
+        columnType: ColumnType.DATE,
+        id: 'creationDate',
+        nameKey: 'INTERNAL.CREATION_DATE',
+        filterable: true,
+        sortable: true,
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      },
+      {
+        columnType: ColumnType.DATE,
+        id: 'modificationDate',
+        nameKey: 'INTERNAL.MODIFICATION_DATE',
+        filterable: true,
+        sortable: true,
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      }
+    ]
   }
 
   ngOnInit() {
-    this.sortField = 'displayName'
-    this.filter = [
-      {
-        columnId: 'displayName',
-        value: 'displayName'
-      }
-    ]
-    this.statusOptions = []
-    this.onSearch()
     this.initFilter()
+    this.onSearch()
   }
 
   initFilter() {
@@ -167,7 +139,7 @@ export class UserProfileSearchComponent implements OnInit {
           if (this.filterData.trim()) {
             const lowerCaseFilter = this.filterData.toLowerCase()
             return array.filter((item) => {
-              return ['firstName', 'lastName', 'displayName', 'email'].some((key) => {
+              return ['firstName', 'lastName', 'email'].some((key) => {
                 const value = item[key]
                 return value?.toString().toLowerCase().includes(lowerCaseFilter)
               })
@@ -206,7 +178,7 @@ export class UserProfileSearchComponent implements OnInit {
           if (stream.length === 0) {
             this.portalMessageService.success({
               summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
-              detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_RESULTS'
+              detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
             })
           }
           clearTimeout(clearTable)

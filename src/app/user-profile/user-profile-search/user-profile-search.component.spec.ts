@@ -143,7 +143,7 @@ describe('UserProfileSearchComponent', () => {
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
     expect(msgServiceSpy.success).toHaveBeenCalledWith({
       summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
-      detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_RESULTS'
+      detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
     })
   })
 

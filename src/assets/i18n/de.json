@@ -31,11 +31,12 @@
       "PREDEFINED_GROUP": {
         "DEFAULT": "Standard",
         "EXTENDED": "Erweitert",
-        "FULL": "Voll"
+        "FULL": "Alle"
       },
       "MESSAGE": {
-        "SUCCESS": "Erfolg",
-        "NO_RESULTS": "Keine Ergebnisse"
+        "SUCCESS": "Suche durchgeführt",
+        "NO_RESULTS": "Keine Ergebnisse",
+        "NO_PROFILES": "Keine Nutzerprofile gefunden"
       }
     },
     "VIEW": {
