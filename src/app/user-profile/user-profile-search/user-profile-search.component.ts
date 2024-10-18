@@ -32,8 +32,7 @@ export class UserProfileSearchComponent implements OnInit {
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
   public userProfile: RowListGridData | undefined
   public filterValue: string | undefined
-  public filterValueDefault = 'displayName,firstName,lastName'
-  public filterBy = this.filterValueDefault
+  public filterBy = 'firstName,lastName,email'
   public filterDataView: string | undefined
   public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
@@ -41,7 +40,7 @@ export class UserProfileSearchComponent implements OnInit {
   public displayDetailDialog = false
 
   public columns: DataTableColumn[]
-  private searchExecuted = false
+  public searchInProgress = true
   public searchError = false
 
   constructor(
@@ -157,6 +156,7 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public onSearch(): void {
+    this.searchInProgress = true
     const userPersonCriteria = this.criteriaGroup.value
     const criteria = {
       userPersonCriteria: userPersonCriteria
@@ -169,7 +169,7 @@ export class UserProfileSearchComponent implements OnInit {
       .searchUserProfile(criteria)
       .pipe(
         finalize(() => {
-          this.searchExecuted = true
+          this.searchInProgress = false
         }),
         map((data: any) => data.stream)
       )
