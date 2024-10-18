@@ -31,11 +31,12 @@
       "PREDEFINED_GROUP": {
         "DEFAULT": "Standard",
         "EXTENDED": "Erweitert",
-        "FULL": "Voll"
+        "FULL": "Alle"
       },
       "MESSAGE": {
-        "SUCCESS": "Erfolg",
-        "NO_RESULTS": "Keine Ergebnisse"
+        "SUCCESS": "Suche durchgeführt",
+        "NO_RESULTS": "Keine Ergebnisse",
+        "NO_PROFILES": "Keine Nutzerprofile gefunden"
       }
     },
     "VIEW": {
@@ -44,10 +45,10 @@
     "GENERAL": {
       "APPLY": "Anwenden",
       "APPLY.TOOLTIP": "Die Seite neu laden, um die Änderung sofort zu sehen",
+      "CHANGE": "Ändern",
       "EDIT": "Bearbeiten",
       "EDIT.TOOLTIP": "In den Bearbeitungsmodus wechseln",
-      "FILTER_CLEAR": "Filter löschen",
-      "CHANGE": "Ändern",
+      "LOADING": "Laden...",
       "REMOVE": "Entfernen",
       "RELOAD": "Neu laden",
       "SAVE": "Speichern",
@@ -59,15 +60,15 @@
     }
   },
   "INTERNAL": {
-    "CREATION_DATE": "Created on",
-    "CREATION_USER": "Created by",
-    "MODIFICATION_DATE": "Changed on",
-    "MODIFICATION_USER": "Changed by",
+    "CREATION_DATE": "Erstellt am",
+    "CREATION_USER": "Erstellt von",
+    "MODIFICATION_DATE": "Geändert am",
+    "MODIFICATION_USER": "Geändert von",
     "TOOLTIPS": {
-      "CREATION_DATE": "Timestamp of the creation",
-      "CREATION_USER": "ID of the user of the creation",
-      "MODIFICATION_DATE": "Timestamp of the last change",
-      "MODIFICATION_USER": "ID of the user of the last change"
+      "CREATION_DATE": "Zeitpunkt der Erstellung",
+      "CREATION_USER": "ID des Benutzers der Erstellung",
+      "MODIFICATION_DATE": "Zeitpunkt der letzten Änderung",
+      "MODIFICATION_USER": "ID des Benutzers der letzten Änderung"
     }
   },
   "DIALOG": {
@@ -121,8 +122,8 @@
     }
   },
   "SETTINGS": {
-    "NAVIGATION.LABEL": "Account Settings",
-    "NAVIGATION.TOOLTIP": "Zu Account Settings wechseln",
+    "NAVIGATION.LABEL": "Einstellungen",
+    "NAVIGATION.TOOLTIP": "Zu Einstellungen wechseln",
     "SUBHEADER": "Meine Einstellungen",
     "PREFERENCE_ITEM": {
       "APPLICATION_ID": "Anwendungs-ID",
@@ -169,31 +170,10 @@
       "REMOVE_ERROR": "Dateientfernung fehlgeschlagen"
     }
   },
-  "ROLE_PERMISSIONS": {
-    "NAVIGATION.LABEL": "Zugriffsrechte",
-    "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Zugriffsrechte wechseln",
-    "HEADLINE": "Rollen und Berechtigungen gewährt",
-    "TAB_NAME_ROLES": "Rollen",
-    "TAB_NAME_ROLES.TOOLTIP": "Rollen des Nutzers",
-    "TAB_NAME_PERMISSIONS": "Berechtigungen",
-    "TAB_NAME_PERMISSIONS.TOOLTIP": "Berechtigungen des Nutzers",
-    "TITLE_ROLES": "Meine Rollen",
-    "TITLE_PERMISSIONS": "Meine Berechtigungen",
-    "NO_RESULTS": "Keine Daten",
-    "PERMISSION": "Berechtigung",
-    "APPLICATION": "Anwendung",
-    "NAME": "Name",
-    "ACTION": "Aktion",
-    "RESOURCE": "Ressource",
-    "ROLE": "Rolle",
-    "TABS": {
-      "ROLES": "Rollen",
-      "PERMISSIONS": "Berechtigungen"
-    },
-    "MSG": {
-      "PERMISSIONS_REFRESH_INFO": "Berechtigungen wurden aktualisiert",
-      "PERMISSIONS_REFRESH_ERROR": "Fehler beim Aktualisieren der Berechtigungen"
-    }
+  "ROLES_PERMISSIONS": {
+    "NAVIGATION.LABEL": "Berechtigungen",
+    "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Berechtigungen wechseln",
+    "SUBHEADER": "Zugewiesene Rollen und Berechtigungen"
   },
   "LANGUAGE_TIMEZONE": {
     "TAB_NAME_LANGUAGE_TIMEZONE": "Sprache & Zeitzone",
@@ -253,6 +233,9 @@
     "TAB_NAME_PREFERENCES": "Vorlieben"
   },
   "BREADCRUMBS": {
-    "SEARCH": "Suche"
+    "SEARCH": "Suche",
+    "SETTINGS": "Einstellungen",
+    "PROFILE": "Nutzerprofil",
+    "ROLES_PERMISSIONS": "Berechtigungen"
   }
 }

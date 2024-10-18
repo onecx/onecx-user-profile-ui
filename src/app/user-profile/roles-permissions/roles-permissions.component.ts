@@ -43,7 +43,7 @@ export class RolesPermissionsComponent {
         'SETTINGS.NAVIGATION.LABEL',
         'SETTINGS.NAVIGATION.TOOLTIP',
         'USER_PROFILE.NAVIGATION.LABEL',
-        'USER_PROFILE.NAVIGATION.TOOTIP'
+        'USER_PROFILE.NAVIGATION.TOOLTIP'
       ])
       .pipe(
         map((data) => {

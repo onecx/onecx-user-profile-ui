@@ -58,8 +58,8 @@ export class UserProfileDetailComponent {
       .get([
         'SETTINGS.NAVIGATION.LABEL',
         'SETTINGS.NAVIGATION.TOOLTIP',
-        'ROLE_PERMISSIONS.NAVIGATION.LABEL',
-        'ROLE_PERMISSIONS.NAVIGATION.TOOTIP'
+        'ROLES_PERMISSIONS.NAVIGATION.LABEL',
+        'ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'
       ])
       .pipe(
         map((data) => {
@@ -73,8 +73,8 @@ export class UserProfileDetailComponent {
               show: 'always'
             },
             {
-              label: data['ROLE_PERMISSIONS.NAVIGATION.LABEL'],
-              title: data['ROLE_PERMISSIONS.NAVIGATION.TOOLTIP'],
+              label: data['ROLES_PERMISSIONS.NAVIGATION.LABEL'],
+              title: data['ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'],
               actionCallback: () => this.router.navigate(['./roles'], { relativeTo: this.route }),
               permission: 'ROLES_PERMISSIONS#VIEW',
               icon: 'pi pi-lock',
