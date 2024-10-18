@@ -6,6 +6,7 @@
   <ocx-page-header
     [header]="person.firstName + ' ' + person.lastName"
     [subheader]="'ROLE_PERMISSIONS.HEADLINE' | translate"
+    [actions]="(actions$ | async) ?? []"
   >
   </ocx-page-header>
 

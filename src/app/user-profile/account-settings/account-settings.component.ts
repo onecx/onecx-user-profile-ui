@@ -1,7 +1,10 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
+import { TranslateService } from '@ngx-translate/core'
+import { map } from 'rxjs/operators'
+import { Observable } from 'rxjs'
 
-import { ConfigurationService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { Action, ConfigurationService, PortalMessageService } from '@onecx/portal-integration-angular'
 import {
   UpdateUserSettings,
   UserProfileAPIService,
@@ -9,8 +12,6 @@ import {
   UserProfileAccountSettings
 } from 'src/app/shared/generated'
 import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.component'
-import { map } from 'rxjs/operators'
-import { Observable } from 'rxjs'
 import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
@@ -21,6 +22,7 @@ export class AccountSettingsComponent implements OnInit {
   @Output() public editModeUpdate = new EventEmitter<boolean>()
   @ViewChild(PrivacySettingsComponent, { static: false }) privacySettings!: PrivacySettingsComponent
 
+  public actions$: Observable<Action[]> | undefined
   public personalInfo$: Observable<UserPerson>
   public isChangePasswordComponentDefined$: Observable<boolean>
   public settings: UserProfileAccountSettings = {}
@@ -33,13 +35,20 @@ export class AccountSettingsComponent implements OnInit {
   private profileCacheItem = 'tkit_user_profile'
 
   constructor(
+    private readonly route: ActivatedRoute,
+    private readonly router: Router,
+    private readonly translate: TranslateService,
     private readonly msgService: PortalMessageService,
     private readonly userProfileService: UserProfileAPIService,
-    private readonly router: Router,
     private readonly confService: ConfigurationService, // private readonly stateService: StateService
     private readonly slotService: SlotService
   ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(map((profile) => profile.person || {}))
+    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
+      map((profile) => {
+        this.prepareActionButtons()
+        return profile.person || {}
+      })
+    )
     this.isChangePasswordComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.changePasswordSlotName)
   }
 
@@ -104,5 +113,37 @@ export class AccountSettingsComponent implements OnInit {
 
   public reloadWindow(): void {
     window.location.reload()
+  }
+
+  private prepareActionButtons(): void {
+    this.actions$ = this.translate
+      .get([
+        'ROLE_PERMISSIONS.NAVIGATION.LABEL',
+        'ROLE_PERMISSIONS.NAVIGATION.TOOLTIP',
+        'USER_PROFILE.NAVIGATION.LABEL',
+        'USER_PROFILE.NAVIGATION.TOOTIP'
+      ])
+      .pipe(
+        map((data) => {
+          return [
+            {
+              label: data['USER_PROFILE.NAVIGATION.LABEL'],
+              title: data['USER_PROFILE.NAVIGATION.TOOLTIP'],
+              actionCallback: () => this.router.navigate(['../'], { relativeTo: this.route }),
+              permission: 'USERPROFILE#VIEW',
+              icon: 'pi pi-user',
+              show: 'always'
+            },
+            {
+              label: data['ROLE_PERMISSIONS.NAVIGATION.LABEL'],
+              title: data['ROLE_PERMISSIONS.NAVIGATION.TOOLTIP'],
+              actionCallback: () => this.router.navigate(['../roles'], { relativeTo: this.route }),
+              permission: 'ROLES_PERMISSIONS#VIEW',
+              icon: 'pi pi-lock',
+              show: 'always'
+            }
+          ]
+        })
+      )
   }
 }

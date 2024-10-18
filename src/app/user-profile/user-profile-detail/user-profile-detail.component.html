@@ -3,6 +3,7 @@
     *ngIf="personalInfo$ | async as person"
     [header]="'USER_PROFILE.HEADERS.GENERAL' | translate"
     [subheader]="'USER_PROFILE.HEADERS.SUBHEADER' | translate"
+    [actions]="(actions$ | async) ?? []"
   >
   </ocx-page-header>
 

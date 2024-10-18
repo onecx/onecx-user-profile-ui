@@ -1,5 +1,5 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
-import { BehaviorSubject, combineLatest, Observable } from 'rxjs'
+import { BehaviorSubject, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import { getDateFormat, getTooltipContent } from 'src/app/shared/utils'
@@ -9,8 +9,6 @@ import {
   Action,
   ColumnType,
   DataTableColumn,
-  DiagramType,
-  DiagramColumn,
   DataViewControlTranslations,
   Filter,
   InteractiveDataViewComponent,
@@ -26,18 +24,14 @@ import { UserProfileAdminAPIService } from 'src/app/shared/generated'
   styleUrls: ['./user-profile-search.component.scss']
 })
 export class UserProfileSearchComponent implements OnInit {
-  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
-  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
   private filterData = ''
-  combined$ = combineLatest([this.resultData$, this.filteredData$]) // TODO
-  filterValueSubject = new BehaviorSubject<string>('')
-  diagramColumn: DiagramColumn | undefined
-  criteriaGroup: UntypedFormGroup
-  subtitleLineIds: string[] = ['firstName', 'lastName', 'email']
+  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
+  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
+  public criteriaGroup: UntypedFormGroup
   public actions$: Observable<Action[]> | undefined
-  public selectedUserName: string | undefined
+  public selectedUserName: string | undefined //used in deletion dialog
 
-  /* ocx-data-view-controls settings*/
+  /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
   public userProfile: RowListGridData | undefined
   public quickFilterValue = 'ALL'
@@ -100,7 +94,7 @@ export class UserProfileSearchComponent implements OnInit {
       nameKey: 'USER_PROFILE.USER_ID',
       filterable: false,
       sortable: true,
-      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
     },
     {
       columnType: ColumnType.DATE,
@@ -135,7 +129,6 @@ export class UserProfileSearchComponent implements OnInit {
   sortField = ''
   filter: Filter[] = []
   getTooltipContent = getTooltipContent
-  supportedDiagramTypes: DiagramType[] = [DiagramType.PIE, DiagramType.HORIZONTAL_BAR, DiagramType.VERTICAL_BAR]
 
   constructor(
     private readonly userProfileAdminService: UserProfileAdminAPIService,

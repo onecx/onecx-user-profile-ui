@@ -3,6 +3,7 @@
     *ngIf="personalInfo$ | async as person"
     [header]="person.firstName + ' ' + person.lastName"
     [subheader]="'SETTINGS.SUBHEADER' | translate"
+    [actions]="(actions$ | async) ?? []"
   >
   </ocx-page-header>
 
