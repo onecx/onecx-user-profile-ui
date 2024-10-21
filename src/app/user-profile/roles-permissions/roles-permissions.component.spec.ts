@@ -75,7 +75,6 @@ describe('RolesPermissionsComponent', () => {
   }))
 
   beforeEach(() => {
-    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
     fixture = TestBed.createComponent(RolesPermissionsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -85,7 +84,17 @@ describe('RolesPermissionsComponent', () => {
     expect(component).toBeTruthy()
   })
 
+  it('should handle empty object returned by getUserProfile', () => {
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
+
+    component.personalInfo$?.subscribe((info) => {
+      expect(info).toEqual({})
+    })
+  })
+
   it('should navigate to user profile', () => {
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
+
     component.actions$?.subscribe((action) => {
       action[0].actionCallback()
     })
@@ -94,6 +103,8 @@ describe('RolesPermissionsComponent', () => {
   })
 
   it('should navigate to account settings', () => {
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
+
     component.actions$?.subscribe((action) => {
       action[1].actionCallback()
     })

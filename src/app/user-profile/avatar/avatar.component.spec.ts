@@ -217,6 +217,29 @@ describe('AvatarComponent', () => {
       })
     })
 
+    it('should handle empty img string and display msg if upload failed', () => {
+      const updateErrorResponse: HttpErrorResponse = {
+        status: 404,
+        statusText: 'Not Found',
+        name: 'HttpErrorResponse',
+        message: '',
+        error: undefined,
+        ok: false,
+        headers: new HttpHeaders(),
+        url: null,
+        type: HttpEventType.ResponseHeader
+      }
+      avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+
+      component.imageLoadError = true
+      component.sendImage('', RefType.Small)
+
+      expect(msgServiceSpy.error).toHaveBeenCalledWith({
+        summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
+        detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
+      })
+    })
+
     it('should display specific error msg if content type is wrong', () => {
       const mockCompressedImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'

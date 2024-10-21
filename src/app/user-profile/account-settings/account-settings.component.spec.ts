@@ -108,6 +108,14 @@ describe('AccountSettingsComponent', () => {
     expect(msgServiceSpy.error).toHaveBeenCalled()
   }))
 
+  it('should handle loading of empty settings', () => {
+    userProfileServiceSpy.getUserSettings.and.returnValue(of({}))
+
+    component.ngOnInit()
+
+    expect(component.settings).toEqual({})
+  })
+
   it('should saveUserSettingsInfo', () => {
     userProfileServiceSpy.updateUserSettings.and.returnValue(of(updatedProfile))
 

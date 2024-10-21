@@ -73,9 +73,7 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
     // imagePath$ is an observable on purpose, so this component can be easily extended to
     // also display avatars of other user where a call the bff is needed to get the url
     // To do this, call the bff here and set the observable as imagePath$ here
-    this.imagePath$ = of(
-      bffImageUrl(this.avatarService.configuration.basePath, 'avatar', RefType.Small) ?? this.placeHolderPath
-    )
+    this.imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', RefType.Small))
   }
 
   public onImageError(): void {

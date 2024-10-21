@@ -31,7 +31,7 @@ export class UserProfileDetailComponent {
       tap((profile) => (this.tenantId = profile.tenantId!)),
       map((profile) => {
         this.prepareActionButtons()
-        return profile.person || {}
+        return profile.person ?? {}
       })
     )
   }

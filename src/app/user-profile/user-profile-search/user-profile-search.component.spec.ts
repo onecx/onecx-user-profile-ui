@@ -7,7 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
-import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RowListGridData } from '@onecx/angular-accelerator'
 
@@ -21,6 +21,11 @@ describe('UserProfileSearchComponent', () => {
   }
 
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
+  const mockUserService = {
+    lang$: {
+      getValue: jasmine.createSpy('getValue')
+    }
+  }
 
   const userProfilepageResult: UserProfilePageResult = {
     totalElements: 5,
@@ -95,7 +100,8 @@ describe('UserProfileSearchComponent', () => {
         provideHttpClient(),
         provideRouter([{ path: '', component: UserProfileSearchComponent }]),
         { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
-        { provide: PortalMessageService, useValue: msgServiceSpy }
+        { provide: PortalMessageService, useValue: msgServiceSpy },
+        { provide: UserService, useValue: mockUserService }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents()
@@ -103,6 +109,7 @@ describe('UserProfileSearchComponent', () => {
     msgServiceSpy.error.calls.reset()
     apiServiceSpy.searchUserProfile.calls.reset()
     apiServiceSpy.deleteUserProfile.calls.reset()
+    mockUserService.lang$.getValue.and.returnValue('de')
   })
 
   beforeEach(async () => {
@@ -290,5 +297,20 @@ describe('UserProfileSearchComponent', () => {
 
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
     expect(component.searchError).toBeTruthy()
+  })
+
+  /**
+   * Language tests
+   */
+  it('should set a German date format', () => {
+    expect(component.dateFormat).toEqual('dd.MM.yyyy HH:mm')
+  })
+
+  it('should set default date format', () => {
+    mockUserService.lang$.getValue.and.returnValue('en')
+    fixture = TestBed.createComponent(UserProfileSearchComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+    expect(component.dateFormat).toEqual('M/d/yy, h:mm a')
   })
 })
