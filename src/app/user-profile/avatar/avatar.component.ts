@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core'
+import { Component, Input, OnInit } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
 import { Observable } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
@@ -15,6 +15,7 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnInit {
+  @Input() adminView: boolean = false
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
@@ -38,10 +39,12 @@ export class AvatarComponent implements OnInit {
 
   public onDeleteAvatarImage(): void {
     this.showAvatarDeleteDialog = false
+    this.imageUrl = ''
+    this.imageLoadError = true
     this.avatarService.deleteUserAvatar().subscribe({
       next: () => {
         this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-        this.windowReload()
+        if (!this.adminView) this.windowReload()
       },
       error: () => {
         this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
@@ -100,13 +103,16 @@ export class AvatarComponent implements OnInit {
     }
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
+    this.imageUrl = ''
+    this.imageLoadError = false
     this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
       next: () => {
         if (refType === RefType.Large) {
           localStorage.removeItem('tkit_user_profile')
           this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
+          this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
         }
-        if (refType === RefType.Small) this.windowReload()
+        if (refType === RefType.Small && !this.adminView) this.windowReload()
       },
       error: (error: HttpErrorResponse) => {
         if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {

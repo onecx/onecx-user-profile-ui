@@ -10,7 +10,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 
-xdescribe('PersonalInformationComponent', () => {
+describe('PersonalInformationComponent', () => {
   let component: PersonalInformationComponent
   let fixture: ComponentFixture<PersonalInformationComponent>
 

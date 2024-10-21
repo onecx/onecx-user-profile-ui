@@ -14,10 +14,15 @@ import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { of, throwError } from 'rxjs'
 import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { ActivatedRoute, Router } from '@angular/router'
 
-xdescribe('AccountSettingsComponent', () => {
+describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent
   let fixture: ComponentFixture<AccountSettingsComponent>
+  const activatedRouteMock = {}
+  const routerMock = {
+    navigate: jasmine.createSpy('navigate')
+  }
 
   const userProfileServiceSpy = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
@@ -72,7 +77,9 @@ xdescribe('AccountSettingsComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
-        { provide: PortalMessageService, useValue: msgServiceSpy }
+        { provide: PortalMessageService, useValue: msgServiceSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: Router, useValue: routerMock }
       ]
     }).compileComponents()
     msgServiceSpy.success.calls.reset()
@@ -177,5 +184,21 @@ xdescribe('AccountSettingsComponent', () => {
     expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
       updateUserSettings: component.settings as UpdateUserSettings
     })
+  })
+
+  it('should navigate to user profile', () => {
+    component.actions$?.subscribe((action) => {
+      action[0].actionCallback()
+    })
+
+    expect(routerMock.navigate).toHaveBeenCalled()
+  })
+
+  it('should navigate to user permissions', () => {
+    component.actions$?.subscribe((action) => {
+      action[1].actionCallback()
+    })
+
+    expect(routerMock.navigate).toHaveBeenCalled()
   })
 })

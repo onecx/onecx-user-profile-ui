@@ -38,11 +38,9 @@ export class UserProfileAdminComponent implements OnChanges {
     this.userProfileAdminService
       .updateUserProfile({ id: this.userProfileId, updateUserPersonRequest: person as UpdateUserPerson })
       .subscribe({
-        next: (person) => {
+        next: () => {
           this.showMessage('success')
-          console.log('PERSON', person)
           this.ngOnChanges()
-          // this.personalInfo$ = of(person)
         },
         error: () => {
           this.showMessage('error')
