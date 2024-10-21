@@ -121,7 +121,7 @@ export class PersonalInformationComponent implements OnChanges {
       map((personalInfo) => {
         if (personalInfo) {
           personalInfo.phone = this.formGroup.value.phone
-          this.personalInfoUpdate.emit(personalInfo!)
+          this.personalInfoUpdate.emit(personalInfo)
           this.phoneEdit = false
         }
         localStorage.removeItem('tkit_user_profile')
