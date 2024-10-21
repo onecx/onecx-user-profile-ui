@@ -85,7 +85,6 @@ describe('UserProfileDetailComponent', () => {
         { provide: Router, useValue: routerMock }
       ]
     }).compileComponents()
-    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
   }))
 
   beforeEach(() => {
@@ -100,9 +99,20 @@ describe('UserProfileDetailComponent', () => {
     expect(component).toBeTruthy()
   })
 
+  it('should handle empty object returned by getUserProfile', () => {
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
+
+    component.personalInfo$?.subscribe((info) => {
+      expect(info).toEqual({})
+    })
+  })
+
   describe('getMyUserProfile', () => {
     it('should set personalInfo$ to defaultCurrentUser.person', () => {
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+      fixture = TestBed.createComponent(UserProfileDetailComponent)
+      component = fixture.componentInstance
+      fixture.detectChanges()
 
       component.personalInfo$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
 

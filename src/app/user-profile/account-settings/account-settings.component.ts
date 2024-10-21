@@ -46,7 +46,7 @@ export class AccountSettingsComponent implements OnInit {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
       map((profile) => {
         this.prepareActionButtons()
-        return profile.person || {}
+        return profile.person ?? {}
       })
     )
     this.isChangePasswordComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.changePasswordSlotName)
@@ -55,7 +55,7 @@ export class AccountSettingsComponent implements OnInit {
   public ngOnInit(): void {
     this.userProfileService.getUserSettings().subscribe({
       next: (profile) => {
-        this.settings = profile || {}
+        this.settings = profile
         this.settingsInitial = { ...this.settings }
       },
       error: (error) => {

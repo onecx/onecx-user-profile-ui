@@ -29,7 +29,7 @@ export class RolesPermissionsComponent {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
       map((profile) => {
         this.prepareActionButtons()
-        return profile.person || {}
+        return profile.person ?? {}
       })
     )
     this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
