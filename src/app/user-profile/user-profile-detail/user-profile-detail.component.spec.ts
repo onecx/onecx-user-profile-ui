@@ -8,10 +8,15 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
 import { UserProfileDetailComponent } from './user-profile-detail.component'
 import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
+import { ActivatedRoute, Router } from '@angular/router'
 
-xdescribe('UserProfileDetailComponent', () => {
+describe('UserProfileDetailComponent', () => {
   let component: UserProfileDetailComponent
   let fixture: ComponentFixture<UserProfileDetailComponent>
+  const activatedRouteMock = {}
+  const routerMock = {
+    navigate: jasmine.createSpy('navigate')
+  }
 
   const userProfileServiceSpy = {
     updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
@@ -75,7 +80,9 @@ xdescribe('UserProfileDetailComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
-        { provide: UserProfileAPIService, useValue: userProfileServiceSpy }
+        { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
+        { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: Router, useValue: routerMock }
       ]
     }).compileComponents()
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
@@ -135,5 +142,21 @@ xdescribe('UserProfileDetailComponent', () => {
       component.onPersonalInfoUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')
     })
+  })
+
+  it('should navigate to accout settings', () => {
+    component.actions$?.subscribe((action) => {
+      action[0].actionCallback()
+    })
+
+    expect(routerMock.navigate).toHaveBeenCalled()
+  })
+
+  it('should navigate to user roles', () => {
+    component.actions$?.subscribe((action) => {
+      action[1].actionCallback()
+    })
+
+    expect(routerMock.navigate).toHaveBeenCalled()
   })
 })

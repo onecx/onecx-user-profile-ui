@@ -68,7 +68,7 @@ const routes: Routes = [
   schemas: []
 })
 export class OneCXUserProfileModule implements DoBootstrap {
-  constructor(private injector: Injector) {
+  constructor(private readonly injector: Injector) {
     console.info('OneCX User Profile Module constructor')
   }
 

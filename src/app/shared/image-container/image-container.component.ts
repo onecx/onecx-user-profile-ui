@@ -27,7 +27,7 @@ export class ImageContainerComponent implements OnChanges {
   public defaultImageUrl = ''
   public displayDefaultLogo = false
 
-  constructor(private appState: AppStateService) {
+  constructor(private readonly appState: AppStateService) {
     appState.currentMfe$
       .pipe(
         map((mfe) => {

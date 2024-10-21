@@ -30,9 +30,9 @@ export class AccountSettingsComponent implements OnInit {
   public selectedTab = 0
   public changePasswordSlotName = 'onecx-user-profile-change-password'
 
-  private cacheItem = 'httpCache'
+  private readonly cacheItem = 'httpCache'
   // This is the local-cache-key for the user profile, containing the localization and timezone setting
-  private profileCacheItem = 'tkit_user_profile'
+  private readonly profileCacheItem = 'tkit_user_profile'
 
   constructor(
     private readonly route: ActivatedRoute,

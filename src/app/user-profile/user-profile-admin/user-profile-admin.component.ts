@@ -40,6 +40,7 @@ export class UserProfileAdminComponent implements OnChanges {
       .subscribe({
         next: () => {
           this.showMessage('success')
+          this.ngOnChanges()
         },
         error: () => {
           this.showMessage('error')

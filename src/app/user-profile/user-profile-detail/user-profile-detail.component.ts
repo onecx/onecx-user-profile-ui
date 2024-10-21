@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable, map, tap } from 'rxjs'
+import { Observable, map, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 
 import { Action, PortalMessageService } from '@onecx/portal-integration-angular'
@@ -38,8 +38,9 @@ export class UserProfileDetailComponent {
 
   public onPersonalInfoUpdate(person: UserPerson): void {
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
-      next: () => {
+      next: (person) => {
         this.showMessage('success')
+        this.personalInfo$ = of(person)
       },
       error: () => {
         this.showMessage('error')

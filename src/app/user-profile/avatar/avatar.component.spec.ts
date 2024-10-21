@@ -10,7 +10,7 @@ import { NgxImageCompressService } from 'ngx-image-compress'
 import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 
-xdescribe('AvatarComponent', () => {
+describe('AvatarComponent', () => {
   let component: AvatarComponent
   let fixture: ComponentFixture<AvatarComponent>
 
@@ -71,7 +71,6 @@ xdescribe('AvatarComponent', () => {
     fixture = TestBed.createComponent(AvatarComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    spyOn(component, 'windowReload').and.returnValue()
   })
 
   it('should create', () => {
@@ -86,6 +85,7 @@ xdescribe('AvatarComponent', () => {
 
   describe('onDeleteAvatarImage', () => {
     it('should delete an existing Avatar image', () => {
+      component.adminView = true
       avatarServiceSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
@@ -120,6 +120,7 @@ xdescribe('AvatarComponent', () => {
 
   describe('onFileUpload', () => {
     it('should compress img for large type', async () => {
+      component.adminView = true
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -137,6 +138,7 @@ xdescribe('AvatarComponent', () => {
     })
 
     it('should compress img for medium type', async () => {
+      component.adminView = true
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -153,6 +155,7 @@ xdescribe('AvatarComponent', () => {
     })
 
     it('should compress img for small type', async () => {
+      component.adminView = true
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0

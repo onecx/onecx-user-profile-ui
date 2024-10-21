@@ -63,7 +63,7 @@
       <p-button
         id="up_avatar_delete_action_no"
         icon="pi pi-times"
-        (click)="showAvatarDeleteDialog = false"
+        (onClick)="showAvatarDeleteDialog = false"
         [label]="'ACTIONS.CONFIRMATION.NO' | translate"
         [ariaLabel]="'ACTIONS.CONFIRMATION.NO' | translate"
         [pTooltip]="'ACTIONS.CONFIRMATION.NO.TOOLTIP' | translate"
@@ -73,7 +73,7 @@
       <p-button
         id="up_avatar_delete_action_yes"
         icon="pi pi-check"
-        (click)="onDeleteAvatarImage()"
+        (onClick)="onDeleteAvatarImage()"
         [label]="'ACTIONS.CONFIRMATION.YES' | translate"
         [ariaLabel]="'ACTIONS.CONFIRMATION.YES' | translate"
         [pTooltip]="'ACTIONS.CONFIRMATION.YES.TOOLTIP' | translate"

@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { Router } from '@angular/router'
+import { ActivatedRoute, Router } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { of } from 'rxjs'
@@ -12,9 +12,10 @@ import { RolesPermissionsComponent } from './roles-permissions.component'
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { PhoneType, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 
-xdescribe('RolesPermissionsComponent', () => {
+describe('RolesPermissionsComponent', () => {
   let component: RolesPermissionsComponent
   let fixture: ComponentFixture<RolesPermissionsComponent>
+  const activatedRouteMock = {}
 
   const defaultCurrentUser: UserProfile = {
     userId: '15',
@@ -46,7 +47,7 @@ xdescribe('RolesPermissionsComponent', () => {
     ['info', 'error']
   )
 
-  const routerMock = jasmine.createSpyObj<Router>('Router', ['navigateByUrl'])
+  const routerMock = jasmine.createSpyObj<Router>('Router', ['navigate'])
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -64,7 +65,8 @@ xdescribe('RolesPermissionsComponent', () => {
         provideHttpClient(),
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: PortalMessageService, useValue: messageServiceMock },
-        { provide: Router, useValue: routerMock }
+        { provide: Router, useValue: routerMock },
+        { provide: ActivatedRoute, useValue: activatedRouteMock }
       ]
     }).compileComponents()
     userProfileServiceSpy.getMyUserProfile.calls.reset()
@@ -81,5 +83,21 @@ xdescribe('RolesPermissionsComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should navigate to user profile', () => {
+    component.actions$?.subscribe((action) => {
+      action[0].actionCallback()
+    })
+
+    expect(routerMock.navigate).toHaveBeenCalled()
+  })
+
+  it('should navigate to account settings', () => {
+    component.actions$?.subscribe((action) => {
+      action[1].actionCallback()
+    })
+
+    expect(routerMock.navigate).toHaveBeenCalled()
   })
 })
