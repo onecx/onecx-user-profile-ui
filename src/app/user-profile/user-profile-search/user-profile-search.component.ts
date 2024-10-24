@@ -256,7 +256,6 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public onPermissions(ev: any) {
-    console.log('EV', ev)
     this.userProfile = ev
     this.displayPermissionsDialog = true
   }

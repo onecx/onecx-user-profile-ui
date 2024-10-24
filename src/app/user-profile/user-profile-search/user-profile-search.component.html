@@ -195,11 +195,14 @@
   [resizable]="true"
   [dismissableMask]="true"
   contentStyleClass="p-0"
-  [style]="{ width: '860px' }"
+  [style]="{ width: '860px', height: '650px' }"
 >
-  Hi
   <div class="p-2 sm:p-3">
-    <ocx-slot *ngIf="isUserRolesAndPermissionsComponentDefined$ | async" name="{{ adminViewPermissionsSlotName }}">
+    <ocx-slot
+      *ngIf="isUserRolesAndPermissionsComponentDefined$ | async"
+      name="{{ adminViewPermissionsSlotName }}"
+      [inputs]="{ userId: userProfile?.['userId'] }"
+    >
     </ocx-slot>
   </div>
   <ng-template pTemplate="footer">
