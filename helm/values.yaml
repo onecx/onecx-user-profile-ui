@@ -41,8 +41,8 @@ app:
             SAVE: Update and save user profile
             SEARCH: Search user profile
             VIEW: View mode for user profile
-            ADMIN_VIEW: View other user profiles for admin
-            ADMIN_EDIT: Edit other user profiles for admin
+            ADMIN_VIEW: View user profiles of other users for admin
+            ADMIN_EDIT: Edit user profiles of other users for admin
             EXPORT: Export user profile
             IMPORT: Import user profile
           ACCOUNT_SETTINGS:
@@ -79,6 +79,7 @@ app:
             VIEW: View avatar
           ROLES_PERMISSIONS:
             VIEW: View roles and permissions
+            ADMIN_VIEW: View roles and permissions of other users for admin
           CHANGE_PASSWORD:
             VIEW: Change password in IAM
     slot:
@@ -90,5 +91,8 @@ app:
         onecx-user-profile-permissions:
           name: 'onecx-user-profile-permissions'
           description: 'User Profile show user roles and permissions'
+        onecx-user-profile-admin-view-permissions:
+          name: 'onecx-user-profile-admin-view-permissions'
+          description: 'User Profile show other user roles and permissions for admin'
 
 # PIPE Config

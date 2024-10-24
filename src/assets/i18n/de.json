@@ -9,7 +9,7 @@
     "DELETE": {
       "LABEL": "Löschen",
       "USER": "Nutzerprofil löschen",
-      "USER.TOOLTIP": "Diese Nutzerprofil löschen",
+      "USER.TOOLTIP": "Dieses Nutzerprofil löschen",
       "MESSAGE_TEXT": "Möchten Sie das folgende Nutzerprofil löschen?",
       "MESSAGE_HINT": "Wenn der Benutzer sich das nächste Mal anmeldet wird ein neues Profil erzeugt.",
       "MESSAGE_INFO": "Diese Aktion kann nicht rückgängig gemacht werden!",

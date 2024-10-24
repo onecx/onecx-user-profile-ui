@@ -3,6 +3,8 @@ import { BehaviorSubject, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 
+import { SlotService } from '@onecx/angular-remote-components'
+
 import {
   Action,
   ColumnType,
@@ -29,6 +31,8 @@ export class UserProfileSearchComponent implements OnInit {
   public resultData$ = new BehaviorSubject<RowListGridData[]>([])
   public criteriaGroup: UntypedFormGroup
   public selectedUserName: string | undefined //used in deletion dialog
+  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
+  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
 
   /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
@@ -51,6 +55,7 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly user: UserService,
     private readonly fb: UntypedFormBuilder,
     private readonly portalMessageService: PortalMessageService,
+    private readonly slotService: SlotService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({
@@ -130,13 +135,31 @@ export class UserProfileSearchComponent implements OnInit {
 
     this.additionalActions = [
       {
-        id: 'permissions',
-        labelKey: 'USER_PROFILE.PERMISSIONS',
-        icon: 'pi pi-lock',
+        id: 'view',
+        labelKey: 'ACTIONS.VIEW.USER_PROFILE',
+        icon: 'pi pi-eye',
         permission: 'USERPROFILE#VIEW',
+        callback: (event) => this.onDetail(event)
+      },
+      {
+        id: 'permissions',
+        labelKey: 'ACTIONS.VIEW.PERMISSIONS',
+        icon: 'pi pi-lock',
+        permission: 'ROLES_PERMISSIONS#ADMIN_VIEW',
         callback: (event) => this.onPermissions(event)
+      },
+      {
+        id: 'delete',
+        labelKey: 'ACTIONS.DELETE.USER.TOOLTIP',
+        icon: 'pi pi-trash',
+        classes: ['danger-action-text'],
+        permission: 'ROLES_PERMISSIONS#ADMIN_VIEW',
+        callback: (event) => this.onDelete(event)
       }
     ]
+    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+      this.adminViewPermissionsSlotName
+    )
   }
 
   ngOnInit() {

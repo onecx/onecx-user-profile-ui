@@ -77,10 +77,6 @@
       [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
       [supportedViewLayouts]="['table']"
       [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
-      (viewItem)="onDetail($event)"
-      (deleteItem)="onDelete($event)"
-      [viewPermission]="'USERPROFILE#VIEW'"
-      [deletePermission]="'USERPROFILE#DELETE'"
       [additionalActions]="additionalActions"
       [actionColumnPosition]="'left'"
     >
@@ -201,6 +197,11 @@
   contentStyleClass="p-0"
   [style]="{ width: '860px' }"
 >
+  Hi
+  <div class="p-2 sm:p-3">
+    <ocx-slot *ngIf="isUserRolesAndPermissionsComponentDefined$ | async" name="{{ adminViewPermissionsSlotName }}">
+    </ocx-slot>
+  </div>
   <ng-template pTemplate="footer">
     <div class="flex flex-wrap justify-content-end column-gap-2">
       <p-button
