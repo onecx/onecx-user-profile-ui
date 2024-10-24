@@ -40,7 +40,8 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "Nutzerprofil ansehen"
+      "USER_PROFILE": "Nutzerprofil ansehen",
+      "PERMISSIONS": "Rollen und Berechtigungen ansehen"
     },
     "GENERAL": {
       "APPLY": "Anwenden",
@@ -74,7 +75,7 @@
   "DIALOG": {
     "SEARCH": {
       "HEADER": "Nutzerprofile",
-      "SUBHEADER": "Suche und verwalten von Nutzerprofilen"
+      "SUBHEADER": "Suche und Verwaltung von Nutzerprofilen"
     }
   },
   "USER_PROFILE": {
@@ -116,6 +117,8 @@
     },
     "PHONE_NUMBER": "Telefonnummer",
     "PHONE_NUMBER.TOOLTIP": "Telefonnummer des Nutzers",
+    "PERMISSIONS": "Berechtigungen",
+    "PERMISSIONS_TOOLTIP": "Anzeige der Rollen und Berechtigungen",
     "MSG": {
       "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
       "SAVE_ERROR": "Daten konnten nicht gespeichert werden"

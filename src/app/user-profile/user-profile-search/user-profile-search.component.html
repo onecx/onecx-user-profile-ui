@@ -81,6 +81,7 @@
       (deleteItem)="onDelete($event)"
       [viewPermission]="'USERPROFILE#VIEW'"
       [deletePermission]="'USERPROFILE#DELETE'"
+      [additionalActions]="additionalActions"
       [actionColumnPosition]="'left'"
     >
       <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
@@ -178,6 +179,34 @@
         id="up_user_delete_button_close"
         icon="pi pi-times"
         (onClick)="onCloseDetail()"
+        [label]="'ACTIONS.GENERAL.CLOSE' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
+        [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
+
+<!-- PERMISSION DIALOG -->
+<p-dialog
+  [(visible)]="displayPermissionsDialog"
+  [header]="'ACTIONS.VIEW.PERMISSIONS' | translate"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="true"
+  [resizable]="true"
+  [dismissableMask]="true"
+  contentStyleClass="p-0"
+  [style]="{ width: '860px' }"
+>
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-content-end column-gap-2">
+      <p-button
+        id="up_user_delete_button_close"
+        icon="pi pi-times"
+        (onClick)="onClosePermissions()"
         [label]="'ACTIONS.GENERAL.CLOSE' | translate"
         [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
         [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"

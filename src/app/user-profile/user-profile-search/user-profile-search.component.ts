@@ -6,6 +6,7 @@ import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import {
   Action,
   ColumnType,
+  DataAction,
   DataTableColumn,
   DataViewControlTranslations,
   InteractiveDataViewComponent,
@@ -22,6 +23,7 @@ import { UserProfileAdminAPIService } from 'src/app/shared/generated'
 })
 export class UserProfileSearchComponent implements OnInit {
   public actions$: Observable<Action[]> | undefined
+  public additionalActions: DataAction[] = []
   private filterData = ''
   public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
   public resultData$ = new BehaviorSubject<RowListGridData[]>([])
@@ -38,6 +40,7 @@ export class UserProfileSearchComponent implements OnInit {
   public dateFormat: string
   public displayDeleteDialog = false
   public displayDetailDialog = false
+  public displayPermissionsDialog = false
 
   public columns: DataTableColumn[]
   public searchInProgress = true
@@ -122,6 +125,16 @@ export class UserProfileSearchComponent implements OnInit {
         filterable: true,
         sortable: true,
         predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+      }
+    ]
+
+    this.additionalActions = [
+      {
+        id: 'permissions',
+        labelKey: 'USER_PROFILE.PERMISSIONS',
+        icon: 'pi pi-lock',
+        permission: 'USERPROFILE#VIEW',
+        callback: (event) => this.onPermissions(event)
       }
     ]
   }
@@ -212,19 +225,20 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public onDetail(ev: RowListGridData) {
-    this.resultData$
-      .pipe(
-        map((results) => {
-          results.forEach((result) => {
-            if (result.id === ev.id) this.userProfile = result
-          })
-        })
-      )
-      .subscribe()
+    this.userProfile = ev
     this.displayDetailDialog = true
   }
   public onCloseDetail(): void {
     this.displayDetailDialog = false
+  }
+
+  public onPermissions(ev: any) {
+    console.log('EV', ev)
+    this.userProfile = ev
+    this.displayPermissionsDialog = true
+  }
+  public onClosePermissions(): void {
+    this.displayPermissionsDialog = false
   }
 
   public onDelete(ev: any): void {

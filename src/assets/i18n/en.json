@@ -40,7 +40,8 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "View user profile"
+      "USER_PROFILE": "View user profile",
+      "PERMISSIONS": "View roles and permisssions"
     },
     "GENERAL": {
       "APPLY": "Apply",
@@ -116,6 +117,8 @@
     },
     "PHONE_NUMBER": "Phone Number",
     "PHONE_NUMBER.TOOLTIP": "Phone number",
+    "PERMISSIONS": "Permissions",
+    "PERMISSIONS_TOOLTIP": "Display assigned Roles and Permissions",
     "MSG": {
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data"
