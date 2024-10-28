@@ -184,39 +184,3 @@
     </div>
   </ng-template>
 </p-dialog>
-
-<!-- PERMISSION DIALOG -->
-<p-dialog
-  [(visible)]="displayPermissionsDialog"
-  [header]="'ACTIONS.VIEW.PERMISSIONS' | translate"
-  [modal]="true"
-  [closable]="true"
-  [draggable]="true"
-  [resizable]="true"
-  [dismissableMask]="true"
-  contentStyleClass="p-0"
-  [style]="{ width: '860px', height: '650px' }"
->
-  <div class="p-2 sm:p-3">
-    <ocx-slot
-      *ngIf="isUserRolesAndPermissionsComponentDefined$ | async"
-      name="{{ adminViewPermissionsSlotName }}"
-      [inputs]="{ userId: userProfile?.['userId'] }"
-    >
-    </ocx-slot>
-  </div>
-  <ng-template pTemplate="footer">
-    <div class="flex flex-wrap justify-content-end column-gap-2">
-      <p-button
-        id="up_user_delete_button_close"
-        icon="pi pi-times"
-        (onClick)="onClosePermissions()"
-        [label]="'ACTIONS.GENERAL.CLOSE' | translate"
-        [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
-        [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></p-button>
-    </div>
-  </ng-template>
-</p-dialog>

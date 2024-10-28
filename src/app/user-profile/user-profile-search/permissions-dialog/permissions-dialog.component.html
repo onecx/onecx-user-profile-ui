@@ -1,3 +1,8 @@
 <div class="p-2 sm:p-3">
-  <ocx-slot name="{{ adminViewPermissionsSlotName }}" [inputs]="{ userId: userId }"> </ocx-slot>
+  <ocx-slot
+    *ngIf="isUserRolesAndPermissionsComponentDefined$ | async"
+    name="{{ adminViewPermissionsSlotName }}"
+    [inputs]="{ userId: userId }"
+  >
+  </ocx-slot>
 </div>

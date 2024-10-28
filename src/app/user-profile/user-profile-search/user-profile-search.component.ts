@@ -2,6 +2,7 @@ import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { PermissionsDialogComponent } from './permissions-dialog/permissions-dialog.component'
 
 import { SlotService } from '@onecx/angular-remote-components'
 
@@ -12,6 +13,7 @@ import {
   DataTableColumn,
   DataViewControlTranslations,
   InteractiveDataViewComponent,
+  PortalDialogService,
   PortalMessageService,
   RowListGridData,
   UserService
@@ -55,6 +57,7 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly user: UserService,
     private readonly fb: UntypedFormBuilder,
     private readonly portalMessageService: PortalMessageService,
+    private readonly portalDialogService: PortalDialogService,
     private readonly slotService: SlotService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
@@ -258,9 +261,18 @@ export class UserProfileSearchComponent implements OnInit {
   public onPermissions(ev: any) {
     this.userProfile = ev
     this.displayPermissionsDialog = true
-  }
-  public onClosePermissions(): void {
-    this.displayPermissionsDialog = false
+    this.portalDialogService
+      .openDialog(
+        'ACTIONS.VIEW.PERMISSIONS',
+        {
+          type: PermissionsDialogComponent,
+          inputs: { userId: this.userProfile?.['userId'] }
+        },
+        'ACTIONS.GENERAL.CLOSE',
+        undefined,
+        {}
+      )
+      .subscribe(() => {})
   }
 
   public onDelete(ev: any): void {
