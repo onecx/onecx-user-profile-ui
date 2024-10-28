@@ -8,6 +8,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 
 import {
   Action,
+  ButtonDialogButtonDetails,
   ColumnType,
   DataAction,
   DataTableColumn,
@@ -19,6 +20,7 @@ import {
   UserService
 } from '@onecx/portal-integration-angular'
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { PrimeIcons } from 'primeng/api'
 
 @Component({
   selector: 'app-user-profile-search',
@@ -261,6 +263,12 @@ export class UserProfileSearchComponent implements OnInit {
   public onPermissions(ev: any) {
     this.userProfile = ev
     this.displayPermissionsDialog = true
+    const primaryButton: ButtonDialogButtonDetails = {
+      key: 'ACTIONS.GENERAL.CLOSE',
+      icon: PrimeIcons.TIMES,
+      tooltipKey: 'ACTIONS.GENERAL.CLOSE.TOOLTIP',
+      tooltipPosition: 'top'
+    }
     this.portalDialogService
       .openDialog(
         'ACTIONS.VIEW.PERMISSIONS',
@@ -268,9 +276,14 @@ export class UserProfileSearchComponent implements OnInit {
           type: PermissionsDialogComponent,
           inputs: { userId: this.userProfile?.['userId'] }
         },
-        'ACTIONS.GENERAL.CLOSE',
+        primaryButton,
         undefined,
-        {}
+        {
+          modal: true,
+          draggable: true,
+          resizable: true,
+          dismissableMask: true
+        }
       )
       .subscribe(() => {})
   }
