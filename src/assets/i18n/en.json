@@ -40,8 +40,8 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "View user profile",
-      "PERMISSIONS": "View roles and permissions"
+      "USER_PROFILE": "View User Profile",
+      "PERMISSIONS": "View Roles and Permissions"
     },
     "GENERAL": {
       "APPLY": "Apply",
