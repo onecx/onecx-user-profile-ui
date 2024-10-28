@@ -12,7 +12,7 @@ import { PortalDialogService } from '@onecx/portal-integration-angular'
 import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RowListGridData } from '@onecx/angular-accelerator'
 
-fdescribe('UserProfileSearchComponent', () => {
+describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
   let fixture: ComponentFixture<UserProfileSearchComponent>
 
