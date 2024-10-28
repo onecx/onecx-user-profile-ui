@@ -48,7 +48,6 @@ export class UserProfileSearchComponent implements OnInit {
   public dateFormat: string
   public displayDeleteDialog = false
   public displayDetailDialog = false
-  public displayPermissionsDialog = false
 
   public columns: DataTableColumn[]
   public searchInProgress = true
@@ -262,7 +261,6 @@ export class UserProfileSearchComponent implements OnInit {
 
   public onPermissions(ev: any) {
     this.userProfile = ev
-    this.displayPermissionsDialog = true
     const primaryButton: ButtonDialogButtonDetails = {
       key: 'ACTIONS.GENERAL.CLOSE',
       icon: PrimeIcons.TIMES,

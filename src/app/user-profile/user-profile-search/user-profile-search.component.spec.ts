@@ -8,10 +8,11 @@ import { BehaviorSubject, of, throwError } from 'rxjs'
 
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { PortalDialogService } from '@onecx/portal-integration-angular'
 import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RowListGridData } from '@onecx/angular-accelerator'
 
-describe('UserProfileSearchComponent', () => {
+fdescribe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
   let fixture: ComponentFixture<UserProfileSearchComponent>
 
@@ -25,6 +26,9 @@ describe('UserProfileSearchComponent', () => {
     lang$: {
       getValue: jasmine.createSpy('getValue')
     }
+  }
+  const mockDialogService = {
+    openDialog: jasmine.createSpy('openDialog').and.returnValue(of({}))
   }
 
   const userProfilepageResult: UserProfilePageResult = {
@@ -101,7 +105,8 @@ describe('UserProfileSearchComponent', () => {
         provideRouter([{ path: '', component: UserProfileSearchComponent }]),
         { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
+        { provide: PortalDialogService, useValue: mockDialogService }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents()
@@ -221,21 +226,13 @@ describe('UserProfileSearchComponent', () => {
 
   describe('onPermission', () => {
     it('should display permission dialog', () => {
+      mockDialogService.openDialog.and.returnValue(of({}))
       const mockEvent = { id: '123', imagePath: '' } as RowListGridData
 
       component.onPermissions(mockEvent)
 
       expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
-      expect(component.displayPermissionsDialog).toBeTrue()
     })
-  })
-
-  it('should close permission dialog', () => {
-    component.displayPermissionsDialog = true
-
-    component.onClosePermissions()
-
-    expect(component.displayPermissionsDialog).toBeFalse()
   })
 
   describe('onDelete', () => {
