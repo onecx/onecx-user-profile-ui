@@ -7,7 +7,7 @@
     ></app-image-container>
   </div>
 
-  <ng-container *ocxIfPermission="'PROFILE_AVATAR#EDIT'">
+  <ng-container *ocxIfPermission="editPermission">
     <div class="flex flex-row sm:flex-column flex-nowrap align-items-start row-gap-1 toolbar">
       <button
         pButton
