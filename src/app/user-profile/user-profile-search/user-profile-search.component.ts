@@ -48,6 +48,13 @@ export class UserProfileSearchComponent implements OnInit {
   public dateFormat: string
   public displayDeleteDialog = false
   public displayDetailDialog = false
+  private primaryButton: ButtonDialogButtonDetails = {
+    id: 'up_user_permissions_dialog_button_close',
+    key: 'ACTIONS.GENERAL.CLOSE',
+    icon: PrimeIcons.TIMES,
+    tooltipKey: 'ACTIONS.GENERAL.CLOSE.TOOLTIP',
+    tooltipPosition: 'top'
+  }
 
   public columns: DataTableColumn[]
   public searchInProgress = true
@@ -261,12 +268,6 @@ export class UserProfileSearchComponent implements OnInit {
 
   public onPermissions(ev: any) {
     this.userProfile = ev
-    const primaryButton: ButtonDialogButtonDetails = {
-      key: 'ACTIONS.GENERAL.CLOSE',
-      icon: PrimeIcons.TIMES,
-      tooltipKey: 'ACTIONS.GENERAL.CLOSE.TOOLTIP',
-      tooltipPosition: 'top'
-    }
     this.portalDialogService
       .openDialog(
         'ACTIONS.VIEW.PERMISSIONS',
@@ -274,7 +275,7 @@ export class UserProfileSearchComponent implements OnInit {
           type: PermissionsDialogComponent,
           inputs: { userId: this.userProfile?.['userId'] }
         },
-        primaryButton,
+        this.primaryButton,
         undefined,
         {
           modal: true,
