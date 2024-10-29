@@ -4,5 +4,10 @@
     name="{{ adminViewPermissionsSlotName }}"
     [inputs]="{ userId: userId }"
   >
+    <ng-template #skeleton>
+      <div class="flex">
+        <p-message severity="info" styleClass="p-2" [text]="'ACTIONS.GENERAL.LOADING' | translate"></p-message>
+      </div>
+    </ng-template>
   </ocx-slot>
 </div>
