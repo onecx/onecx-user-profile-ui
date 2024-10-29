@@ -168,7 +168,7 @@ export class UserProfileSearchComponent implements OnInit {
         labelKey: 'ACTIONS.DELETE.USER.TOOLTIP',
         icon: 'pi pi-trash',
         classes: ['danger-action-text'],
-        permission: 'ROLES_PERMISSIONS#ADMIN_DELETE',
+        permission: 'USERPROFILE#ADMIN_DELETE',
         callback: (event) => this.onDelete(event)
       }
     ]
