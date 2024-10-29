@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
 import { PersonalInformationComponent } from './personal-information.component'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 import { of } from 'rxjs'
@@ -69,6 +69,10 @@ describe('PersonalInformationComponent', () => {
 
   const countriesInfoMock = jasmine.createSpyObj('countriesInfo', ['registerLocale', 'getNames'])
 
+  const userServiceSpy = {
+    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
+  }
+
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [PersonalInformationComponent],
@@ -84,13 +88,15 @@ describe('PersonalInformationComponent', () => {
         provideHttpClient(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
-        { provide: TranslateService, useValue: translateServiceSpy }
+        { provide: TranslateService, useValue: translateServiceSpy },
+        { provide: UserService, useValue: userServiceSpy }
       ]
     }).compileComponents()
 
     userProfileServiceSpy.getMyUserProfile.calls.reset()
     userProfileServiceSpy.updateUserPerson.calls.reset()
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+    userServiceSpy.hasPermission.and.returnValue(true)
 
     countriesInfoMock.getNames.and.returnValue({
       US: 'United States',

@@ -25,8 +25,10 @@ describe('UserProfileSearchComponent', () => {
   const mockUserService = {
     lang$: {
       getValue: jasmine.createSpy('getValue')
-    }
+    },
+    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
   }
+
   const mockDialogService = {
     openDialog: jasmine.createSpy('openDialog').and.returnValue(of({}))
   }
@@ -115,6 +117,7 @@ describe('UserProfileSearchComponent', () => {
     apiServiceSpy.searchUserProfile.calls.reset()
     apiServiceSpy.deleteUserProfile.calls.reset()
     mockUserService.lang$.getValue.and.returnValue('de')
+    mockUserService.hasPermission.and.returnValue(true)
   })
 
   beforeEach(async () => {
