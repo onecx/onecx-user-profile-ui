@@ -11,7 +11,8 @@ import {
   createTranslateLoader,
   PortalApiConfiguration,
   PortalCoreModule,
-  PortalMissingTranslationHandler
+  PortalMissingTranslationHandler,
+  providePortalDialogService
 } from '@onecx/portal-integration-angular'
 import { startsWith, initializeRouter, createAppEntrypoint } from '@onecx/angular-webcomponents'
 import { AngularAuthModule } from '@onecx/angular-auth'
@@ -63,7 +64,8 @@ const routes: Routes = [
       deps: [Router, AppStateService]
     },
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    providePortalDialogService()
   ],
   schemas: []
 })

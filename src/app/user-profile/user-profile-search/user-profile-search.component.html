@@ -77,10 +77,7 @@
       [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
       [supportedViewLayouts]="['table']"
       [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
-      (viewItem)="onDetail($event)"
-      (deleteItem)="onDelete($event)"
-      [viewPermission]="'USERPROFILE#VIEW'"
-      [deletePermission]="'USERPROFILE#DELETE'"
+      [additionalActions]="additionalActions"
       [actionColumnPosition]="'left'"
     >
       <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">

@@ -8,6 +8,7 @@ import { BehaviorSubject, of, throwError } from 'rxjs'
 
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { PortalDialogService } from '@onecx/portal-integration-angular'
 import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RowListGridData } from '@onecx/angular-accelerator'
 
@@ -25,6 +26,9 @@ describe('UserProfileSearchComponent', () => {
     lang$: {
       getValue: jasmine.createSpy('getValue')
     }
+  }
+  const mockDialogService = {
+    openDialog: jasmine.createSpy('openDialog').and.returnValue(of({}))
   }
 
   const userProfilepageResult: UserProfilePageResult = {
@@ -101,7 +105,8 @@ describe('UserProfileSearchComponent', () => {
         provideRouter([{ path: '', component: UserProfileSearchComponent }]),
         { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
-        { provide: UserService, useValue: mockUserService }
+        { provide: UserService, useValue: mockUserService },
+        { provide: PortalDialogService, useValue: mockDialogService }
       ],
       schemas: [NO_ERRORS_SCHEMA]
     }).compileComponents()
@@ -120,6 +125,20 @@ describe('UserProfileSearchComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
+  })
+
+  it('should perform actions', () => {
+    spyOn(component, 'onDetail')
+    component.additionalActions[0].callback({})
+    expect(component.onDetail).toHaveBeenCalled()
+
+    spyOn(component, 'onPermissions')
+    component.additionalActions[1].callback({})
+    expect(component.onPermissions).toHaveBeenCalled()
+
+    spyOn(component, 'onDelete')
+    component.additionalActions[2].callback({})
+    expect(component.onDelete).toHaveBeenCalled()
   })
 
   it('should search user profiles - successfully found', () => {
@@ -188,31 +207,11 @@ describe('UserProfileSearchComponent', () => {
 
   describe('onDetail', () => {
     it('should display detail dialog', () => {
-      const mockEvent = { id: '123' } as RowListGridData
-      const mockResults: RowListGridData[] = [
-        { id: '123', imagePath: '' },
-        { id: '456', imagePath: '' }
-      ]
-      component.resultData$ = new BehaviorSubject(mockResults)
+      const mockEvent = { id: '123', imagePath: '' } as RowListGridData
 
       component.onDetail(mockEvent)
 
       expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
-      expect(component.displayDetailDialog).toBeTrue()
-    })
-
-    it('should not set userProfile when id does not match', () => {
-      const mockEvent = { id: '789' } as RowListGridData
-      const mockResults: RowListGridData[] = [
-        { id: '123', imagePath: '' },
-        { id: '456', imagePath: '' }
-      ]
-      component.resultData$ = new BehaviorSubject(mockResults)
-      component.userProfile = undefined
-
-      component.onDetail(mockEvent)
-
-      expect(component.userProfile).toBeUndefined()
       expect(component.displayDetailDialog).toBeTrue()
     })
   })
@@ -223,6 +222,17 @@ describe('UserProfileSearchComponent', () => {
     component.onCloseDetail()
 
     expect(component.displayDetailDialog).toBeFalse()
+  })
+
+  describe('onPermission', () => {
+    it('should display permission dialog', () => {
+      mockDialogService.openDialog.and.returnValue(of({}))
+      const mockEvent = { id: '123', imagePath: '' } as RowListGridData
+
+      component.onPermissions(mockEvent)
+
+      expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
+    })
   })
 
   describe('onDelete', () => {

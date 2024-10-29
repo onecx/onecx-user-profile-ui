@@ -19,6 +19,7 @@ import { UserProfileAdminComponent } from 'src/app/user-profile/user-profile-adm
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
 import { LabelResolver } from '../shared/label.resolver'
+import { PermissionsDialogComponent } from './user-profile-search/permissions-dialog/permissions-dialog.component'
 
 const routes: Routes = [
   {
@@ -105,7 +106,8 @@ const routes: Routes = [
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacySettingsComponent,
-    RolesPermissionsComponent
+    RolesPermissionsComponent,
+    PermissionsDialogComponent
   ],
   imports: [
     CommonModule,
