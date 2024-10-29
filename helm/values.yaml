@@ -80,7 +80,7 @@ app:
           ROLES_PERMISSIONS:
             VIEW: View roles and permissions
             ADMIN_VIEW: View roles and permissions of other users for admin
-            ADMIN_DELETE: View roles and permissions of other users for admin
+            ADMIN_DELETE: Delete roles and permissions of other users for admin
           CHANGE_PASSWORD:
             VIEW: Change password in IAM
     slot:
