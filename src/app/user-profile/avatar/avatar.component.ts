@@ -20,6 +20,7 @@ export class AvatarComponent implements OnInit {
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
   protected placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
+  public editPermission: string = ''
 
   imageLoadError: boolean | undefined
   imageUrl: string | undefined
@@ -35,6 +36,7 @@ export class AvatarComponent implements OnInit {
   public ngOnInit(): void {
     this.imageLoadError = false
     this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+    this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'PROFILE_AVATAR#EDIT'
   }
 
   public onDeleteAvatarImage(): void {

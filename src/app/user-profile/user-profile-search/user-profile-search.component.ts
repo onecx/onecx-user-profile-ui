@@ -48,6 +48,7 @@ export class UserProfileSearchComponent implements OnInit {
   public dateFormat: string
   public displayDeleteDialog = false
   public displayDetailDialog = false
+  private editPermission = false
   private primaryButton: ButtonDialogButtonDetails = {
     id: 'up_user_permissions_dialog_button_close',
     key: 'ACTIONS.GENERAL.CLOSE',
@@ -67,6 +68,7 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly portalMessageService: PortalMessageService,
     private readonly portalDialogService: PortalDialogService,
     private readonly slotService: SlotService,
+    private readonly userService: UserService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({
@@ -143,12 +145,14 @@ export class UserProfileSearchComponent implements OnInit {
         predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
       }
     ]
-
+    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) {
+      this.editPermission = true
+    }
     this.additionalActions = [
       {
         id: 'view',
         labelKey: 'ACTIONS.VIEW.USER_PROFILE',
-        icon: 'pi pi-eye',
+        icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
         permission: 'USERPROFILE#VIEW',
         callback: (event) => this.onDetail(event)
       },
@@ -164,7 +168,7 @@ export class UserProfileSearchComponent implements OnInit {
         labelKey: 'ACTIONS.DELETE.USER.TOOLTIP',
         icon: 'pi pi-trash',
         classes: ['danger-action-text'],
-        permission: 'ROLES_PERMISSIONS#ADMIN_VIEW',
+        permission: 'USERPROFILE#ADMIN_DELETE',
         callback: (event) => this.onDelete(event)
       }
     ]
