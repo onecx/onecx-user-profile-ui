@@ -70,7 +70,8 @@
   <div *ngIf="searchInProgress" class="card">
     <p-message severity="info" styleClass="p-2" [text]="'ACTIONS.GENERAL.LOADING' | translate"></p-message>
   </div>
-  <div *ngIf="(resultData$ | async)!.length > 0 && !searchError" class="card pt-2 correct-ocx-interactive-data-view">
+
+  <div *ngIf="(resultData$ | async)!.length > 0 && !searchError" class="card pt-2 pb-0">
     <ocx-interactive-data-view
       [data]="(filteredData$ | async) ?? []"
       [columns]="columns"
