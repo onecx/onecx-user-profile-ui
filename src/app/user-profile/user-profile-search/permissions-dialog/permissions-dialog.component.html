@@ -1,13 +1,13 @@
-<div class="p-2 sm:p-3">
-  <ocx-slot
-    *ngIf="isUserRolesAndPermissionsComponentDefined$ | async"
-    name="{{ adminViewPermissionsSlotName }}"
-    [inputs]="{ userId: userId }"
-  >
-    <ng-template #skeleton>
-      <div class="flex">
-        <p-message severity="info" styleClass="p-2" [text]="'ACTIONS.GENERAL.LOADING' | translate"></p-message>
-      </div>
-    </ng-template>
-  </ocx-slot>
-</div>
+<ocx-slot
+  *ngIf="isUserRolesAndPermissionsComponentDefined$ | async"
+  [name]="adminViewPermissionsSlotName"
+  [inputs]="{ userId: userId, displayName: displayName }"
+>
+  <ng-template #skeleton>
+    <p-message
+      severity="info"
+      styleClass="w-full flex flex-row justify-content-start"
+      [text]="'ACTIONS.GENERAL.LOADING' | translate"
+    ></p-message>
+  </ng-template>
+</ocx-slot>

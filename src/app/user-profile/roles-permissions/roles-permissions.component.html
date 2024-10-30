@@ -9,11 +9,8 @@
     [actions]="(actions$ | async) ?? []"
   >
   </ocx-page-header>
-
   <ocx-page-content>
-    <div class="p-2 sm:p-3">
-      <ocx-slot *ngIf="isUserRolesAndPermissionsComponentDefined$ | async" name="{{ userRolesAndPermissionsSlotName }}">
-      </ocx-slot>
-    </div>
+    <ocx-slot *ngIf="isUserRolesAndPermissionsComponentDefined$ | async" [name]="userRolesAndPermissionsSlotName">
+    </ocx-slot>
   </ocx-page-content>
 </ocx-portal-page>

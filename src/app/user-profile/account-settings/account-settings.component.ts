@@ -16,7 +16,8 @@ import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
   selector: 'app-account-settings',
-  templateUrl: './account-settings.component.html'
+  templateUrl: './account-settings.component.html',
+  styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent implements OnInit {
   @Output() public editModeUpdate = new EventEmitter<boolean>()
@@ -27,7 +28,6 @@ export class AccountSettingsComponent implements OnInit {
   public isChangePasswordComponentDefined$: Observable<boolean>
   public settings: UserProfileAccountSettings = {}
   public settingsInitial: UserProfileAccountSettings = {}
-  public selectedTab = 0
   public changePasswordSlotName = 'onecx-user-profile-change-password'
 
   private readonly cacheItem = 'httpCache'

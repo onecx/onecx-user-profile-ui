@@ -277,7 +277,7 @@ export class UserProfileSearchComponent implements OnInit {
         'ACTIONS.VIEW.PERMISSIONS',
         {
           type: PermissionsDialogComponent,
-          inputs: { userId: this.userProfile?.['userId'] }
+          inputs: { userId: this.userProfile?.['userId'], displayName: this.userProfile?.['displayName'] }
         },
         this.primaryButton,
         undefined,
@@ -285,7 +285,9 @@ export class UserProfileSearchComponent implements OnInit {
           modal: true,
           draggable: true,
           resizable: true,
-          dismissableMask: true
+          dismissableMask: true,
+          maximizable: true,
+          width: '800px'
         }
       )
       .subscribe(() => {})
