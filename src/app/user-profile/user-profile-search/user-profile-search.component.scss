@@ -5,14 +5,9 @@
 @include table-zebra-rows;
 @include table-inline-buttons;
 @include displaying-text-responsive;
+@include correct-ocx-interactive-data-view;
 
 :host ::ng-deep {
-  .correct-ocx-interactive-data-view > ocx-interactive-data-view > div {
-    padding: 0 0 0.5rem 0 !important;
-    &.surface-border {
-      border-bottom: var(--table-header-border) !important;
-    }
-  }
   .p-datatable .p-datatable-thead > tr > th {
     border-bottom-width: 2px;
   }

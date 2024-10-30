@@ -287,7 +287,7 @@ export class UserProfileSearchComponent implements OnInit {
           resizable: true,
           dismissableMask: true,
           maximizable: true,
-          width: '800px'
+          width: '1000px'
         }
       )
       .subscribe(() => {})
