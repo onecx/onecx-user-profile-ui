@@ -53,7 +53,7 @@
     "@ngx-translate/http-loader": "^8.0.0",
     "@onecx/accelerator": "^5.22.0",
     "@onecx/angular-accelerator": "^5.22.0",
-    "@onecx/angular-auth": "^5.13.0",
+    "@onecx/angular-auth": "^5.22.0",
     "@onecx/angular-integration-interface": "^5.22.0",
     "@onecx/angular-remote-components": "^5.22.0",
     "@onecx/angular-testing": "^5.22.0",
