@@ -77,10 +77,15 @@
             [name]="changePasswordSlotName"
           >
           </ocx-slot>
-          <ng-template #changePasswordPlaceholder>
-            <div class="font-bold mt-2 mb-3">{{ 'PASSWORD.NOT_AVAILABLE' | translate }}</div>
-          </ng-template>
         </div>
+        <ng-template #changePasswordPlaceholder id="up_change_password_error">
+          <p-message
+            id="ps_change_password_error_message"
+            severity="info"
+            styleClass="p-2"
+            [text]="'PASSWORD.NOT_AVAILABLE' | translate"
+          ></p-message>
+        </ng-template>
       </p-tabPanel>
     </p-tabView>
   </ocx-page-content>
