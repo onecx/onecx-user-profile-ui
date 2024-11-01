@@ -11,6 +11,21 @@
   </ocx-page-header>
   <ocx-page-content>
     <ocx-slot *ngIf="isUserRolesAndPermissionsComponentDefined$ | async" [name]="userRolesAndPermissionsSlotName">
+      <ng-template #skeleton>
+        <p-message
+          severity="info"
+          styleClass="w-full flex flex-row justify-content-start"
+          [text]="'ACTIONS.GENERAL.LOADING' | translate"
+        ></p-message>
+      </ng-template>
     </ocx-slot>
+    <div *ngIf="(isUserRolesAndPermissionsComponentDefined$ | async) === false" id="up_roles_permissions_error">
+      <p-message
+        id="ps_roles_permissions_error_message"
+        severity="info"
+        styleClass="p-2"
+        [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
+      ></p-message>
+    </div>
   </ocx-page-content>
 </ocx-portal-page>
