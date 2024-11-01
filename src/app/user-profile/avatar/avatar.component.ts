@@ -1,11 +1,11 @@
 import { Component, Input, OnInit } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
-import { Observable } from 'rxjs'
+import { map, Observable } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 
-import { RefType, UserAvatarAPIService } from 'src/app/shared/generated'
+import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { bffImageUrl } from 'src/app/shared/utils'
 import { environment } from 'src/environments/environment'
 
@@ -16,6 +16,7 @@ import { environment } from 'src/environments/environment'
 })
 export class AvatarComponent implements OnInit {
   @Input() adminView: boolean = false
+  @Input() userProfileId = ''
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
@@ -28,14 +29,28 @@ export class AvatarComponent implements OnInit {
   bffImagePath = this.avatarService.configuration.basePath
 
   constructor(
+    private readonly avatarAdminService: UserAvatarAdminAPIService,
     private readonly avatarService: UserAvatarAPIService,
     private readonly msgService: PortalMessageService,
     private readonly imageCompress: NgxImageCompressService
   ) {}
 
   public ngOnInit(): void {
+    console.log('ID', this.userProfileId)
     this.imageLoadError = false
-    this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+    if (this.userProfileId) {
+      this.avatarAdminService
+        .getUserAvatarById({ id: this.userProfileId, refType: RefType.Large })
+        .pipe(
+          map((data) => {
+            console.log('DATA', data)
+            this.imageUrl = URL.createObjectURL(data)
+          })
+        )
+        .subscribe()
+    } else {
+      this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+    }
     this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'PROFILE_AVATAR#EDIT'
   }
 
@@ -107,29 +122,55 @@ export class AvatarComponent implements OnInit {
 
     this.imageUrl = ''
     this.imageLoadError = false
-    this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
-      next: () => {
-        if (refType === RefType.Large) {
-          localStorage.removeItem('tkit_user_profile')
-          this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-          this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+    if (this.userProfileId) {
+      this.avatarAdminService.uploadAvatarById({ id: this.userProfileId, refType, body: blob }).subscribe({
+        next: () => {
+          if (refType === RefType.Large) {
+            localStorage.removeItem('tkit_user_profile')
+            this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
+            this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+          }
+          if (refType === RefType.Small && !this.adminView) this.windowReload()
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
+            this.msgService.error({
+              summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
+              detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
+            })
+          } else {
+            this.msgService.error({
+              summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
+              detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
+            })
+          }
         }
-        if (refType === RefType.Small && !this.adminView) this.windowReload()
-      },
-      error: (error: HttpErrorResponse) => {
-        if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
-          this.msgService.error({
-            summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
-            detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
-          })
-        } else {
-          this.msgService.error({
-            summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
-            detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
-          })
+      })
+    } else {
+      this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
+        next: () => {
+          if (refType === RefType.Large) {
+            localStorage.removeItem('tkit_user_profile')
+            this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
+            this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+          }
+          if (refType === RefType.Small && !this.adminView) this.windowReload()
+        },
+        error: (error: HttpErrorResponse) => {
+          if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
+            this.msgService.error({
+              summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
+              detailKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.DETAIL'
+            })
+          } else {
+            this.msgService.error({
+              summaryKey: 'AVATAR.MSG.UPLOAD_ERROR.SUMMARY',
+              detailKey: 'AVATAR.MSG.UPLOAD_ERROR.DETAIL'
+            })
+          }
         }
-      }
-    })
+      })
+    }
   }
 
   public onImageError(value: boolean): void {

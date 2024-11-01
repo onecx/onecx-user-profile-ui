@@ -16,9 +16,9 @@ import { UserPerson } from 'src/app/shared/generated'
 })
 export class PersonalInformationComponent implements OnChanges {
   @Input() personalInfo!: UserPerson | null
-  @Input() tenantId: string = ''
+  @Input() userProfileId = ''
+  @Input() tenantId = ''
   @Input() adminView: boolean = false
-  public userId$!: Observable<string>
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
   public addressEdit = false

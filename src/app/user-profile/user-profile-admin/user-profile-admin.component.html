@@ -1,6 +1,7 @@
 <ocx-portal-page permission="USERPROFILE#ADMIN_VIEW" class="p-0">
   <app-personal-info
     [personalInfo]="personalInfo$ | async"
+    [userProfileId]="userProfileId"
     [tenantId]="tenantId"
     [adminView]="true"
     (personalInfoUpdate)="onPersonalInfoUpdate($event)"
