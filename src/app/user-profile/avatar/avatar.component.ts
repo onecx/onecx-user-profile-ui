@@ -1,6 +1,6 @@
-import { Component, Input, OnInit } from '@angular/core'
+import { Component, Input, OnChanges } from '@angular/core'
 import { HttpErrorResponse } from '@angular/common/http'
-import { map, Observable } from 'rxjs'
+import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
@@ -14,9 +14,9 @@ import { environment } from 'src/environments/environment'
   templateUrl: './avatar.component.html',
   styleUrls: ['./avatar.component.scss']
 })
-export class AvatarComponent implements OnInit {
+export class AvatarComponent implements OnChanges {
   @Input() adminView: boolean = false
-  @Input() userProfileId = ''
+  @Input() userProfileId: string | undefined = undefined
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
@@ -35,12 +35,16 @@ export class AvatarComponent implements OnInit {
     private readonly imageCompress: NgxImageCompressService
   ) {}
 
-  public ngOnInit(): void {
-    console.log('ID', this.userProfileId)
+  public ngOnChanges(): void {
+    this.imageLoadError = false
     if (this.userProfileId) {
       this.avatarAdminService
         .getUserAvatarById({ id: this.userProfileId, refType: RefType.Large })
         .pipe(
+          catchError((error) => {
+            console.error('getUserAvatarById()', error)
+            return of(new Blob([]))
+          }),
           map((data) => {
             this.imageUrl = URL.createObjectURL(data)
           })
@@ -57,14 +61,15 @@ export class AvatarComponent implements OnInit {
     this.imageUrl = ''
     this.imageLoadError = true
     if (this.userProfileId) {
-      this.avatarAdminService
-        .deleteUserAvatarById({ id: this.userProfileId })
-        .pipe(
-          map(() => {
-            console.log('DELETED')
-          })
-        )
-        .subscribe()
+      this.avatarAdminService.deleteUserAvatarById({ id: this.userProfileId }).subscribe({
+        next: () => {
+          this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
+        },
+        error: (error) => {
+          console.error('getUserAvatarById()', error)
+          this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
+        }
+      })
     } else {
       this.avatarService.deleteUserAvatar().subscribe({
         next: () => {
