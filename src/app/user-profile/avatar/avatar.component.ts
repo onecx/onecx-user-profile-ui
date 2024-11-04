@@ -37,13 +37,11 @@ export class AvatarComponent implements OnInit {
 
   public ngOnInit(): void {
     console.log('ID', this.userProfileId)
-    this.imageLoadError = false
     if (this.userProfileId) {
       this.avatarAdminService
         .getUserAvatarById({ id: this.userProfileId, refType: RefType.Large })
         .pipe(
           map((data) => {
-            console.log('DATA', data)
             this.imageUrl = URL.createObjectURL(data)
           })
         )
@@ -58,15 +56,26 @@ export class AvatarComponent implements OnInit {
     this.showAvatarDeleteDialog = false
     this.imageUrl = ''
     this.imageLoadError = true
-    this.avatarService.deleteUserAvatar().subscribe({
-      next: () => {
-        this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-        if (!this.adminView) this.windowReload()
-      },
-      error: () => {
-        this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
-      }
-    })
+    if (this.userProfileId) {
+      this.avatarAdminService
+        .deleteUserAvatarById({ id: this.userProfileId })
+        .pipe(
+          map(() => {
+            console.log('DELETED')
+          })
+        )
+        .subscribe()
+    } else {
+      this.avatarService.deleteUserAvatar().subscribe({
+        next: () => {
+          this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
+          if (!this.adminView) this.windowReload()
+        },
+        error: () => {
+          this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
+        }
+      })
+    }
   }
 
   onFileUpload() {
@@ -128,7 +137,7 @@ export class AvatarComponent implements OnInit {
           if (refType === RefType.Large) {
             localStorage.removeItem('tkit_user_profile')
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-            this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+            this.imageUrl = URL.createObjectURL(blob)
           }
           if (refType === RefType.Small && !this.adminView) this.windowReload()
         },
