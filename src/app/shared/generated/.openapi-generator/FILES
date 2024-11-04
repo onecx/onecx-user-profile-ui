@@ -4,6 +4,7 @@ README.md
 api.module.ts
 api/api.ts
 api/userAvatar.service.ts
+api/userAvatarAdmin.service.ts
 api/userProfile.service.ts
 api/userProfileAdmin.service.ts
 configuration.ts
