@@ -10,7 +10,7 @@ import { NgxImageCompressService } from 'ngx-image-compress'
 import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 
-fdescribe('AvatarComponent', () => {
+describe('AvatarComponent', () => {
   let component: AvatarComponent
   let fixture: ComponentFixture<AvatarComponent>
 

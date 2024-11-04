@@ -16,8 +16,8 @@ import { UserPerson } from 'src/app/shared/generated'
 })
 export class PersonalInformationComponent implements OnChanges {
   @Input() personalInfo!: UserPerson | null
-  @Input() userProfileId = ''
-  @Input() tenantId = ''
+  @Input() userProfileId = undefined
+  @Input() tenantId = undefined
   @Input() adminView: boolean = false
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
