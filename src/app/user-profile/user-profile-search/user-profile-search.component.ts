@@ -153,7 +153,7 @@ export class UserProfileSearchComponent implements OnInit {
         id: 'view',
         labelKey: 'ACTIONS.VIEW.USER_PROFILE',
         icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
-        permission: 'USERPROFILE#VIEW',
+        permission: 'USERPROFILE#ADMIN_VIEW',
         callback: (event) => this.onDetail(event)
       },
       {
