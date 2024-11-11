@@ -1,6 +1,7 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
 import { BehaviorSubject, Observable } from 'rxjs'
 import { finalize, map } from 'rxjs/operators'
+import { TranslateService } from '@ngx-translate/core'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
 import { PermissionsDialogComponent } from './permissions-dialog/permissions-dialog.component'
 
@@ -29,7 +30,7 @@ import { PrimeIcons } from 'primeng/api'
 })
 export class UserProfileSearchComponent implements OnInit {
   public actions$: Observable<Action[]> | undefined
-  public additionalActions: DataAction[] = []
+  public additionalActions!: DataAction[]
   private filterData = ''
   public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
   public resultData$ = new BehaviorSubject<RowListGridData[]>([])
@@ -48,7 +49,7 @@ export class UserProfileSearchComponent implements OnInit {
   public dateFormat: string
   public displayDeleteDialog = false
   public displayDetailDialog = false
-  private editPermission = false
+  public editPermission = false
   private primaryButton: ButtonDialogButtonDetails = {
     id: 'up_user_permissions_dialog_button_close',
     key: 'ACTIONS.GENERAL.CLOSE',
@@ -69,6 +70,7 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly portalDialogService: PortalDialogService,
     private readonly slotService: SlotService,
     private readonly userService: UserService,
+    private readonly translate: TranslateService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
     this.criteriaGroup = this.fb.group({
@@ -79,6 +81,9 @@ export class UserProfileSearchComponent implements OnInit {
       size: 50
     })
     this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
+    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+      this.adminViewPermissionsSlotName
+    )
     this.columns = [
       {
         columnType: ColumnType.STRING,
@@ -146,37 +151,11 @@ export class UserProfileSearchComponent implements OnInit {
       }
     ]
     if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = true
-    this.additionalActions = [
-      {
-        id: 'view',
-        labelKey: 'ACTIONS.VIEW.USER_PROFILE',
-        icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
-        permission: this.editPermission ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#ADMIN_VIEW',
-        callback: (event) => this.onDetail(event)
-      },
-      {
-        id: 'permissions',
-        labelKey: 'ACTIONS.VIEW.PERMISSIONS',
-        icon: 'pi pi-lock',
-        permission: 'ROLES_PERMISSIONS#ADMIN_VIEW',
-        callback: (event) => this.onPermissions(event)
-      },
-      {
-        id: 'delete',
-        labelKey: 'ACTIONS.DELETE.USER.TOOLTIP',
-        icon: 'pi pi-trash',
-        classes: ['danger-action-text'],
-        permission: 'USERPROFILE#ADMIN_DELETE',
-        callback: (event) => this.onDelete(event)
-      }
-    ]
-    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
-      this.adminViewPermissionsSlotName
-    )
   }
 
   ngOnInit() {
     this.initFilter()
+    this.prepareActionButtons()
     this.onSearch()
   }
 
@@ -318,5 +297,32 @@ export class UserProfileSearchComponent implements OnInit {
       })
     }
     this.onSearch()
+  }
+
+  public prepareActionButtons(): void {
+    this.additionalActions = [
+      {
+        id: 'view',
+        labelKey: 'ACTIONS.VIEW.USER_PROFILE',
+        icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
+        permission: this.editPermission ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#ADMIN_VIEW',
+        callback: (event: any) => this.onDetail(event)
+      },
+      {
+        id: 'permissions',
+        labelKey: 'ACTIONS.VIEW.PERMISSIONS',
+        icon: 'pi pi-lock',
+        permission: 'ROLES_PERMISSIONS#ADMIN_VIEW',
+        callback: (event) => this.onPermissions(event)
+      },
+      {
+        id: 'delete',
+        labelKey: 'ACTIONS.DELETE.USER.TOOLTIP',
+        icon: 'pi pi-trash',
+        classes: ['danger-action-text'],
+        permission: 'USERPROFILE#ADMIN_DELETE',
+        callback: (event) => this.onDelete(event)
+      }
+    ]
   }
 }
