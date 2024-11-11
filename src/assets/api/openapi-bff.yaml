@@ -3,7 +3,7 @@ openapi: 3.0.3
 info:
   title: onecx-user-profile-bff
   description: OneCx user profile Bff
-  version: '1.0'
+  version: "1.0"
 servers:
   - url: http://onecx-user-profile-bff:8080/
 tags:
@@ -22,13 +22,13 @@ paths:
       description: Load user profile for current user
       operationId: getMyUserProfile
       responses:
-        '200':
+        "200":
           description: User profile of current user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfile'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -44,9 +44,9 @@ paths:
       description: Delete user profile for current user
       operationId: deleteMyUserProfile
       responses:
-        '204':
+        "204":
           description: OK
-        '400':
+        "400":
           description: Internal Server Error
           content:
             application/json:
@@ -63,13 +63,13 @@ paths:
       description: Load user preferences for current user
       operationId: getUserPreference
       responses:
-        '200':
+        "200":
           description: User profile of current user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPreferences'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -91,7 +91,7 @@ paths:
             schema:
               $ref: '#/components/schemas/CreateUserPreference'
       responses:
-        '201':
+        "201":
           description: OK
           headers:
             Location:
@@ -103,7 +103,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPreference'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -128,19 +128,19 @@ paths:
             schema:
               type: string
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPreference'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-        '404':
+        "404":
           description: User preference not found
     delete:
       x-onecx:
@@ -154,9 +154,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
-        '204':
+        "204":
           description: OK
-        '400':
+        "400":
           description: Internal Server Error
           content:
             application/json:
@@ -173,13 +173,13 @@ paths:
       description: Load user person for current user
       operationId: getUserPerson
       responses:
-        '200':
+        "200":
           description: User person of current user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPerson'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -201,13 +201,13 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUserPerson'
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserPerson'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -224,13 +224,13 @@ paths:
       description: Load user profile account settings for current user
       operationId: getUserSettings
       responses:
-        '200':
+        "200":
           description: User profile account settings of current user
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfileAccountSettings'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -252,13 +252,13 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUserSettings'
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfileAccountSettings'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -279,9 +279,9 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/RefType'
+            $ref: "#/components/schemas/RefType"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             image/*:
@@ -290,7 +290,7 @@ paths:
                 maximum: 310000
                 type: string
                 format: binary
-        '404':
+        "204":
           description: User avatar not found
     post:
       x-onecx:
@@ -306,7 +306,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/RefType'
+            $ref: "#/components/schemas/RefType"
       requestBody:
         required: true
         content:
@@ -323,7 +323,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ImageInfo'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -341,7 +341,7 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -363,9 +363,9 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/RefType'
+            $ref: "#/components/schemas/RefType"
       responses:
-        '200':
+        "200":
           description: OK
           content:
             image/*:
@@ -374,7 +374,7 @@ paths:
                 maximum: 310000
                 type: string
                 format: binary
-        '404':
+        "204":
           description: User avatar not found
     post:
       x-onecx:
@@ -391,7 +391,7 @@ paths:
           in: query
           required: true
           schema:
-            $ref: '#/components/schemas/RefType'
+            $ref: "#/components/schemas/RefType"
       requestBody:
         required: true
         content:
@@ -408,7 +408,7 @@ paths:
             application/json:
               schema:
                 $ref: '#/components/schemas/ImageInfo'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -428,7 +428,7 @@ paths:
       responses:
         '204':
           description: No Content
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -451,13 +451,13 @@ paths:
             schema:
               $ref: '#/components/schemas/UserPersonCriteria'
       responses:
-        '200':
+        "200":
           description: Corresponding user profiles
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfilePageResult'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
@@ -476,13 +476,13 @@ paths:
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfile'
-        '404':
+        "404":
           description: Not found
     put:
       x-onecx:
@@ -502,19 +502,19 @@ paths:
             schema:
               $ref: '#/components/schemas/UpdateUserPersonRequest'
       responses:
-        '200':
+        "200":
           description: OK
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/UserProfile'
-        '400':
+        "400":
           description: Bad request
           content:
             application/json:
               schema:
                 $ref: '#/components/schemas/ProblemDetailResponse'
-        '404':
+        "404":
           description: User profile not found
     delete:
       x-onecx:
@@ -528,9 +528,9 @@ paths:
       parameters:
         - $ref: '#/components/parameters/id'
       responses:
-        '204':
+        "204":
           description: No Content
-        '400':
+        "400":
           description: Internal Server Error
           content:
             application/json:
@@ -767,7 +767,7 @@ components:
       type: string
     RefType:
       type: string
-      enum: [small, medium, large]
+      enum: [ small, medium, large ]
     ImageInfo:
       type: object
       properties:

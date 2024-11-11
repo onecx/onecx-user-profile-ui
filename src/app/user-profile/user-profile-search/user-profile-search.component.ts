@@ -145,15 +145,13 @@ export class UserProfileSearchComponent implements OnInit {
         predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
       }
     ]
-    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) {
-      this.editPermission = true
-    }
+    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = true
     this.additionalActions = [
       {
         id: 'view',
         labelKey: 'ACTIONS.VIEW.USER_PROFILE',
         icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
-        permission: 'USERPROFILE#VIEW',
+        permission: this.editPermission ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#ADMIN_VIEW',
         callback: (event) => this.onDetail(event)
       },
       {
