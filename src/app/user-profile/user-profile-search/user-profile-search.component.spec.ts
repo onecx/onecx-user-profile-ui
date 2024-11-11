@@ -134,6 +134,7 @@ describe('UserProfileSearchComponent', () => {
     spyOn(component, 'onDetail')
     component.additionalActions[0].callback({})
     expect(component.onDetail).toHaveBeenCalled()
+    expect(component.additionalActions[0].permission).toEqual('USERPROFILE#ADMIN_EDIT')
 
     spyOn(component, 'onPermissions')
     component.additionalActions[1].callback({})
@@ -142,6 +143,11 @@ describe('UserProfileSearchComponent', () => {
     spyOn(component, 'onDelete')
     component.additionalActions[2].callback({})
     expect(component.onDelete).toHaveBeenCalled()
+
+    expect(component.editPermission).toBeTrue()
+    component.editPermission = false
+    component.prepareActionButtons()
+    expect(component.additionalActions[0].permission).toEqual('USERPROFILE#ADMIN_VIEW')
   })
 
   it('should search user profiles - successfully found', () => {

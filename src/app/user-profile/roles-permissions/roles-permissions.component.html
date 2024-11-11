@@ -16,8 +16,9 @@
     >
       <ng-template #skeleton>
         <p-message
+          id="ps_roles_permissions_loading"
           severity="info"
-          styleClass="w-full flex flex-row justify-content-start"
+          styleClass="m-3 p-2"
           [text]="'ACTIONS.GENERAL.LOADING' | translate"
         ></p-message>
       </ng-template>
@@ -26,7 +27,7 @@
       <p-message
         id="ps_roles_permissions_error_message"
         severity="info"
-        styleClass="p-2"
+        styleClass="m-3 p-2"
         [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
       ></p-message>
     </ng-template>
