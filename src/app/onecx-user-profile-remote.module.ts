@@ -12,7 +12,8 @@ import { addInitializeModuleGuard, AppStateService, ConfigurationService } from 
 import {
   PortalApiConfiguration,
   PortalCoreModule,
-  PortalMissingTranslationHandler
+  PortalMissingTranslationHandler,
+  providePortalDialogService
 } from '@onecx/portal-integration-angular'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 
@@ -58,7 +59,8 @@ const routes: Routes = [
       multi: true,
       deps: [Router, AppStateService]
     },
-    provideHttpClient(withInterceptorsFromDi())
+    provideHttpClient(withInterceptorsFromDi()),
+    providePortalDialogService()
   ]
 })
 export class OneCXUserProfileModule implements DoBootstrap {
