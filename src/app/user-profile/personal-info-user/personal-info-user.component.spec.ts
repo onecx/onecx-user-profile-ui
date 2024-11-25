@@ -6,13 +6,13 @@ import { map, of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
-import { UserProfileDetailComponent } from './user-profile-detail.component'
+import { PersonalInfoUserComponent } from './personal-info-user.component'
 import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 import { ActivatedRoute, Router } from '@angular/router'
 
-describe('UserProfileDetailComponent', () => {
-  let component: UserProfileDetailComponent
-  let fixture: ComponentFixture<UserProfileDetailComponent>
+describe('PersonalInfoUserComponent', () => {
+  let component: PersonalInfoUserComponent
+  let fixture: ComponentFixture<PersonalInfoUserComponent>
   const activatedRouteMock = {}
   const routerMock = {
     navigate: jasmine.createSpy('navigate')
@@ -68,7 +68,7 @@ describe('UserProfileDetailComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserProfileDetailComponent],
+      declarations: [PersonalInfoUserComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -88,7 +88,7 @@ describe('UserProfileDetailComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserProfileDetailComponent)
+    fixture = TestBed.createComponent(PersonalInfoUserComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
     userProfileServiceSpy.updateUserPerson.calls.reset()
@@ -110,7 +110,7 @@ describe('UserProfileDetailComponent', () => {
   describe('getMyUserProfile', () => {
     it('should set personalInfo$ to defaultCurrentUser.person', () => {
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
-      fixture = TestBed.createComponent(UserProfileDetailComponent)
+      fixture = TestBed.createComponent(PersonalInfoUserComponent)
       component = fixture.componentInstance
       fixture.detectChanges()
 

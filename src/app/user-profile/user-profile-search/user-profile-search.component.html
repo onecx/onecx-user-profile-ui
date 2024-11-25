@@ -1,4 +1,4 @@
-<ocx-portal-page permission="USERPROFILE#SEARCH" helpArticleId="PAGE_USER_SEARCH">
+<ocx-portal-page permission="USERPROFILE#SEARCH" helpArticleId="PAGE_PROFILE_SEARCH">
   <ocx-search-header
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
@@ -67,7 +67,7 @@
     </div>
   </ocx-search-header>
 
-  <div *ngIf="searchInProgress" class="card">
+  <div *ngIf="loading" class="card">
     <p-message severity="info" styleClass="p-2" [text]="'ACTIONS.GENERAL.LOADING' | translate"></p-message>
   </div>
 

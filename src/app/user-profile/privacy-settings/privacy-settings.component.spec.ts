@@ -54,4 +54,12 @@ describe('PrivacySettingsComponent', () => {
 
     expect(component.applyChanges.emit).toHaveBeenCalledWith(true)
   })
+
+  it('should initialize form group', () => {
+    component.hideMyProfile = true
+
+    component.ngOnChanges()
+
+    expect(component.formGroup.get('hideMyProfile')?.value).toBeTrue()
+  })
 })

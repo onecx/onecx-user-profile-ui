@@ -20,19 +20,14 @@ describe('UserProfileSearchComponent', () => {
     searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({})),
     deleteUserProfile: jasmine.createSpy('deleteUserProfile').and.returnValue(of({}))
   }
-
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const mockUserService = {
-    lang$: {
-      getValue: jasmine.createSpy('getValue')
-    },
+    lang$: { getValue: jasmine.createSpy('getValue') },
     hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
   }
-
   const mockDialogService = {
     openDialog: jasmine.createSpy('openDialog').and.returnValue(of({}))
   }
-
   const userProfilepageResult: UserProfilePageResult = {
     totalElements: 5,
     number: 0,

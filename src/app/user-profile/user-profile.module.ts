@@ -7,24 +7,24 @@ import { InitializeModuleGuard, addInitializeModuleGuard } from '@onecx/angular-
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { SharedModule } from 'src/app/shared/shared.module'
+import { LabelResolver } from 'src/app/shared/label.resolver'
 
-import { AccountSettingsComponent } from 'src/app/user-profile/account-settings/account-settings.component'
-import { AvatarComponent } from 'src/app/user-profile/avatar/avatar.component'
-import { LayoutThemeComponent } from 'src/app/user-profile/layout-theme/layout-theme.component'
-import { LocaleTimezoneComponent } from 'src/app/user-profile/locale-timezone/locale-timezone.component'
-import { PersonalInformationComponent } from 'src/app/user-profile/personal-information/personal-information.component'
-import { PrivacySettingsComponent } from 'src/app/user-profile/privacy-settings/privacy-settings.component'
-import { UserProfileDetailComponent } from 'src/app/user-profile/user-profile-detail/user-profile-detail.component'
-import { UserProfileAdminComponent } from 'src/app/user-profile/user-profile-admin/user-profile-admin.component'
+import { AccountSettingsComponent } from './account-settings/account-settings.component'
+import { AvatarComponent } from './avatar/avatar.component'
+import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
+import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
+import { PersonalInfoComponent } from './personal-info/personal-info.component'
+import { PersonalInfoUserComponent } from './personal-info-user/personal-info-user.component'
+import { UserProfileAdminComponent } from './user-profile-admin/user-profile-admin.component'
+import { PrivacySettingsComponent } from './privacy-settings/privacy-settings.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
-import { LabelResolver } from '../shared/label.resolver'
 import { PermissionsDialogComponent } from './user-profile-search/permissions-dialog/permissions-dialog.component'
 
 const routes: Routes = [
   {
     path: '',
-    component: UserProfileDetailComponent,
+    component: PersonalInfoUserComponent,
     pathMatch: 'full',
     data: {
       breadcrumb: 'BREADCRUMBS.PROFILE',
@@ -98,9 +98,9 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     UserProfileSearchComponent,
-    UserProfileDetailComponent,
+    PersonalInfoUserComponent,
     UserProfileAdminComponent,
-    PersonalInformationComponent,
+    PersonalInfoComponent,
     AvatarComponent,
     AccountSettingsComponent,
     LayoutThemeComponent,

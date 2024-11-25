@@ -59,7 +59,7 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public columns: DataTableColumn[]
-  public searchInProgress = true
+  public loading = true
   public searchError = false
 
   constructor(
@@ -184,7 +184,7 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public onSearch(): void {
-    this.searchInProgress = true
+    this.loading = true
     const userPersonCriteria = this.criteriaGroup.value
     const criteria = {
       userPersonCriteria: userPersonCriteria
@@ -197,7 +197,7 @@ export class UserProfileSearchComponent implements OnInit {
       .searchUserProfile(criteria)
       .pipe(
         finalize(() => {
-          this.searchInProgress = false
+          this.loading = false
         }),
         map((data: any) => data.stream)
       )

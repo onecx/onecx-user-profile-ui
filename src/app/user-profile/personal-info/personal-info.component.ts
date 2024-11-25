@@ -11,10 +11,10 @@ import { UserPerson } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-info',
-  templateUrl: './personal-information.component.html',
-  styleUrls: ['./personal-information.component.scss']
+  templateUrl: './personal-info.component.html',
+  styleUrls: ['./personal-info.component.scss']
 })
-export class PersonalInformationComponent implements OnChanges {
+export class PersonalInfoComponent implements OnChanges {
   @Input() personalInfo!: UserPerson | null
   @Input() userProfileId: string | undefined = undefined
   @Input() tenantId: string | undefined = undefined

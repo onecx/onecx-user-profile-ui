@@ -1,18 +1,20 @@
-import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
-import { PersonalInformationComponent } from './personal-information.component'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
-import { of } from 'rxjs'
-import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
-import { TranslateService } from '@ngx-translate/core'
+import { ComponentFixture, TestBed, fakeAsync, tick, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { UntypedFormControl, UntypedFormGroup } from '@angular/forms'
+import { of } from 'rxjs'
+import { TranslateService } from '@ngx-translate/core'
+import { TranslateTestingModule } from 'ngx-translate-testing'
 
-describe('PersonalInformationComponent', () => {
-  let component: PersonalInformationComponent
-  let fixture: ComponentFixture<PersonalInformationComponent>
+import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+
+import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
+import { PersonalInfoComponent } from './personal-info.component'
+
+describe('PersonalInfoComponent', () => {
+  let component: PersonalInfoComponent
+  let fixture: ComponentFixture<PersonalInfoComponent>
 
   const defaultCurrentUser: UserProfile = {
     id: 'testId',
@@ -75,7 +77,7 @@ describe('PersonalInformationComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalInformationComponent],
+      declarations: [PersonalInfoComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -106,7 +108,7 @@ describe('PersonalInformationComponent', () => {
   }))
 
   beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(PersonalInformationComponent)
+    fixture = TestBed.createComponent(PersonalInfoComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   }))
