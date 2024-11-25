@@ -6,11 +6,12 @@ import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
-import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { PortalDialogService } from '@onecx/portal-integration-angular'
-import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RowListGridData } from '@onecx/angular-accelerator'
+
+import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
+import { UserProfileSearchComponent } from './user-profile-search.component'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent

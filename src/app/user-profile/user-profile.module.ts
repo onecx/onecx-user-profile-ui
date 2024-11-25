@@ -15,7 +15,7 @@ import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
 import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
 import { PersonalInfoComponent } from './personal-info/personal-info.component'
 import { PersonalInfoUserComponent } from './personal-info-user/personal-info-user.component'
-import { UserProfileAdminComponent } from './user-profile-admin/user-profile-admin.component'
+import { PersonalInfoAdminComponent } from './personal-info-admin/personal-info-admin.component'
 import { PrivacySettingsComponent } from './privacy-settings/privacy-settings.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
@@ -99,7 +99,7 @@ const routes: Routes = [
   declarations: [
     UserProfileSearchComponent,
     PersonalInfoUserComponent,
-    UserProfileAdminComponent,
+    PersonalInfoAdminComponent,
     PersonalInfoComponent,
     AvatarComponent,
     AccountSettingsComponent,
