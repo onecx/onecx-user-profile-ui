@@ -66,12 +66,12 @@
         inputId="up_layout_theme_breadcrumbs"
         formControlName="breadcrumbs"
         (onChange)="saveBreadcrumbs()"
+        [ariaLabel]="'LAYOUT_THEME.BREADCRUMBS' | translate"
         [pTooltip]="'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       >
       </p-inputSwitch>
-      <label for="up_layout_theme_breadcrumbs">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</label>
       <button
         *ngIf="changedBreadcrumbs"
         pButton

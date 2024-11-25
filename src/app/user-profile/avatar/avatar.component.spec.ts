@@ -19,7 +19,7 @@ describe('AvatarComponent', () => {
     profile$: jasmine.createSpy('profile$')
   }
 
-  const avatarServiceSpy = {
+  const avatarUserSpy = {
     deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({})),
     uploadAvatar: jasmine.createSpy('uploadAvatar').and.returnValue(of({})),
     getUserAvatar: jasmine.createSpy('getUserAvatar').and.returnValue(of({})),
@@ -54,7 +54,7 @@ describe('AvatarComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: UserService, useValue: userServiceSpy },
-        { provide: UserAvatarAPIService, useValue: avatarServiceSpy },
+        { provide: UserAvatarAPIService, useValue: avatarUserSpy },
         { provide: UserAvatarAdminAPIService, useValue: avatarAdminSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
         { provide: UserService },
@@ -66,10 +66,10 @@ describe('AvatarComponent', () => {
     msgServiceSpy.error.calls.reset()
     imageCompressSpy.uploadFile.calls.reset()
     imageCompressSpy.compressFile.calls.reset()
-    avatarServiceSpy.deleteUserAvatar.calls.reset()
-    avatarServiceSpy.uploadAvatar.calls.reset()
-    avatarServiceSpy.getUserAvatar.calls.reset()
-    avatarServiceSpy.configuration.and.callFake(() => {
+    avatarUserSpy.deleteUserAvatar.calls.reset()
+    avatarUserSpy.uploadAvatar.calls.reset()
+    avatarUserSpy.getUserAvatar.calls.reset()
+    avatarUserSpy.configuration.and.callFake(() => {
       return { basePath: '/mocked-base-path' }
     })
     avatarAdminSpy.deleteUserAvatarById.calls.reset()
@@ -89,9 +89,20 @@ describe('AvatarComponent', () => {
 
   describe('onChanges', () => {
     it('should get the avatar image url', () => {
+      component.adminView = false
+
       component.ngOnChanges()
 
       expect(component.imageUrl).toBeDefined()
+      expect(component.editPermission).toEqual('PROFILE_AVATAR#EDIT')
+    })
+
+    it('should get the avatar image url', () => {
+      component.adminView = true
+
+      component.ngOnChanges()
+
+      expect(component.editPermission).toEqual('USERPROFILE#ADMIN_EDIT')
     })
 
     it('should get the avatar image url for another user', () => {
@@ -118,41 +129,47 @@ describe('AvatarComponent', () => {
   })
 
   describe('onDeleteAvatarImage', () => {
-    it('should delete an existing Avatar image', () => {
-      component.adminView = true
-      avatarServiceSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
+    it('should delete successfully my Avatar image: user view => reload', () => {
+      component.adminView = false
+      component.userProfileId = undefined
+      avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
 
-      expect(avatarServiceSpy.deleteUserAvatar).toHaveBeenCalled()
+      expect(avatarUserSpy.deleteUserAvatar).toHaveBeenCalled()
       expect(component.showAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
     })
 
-    it('should return error when delete fails', fakeAsync(() => {
-      const deleteErrorResponse: HttpErrorResponse = {
-        status: 401,
-        statusText: 'Not Found',
-        name: 'HttpErrorResponse',
-        message: '',
-        error: undefined,
-        ok: false,
-        headers: new HttpHeaders(),
-        url: null,
-        type: HttpEventType.ResponseHeader
-      }
-
-      avatarServiceSpy.deleteUserAvatar.and.returnValue(throwError(() => deleteErrorResponse))
+    it('should delete successfully my Avatar image: admin view => no page reload', () => {
+      component.adminView = true // do not reload
+      component.userProfileId = undefined
+      avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
 
-      expect(avatarServiceSpy.deleteUserAvatar).toHaveBeenCalled()
+      expect(avatarUserSpy.deleteUserAvatar).toHaveBeenCalled()
+      expect(component.showAvatarDeleteDialog).toBeFalse()
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
+    })
+
+    it('should get error if deletion of my Avatar image fails', fakeAsync(() => {
+      const errorResponse = { error: 'Error on removing my image', status: 400 }
+      component.adminView = true // do not reload
+      component.userProfileId = undefined
+
+      avatarUserSpy.deleteUserAvatar.and.returnValue(throwError(() => errorResponse))
+
+      component.onDeleteAvatarImage()
+
+      expect(avatarUserSpy.deleteUserAvatar).toHaveBeenCalled()
       expect(component.showAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
     }))
 
     it('should delete existing Avatar image of another user', () => {
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(of({}))
+      component.adminView = true // do not reload
       component.userProfileId = 'id'
 
       component.onDeleteAvatarImage()
@@ -162,7 +179,8 @@ describe('AvatarComponent', () => {
     })
 
     it('should handle delete existing Avatar image of another user', () => {
-      avatarAdminSpy.deleteUserAvatarById.and.returnValue(throwError(() => new Error()))
+      const errorResponse = { error: 'Error on removing image of another user', status: 400 }
+      avatarAdminSpy.deleteUserAvatarById.and.returnValue(throwError(() => errorResponse))
       component.userProfileId = 'id'
 
       component.onDeleteAvatarImage()
@@ -182,7 +200,7 @@ describe('AvatarComponent', () => {
       imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
       imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
       imageCompressSpy.byteCount.and.returnValues(300001, 30001)
-      avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+      avatarUserSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
       component.imageLoadError = false
 
       await component.onFileUpload()
@@ -200,7 +218,7 @@ describe('AvatarComponent', () => {
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
       imageCompressSpy.byteCount.and.returnValues(30001, 3001)
-      avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+      avatarUserSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
 
@@ -217,7 +235,7 @@ describe('AvatarComponent', () => {
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
       imageCompressSpy.byteCount.and.returnValues(3001, 3000)
-      avatarServiceSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+      avatarUserSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
 
@@ -247,7 +265,7 @@ describe('AvatarComponent', () => {
     it('should display msg if upload failed', () => {
       const mockCompressedImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-
+      component.adminView = false
       const updateErrorResponse: HttpErrorResponse = {
         status: 404,
         statusText: 'Not Found',
@@ -259,7 +277,7 @@ describe('AvatarComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       }
-      avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+      avatarUserSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
       component.imageLoadError = true
       component.sendImage(mockCompressedImage, RefType.Small)
@@ -282,7 +300,7 @@ describe('AvatarComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       }
-      avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+      avatarUserSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
       component.imageLoadError = true
       component.sendImage('', RefType.Small)
@@ -310,7 +328,7 @@ describe('AvatarComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       }
-      avatarServiceSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+      avatarUserSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
       component.imageLoadError = true
       component.sendImage(mockCompressedImage, RefType.Small)
@@ -321,9 +339,36 @@ describe('AvatarComponent', () => {
       })
     })
 
-    it('should upload image of another user', () => {
-      avatarAdminSpy.uploadAvatarById.and.returnValue(of({}))
+    it('should upload image of (me) user', () => {
+      spyOn(component, 'reloadPage')
+      avatarUserSpy.uploadAvatar.and.returnValue(of({}))
+      component.userProfileId = undefined
+      component.adminView = false
+
+      component.sendImage('image', RefType.Large)
+
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
+    })
+
+    it('should upload SMALL image of (me) user', () => {
+      spyOn(component, 'reloadPage')
+      avatarUserSpy.uploadAvatar.and.returnValue(of({}))
+      component.userProfileId = undefined
+      component.adminView = false
+
+      component.sendImage('image', RefType.Small)
+
+      expect(component.reloadPage).toHaveBeenCalled()
+    })
+
+    it('should upload LARGE image of another user', () => {
+      const dummyImageData = new Uint8Array([137, 80, 78, 71])
+      const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
+      avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
       component.userProfileId = 'id'
+      component.adminView = true
+
+      component.ngOnChanges()
 
       component.sendImage('image', RefType.Large)
 
@@ -362,5 +407,9 @@ describe('AvatarComponent', () => {
     component.imageLoadError = false
     component.onImageError(true)
     expect(component.imageLoadError).toBeTrue()
+  })
+
+  it('should reload page', () => {
+    component.reloadPage()
   })
 })

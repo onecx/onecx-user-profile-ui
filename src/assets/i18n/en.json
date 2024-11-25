@@ -200,7 +200,7 @@
     "TAB_NAME_PRIVACY": "Privacy",
     "TAB_NAME_PRIVACY.TOOLTIP": "The user's privacy settings",
     "HIDE_MY_PROFILE": "Hide my profile",
-    "PRIVACY.TOOLTIP": "Enable/Disable hiding the profile"
+    "HIDE_MY_PROFILE.TOOLTIP": "Enable/Disable hiding the profile"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Password",

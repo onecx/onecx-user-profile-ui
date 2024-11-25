@@ -1,4 +1,5 @@
 import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
+import { Location } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs/operators'
@@ -37,6 +38,7 @@ export class AccountSettingsComponent implements OnInit {
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
+    private readonly location: Location,
     private readonly translate: TranslateService,
     private readonly msgService: PortalMessageService,
     private readonly userProfileService: UserProfileAPIService,
@@ -59,22 +61,19 @@ export class AccountSettingsComponent implements OnInit {
         this.settingsInitial = { ...this.settings }
       },
       error: (error) => {
-        console.error('Failed to load user profile', error)
+        console.error(error)
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public localeChange(ev: any) {
     this.settings.locale = ev
     this.saveUserSettingsInfo()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public timezoneChange(ev: any) {
     this.settings.timezone = ev
     this.saveUserSettingsInfo()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public colorSchemeChange(ev: any) {
     this.settings.colorScheme = ev
     this.saveUserSettingsInfo()
@@ -83,7 +82,6 @@ export class AccountSettingsComponent implements OnInit {
     this.settings.menuMode = ev
     this.saveUserSettingsInfo()
   }
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   public privacySettingsChange(ev: any) {
     this.settings.hideMyProfile = ev.hideMyProfile
     this.saveUserSettingsInfo()
@@ -92,10 +90,11 @@ export class AccountSettingsComponent implements OnInit {
   public saveUserSettingsInfo(): void {
     this.userProfileService.updateUserSettings({ updateUserSettings: this.settings as UpdateUserSettings }).subscribe({
       next: (res) => {
-        this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
         this.settings = res
+        this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
       },
-      error: () => {
+      error: (error) => {
+        console.error(error)
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
@@ -108,11 +107,7 @@ export class AccountSettingsComponent implements OnInit {
 
   public reloadPage(): void {
     this.clearProfileCache()
-    this.reloadWindow()
-  }
-
-  public reloadWindow(): void {
-    window.location.reload()
+    this.location.historyGo(0) // load current page = reload (trick for code coverage)
   }
 
   private prepareActionButtons(): void {

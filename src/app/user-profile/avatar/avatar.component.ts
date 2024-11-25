@@ -1,4 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core'
+import { Location } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
@@ -31,6 +32,7 @@ export class AvatarComponent implements OnChanges {
   constructor(
     private readonly avatarAdminService: UserAvatarAdminAPIService,
     private readonly avatarService: UserAvatarAPIService,
+    private readonly location: Location,
     private readonly msgService: PortalMessageService,
     private readonly imageCompress: NgxImageCompressService
   ) {}
@@ -38,24 +40,27 @@ export class AvatarComponent implements OnChanges {
   public ngOnChanges(): void {
     this.imageLoadError = false
     if (this.userProfileId) {
-      this.avatarAdminService
-        .getUserAvatarById({ id: this.userProfileId, refType: RefType.Large })
-        .pipe(
-          catchError((error) => {
-            console.error('getUserAvatarById()', error)
-            return of(new Blob([]))
-          }),
-          map((data) => {
-            this.imageUrl = URL.createObjectURL(data)
-          })
-        )
-        .subscribe()
+      this.getUserAvatarImage()
     } else {
       this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
     }
     this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'PROFILE_AVATAR#EDIT'
   }
 
+  private getUserAvatarImage() {
+    this.avatarAdminService
+      .getUserAvatarById({ id: this.userProfileId!, refType: RefType.Large })
+      .pipe(
+        catchError((error) => {
+          console.error('getUserAvatarById()', error)
+          return of(new Blob([]))
+        }),
+        map((data) => {
+          this.imageUrl = URL.createObjectURL(data)
+        })
+      )
+      .subscribe()
+  }
   public onDeleteAvatarImage(): void {
     this.showAvatarDeleteDialog = false
     this.imageUrl = ''
@@ -66,7 +71,7 @@ export class AvatarComponent implements OnChanges {
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         },
         error: (error) => {
-          console.error('getUserAvatarById()', error)
+          console.error('deleteUserAvatarById()', error)
           this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
         }
       })
@@ -74,9 +79,10 @@ export class AvatarComponent implements OnChanges {
       this.avatarService.deleteUserAvatar().subscribe({
         next: () => {
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-          if (!this.adminView) this.windowReload()
+          if (!this.adminView) this.reloadPage()
         },
-        error: () => {
+        error: (error) => {
+          console.error('deleteUserAvatar()', error)
           this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
         }
       })
@@ -134,17 +140,17 @@ export class AvatarComponent implements OnChanges {
     }
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
-    this.imageUrl = ''
+    this.imageUrl = undefined
     this.imageLoadError = false
     if (this.userProfileId) {
+      // admin perspective: upload only, refresh large image
       this.avatarAdminService.uploadAvatarById({ id: this.userProfileId, refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
             localStorage.removeItem('tkit_user_profile')
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-            this.imageUrl = URL.createObjectURL(blob)
+            this.getUserAvatarImage()
           }
-          if (refType === RefType.Small && !this.adminView) this.windowReload()
         },
         error: (error: HttpErrorResponse) => {
           if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
@@ -161,14 +167,15 @@ export class AvatarComponent implements OnChanges {
         }
       })
     } else {
+      // user perspective: upload and reload
       this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
             localStorage.removeItem('tkit_user_profile')
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-            this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+            this.imageUrl = URL.createObjectURL(blob)
           }
-          if (refType === RefType.Small && !this.adminView) this.windowReload()
+          if (refType === RefType.Small) this.reloadPage()
         },
         error: (error: HttpErrorResponse) => {
           if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
@@ -191,7 +198,7 @@ export class AvatarComponent implements OnChanges {
     this.imageLoadError = value
   }
 
-  public windowReload() {
-    window.location.reload()
+  public reloadPage() {
+    this.location.historyGo(0) // load current page = reload (trick for code coverage)
   }
 }

@@ -1,8 +1,11 @@
+import { Component, Inject, Input, OnInit, NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule, Location } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { Component, Inject, Input, OnInit } from '@angular/core'
 import { RouterModule } from '@angular/router'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { Observable, ReplaySubject, of } from 'rxjs'
+import { SharedModule } from 'primeng/api'
+
 import {
   AngularRemoteComponentsModule,
   BASE_URL,
@@ -12,11 +15,10 @@ import {
   provideTranslateServiceForRoot
 } from '@onecx/angular-remote-components'
 import { PortalCoreModule, createRemoteComponentTranslateLoader } from '@onecx/portal-integration-angular'
-import { SharedModule } from 'primeng/api'
-import { Observable, ReplaySubject, of } from 'rxjs'
-import { SharedModule as SharedModuleUserProfile } from '../shared/shared.module'
-import { Configuration, RefType, UserAvatarAPIService } from '../shared/generated'
-import { bffImageUrl } from '../shared/utils'
+
+import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
+import { Configuration, RefType, UserAvatarAPIService } from 'src/app/shared/generated'
+import { bffImageUrl } from 'src/app/shared/utils'
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -38,6 +40,7 @@ import { environment } from 'src/environments/environment'
       }
     })
   ],
+  schemas: [NO_ERRORS_SCHEMA],
   imports: [
     AngularRemoteComponentsModule,
     CommonModule,

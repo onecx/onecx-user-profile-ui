@@ -74,8 +74,7 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
           factor: tz.factor
         }))
       },
-      // eslint-disable-next-line no-console
-      (error) => console.log(error)
+      (error) => console.error(error)
     )
     const supportedLanguagesProperty = this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES)
     const supportedLanguages = supportedLanguagesProperty

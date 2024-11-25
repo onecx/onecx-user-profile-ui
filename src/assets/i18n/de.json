@@ -200,7 +200,7 @@
     "TAB_NAME_PRIVACY": "Privatsphäre",
     "TAB_NAME_PRIVACY.TOOLTIP": "Einstellungen zur Privatsphäre des Nutzers",
     "HIDE_MY_PROFILE": "Mein Profil ausblenden",
-    "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
+    "HIDE_MY_PROFILE.TOOLTIP": "Sichtbarkeit des Profils"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Passwort",
@@ -211,7 +211,7 @@
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
     "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Einstellungen zu Darstellung und Aussehen",
     "BREADCRUMBS": "Seitenpfad",
-    "BREADCRUMBS.TOOLTIP": "Generelle Sichtbarkeit des Seitenpfads",
+    "BREADCRUMBS.TOOLTIP": "Sichtbarkeit des Seitenpfads: sichtbar/unsichtbar",
     "MENU_MODE": "Menüdarstellung",
     "MENU_MODES": {
       "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Sidebar (Mobil)",

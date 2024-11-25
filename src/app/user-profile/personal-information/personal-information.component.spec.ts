@@ -146,7 +146,7 @@ describe('PersonalInformationComponent', () => {
 
       component.formUpdates$.subscribe((person) => {
         const p: any = person
-        console.log(p)
+        //console.log(p)
         expect(p.firstName).toEqual('newName')
       })
       tick(2000)
