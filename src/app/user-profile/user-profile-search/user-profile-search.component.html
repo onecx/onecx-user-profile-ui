@@ -1,4 +1,4 @@
-<ocx-portal-page permission="USERPROFILE#SEARCH" helpArticleId="PAGE_USER_SEARCH">
+<ocx-portal-page permission="USERPROFILE#SEARCH" helpArticleId="PAGE_PROFILE_SEARCH">
   <ocx-search-header
     [header]="'DIALOG.SEARCH.HEADER' | translate"
     [subheader]="'DIALOG.SEARCH.SUBHEADER' | translate"
@@ -67,7 +67,7 @@
     </div>
   </ocx-search-header>
 
-  <div *ngIf="searchInProgress" class="card">
+  <div *ngIf="loading" class="card">
     <p-message severity="info" styleClass="p-2" [text]="'ACTIONS.GENERAL.LOADING' | translate"></p-message>
   </div>
 
@@ -155,8 +155,8 @@
 
 <!-- DETAIL -->
 <p-dialog
-  [(visible)]="displayDetailDialog"
   [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
+  [(visible)]="displayDetailDialog"
   [modal]="true"
   [closable]="true"
   [draggable]="true"
@@ -165,11 +165,11 @@
   contentStyleClass="p-0"
   [style]="{ width: '860px' }"
 >
-  <app-user-profile-admin
+  <app-personal-info-admin
     [displayDetailDialog]="displayDetailDialog"
     (hideDialog)="onCloseDetail()"
     [userProfileId]="userProfile?.['userId']"
-  ></app-user-profile-admin>
+  ></app-personal-info-admin>
   <ng-template pTemplate="footer">
     <div class="flex flex-wrap justify-content-end column-gap-2">
       <p-button

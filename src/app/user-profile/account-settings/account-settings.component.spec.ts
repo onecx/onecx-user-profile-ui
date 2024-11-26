@@ -1,8 +1,14 @@
+import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
-
-import { AccountSettingsComponent } from './account-settings.component'
-import { PortalMessageService } from '@onecx/angular-integration-interface'
+import { Location } from '@angular/common'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { ActivatedRoute, Router } from '@angular/router'
+import { of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+
+import { PortalMessageService } from '@onecx/angular-integration-interface'
+
 import {
   ColorScheme,
   MenuMode,
@@ -10,11 +16,7 @@ import {
   UserProfileAPIService,
   UserProfileAccountSettings
 } from 'src/app/shared/generated'
-import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { of, throwError } from 'rxjs'
-import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { ActivatedRoute, Router } from '@angular/router'
+import { AccountSettingsComponent } from './account-settings.component'
 
 describe('AccountSettingsComponent', () => {
   let component: AccountSettingsComponent
@@ -23,44 +25,21 @@ describe('AccountSettingsComponent', () => {
   const routerMock = {
     navigate: jasmine.createSpy('navigate')
   }
-
   const userProfileServiceSpy = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
     getUserSettings: jasmine.createSpy('getUserSettings').and.returnValue(of({})),
     updateUserSettings: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
   }
-
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
+  const locationSpy = jasmine.createSpyObj<Location>('Location', ['historyGo'])
 
-  /** DATA  PREP */
   const profile: UserProfileAccountSettings = {
-    modificationCount: 1,
+    modificationCount: 0,
     hideMyProfile: false,
     locale: 'de-de',
     timezone: 'UTC',
     menuMode: MenuMode.Horizontal,
     colorScheme: ColorScheme.Auto
-  }
-
-  const updatedProfile: UserProfileAccountSettings = {
-    modificationCount: 1,
-    hideMyProfile: false,
-    locale: 'de-de',
-    timezone: 'UTC',
-    menuMode: MenuMode.Horizontal,
-    colorScheme: ColorScheme.Auto
-  }
-
-  const initErrorResponse: HttpErrorResponse = {
-    status: 401,
-    statusText: 'Not Found',
-    name: 'HttpErrorResponse',
-    message: '',
-    error: undefined,
-    ok: false,
-    headers: new HttpHeaders(),
-    url: null,
-    type: HttpEventType.ResponseHeader
   }
 
   beforeEach(waitForAsync(() => {
@@ -79,6 +58,7 @@ describe('AccountSettingsComponent', () => {
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
+        { provide: Location, useValue: locationSpy },
         { provide: Router, useValue: routerMock }
       ]
     }).compileComponents()
@@ -87,6 +67,7 @@ describe('AccountSettingsComponent', () => {
     userProfileServiceSpy.getMyUserProfile.calls.reset()
     userProfileServiceSpy.getUserSettings.calls.reset()
     userProfileServiceSpy.updateUserSettings.calls.reset()
+    locationSpy.historyGo.calls.reset()
   }))
 
   beforeEach(() => {
@@ -94,11 +75,11 @@ describe('AccountSettingsComponent', () => {
     fixture = TestBed.createComponent(AccountSettingsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    spyOn(component, 'reloadWindow').and.returnValue()
   })
 
-  it('should create', fakeAsync(() => {
-    userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => initErrorResponse))
+  it('should display error if loading fails', fakeAsync(() => {
+    const errorResponse = { error: 'Error on loading user settings', status: 400 }
+    userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => errorResponse))
 
     component.ngOnInit()
 
@@ -117,27 +98,19 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should saveUserSettingsInfo', () => {
-    userProfileServiceSpy.updateUserSettings.and.returnValue(of(updatedProfile))
+    component.settings = profile
+    const response: UpdateUserSettings = { ...profile, modificationCount: 1 }
+
+    userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
 
     component.saveUserSettingsInfo()
     expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-    expect(component.settings).toEqual(updatedProfile)
+    expect(component.settings).toEqual(response)
   })
 
   it('should handle error on update in saveUserSettingsInfo', () => {
-    const updateErrorResponse: HttpErrorResponse = {
-      status: 404,
-      statusText: 'Not Found',
-      name: 'HttpErrorResponse',
-      message: '',
-      error: undefined,
-      ok: false,
-      headers: new HttpHeaders(),
-      url: null,
-      type: HttpEventType.ResponseHeader
-    }
-
-    userProfileServiceSpy.updateUserSettings.and.returnValue(throwError(() => updateErrorResponse))
+    const errorResponse = { error: 'Error on updating user settings', status: 400 }
+    userProfileServiceSpy.updateUserSettings.and.returnValue(throwError(() => errorResponse))
 
     component.saveUserSettingsInfo()
     expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.ERROR' })
@@ -158,39 +131,53 @@ describe('AccountSettingsComponent', () => {
     })
   })
 
-  it('should call timezoneChange', () => {
-    component.settings.timezone = 'US'
-    component.timezoneChange('HST')
-    expect(component.settings.timezone).toEqual('HST')
-    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
-      updateUserSettings: component.settings as UpdateUserSettings
-    })
-  })
+  describe('on change settings', () => {
+    it('should call timezoneChange', () => {
+      component.settings = profile
+      const val = 'HST'
+      const response: UpdateUserSettings = { ...profile, modificationCount: 1, timezone: val }
+      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
 
-  it('should call colorSchemeChange', () => {
-    component.settings.colorScheme = ColorScheme.Light
-    component.colorSchemeChange(ColorScheme.Dark)
-    expect(component.settings.colorScheme).toEqual(ColorScheme.Dark)
-    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
-      updateUserSettings: component.settings as UpdateUserSettings
-    })
-  })
+      component.timezoneChange(val)
 
-  it('should call menuModeChange', () => {
-    component.settings.menuMode = MenuMode.Horizontal
-    component.menuModeChange(MenuMode.Slim)
-    expect(component.settings.menuMode).toEqual(MenuMode.Slim)
-    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
-      updateUserSettings: component.settings as UpdateUserSettings
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
+      expect(component.settings).toEqual(response)
     })
-  })
 
-  it('should call privacySettingsChange', () => {
-    component.settings.hideMyProfile = false
-    component.privacySettingsChange({ hideMyProfile: true })
-    expect(component.settings.hideMyProfile).toEqual(true)
-    expect(userProfileServiceSpy.updateUserSettings).toHaveBeenCalledWith({
-      updateUserSettings: component.settings as UpdateUserSettings
+    it('should call colorSchemeChange', () => {
+      component.settings = profile
+      const val = ColorScheme.Dark
+      const response: UpdateUserSettings = { ...profile, modificationCount: 1, colorScheme: val }
+      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+
+      component.colorSchemeChange(val)
+
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
+      expect(component.settings).toEqual(response)
+    })
+
+    it('should call menuModeChange', () => {
+      component.settings = profile
+      const val = MenuMode.Horizontal
+      const response: UpdateUserSettings = { ...profile, modificationCount: 1, menuMode: val }
+      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+
+      component.menuModeChange(MenuMode.Slim)
+
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
+      expect(component.settings).toEqual(response)
+    })
+
+    it('should call privacySettingsChange', () => {
+      component.settings = profile
+      const val = false
+      const response: UpdateUserSettings = { ...profile, modificationCount: 1, hideMyProfile: val }
+      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+
+      component.privacySettingsChange({ hideMyProfile: true })
+
+      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
+      expect(component.settings).toEqual(response)
     })
   })
 
@@ -208,5 +195,9 @@ describe('AccountSettingsComponent', () => {
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()
+  })
+
+  it('should reload page', () => {
+    component.reloadPage()
   })
 })

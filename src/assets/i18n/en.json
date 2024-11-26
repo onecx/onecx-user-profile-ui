@@ -200,7 +200,7 @@
     "TAB_NAME_PRIVACY": "Privacy",
     "TAB_NAME_PRIVACY.TOOLTIP": "The user's privacy settings",
     "HIDE_MY_PROFILE": "Hide my profile",
-    "PRIVACY.TOOLTIP": "Enable/Disable hiding the profile"
+    "HIDE_MY_PROFILE.TOOLTIP": "Enable/Disable hiding the profile"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Password",
@@ -242,5 +242,28 @@
     "SETTINGS": "Settings",
     "PROFILE": "User Profile",
     "ROLES_PERMISSIONS": "Permissions"
+  },
+  "EXCEPTIONS": {
+    "NOT_FOUND": {
+      "PROFILES": "No data could be found for this Profile."
+    },
+    "HTTP_STATUS_0": {
+      "PROFILES": "Unknown problem retrieving Profiles. Please try again."
+    },
+    "HTTP_STATUS_400": {
+      "PROFILES": "The Profile could not be processed."
+    },
+    "HTTP_STATUS_401": {
+      "PROFILES": "You are not authorized to see Profiles."
+    },
+    "HTTP_STATUS_403": {
+      "PROFILES": "You have no Permissions to see Profiles."
+    },
+    "HTTP_STATUS_404": {
+      "PROFILES": "No data could be found for this Profile."
+    },
+    "HTTP_STATUS_500": {
+      "PROFILES": "Unknown problem retrieving Profiles. Please try again."
+    }
   }
 }

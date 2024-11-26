@@ -9,7 +9,7 @@
 
   <ocx-page-content>
     <app-personal-info
-      [personalInfo]="personalInfo$ | async"
+      [personalInfo]="(personalInfo$ | async) ?? {}"
       [tenantId]="tenantId"
       (personalInfoUpdate)="onPersonalInfoUpdate($event)"
       [adminView]="false"

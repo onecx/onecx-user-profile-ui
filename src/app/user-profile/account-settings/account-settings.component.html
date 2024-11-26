@@ -27,6 +27,7 @@
           (applyChanges)="reloadPage()"
         ></app-locale-timezone>
       </p-tabPanel>
+
       <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_LAYOUT_THEME#VIEW'">
         <ng-template pTemplate="header">
           <span
@@ -45,6 +46,7 @@
           (applyChanges)="reloadPage()"
         ></app-layout-theme>
       </p-tabPanel>
+
       <p-tabPanel *ocxIfPermission="'ACCOUNT_SETTINGS_PRIVACY#VIEW'">
         <ng-template pTemplate="header">
           <span
@@ -56,11 +58,12 @@
           </span>
         </ng-template>
         <app-privacy-settings
-          [privacySettings]="settings.hideMyProfile"
-          (privacySettingsChange)="privacySettingsChange($event)"
+          [hideMyProfile]="settings.hideMyProfile"
+          (hideMyProfileChange)="privacySettingsChange($event)"
           (applyChanges)="reloadPage()"
         ></app-privacy-settings>
       </p-tabPanel>
+
       <p-tabPanel *ocxIfPermission="'CHANGE_PASSWORD#VIEW'">
         <ng-template pTemplate="header">
           <span

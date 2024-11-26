@@ -200,7 +200,7 @@
     "TAB_NAME_PRIVACY": "Privatsphäre",
     "TAB_NAME_PRIVACY.TOOLTIP": "Einstellungen zur Privatsphäre des Nutzers",
     "HIDE_MY_PROFILE": "Mein Profil ausblenden",
-    "PRIVACY.TOOLTIP": "Sichtbarkeit des Profils"
+    "HIDE_MY_PROFILE.TOOLTIP": "Sichtbarkeit des Profils"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Passwort",
@@ -211,7 +211,7 @@
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
     "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Einstellungen zu Darstellung und Aussehen",
     "BREADCRUMBS": "Seitenpfad",
-    "BREADCRUMBS.TOOLTIP": "Generelle Sichtbarkeit des Seitenpfads",
+    "BREADCRUMBS.TOOLTIP": "Sichtbarkeit des Seitenpfads: sichtbar/unsichtbar",
     "MENU_MODE": "Menüdarstellung",
     "MENU_MODES": {
       "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Sidebar (Mobil)",
@@ -242,5 +242,28 @@
     "SETTINGS": "Einstellungen",
     "PROFILE": "Nutzerprofil",
     "ROLES_PERMISSIONS": "Berechtigungen"
+  },
+  "EXCEPTIONS": {
+    "NOT_FOUND": {
+      "PROFILES": "Es konnten keine Profile gefunden werden."
+    },
+    "HTTP_STATUS_0": {
+      "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es noch einmal."
+    },
+    "HTTP_STATUS_400": {
+      "PROFILES": "Das Profil konnte nicht verarbeitet werden."
+    },
+    "HTTP_STATUS_401": {
+      "PROFILES": "Sie sind nicht autorisiert um Profile zu sehen."
+    },
+    "HTTP_STATUS_403": {
+      "PROFILES": "Sie haben keine Rechte um Profile zu sehen."
+    },
+    "HTTP_STATUS_404": {
+      "PROFILES": "Es konnten keine Profile gefunden werden"
+    },
+    "HTTP_STATUS_500": {
+      "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es erneut."
+    }
   }
 }

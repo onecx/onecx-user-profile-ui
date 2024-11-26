@@ -59,7 +59,7 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public columns: DataTableColumn[]
-  public searchInProgress = true
+  public loading = true
   public searchError = false
 
   constructor(
@@ -184,20 +184,16 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public onSearch(): void {
-    this.searchInProgress = true
+    this.loading = true
     const userPersonCriteria = this.criteriaGroup.value
     const criteria = {
       userPersonCriteria: userPersonCriteria
     }
-    const clearTable = setTimeout(() => {
-      this.resultData$.next([])
-    }, 500)
-
     this.userProfileAdminService
       .searchUserProfile(criteria)
       .pipe(
         finalize(() => {
-          this.searchInProgress = false
+          this.loading = false
         }),
         map((data: any) => data.stream)
       )
@@ -209,7 +205,6 @@ export class UserProfileSearchComponent implements OnInit {
               detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
             })
           }
-          clearTimeout(clearTable)
           stream = stream.map((row: any) => ({
             ...row,
             lastName: row.person.lastName,

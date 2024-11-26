@@ -6,11 +6,12 @@ import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
-import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { PortalDialogService } from '@onecx/portal-integration-angular'
-import { UserProfileSearchComponent } from './user-profile-search.component'
 import { RowListGridData } from '@onecx/angular-accelerator'
+
+import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
+import { UserProfileSearchComponent } from './user-profile-search.component'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
@@ -20,19 +21,14 @@ describe('UserProfileSearchComponent', () => {
     searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({})),
     deleteUserProfile: jasmine.createSpy('deleteUserProfile').and.returnValue(of({}))
   }
-
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const mockUserService = {
-    lang$: {
-      getValue: jasmine.createSpy('getValue')
-    },
+    lang$: { getValue: jasmine.createSpy('getValue') },
     hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
   }
-
   const mockDialogService = {
     openDialog: jasmine.createSpy('openDialog').and.returnValue(of({}))
   }
-
   const userProfilepageResult: UserProfilePageResult = {
     totalElements: 5,
     number: 0,

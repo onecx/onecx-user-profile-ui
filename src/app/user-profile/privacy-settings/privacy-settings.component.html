@@ -6,12 +6,12 @@
         inputId="up_privacy_settings_hide_my_profile"
         formControlName="hideMyProfile"
         (onChange)="savePrivacySettings()"
-        [(ngModel)]="privacySettings"
-        [pTooltip]="'PRIVACY_SETTINGS.PRIVACY.TOOLTIP' | translate"
+        [ariaLabel]="'PRIVACY_SETTINGS.HIDE_MY_PROFILE' | translate"
+        [pTooltip]="'PRIVACY_SETTINGS.HIDE_MY_PROFILE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-inputSwitch>
-      <label for="up_privacy_settings_hide_my_profile">{{ 'PRIVACY_SETTINGS.HIDE_MY_PROFILE' | translate }}</label>
+
       <button
         *ngIf="changedPrivacySettings"
         pButton
