@@ -137,9 +137,7 @@ describe('PersonalInfoComponent', () => {
       })
 
       const spyCreateCountry = spyOn<any>(component, 'createCountryList').and.callFake(() => {
-        return Promise.resolve({
-          testUserPerson
-        })
+        return Promise.resolve({ testUserPerson })
       })
 
       fixture.detectChanges()
@@ -148,44 +146,7 @@ describe('PersonalInfoComponent', () => {
 
       component.formUpdates$.subscribe((person) => {
         const p: any = person
-        //console.log(p)
         expect(p.firstName).toEqual('newName')
-      })
-      tick(2000)
-      expect(spyCreateCountry).toHaveBeenCalled()
-    }))
-
-    it('should call createCountryList empty personalInfo', fakeAsync(() => {
-      component.formUpdates$ = of({})
-      component.personalInfo = {}
-
-      component.formGroup = new UntypedFormGroup({
-        address: new UntypedFormGroup({
-          street: new UntypedFormControl('newStreet'),
-          streetNo: new UntypedFormControl('newStreetNo'),
-          postalCode: new UntypedFormControl('80243'),
-          city: new UntypedFormControl('newCity'),
-          country: new UntypedFormControl('newCountry')
-        }),
-        phone: new UntypedFormGroup({
-          type: new UntypedFormControl(PhoneType.Mobile),
-          number: new UntypedFormControl('+4916883930')
-        })
-      })
-
-      const spyCreateCountry = spyOn<any>(component, 'createCountryList').and.callFake(() => {
-        return Promise.resolve({
-          testUserPerson
-        })
-      })
-
-      fixture.detectChanges()
-      component.ngOnChanges()
-      tick(2000)
-
-      component.formUpdates$.subscribe((person) => {
-        const p: any = person
-        expect(p.firstName).toEqual(undefined)
       })
       tick(2000)
       expect(spyCreateCountry).toHaveBeenCalled()
@@ -309,7 +270,7 @@ describe('PersonalInfoComponent', () => {
 
       component.formUpdates$.subscribe((personalInfo) => {
         const p: any = personalInfo
-        expect(p.phone).toEqual(component.formGroup.value.phone)
+        expect(p.phone).toEqual(component.formGroup?.value.phone)
       })
 
       expect(component.phoneEdit).toBeFalse()
@@ -344,7 +305,7 @@ describe('PersonalInfoComponent', () => {
 
       component.formUpdates$.subscribe((personalInfo) => {
         const p: any = personalInfo
-        expect(p.phone).toEqual(component.formGroup.value.phone)
+        expect(p.phone).toEqual(component.formGroup?.value.phone)
       })
 
       expect(component.phoneEdit).toBeFalse()
@@ -379,7 +340,7 @@ describe('PersonalInfoComponent', () => {
 
       component.formUpdates$.subscribe((personalInfo) => {
         const p: any = personalInfo
-        expect(p.phone).toEqual(component.formGroup.value.phone)
+        expect(p.phone).toEqual(component.formGroup?.value.phone)
       })
 
       expect(component.phoneEdit).toBeFalse()
@@ -409,7 +370,7 @@ describe('PersonalInfoComponent', () => {
 
       component.formUpdates$.subscribe((personalInfo) => {
         const p: any = personalInfo
-        expect(p.phone).toEqual(component.formGroup.value.phone)
+        expect(p.phone).toEqual(component.formGroup?.value.phone)
       })
       tick(1000)
 

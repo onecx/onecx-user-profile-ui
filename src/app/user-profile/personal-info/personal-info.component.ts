@@ -15,7 +15,7 @@ import { UserPerson } from 'src/app/shared/generated'
   styleUrls: ['./personal-info.component.scss']
 })
 export class PersonalInfoComponent implements OnChanges {
-  @Input() personalInfo!: UserPerson | null
+  @Input() personalInfo!: UserPerson
   @Input() userProfileId: string | undefined = undefined
   @Input() tenantId: string | undefined = undefined
   @Input() adminView: boolean = false
@@ -29,26 +29,25 @@ export class PersonalInfoComponent implements OnChanges {
     { value: PhoneType.MOBILE, label: 'Mobile' },
     { value: PhoneType.LANDLINE, label: 'Landline' }
   ]
-  public formGroup!: UntypedFormGroup
-  public booleanOptions!: SelectItem[]
+  public formGroup: UntypedFormGroup
   public formUpdates$: Observable<unknown> | undefined
   public editPermission: string = ''
 
   constructor(
     public readonly http: HttpClient,
     public readonly translate: TranslateService
-  ) {}
+  ) {
+    this.formGroup = this.initFormGroup()
+  }
 
   public ngOnChanges(): void {
-    this.formGroup = this.initFormGroup()
-    this.formUpdates$ = of(this.personalInfo).pipe(
-      switchMap((personalInfo) => {
-        if (this.formGroup && personalInfo) {
+    if (Object.keys(this.personalInfo).length > 0) {
+      this.formUpdates$ = of(this.personalInfo).pipe(
+        switchMap((personalInfo) => {
           return from(this.createCountryList(personalInfo)).pipe(map(() => personalInfo))
-        }
-        return of(undefined)
-      })
-    )
+        })
+      )
+    }
     this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
   }
 
@@ -76,7 +75,7 @@ export class PersonalInfoComponent implements OnChanges {
     this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
         if (personalInfo?.address) {
-          this.formGroup.patchValue({ address: personalInfo.address })
+          this.formGroup?.patchValue({ address: personalInfo.address })
         }
         this.addressEdit = false
         return personalInfo
@@ -88,7 +87,7 @@ export class PersonalInfoComponent implements OnChanges {
     this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
         if (personalInfo) {
-          personalInfo.address = this.formGroup.value.address
+          personalInfo.address = this.formGroup?.value.address
           this.personalInfoUpdate.emit(personalInfo)
           this.addressEdit = false
           localStorage.removeItem('tkit_user_profile')
@@ -106,7 +105,7 @@ export class PersonalInfoComponent implements OnChanges {
     this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
         if (personalInfo?.phone) {
-          this.formGroup.patchValue({
+          this.formGroup?.patchValue({
             phone: personalInfo?.phone
           })
         }
@@ -120,7 +119,7 @@ export class PersonalInfoComponent implements OnChanges {
     this.formUpdates$ = of(this.personalInfo).pipe(
       map((personalInfo) => {
         if (personalInfo) {
-          personalInfo.phone = this.formGroup.value.phone
+          personalInfo.phone = this.formGroup?.value.phone
           this.personalInfoUpdate.emit(personalInfo)
           this.phoneEdit = false
         }

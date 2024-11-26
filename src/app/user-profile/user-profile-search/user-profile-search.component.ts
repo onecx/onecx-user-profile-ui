@@ -189,10 +189,6 @@ export class UserProfileSearchComponent implements OnInit {
     const criteria = {
       userPersonCriteria: userPersonCriteria
     }
-    const clearTable = setTimeout(() => {
-      this.resultData$.next([])
-    }, 500)
-
     this.userProfileAdminService
       .searchUserProfile(criteria)
       .pipe(
@@ -209,7 +205,6 @@ export class UserProfileSearchComponent implements OnInit {
               detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
             })
           }
-          clearTimeout(clearTable)
           stream = stream.map((row: any) => ({
             ...row,
             lastName: row.person.lastName,
