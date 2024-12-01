@@ -1,15 +1,12 @@
 import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
-import { BehaviorSubject, Observable } from 'rxjs'
-import { finalize, map } from 'rxjs/operators'
-import { TranslateService } from '@ngx-translate/core'
 import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
-import { PermissionsDialogComponent } from './permissions-dialog/permissions-dialog.component'
+import { BehaviorSubject, catchError, finalize, map, of, Observable } from 'rxjs'
+import { TranslateService } from '@ngx-translate/core'
+import { PrimeIcons } from 'primeng/api'
 
 import { SlotService } from '@onecx/angular-remote-components'
-
 import {
   Action,
-  ButtonDialogButtonDetails,
   ColumnType,
   DataAction,
   DataTableColumn,
@@ -20,8 +17,9 @@ import {
   RowListGridData,
   UserService
 } from '@onecx/portal-integration-angular'
+
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { PrimeIcons } from 'primeng/api'
+import { PermissionsDialogComponent } from './permissions-dialog/permissions-dialog.component'
 
 @Component({
   selector: 'app-user-profile-search',
@@ -29,38 +27,31 @@ import { PrimeIcons } from 'primeng/api'
   styleUrls: ['./user-profile-search.component.scss']
 })
 export class UserProfileSearchComponent implements OnInit {
+  public loading = true
+  public exceptionKey: string | undefined
   public actions$: Observable<Action[]> | undefined
   public additionalActions!: DataAction[]
-  private filterData = ''
-  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
-  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
   public criteriaGroup: UntypedFormGroup
-  public selectedUserName: string | undefined //used in deletion dialog
-  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
+  public columns: DataTableColumn[]
 
-  /* ocx-data-view-controls settings */
-  @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
-  public userProfile: RowListGridData | undefined
+  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
+  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
+  private filterData = ''
   public filterValue: string | undefined
   public filterBy = 'firstName,lastName,email'
   public filterDataView: string | undefined
+
+  /* ocx-data-view-controls settings */
+  @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
   public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
-  public displayDeleteDialog = false
+  public userProfile: RowListGridData | undefined
   public displayDetailDialog = false
+  public displayDeleteDialog = false
+  public selectedUserName: string | undefined //used in deletion dialog
   public editPermission = false
-  private primaryButton: ButtonDialogButtonDetails = {
-    id: 'up_user_permissions_dialog_button_close',
-    key: 'ACTIONS.GENERAL.CLOSE',
-    icon: PrimeIcons.TIMES,
-    tooltipKey: 'ACTIONS.GENERAL.CLOSE.TOOLTIP',
-    tooltipPosition: 'top'
-  }
-
-  public columns: DataTableColumn[]
-  public loading = true
-  public searchError = false
+  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
+  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
 
   constructor(
     private readonly userProfileAdminService: UserProfileAdminAPIService,
@@ -84,6 +75,11 @@ export class UserProfileSearchComponent implements OnInit {
     this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
       this.adminViewPermissionsSlotName
     )
+    const commoneColumnSelectionKeys = [
+      'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
+      'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
+      'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
+    ]
     this.columns = [
       {
         columnType: ColumnType.STRING,
@@ -91,11 +87,7 @@ export class UserProfileSearchComponent implements OnInit {
         nameKey: 'USER_PROFILE.FIRST_NAME',
         filterable: false,
         sortable: true,
-        predefinedGroupKeys: [
-          'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
-          'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
-          'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
-        ]
+        predefinedGroupKeys: commoneColumnSelectionKeys
       },
       {
         columnType: ColumnType.STRING,
@@ -103,11 +95,7 @@ export class UserProfileSearchComponent implements OnInit {
         nameKey: 'USER_PROFILE.LAST_NAME',
         filterable: false,
         sortable: true,
-        predefinedGroupKeys: [
-          'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
-          'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
-          'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
-        ]
+        predefinedGroupKeys: commoneColumnSelectionKeys
       },
       {
         columnType: ColumnType.STRING,
@@ -115,7 +103,7 @@ export class UserProfileSearchComponent implements OnInit {
         nameKey: 'USER_PROFILE.EMAIL',
         filterable: false,
         sortable: true,
-        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+        predefinedGroupKeys: commoneColumnSelectionKeys
       },
       {
         columnType: ColumnType.STRING,
@@ -123,7 +111,7 @@ export class UserProfileSearchComponent implements OnInit {
         nameKey: 'USER_PROFILE.TENANT',
         filterable: false,
         sortable: true,
-        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED', 'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL']
       },
       {
         columnType: ColumnType.STRING,
@@ -131,23 +119,23 @@ export class UserProfileSearchComponent implements OnInit {
         nameKey: 'USER_PROFILE.USER_ID',
         filterable: false,
         sortable: true,
-        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED', 'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL']
       },
       {
         columnType: ColumnType.DATE,
         id: 'creationDate',
         nameKey: 'INTERNAL.CREATION_DATE',
-        filterable: true,
+        filterable: false,
         sortable: true,
-        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+        predefinedGroupKeys: commoneColumnSelectionKeys
       },
       {
         columnType: ColumnType.DATE,
         id: 'modificationDate',
         nameKey: 'INTERNAL.MODIFICATION_DATE',
-        filterable: true,
+        filterable: false,
         sortable: true,
-        predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT', 'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED']
+        predefinedGroupKeys: commoneColumnSelectionKeys
       }
     ]
     if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = true
@@ -159,14 +147,14 @@ export class UserProfileSearchComponent implements OnInit {
     this.onSearch()
   }
 
-  initFilter() {
+  public initFilter(): void {
     this.resultData$
       .pipe(
         map((array) => {
           if (this.filterData.trim()) {
             const lowerCaseFilter = this.filterData.toLowerCase()
             return array.filter((item) => {
-              return ['firstName', 'lastName', 'email'].some((key) => {
+              return ['firstName', 'lastName', 'email', 'creationDate', 'modificationDate'].some((key) => {
                 const value = item[key]
                 return value?.toString().toLowerCase().includes(lowerCaseFilter)
               })
@@ -185,6 +173,7 @@ export class UserProfileSearchComponent implements OnInit {
 
   public onSearch(): void {
     this.loading = true
+    this.exceptionKey = undefined
     const userPersonCriteria = this.criteriaGroup.value
     const criteria = {
       userPersonCriteria: userPersonCriteria
@@ -192,10 +181,13 @@ export class UserProfileSearchComponent implements OnInit {
     this.userProfileAdminService
       .searchUserProfile(criteria)
       .pipe(
-        finalize(() => {
-          this.loading = false
+        map((data: any) => data.stream),
+        catchError((err) => {
+          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILES'
+          console.error('searchUserProfile', err)
+          return of([])
         }),
-        map((data: any) => data.stream)
+        finalize(() => (this.loading = false))
       )
       .subscribe({
         next: (stream) => {
@@ -214,10 +206,6 @@ export class UserProfileSearchComponent implements OnInit {
           }))
           this.resultData$.next(stream)
           this.filteredData$.next(stream)
-          this.searchError = false
-        },
-        error: () => {
-          this.searchError = true
         }
       })
   }
@@ -251,7 +239,13 @@ export class UserProfileSearchComponent implements OnInit {
           type: PermissionsDialogComponent,
           inputs: { userId: this.userProfile?.['userId'], displayName: this.userProfile?.['displayName'] }
         },
-        this.primaryButton,
+        {
+          id: 'up_user_permissions_dialog_button_close',
+          key: 'ACTIONS.GENERAL.CLOSE',
+          icon: PrimeIcons.TIMES,
+          tooltipKey: 'ACTIONS.GENERAL.CLOSE.TOOLTIP',
+          tooltipPosition: 'top'
+        },
         undefined,
         {
           modal: true,

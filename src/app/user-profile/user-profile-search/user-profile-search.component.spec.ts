@@ -1,6 +1,6 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
-import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
+import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -292,26 +292,16 @@ describe('UserProfileSearchComponent', () => {
     })
   })
 
-  it('should search user profiles - errorResponse 404', () => {
-    const updateErrorResponse: HttpErrorResponse = {
-      status: 404,
-      statusText: 'Not Found',
-      name: 'HttpErrorResponse',
-      message: '',
-      error: undefined,
-      ok: false,
-      headers: new HttpHeaders(),
-      url: null,
-      type: HttpEventType.ResponseHeader
-    }
+  it('should search user profiles failed - errorResponse', () => {
+    const errorResponse = { status: 403, statusText: 'No permission' }
+    apiServiceSpy.searchUserProfile.and.returnValue(throwError(() => errorResponse))
+    spyOn(console, 'error')
 
-    apiServiceSpy.searchUserProfile.and.returnValue(throwError(() => updateErrorResponse))
-
-    component.searchError = false
     component.onSearch()
 
     expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
-    expect(component.searchError).toBeTruthy()
+    expect(component.exceptionKey).toEqual('EXCEPTIONS.HTTP_STATUS_' + errorResponse.status + '.PROFILES')
+    expect(console.error).toHaveBeenCalledWith('searchUserProfile', errorResponse)
   })
 
   /**

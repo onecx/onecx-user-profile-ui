@@ -67,24 +67,28 @@
     </div>
   </ocx-search-header>
 
-  <div *ngIf="loading" class="card">
-    <p-message severity="info" styleClass="p-2" [text]="'ACTIONS.GENERAL.LOADING' | translate"></p-message>
+  <div *ngIf="loading || exceptionKey" class="card">
+    <p-message
+      *ngIf="loading"
+      severity="info"
+      styleClass="p-2"
+      [text]="'ACTIONS.GENERAL.LOADING' | translate"
+    ></p-message>
+    <p-message *ngIf="exceptionKey" severity="info" styleClass="p-2" [text]="exceptionKey | translate"></p-message>
   </div>
 
-  <div *ngIf="(resultData$ | async)!.length > 0 && !searchError" class="card pt-2 pb-0">
+  <div *ngIf="!(loading || exceptionKey)" class="card pt-2 pb-0">
     <ocx-interactive-data-view
+      *ngIf="(resultData$ | async) ?? []"
       [data]="(filteredData$ | async) ?? []"
       [columns]="columns"
       [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
       [supportedViewLayouts]="['table']"
       [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
       [additionalActions]="additionalActions"
-      [actionColumnPosition]="'left'"
+      actionColumnPosition="left"
     >
       <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
-        <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
-      </ng-template>
-      <ng-template pTemplate="dateTableFilterCell" let-rowObject="rowObject" let-column="column">
         <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
       </ng-template>
 
@@ -96,7 +100,9 @@
           [filterColumns]="[
             'USER_PROFILE.FIRST_NAME' | translate,
             'USER_PROFILE.LAST_NAME' | translate,
-            'USER_PROFILE.EMAIL' | translate
+            'USER_PROFILE.EMAIL' | translate,
+            'INTERNAL.CREATION_DATE' | translate,
+            'INTERNAL.MODIFICATION_DATE' | translate
           ]"
           [translations]="dataViewControlsTranslations"
         >
