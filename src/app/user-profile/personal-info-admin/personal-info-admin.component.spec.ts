@@ -6,6 +6,7 @@ import { map, of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
+
 import { PersonalInfoAdminComponent } from './personal-info-admin.component'
 import { UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
@@ -17,8 +18,7 @@ describe('PersonalInfoAdminComponent', () => {
     updateUserProfile: jasmine.createSpy('updateUserProfile').and.returnValue(of({})),
     getUserProfile: jasmine.createSpy('getUserProfile').and.returnValue(of({}))
   }
-
-  const defaultCurrentUser: UserProfile = {
+  const defaultProfile: UserProfile = {
     userId: '15',
     person: {
       firstName: 'John',
@@ -32,13 +32,9 @@ describe('PersonalInfoAdminComponent', () => {
         postalCode: '80-243',
         country: 'EN'
       },
-      phone: {
-        type: PhoneType.MOBILE,
-        number: '123456789'
-      }
+      phone: { type: PhoneType.MOBILE, number: '123456789' }
     }
   }
-
   const updatedPerson: UserPerson = {
     firstName: 'newName',
     lastName: 'newLastName',
@@ -51,9 +47,7 @@ describe('PersonalInfoAdminComponent', () => {
       postalCode: 'newCode',
       country: 'newCountry'
     },
-    phone: {
-      number: 'newPhoneNumber'
-    }
+    phone: { number: 'newPhoneNumber' }
   }
 
   const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
@@ -78,7 +72,7 @@ describe('PersonalInfoAdminComponent', () => {
         { provide: UserProfileAdminAPIService, useValue: adminServiceSpy }
       ]
     }).compileComponents()
-    adminServiceSpy.getUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+    adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile as UserProfile))
   }))
 
   beforeEach(() => {
@@ -95,26 +89,29 @@ describe('PersonalInfoAdminComponent', () => {
   })
 
   describe('getUserProfile', () => {
-    it('should set personalInfo$ to defaultCurrentUser.person', () => {
-      adminServiceSpy.getUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
+    it('should set personalInfo$ to defaultProfile.person', () => {
+      adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile as UserProfile))
       component.userProfileId = 'id'
       component.userProfileId = 'id'
 
       component.ngOnChanges()
 
-      component.personalInfo$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
+      component.personalInfo$.pipe(map((person) => expect(person).toEqual(defaultProfile.person as UserPerson)))
       component.personalInfo$.subscribe((test) => {
-        expect(test).toEqual(defaultCurrentUser.person as UserPerson)
+        expect(test).toEqual(defaultProfile.person as UserPerson)
       })
     })
 
     it('should set personalInfo$ empty when getUserProfile() returns empty UserProfile', () => {
-      adminServiceSpy.getUserProfile.and.returnValue(of({ person: undefined }))
+      adminServiceSpy.getUserProfile.and.returnValue(of({}))
       component.userProfileId = 'id'
 
       component.ngOnChanges()
 
-      component.personalInfo$.pipe(map((person) => expect(person).not.toBeUndefined()))
+      component.personalInfo$.subscribe((data) => {
+        expect(data).toEqual({})
+        return data
+      })
     })
   })
 

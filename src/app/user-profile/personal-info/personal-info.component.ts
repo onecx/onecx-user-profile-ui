@@ -1,12 +1,12 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
-import { from, map, Observable, of, switchMap } from 'rxjs'
 import { SelectItem } from 'primeng/api'
 import { TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
 
-import { PhoneType } from '@onecx/portal-integration-angular'
+import { PhoneType, UserService } from '@onecx/portal-integration-angular'
+
 import { UserPerson } from 'src/app/shared/generated'
 
 @Component({
@@ -15,40 +15,38 @@ import { UserPerson } from 'src/app/shared/generated'
   styleUrls: ['./personal-info.component.scss']
 })
 export class PersonalInfoComponent implements OnChanges {
-  @Input() personalInfo!: UserPerson
+  @Input() person!: UserPerson
   @Input() userProfileId: string | undefined = undefined
   @Input() tenantId: string | undefined = undefined
-  @Input() adminView: boolean = false
   @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
 
   public addressEdit = false
   public phoneEdit = false
-  public countries: SelectItem[] = new Array<SelectItem>()
+  public countries: SelectItem[] = [] // important default for init dropdown
   public selectedCountry: SelectItem | undefined
   public phoneTypes: SelectItem[] = [
     { value: PhoneType.MOBILE, label: 'Mobile' },
     { value: PhoneType.LANDLINE, label: 'Landline' }
   ]
   public formGroup: UntypedFormGroup
-  public formUpdates$: Observable<unknown> | undefined
   public editPermission: string = ''
 
   constructor(
     public readonly http: HttpClient,
+    public readonly user: UserService,
     public readonly translate: TranslateService
   ) {
     this.formGroup = this.initFormGroup()
   }
 
   public ngOnChanges(): void {
-    if (Object.keys(this.personalInfo).length > 0) {
-      this.formUpdates$ = of(this.personalInfo).pipe(
-        switchMap((personalInfo) => {
-          return from(this.createCountryList(personalInfo)).pipe(map(() => personalInfo))
-        })
-      )
+    if (Object.keys(this.person).length > 0) {
+      this.formGroup?.patchValue(this.person)
+      this.createCountryList()
     }
-    this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#EDIT'
+    if (this.userProfileId && this.user.hasPermission('USERPROFILE#ADMIN_EDIT'))
+      this.editPermission = 'USERPROFILE#ADMIN_EDIT'
+    if (!this.userProfileId && this.user.hasPermission('USERPROFILE#EDIT')) this.editPermission = 'USERPROFILE#EDIT'
   }
 
   private initFormGroup(): UntypedFormGroup {
@@ -72,29 +70,19 @@ export class PersonalInfoComponent implements OnChanges {
   }
 
   public cancelAddressEdit(): void {
-    this.formUpdates$ = of(this.personalInfo).pipe(
-      map((personalInfo) => {
-        if (personalInfo?.address) {
-          this.formGroup?.patchValue({ address: personalInfo.address })
-        }
-        this.addressEdit = false
-        return personalInfo
-      })
-    )
+    if (this.person?.address) {
+      this.formGroup?.patchValue({ address: this.person.address })
+    }
+    this.addressEdit = false
   }
 
   public updateAddress(): void {
-    this.formUpdates$ = of(this.personalInfo).pipe(
-      map((personalInfo) => {
-        if (personalInfo) {
-          personalInfo.address = this.formGroup?.value.address
-          this.personalInfoUpdate.emit(personalInfo)
-          this.addressEdit = false
-          localStorage.removeItem('tkit_user_profile')
-        }
-        return personalInfo
-      })
-    )
+    if (this.person) {
+      this.person.address = this.formGroup?.value.address
+      this.personalInfoUpdate.emit(this.person)
+      this.addressEdit = false
+      localStorage.removeItem('tkit_user_profile')
+    }
   }
 
   public togglePhoneEdit(): void {
@@ -102,53 +90,33 @@ export class PersonalInfoComponent implements OnChanges {
   }
 
   public cancelPhoneEdit(): void {
-    this.formUpdates$ = of(this.personalInfo).pipe(
-      map((personalInfo) => {
-        if (personalInfo?.phone) {
-          this.formGroup?.patchValue({
-            phone: personalInfo?.phone
-          })
-        }
-        this.phoneEdit = false
-        return personalInfo
-      })
-    )
+    if (this.person?.phone) {
+      this.formGroup?.patchValue({ phone: this.person?.phone })
+    }
+    this.phoneEdit = false
   }
 
   public updatePhone(): void {
-    this.formUpdates$ = of(this.personalInfo).pipe(
-      map((personalInfo) => {
-        if (personalInfo) {
-          personalInfo.phone = this.formGroup?.value.phone
-          this.personalInfoUpdate.emit(personalInfo)
-          this.phoneEdit = false
-        }
-        localStorage.removeItem('tkit_user_profile')
-        return personalInfo
-      })
-    )
+    if (this.person) {
+      this.person.phone = this.formGroup?.value.phone
+      this.personalInfoUpdate.emit(this.person)
+      this.phoneEdit = false
+    }
+    localStorage.removeItem('tkit_user_profile')
   }
 
-  private async createCountryList(personalInfo: UserPerson): Promise<UserPerson> {
-    if (this.translate.currentLang == undefined) {
-      this.translate.currentLang = 'en'
-    }
+  private async createCountryList() {
+    if (!this.translate.currentLang) this.translate.currentLang = 'en'
     countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
     const countryList = countriesInfo.getNames(this.translate.currentLang)
     const countryCodes = Object.keys(countryList)
     const countryNames = Object.values(countryList)
-    const len = countryCodes.length
-
-    this.countries.push({
-      label: '',
-      value: null
-    } as SelectItem)
-    for (let i = 1; i < len - 1; i++) {
+    this.countries = [] // important: trigger UI update
+    for (let i = 0; i < countryCodes.length - 1; i++) {
       this.countries.push({
         label: countryNames[i].toString(),
-        value: countryCodes[i]
+        value: countryCodes[i].toString()
       } as SelectItem)
     }
-    return personalInfo // fill the form
   }
 }

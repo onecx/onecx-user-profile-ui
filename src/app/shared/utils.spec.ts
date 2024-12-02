@@ -1,16 +1,17 @@
 import { FormGroup, FormControl } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
+import { RefType } from './generated'
 import {
-  limitText,
+  bffImageUrl,
   copyToClipboard,
-  forceFormValidation,
   dropDownSortItemsByLabel,
   dropDownGetLabelByValue,
-  sortByLocale,
-  getTooltipContent,
+  forceFormValidation,
   getLocale,
-  getDateFormat
+  getDateFormat,
+  limitText,
+  sortByLocale
 } from './utils'
 
 describe('util functions', () => {
@@ -110,28 +111,9 @@ describe('util functions', () => {
     })
   })
 
-  describe('getTooltipContent', () => {
-    it('should return null if value is empty', () => {
-      const result = getTooltipContent('')
-      expect(result).toBeNull()
-    })
-
-    it('should truncate long tooltip content', () => {
-      const longContent = 'This is a very long tooltip content that needs truncation. Please return this tooltip'
-      const result = getTooltipContent(longContent, 20)
-      expect(result).toEqual(null)
-    })
-
-    it('should not truncate short tooltip content', () => {
-      const shortContent = 'Short content'
-      const result = getTooltipContent(shortContent, 20)
-      expect(result).toEqual(shortContent)
-    })
-  })
-
   describe('getLocale', () => {
     it('should return the default locale if navigator language is empty', () => {
-      spyOnProperty(window.navigator, 'language').and.returnValue('en-US')
+      spyOnProperty(window.navigator, 'language').and.returnValue('')
       const result = getLocale()
       expect(result).toEqual('en-US')
     })
@@ -158,6 +140,29 @@ describe('util functions', () => {
     it('should return "mm/dd/yyyy" for other types', () => {
       const result = getDateFormat('other')
       expect(result).toBe('mm/dd/yyyy')
+    })
+  })
+
+  describe('bffImageUrl', () => {
+    /**
+     *  export enum RefType { Small = 'small', Medium = 'medium', Large = 'large' }
+     */
+    it('should return a correct image path', () => {
+      const basePath = 'base'
+      const name = 'avatar'
+
+      const preparedUrl = bffImageUrl(basePath, name, RefType.Large)
+
+      expect(preparedUrl).toBe('base/userProfile/me/avatar?refType=large')
+    })
+
+    it('should return a path without base', () => {
+      const basePath = undefined
+      const name = 'avatar'
+
+      const preparedUrl = bffImageUrl(basePath, name, RefType.Small)
+
+      expect(preparedUrl).toBe('userProfile/me/avatar?refType=small')
     })
   })
 })

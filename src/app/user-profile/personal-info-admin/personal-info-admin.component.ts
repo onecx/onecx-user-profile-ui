@@ -28,7 +28,7 @@ export class PersonalInfoAdminComponent implements OnChanges {
       this.personalInfo$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId.toString() }).pipe(
         tap((profile) => (this.tenantId = profile.tenantId ?? '')),
         map((profile) => {
-          return profile.person || {}
+          return profile.person ?? {}
         })
       )
     }

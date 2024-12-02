@@ -1,4 +1,5 @@
 import { AbstractControl, FormArray, FormGroup } from '@angular/forms'
+import { Location } from '@angular/common'
 import { SelectItem } from 'primeng/api'
 import { RefType } from './generated'
 
@@ -76,15 +77,7 @@ export function getDateFormat(type: string): string {
     .join('')
 }
 
-export function getTooltipContent(value: string, maxlength?: number) {
-  if (value) {
-    const tooltipContent = value.toString()
-    const truncatedLength = maxlength ?? 30
-    return tooltipContent.length < truncatedLength ? tooltipContent : null
-  }
-  return null
-}
-
-export function bffImageUrl(basePath: string | undefined, name: string | undefined, refType: RefType): string {
-  return !name ? '' : basePath + '/userProfile/me/' + name + '?refType=' + refType
+// basePath => path to bff
+export function bffImageUrl(basePath: string | undefined, name: string, refType: RefType): string {
+  return Location.joinWithSlash(basePath ?? '', 'userProfile/me/') + name + '?refType=' + refType
 }
