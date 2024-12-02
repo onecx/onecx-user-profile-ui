@@ -9,14 +9,14 @@ import { PortalCoreModule } from '@onecx/portal-integration-angular'
 import { SharedModule } from 'src/app/shared/shared.module'
 import { LabelResolver } from 'src/app/shared/label.resolver'
 
-import { AccountSettingsComponent } from './account-settings/account-settings.component'
 import { AvatarComponent } from './avatar/avatar.component'
+import { PersonalDataComponent } from './personal-data/personal-data.component'
+import { PersonalDataUserComponent } from './personal-data-user/personal-data-user.component'
+import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
+import { AccountSettingsComponent } from './account-settings/account-settings.component'
 import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
 import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
-import { PersonalInfoComponent } from './personal-info/personal-info.component'
-import { PersonalInfoUserComponent } from './personal-info-user/personal-info-user.component'
-import { PersonalInfoAdminComponent } from './personal-info-admin/personal-info-admin.component'
-import { PrivacySettingsComponent } from './privacy-settings/privacy-settings.component'
+import { PrivacyComponent } from './privacy/privacy.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
 import { PermissionsDialogComponent } from './user-profile-search/permissions-dialog/permissions-dialog.component'
@@ -24,7 +24,7 @@ import { PermissionsDialogComponent } from './user-profile-search/permissions-di
 const routes: Routes = [
   {
     path: '',
-    component: PersonalInfoUserComponent,
+    component: PersonalDataUserComponent,
     pathMatch: 'full',
     data: {
       breadcrumb: 'BREADCRUMBS.PROFILE',
@@ -98,14 +98,14 @@ const routes: Routes = [
 @NgModule({
   declarations: [
     UserProfileSearchComponent,
-    PersonalInfoUserComponent,
-    PersonalInfoAdminComponent,
-    PersonalInfoComponent,
+    PersonalDataUserComponent,
+    PersonalDataAdminComponent,
+    PersonalDataComponent,
     AvatarComponent,
     AccountSettingsComponent,
     LayoutThemeComponent,
     LocaleTimezoneComponent,
-    PrivacySettingsComponent,
+    PrivacyComponent,
     RolesPermissionsComponent,
     PermissionsDialogComponent
   ],

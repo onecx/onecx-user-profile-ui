@@ -7,10 +7,10 @@ import { Action, PortalMessageService } from '@onecx/portal-integration-angular'
 import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 
 @Component({
-  selector: 'app-personal-info-user',
-  templateUrl: './personal-info-user.component.html'
+  selector: 'app-personal-data-user',
+  templateUrl: './personal-data-user.component.html'
 })
-export class PersonalInfoUserComponent {
+export class PersonalDataUserComponent {
   @Input() public displayDetailDialog = false
   @Input() public userProfileId: any
   @Output() public hideDialog = new EventEmitter<boolean>()

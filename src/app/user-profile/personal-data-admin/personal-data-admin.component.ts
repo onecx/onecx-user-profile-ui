@@ -6,10 +6,10 @@ import { map, Observable, tap } from 'rxjs'
 import { UpdateUserPerson, UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
-  selector: 'app-personal-info-admin',
-  templateUrl: './personal-info-admin.component.html'
+  selector: 'app-personal-data-admin',
+  templateUrl: './personal-data-admin.component.html'
 })
-export class PersonalInfoAdminComponent implements OnChanges {
+export class PersonalDataAdminComponent implements OnChanges {
   public personalInfo$!: Observable<UserPerson>
   public tenantId: string = ''
   public messages: { [key: string]: string } = {}

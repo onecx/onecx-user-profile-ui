@@ -12,7 +12,7 @@ import {
   UserPerson,
   UserProfileAccountSettings
 } from 'src/app/shared/generated'
-import { PrivacySettingsComponent } from '../privacy-settings/privacy-settings.component'
+import { PrivacyComponent } from '../privacy/privacy.component'
 import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
@@ -22,7 +22,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 })
 export class AccountSettingsComponent implements OnInit {
   @Output() public editModeUpdate = new EventEmitter<boolean>()
-  @ViewChild(PrivacySettingsComponent, { static: false }) privacySettings!: PrivacySettingsComponent
+  @ViewChild(PrivacyComponent, { static: false }) privacySettings!: PrivacyComponent
 
   public actions$: Observable<Action[]> | undefined
   public personalInfo$: Observable<UserPerson>

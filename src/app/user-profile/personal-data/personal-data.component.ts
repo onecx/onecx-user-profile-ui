@@ -10,11 +10,11 @@ import { PhoneType, UserService } from '@onecx/portal-integration-angular'
 import { UserPerson } from 'src/app/shared/generated'
 
 @Component({
-  selector: 'app-personal-info',
-  templateUrl: './personal-info.component.html',
-  styleUrls: ['./personal-info.component.scss']
+  selector: 'app-personal-data',
+  templateUrl: './personal-data.component.html',
+  styleUrls: ['./personal-data.component.scss']
 })
-export class PersonalInfoComponent implements OnChanges {
+export class PersonalDataComponent implements OnChanges {
   @Input() person!: UserPerson
   @Input() userProfileId: string | undefined = undefined
   @Input() tenantId: string | undefined = undefined
