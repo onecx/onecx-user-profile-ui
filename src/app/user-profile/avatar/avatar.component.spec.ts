@@ -16,8 +16,12 @@ describe('AvatarComponent', () => {
 
   const userServiceSpy = {
     removeAvatar: jasmine.createSpy('removeAvatar'),
+    hasPermission: jasmine.createSpy('hasPermission'),
     profile$: jasmine.createSpy('profile$')
   }
+  userServiceSpy.hasPermission.and.callFake((permission: string) => {
+    return ['PROFILE_AVATAR#EDIT', 'USERPROFILE#ADMIN_EDIT'].includes(permission)
+  })
 
   const avatarUserSpy = {
     deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({})),
@@ -25,13 +29,11 @@ describe('AvatarComponent', () => {
     getUserAvatar: jasmine.createSpy('getUserAvatar').and.returnValue(of({})),
     configuration: jasmine.createSpy('configuration')
   }
-
   const avatarAdminSpy = {
     getUserAvatarById: jasmine.createSpy('getUserAvatarById').and.returnValue(of({})),
     uploadAvatarById: jasmine.createSpy('uploadAvatarById').and.returnValue(of({})),
     deleteUserAvatarById: jasmine.createSpy('deleteUserAvatarById').and.returnValue(of({}))
   }
-
   const imageCompressSpy = {
     uploadFile: jasmine.createSpy('uploadFile').and.returnValue(of({})),
     compressFile: jasmine.createSpy('compressFile').and.returnValue(of({})),
@@ -57,7 +59,6 @@ describe('AvatarComponent', () => {
         { provide: UserAvatarAPIService, useValue: avatarUserSpy },
         { provide: UserAvatarAdminAPIService, useValue: avatarAdminSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
-        { provide: UserService },
         { provide: AppStateService },
         { provide: NgxImageCompressService, useValue: imageCompressSpy }
       ]
@@ -88,8 +89,9 @@ describe('AvatarComponent', () => {
   })
 
   describe('onChanges', () => {
-    it('should get the avatar image url', () => {
-      component.adminView = false
+    it('should get the avatar image url - on user mode', () => {
+      userServiceSpy.hasPermission.and.returnValue(of('PROFILE_AVATAR#EDIT'))
+      component.userProfileId = undefined
 
       component.ngOnChanges()
 
@@ -97,35 +99,50 @@ describe('AvatarComponent', () => {
       expect(component.editPermission).toEqual('PROFILE_AVATAR#EDIT')
     })
 
-    it('should get the avatar image url', () => {
-      component.adminView = true
-
-      component.ngOnChanges()
-
-      expect(component.editPermission).toEqual('USERPROFILE#ADMIN_EDIT')
-    })
-
-    it('should get the avatar image url for another user', () => {
-      const dummyImageData = new Uint8Array([137, 80, 78, 71])
-      const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
-      avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
-      component.userProfileId = 'id'
-
-      component.ngOnChanges()
-
-      expect(component.imageUrl).toBeDefined()
-    })
-
-    it('should handle error when getting user avatar', () => {
-      const error = { err: 'error' }
-      avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => error))
+    it('should get the avatar image url failed - on admin mode', () => {
+      const errorResponse = { status: 404, statusText: 'Not Found' }
+      avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
       component.userProfileId = 'id'
       spyOn(console, 'error')
 
       component.ngOnChanges()
 
-      expect(console.error).toHaveBeenCalledWith('getUserAvatarById()', error)
+      expect(console.error).toHaveBeenCalledWith('getUserAvatarById', errorResponse)
     })
+
+    it('should get the avatar image url, but no avatar exists - on admin mode', () => {
+      const errorResponse = { status: 204, statusText: 'No Content' }
+      avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
+      component.userProfileId = 'id'
+      spyOn(console, 'error')
+
+      component.ngOnChanges()
+
+      expect(console.error).toHaveBeenCalledWith('getUserAvatarById', errorResponse)
+    })
+
+    it('should get the avatar image url - on admin mode', () => {
+      avatarAdminSpy.getUserAvatarById.and.returnValue(of(null))
+      component.userProfileId = 'id'
+      spyOn(console, 'error')
+
+      component.ngOnChanges()
+
+      expect(component.imageUrl).toBeUndefined()
+      expect(component.imageLoadError).toBeTrue()
+      expect(console.error).not.toHaveBeenCalled()
+    })
+  })
+
+  it('should get the avatar image url for another user', () => {
+    const dummyImageData = new Uint8Array([137, 80, 78, 71])
+    const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
+    avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
+    component.userProfileId = 'id'
+
+    component.ngOnChanges()
+
+    expect(component.imageUrl).toBeDefined()
   })
 
   describe('onDeleteAvatarImage', () => {

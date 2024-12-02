@@ -55,12 +55,8 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   }
 
   public ngOnChanges(): void {
-    if (this.localeInput) {
-      this.formGroup.patchValue({ locale: this.localeInput })
-    }
-    if (this.timezoneInput) {
-      this.formGroup.patchValue({ timezone: this.timezoneInput })
-    }
+    if (this.localeInput) this.formGroup.patchValue({ locale: this.localeInput })
+    if (this.timezoneInput) this.formGroup.patchValue({ timezone: this.timezoneInput })
     this.initLocalesAndTimezones()
   }
 

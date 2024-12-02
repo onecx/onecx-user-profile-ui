@@ -1,325 +1,319 @@
-<!--Personal Info-->
-<form *ngIf="personalInfo as person" [formGroup]="formGroup" [ocxPatchFormGroupValues]="formUpdates$ | async">
-  <div class="flex flex-column row-gap-3 md:row-gap-4" [ngClass]="adminView ? 'pt-0 pb-1 px-3 sm:px-4' : 'p-3 sm:p-4'">
-    <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
-      <div class="flex-1 min-w-max">
-        <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
-          <ng-template pTemplate="header">
-            <div class="mt-0 mb-0 sm:mb-2 ml-1 w-full font-bold text-2xl">
-              {{ 'USER_PROFILE.HEADERS.BASIC' | translate }}
-            </div>
-          </ng-template>
-          <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
-            <span class="p-float-label">
-              <input
-                pInputText
-                type="text"
-                readonly
-                class="w-full pt-3 pb-2 text-responsive"
-                id="up_personal_info_first_name"
-                [value]="person.firstName"
-                [ariaLabel]="'USER_PROFILE.FIRST_NAME' | translate"
-                [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              />
-              <label for="up_personal_info_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
-            </span>
-            <span class="p-float-label">
-              <input
-                pInputText
-                type="text"
-                readonly
-                class="w-full pt-3 pb-2 text-responsive"
-                id="up_personal_info_last_name"
-                [value]="person.lastName"
-                [ariaLabel]="'USER_PROFILE.LAST_NAME' | translate"
-                [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              />
-              <label for="up_personal_info_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
-            </span>
-            <span class="p-float-label">
-              <input
-                pInputText
-                type="text"
-                readonly
-                class="w-full pt-3 pb-2 text-responsive"
-                id="up_personal_info_email"
-                [value]="person.email"
-                [ariaLabel]="'USER_PROFILE.EMAIL' | translate"
-                [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              />
-              <label for="up_personal_info_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
-            </span>
-            <span class="p-float-label">
-              <input
-                pInputText
-                type="text"
-                readonly
-                class="w-full pt-3 pb-2 text-responsive"
-                id="up_personal_info_tenant"
-                [value]="tenantId"
-                [ariaLabel]="'USER_PROFILE.TENANT' | translate"
-                [pTooltip]="'USER_PROFILE.TENANT.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              />
-              <label for="up_personal_info_tenant">{{ 'USER_PROFILE.TENANT' | translate }}</label>
-            </span>
+<!--Personal Info -->
+<div
+  [formGroup]="formGroup"
+  class="flex flex-column row-gap-3 md:row-gap-4"
+  [ngClass]="userProfileId ? 'pt-0 pb-1 px-3 sm:px-4' : 'p-3 sm:p-4'"
+>
+  <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
+    <div class="flex-1 min-w-max">
+      <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-0 sm:mb-2 ml-1 w-full font-bold text-2xl">
+            {{ 'USER_PROFILE.HEADERS.BASIC' | translate }}
           </div>
-        </p-panel>
-      </div>
-      <div class="flex-1">
-        <p-panel styleClass="surface-50 h-full">
-          <ng-template pTemplate="header">
-            <div class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full font-bold text-2xl">Avatar</div>
-          </ng-template>
-          <app-avatar [adminView]="adminView" [userProfileId]="userProfileId"> </app-avatar>
-        </p-panel>
-      </div>
+        </ng-template>
+        <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
+          <span class="p-float-label">
+            <input
+              id="up_personal_info_first_name"
+              pInputText
+              type="text"
+              readonly
+              class="w-full pt-3 pb-2 text-responsive"
+              [value]="person.firstName"
+              aria-labelledby="up_personal_info_first_name"
+              [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
+          </span>
+          <span class="p-float-label">
+            <input
+              id="up_personal_info_last_name"
+              pInputText
+              type="text"
+              readonly
+              class="w-full pt-3 pb-2 text-responsive"
+              [value]="person.lastName"
+              aria-labelledby="up_personal_info_last_name"
+              [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
+          </span>
+          <span class="p-float-label">
+            <input
+              id="up_personal_info_email"
+              pInputText
+              type="text"
+              readonly
+              class="w-full pt-3 pb-2 text-responsive"
+              [value]="person.email"
+              aria-labelledby="up_personal_info_email"
+              [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
+          </span>
+          <span class="p-float-label">
+            <input
+              id="up_personal_info_tenant"
+              pInputText
+              type="text"
+              readonly
+              class="w-full pt-3 pb-2 text-responsive"
+              [value]="tenantId"
+              aria-labelledby="up_personal_info_tenant"
+              [pTooltip]="'USER_PROFILE.TENANT.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_tenant">{{ 'USER_PROFILE.TENANT' | translate }}</label>
+          </span>
+        </div>
+      </p-panel>
     </div>
+    <div class="flex-1">
+      <p-panel styleClass="surface-50 h-full">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full font-bold text-2xl">Avatar</div>
+        </ng-template>
+        <app-avatar [adminView]="userProfileId !== undefined" [userProfileId]="userProfileId"> </app-avatar>
+      </p-panel>
+    </div>
+  </div>
 
-    <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
-      <div class="flex-1">
-        <p-panel *ocxIfPermission="'PROFILE_ADDRESS#VIEW'" formGroupName="address" styleClass="surface-50">
-          <ng-template pTemplate="header">
-            <div
-              class="mt-0 mb-0 sm:mb-2 ml-1 w-full flex flex-row flex-wrap justify-content-between align-items-center"
-            >
-              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADERS.ADDRESS' | translate }}</div>
-              <div *ocxIfPermission="editPermission">
-                <button
-                  *ngIf="!addressEdit"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-pencil"
-                  class="p-2 p-button-text"
-                  id="up_personal_info_address_edit"
-                  (click)="toggleAddressEdit()"
-                  [label]="'ACTIONS.GENERAL.EDIT' | translate"
-                  [ariaLabel]="'ACTIONS.GENERAL.EDIT' | translate"
-                  [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                ></button>
-                <button
-                  *ngIf="addressEdit"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-times"
-                  class="p-2 p-button-text"
-                  id="up_personal_info_address_cancel"
-                  (click)="cancelAddressEdit()"
-                  [label]="'ACTIONS.GENERAL.CANCEL' | translate"
-                  [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
-                  [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                ></button>
-                <button
-                  *ngIf="addressEdit"
-                  pButton
-                  pRipple
-                  type="button"
-                  icon="pi pi-save"
-                  class="p-2 p-button-text"
-                  id="up_personal_info_address_save"
-                  (click)="updateAddress()"
-                  [disabled]="formGroup.invalid"
-                  [label]="'ACTIONS.GENERAL.SAVE' | translate"
-                  [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
-                  [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                ></button>
-              </div>
-            </div>
-          </ng-template>
-
-          <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
-            <div class="flex flex-row flex-wrap gap-3">
-              <span class="p-float-label flex-grow-1" controlErrorAnchor>
-                <input
-                  pInputText
-                  type="text"
-                  class="pt-3 pb-2 w-full min-w-15rem text-responsive"
-                  id="up_personal_info_address_street"
-                  formControlName="street"
-                  [value]="person.address?.street"
-                  [readonly]="!addressEdit"
-                  [ariaLabel]="'USER_PROFILE.STREET' | translate"
-                  [pTooltip]="'USER_PROFILE.STREET.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                />
-                <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
-              </span>
-              <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
-                <input
-                  pInputText
-                  type="text"
-                  class="pt-3 pb-2 w-full text-responsive"
-                  id="up_personal_info_address_street_no"
-                  formControlName="streetNo"
-                  [value]="person.address?.streetNo"
-                  [readonly]="!addressEdit"
-                  [ariaLabel]="'USER_PROFILE.HOUSE_NUMBER' | translate"
-                  [pTooltip]="'USER_PROFILE.HOUSE_NUMBER.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                />
-                <label for="up_personal_info_address_street_no"> {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }} </label>
-              </span>
-            </div>
-            <div class="flex flex-row flex-wrap gap-3">
-              <span class="p-float-label flex-grow-1" controlErrorAnchor>
-                <input
-                  pInputText
-                  type="text"
-                  class="pt-3 pb-2 w-full min-w-15rem text-responsive"
-                  id="up_personal_info_address_city"
-                  formControlName="city"
-                  [value]="person.address?.city"
-                  [readonly]="!addressEdit"
-                  [ariaLabel]="'USER_PROFILE.CITY' | translate"
-                  [pTooltip]="'USER_PROFILE.CITY.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                />
-                <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
-              </span>
-              <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
-                <input
-                  pInputText
-                  type="text"
-                  class="pt-3 pb-2 w-full text-responsive"
-                  id="up_personal_info_address_postal_code"
-                  formControlName="postalCode"
-                  [value]="person.address?.postalCode"
-                  [readonly]="!addressEdit"
-                  [ariaLabel]="'USER_PROFILE.POSTAL_CODE' | translate"
-                  [pTooltip]="'USER_PROFILE.POSTAL_CODE.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                />
-                <label for="up_personal_info_address_postal_code"> {{ 'USER_PROFILE.POSTAL_CODE' | translate }} </label>
-              </span>
-            </div>
-            <span class="p-float-label" controlErrorAnchor>
-              <p-dropdown
-                styleClass="w-full min-w-15rem"
-                id="up_personal_info_address_country"
-                [options]="countries"
-                formControlName="country"
-                [readonly]="!addressEdit"
-                [ariaLabel]="'USER_PROFILE.COUNTRY' | translate"
-                [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
+  <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
+    <div class="flex-1">
+      <p-panel *ocxIfPermission="'PROFILE_ADDRESS#VIEW'" formGroupName="address" styleClass="surface-50">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-0 sm:mb-2 ml-1 w-full flex flex-row flex-wrap justify-content-between align-items-center">
+            <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADERS.ADDRESS' | translate }}</div>
+            <div *ocxIfPermission="editPermission">
+              <button
+                *ngIf="!addressEdit"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-pencil"
+                class="p-2 p-button-text"
+                id="up_personal_info_address_edit"
+                (click)="toggleAddressEdit()"
+                [label]="'ACTIONS.GENERAL.EDIT' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.EDIT' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-              >
-              </p-dropdown>
-              <label for="up_personal_info_address_country">{{ 'USER_PROFILE.COUNTRY' | translate }}</label>
-            </span>
+              ></button>
+              <button
+                *ngIf="addressEdit"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-times"
+                class="p-2 p-button-text"
+                id="up_personal_info_address_cancel"
+                (click)="cancelAddressEdit()"
+                [label]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></button>
+              <button
+                *ngIf="addressEdit"
+                pButton
+                pRipple
+                type="button"
+                icon="pi pi-save"
+                class="p-2 p-button-text"
+                id="up_personal_info_address_save"
+                (click)="updateAddress()"
+                [disabled]="formGroup.invalid"
+                [label]="'ACTIONS.GENERAL.SAVE' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></button>
+            </div>
           </div>
-        </p-panel>
-      </div>
+        </ng-template>
 
-      <div class="flex-1">
-        <p-panel *ocxIfPermission="'PROFILE_PHONE#VIEW'" formGroupName="phone" styleClass="surface-50 h-full">
-          <ng-template pTemplate="header">
-            <div
-              class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center"
-            >
-              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADERS.PHONE' | translate }}</div>
-              <div *ocxIfPermission="editPermission">
-                <button
-                  *ngIf="!this.phoneEdit"
-                  pButton
-                  pRipple
-                  id="up_personal_info_phone_edit"
-                  class="p-2 p-button-text"
-                  icon="pi pi-pencil"
-                  (click)="togglePhoneEdit()"
-                  [label]="'ACTIONS.GENERAL.EDIT' | translate"
-                  [ariaLabel]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
-                  [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                ></button>
-                <button
-                  *ngIf="phoneEdit"
-                  pButton
-                  pRipple
-                  id="up_personal_info_phone_cancel"
-                  icon="pi pi-times"
-                  class="p-2 p-button-text"
-                  (click)="cancelPhoneEdit()"
-                  [label]="'ACTIONS.GENERAL.CANCEL' | translate"
-                  [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
-                  [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                ></button>
-                <button
-                  *ngIf="this.phoneEdit"
-                  pButton
-                  pRipple
-                  id="up_personal_info_phone_save"
-                  class="p-2 p-button-text"
-                  icon="pi pi-save"
-                  (click)="this.updatePhone()"
-                  [disabled]="formGroup.invalid"
-                  [label]="'ACTIONS.GENERAL.SAVE' | translate"
-                  [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
-                  [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
-                  tooltipPosition="top"
-                  tooltipEvent="hover"
-                ></button>
-              </div>
-            </div>
-          </ng-template>
-
-          <div class="mx-1mb-3 flex flex-row flex-wrap justify-content-start gap-3">
-            <span class="p-float-label flex-grow-0" controlErrorAnchor>
-              <p-dropdown
-                id="up_personal_info_phone_type"
-                [options]="phoneTypes"
-                formControlName="type"
-                [readonly]="!phoneEdit"
-                [ariaLabel]="'USER_PROFILE.PHONE_TYPE' | translate"
-                [pTooltip]="'USER_PROFILE.PHONE_TYPE.TOOLTIP' | translate"
-                tooltipPosition="top"
-                tooltipEvent="hover"
-              >
-              </p-dropdown>
-              <label for="up_personal_info_phone_type"> {{ 'USER_PROFILE.PHONE_TYPE' | translate }} </label>
-            </span>
+        <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
+          <div class="flex flex-row flex-wrap gap-3">
             <span class="p-float-label flex-grow-1" controlErrorAnchor>
               <input
                 pInputText
                 type="text"
-                readonly
                 class="pt-3 pb-2 w-full min-w-15rem text-responsive"
-                id="up_personal_info_phone_number"
-                formControlName="number"
-                [value]="person.phone?.number"
-                [readonly]="!phoneEdit"
-                [ariaLabel]="'USER_PROFILE.PHONE_NUMBER' | translate"
-                [pTooltip]="'USER_PROFILE.PHONE_NUMBER.TOOLTIP' | translate"
+                id="up_personal_info_address_street"
+                formControlName="street"
+                [readonly]="!addressEdit"
+                aria-labelledby="up_personal_info_address_street"
+                [pTooltip]="'USER_PROFILE.STREET.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_phone_number">{{ 'USER_PROFILE.PHONE_NUMBER' | translate }}</label>
+              <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
+            </span>
+            <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
+              <input
+                id="up_personal_info_address_street_no"
+                pInputText
+                type="text"
+                class="pt-3 pb-2 w-full text-responsive"
+                formControlName="streetNo"
+                [readonly]="!addressEdit"
+                aria-labelledby="up_personal_info_address_street_no"
+                [pTooltip]="'USER_PROFILE.HOUSE_NUMBER.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="up_personal_info_address_street_no"> {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }} </label>
             </span>
           </div>
-        </p-panel>
-      </div>
+          <div class="flex flex-row flex-wrap gap-3">
+            <span class="p-float-label flex-grow-1" controlErrorAnchor>
+              <input
+                id="up_personal_info_address_city"
+                pInputText
+                type="text"
+                class="pt-3 pb-2 w-full min-w-15rem text-responsive"
+                formControlName="city"
+                [readonly]="!addressEdit"
+                aria-labelledby="up_personal_info_address_city"
+                [pTooltip]="'USER_PROFILE.CITY.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
+            </span>
+            <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
+              <input
+                id="up_personal_info_address_postal_code"
+                pInputText
+                type="text"
+                class="pt-3 pb-2 w-full text-responsive"
+                formControlName="postalCode"
+                [readonly]="!addressEdit"
+                aria-labelledby="up_personal_info_address_postal_code"
+                [pTooltip]="'USER_PROFILE.POSTAL_CODE.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              />
+              <label for="up_personal_info_address_postal_code"> {{ 'USER_PROFILE.POSTAL_CODE' | translate }} </label>
+            </span>
+          </div>
+          <span class="p-float-label">
+            <p-dropdown
+              id="up_personal_info_address_country"
+              styleClass="w-full min-w-15rem"
+              formControlName="country"
+              [options]="countries"
+              [showClear]="addressEdit"
+              [readonly]="!addressEdit"
+              [attr.xaria-labelledby]="'up_personal_info_address_country'"
+              [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+            </p-dropdown>
+            <label for="up_personal_info_address_country">{{ 'USER_PROFILE.COUNTRY' | translate }}</label>
+          </span>
+        </div>
+      </p-panel>
+    </div>
+
+    <div class="flex-1">
+      <p-panel *ocxIfPermission="'PROFILE_PHONE#VIEW'" formGroupName="phone" styleClass="surface-50 h-full">
+        <ng-template pTemplate="header">
+          <div class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
+            <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADERS.PHONE' | translate }}</div>
+            <div *ocxIfPermission="editPermission">
+              <button
+                *ngIf="!this.phoneEdit"
+                pButton
+                pRipple
+                id="up_personal_info_phone_edit"
+                class="p-2 p-button-text"
+                icon="pi pi-pencil"
+                (click)="togglePhoneEdit()"
+                [label]="'ACTIONS.GENERAL.EDIT' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></button>
+              <button
+                *ngIf="phoneEdit"
+                pButton
+                pRipple
+                id="up_personal_info_phone_cancel"
+                icon="pi pi-times"
+                class="p-2 p-button-text"
+                (click)="cancelPhoneEdit()"
+                [label]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></button>
+              <button
+                *ngIf="this.phoneEdit"
+                pButton
+                pRipple
+                id="up_personal_info_phone_save"
+                class="p-2 p-button-text"
+                icon="pi pi-save"
+                (click)="this.updatePhone()"
+                [disabled]="formGroup.invalid"
+                [label]="'ACTIONS.GENERAL.SAVE' | translate"
+                [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
+                [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
+                tooltipPosition="top"
+                tooltipEvent="hover"
+              ></button>
+            </div>
+          </div>
+        </ng-template>
+
+        <div class="mx-1mb-3 flex flex-row flex-wrap justify-content-start gap-3">
+          <span class="p-float-label flex-grow-0" controlErrorAnchor>
+            <p-dropdown
+              id="up_personal_info_phone_type"
+              formControlName="type"
+              [options]="phoneTypes"
+              [readonly]="!phoneEdit"
+              [ariaLabel]="'USER_PROFILE.PHONE_TYPE' | translate"
+              [pTooltip]="'USER_PROFILE.PHONE_TYPE.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            >
+            </p-dropdown>
+            <label for="up_personal_info_phone_type"> {{ 'USER_PROFILE.PHONE_TYPE' | translate }} </label>
+          </span>
+          <span class="p-float-label flex-grow-1" controlErrorAnchor>
+            <input
+              id="up_personal_info_phone_number"
+              pInputText
+              type="text"
+              class="pt-3 pb-2 w-full min-w-15rem text-responsive"
+              formControlName="number"
+              [value]="person.phone?.number"
+              [readonly]="!phoneEdit"
+              aria-labelledby="up_personal_info_phone_number"
+              [pTooltip]="'USER_PROFILE.PHONE_NUMBER.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_phone_number">{{ 'USER_PROFILE.PHONE_NUMBER' | translate }}</label>
+          </span>
+        </div>
+      </p-panel>
     </div>
   </div>
-</form>
+</div>

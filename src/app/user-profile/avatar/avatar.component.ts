@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { bffImageUrl } from 'src/app/shared/utils'
@@ -33,30 +33,34 @@ export class AvatarComponent implements OnChanges {
     private readonly avatarAdminService: UserAvatarAdminAPIService,
     private readonly avatarService: UserAvatarAPIService,
     private readonly location: Location,
+    private readonly user: UserService,
     private readonly msgService: PortalMessageService,
     private readonly imageCompress: NgxImageCompressService
   ) {}
 
   public ngOnChanges(): void {
-    this.imageLoadError = false
+    this.imageUrl = undefined
     if (this.userProfileId) {
       this.getUserAvatarImage()
+      if (this.user.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = 'USERPROFILE#ADMIN_EDIT'
     } else {
       this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
+      if (this.user.hasPermission('PROFILE_AVATAR#EDIT')) this.editPermission = 'PROFILE_AVATAR#EDIT'
     }
-    this.editPermission = this.adminView ? 'USERPROFILE#ADMIN_EDIT' : 'PROFILE_AVATAR#EDIT'
   }
 
   private getUserAvatarImage() {
+    this.imageLoadError = false
     this.avatarAdminService
       .getUserAvatarById({ id: this.userProfileId!, refType: RefType.Large })
       .pipe(
-        catchError((error) => {
-          console.error('getUserAvatarById()', error)
-          return of(new Blob([]))
-        }),
         map((data) => {
-          this.imageUrl = URL.createObjectURL(data)
+          if (data) this.imageUrl = URL.createObjectURL(data)
+          else this.imageLoadError = true
+        }),
+        catchError((error) => {
+          console.error('getUserAvatarById', error)
+          return of(new Blob([]))
         })
       )
       .subscribe()
@@ -64,10 +68,11 @@ export class AvatarComponent implements OnChanges {
   public onDeleteAvatarImage(): void {
     this.showAvatarDeleteDialog = false
     this.imageUrl = ''
-    this.imageLoadError = true
+    this.imageLoadError = false
     if (this.userProfileId) {
       this.avatarAdminService.deleteUserAvatarById({ id: this.userProfileId }).subscribe({
         next: () => {
+          this.imageLoadError = true
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         },
         error: (error) => {
@@ -78,6 +83,7 @@ export class AvatarComponent implements OnChanges {
     } else {
       this.avatarService.deleteUserAvatar().subscribe({
         next: () => {
+          this.imageLoadError = true
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
           if (!this.adminView) this.reloadPage()
         },
@@ -141,7 +147,6 @@ export class AvatarComponent implements OnChanges {
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
     this.imageUrl = undefined
-    this.imageLoadError = false
     if (this.userProfileId) {
       // admin perspective: upload only, refresh large image
       this.avatarAdminService.uploadAvatarById({ id: this.userProfileId, refType, body: blob }).subscribe({
@@ -153,6 +158,7 @@ export class AvatarComponent implements OnChanges {
           }
         },
         error: (error: HttpErrorResponse) => {
+          this.imageLoadError = true
           if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
             this.msgService.error({
               summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
