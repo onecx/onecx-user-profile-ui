@@ -8,10 +8,10 @@
   </ocx-page-header>
 
   <ocx-page-content>
-    <app-personal-info
+    <app-personal-data
       [person]="(personalInfo$ | async) ?? {}"
       [tenantId]="tenantId"
       (personalInfoUpdate)="onPersonalInfoUpdate($event)"
-    ></app-personal-info>
+    ></app-personal-data>
   </ocx-page-content>
 </ocx-portal-page>

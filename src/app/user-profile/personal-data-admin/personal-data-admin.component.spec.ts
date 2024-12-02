@@ -7,12 +7,12 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
 
-import { PersonalInfoAdminComponent } from './personal-info-admin.component'
+import { PersonalDataAdminComponent } from './personal-data-admin.component'
 import { UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
-describe('PersonalInfoAdminComponent', () => {
-  let component: PersonalInfoAdminComponent
-  let fixture: ComponentFixture<PersonalInfoAdminComponent>
+describe('PersonalDataAdminComponent', () => {
+  let component: PersonalDataAdminComponent
+  let fixture: ComponentFixture<PersonalDataAdminComponent>
 
   const adminServiceSpy = {
     updateUserProfile: jasmine.createSpy('updateUserProfile').and.returnValue(of({})),
@@ -57,7 +57,7 @@ describe('PersonalInfoAdminComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalInfoAdminComponent],
+      declarations: [PersonalDataAdminComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('/src/assets/i18n/de.json'),
@@ -76,7 +76,7 @@ describe('PersonalInfoAdminComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PersonalInfoAdminComponent)
+    fixture = TestBed.createComponent(PersonalDataAdminComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
     adminServiceSpy.updateUserProfile.calls.reset()

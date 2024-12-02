@@ -57,11 +57,11 @@
             {{ 'PRIVACY_SETTINGS.TAB_NAME_PRIVACY' | translate }}
           </span>
         </ng-template>
-        <app-privacy-settings
+        <app-privacy
           [hideMyProfile]="settings.hideMyProfile"
           (hideMyProfileChange)="privacySettingsChange($event)"
           (applyChanges)="reloadPage()"
-        ></app-privacy-settings>
+        ></app-privacy>
       </p-tabPanel>
 
       <p-tabPanel *ocxIfPermission="'CHANGE_PASSWORD#VIEW'">

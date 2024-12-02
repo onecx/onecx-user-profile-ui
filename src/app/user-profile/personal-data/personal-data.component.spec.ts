@@ -9,11 +9,11 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 
 import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
-import { PersonalInfoComponent } from './personal-info.component'
+import { PersonalDataComponent } from './personal-data.component'
 
-describe('PersonalInfoComponent', () => {
-  let component: PersonalInfoComponent
-  let fixture: ComponentFixture<PersonalInfoComponent>
+describe('PersonalDataComponent', () => {
+  let component: PersonalDataComponent
+  let fixture: ComponentFixture<PersonalDataComponent>
 
   const defaultPerson: UserPerson = {
     firstName: 'John',
@@ -61,7 +61,7 @@ describe('PersonalInfoComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalInfoComponent],
+      declarations: [PersonalDataComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -92,7 +92,7 @@ describe('PersonalInfoComponent', () => {
   }))
 
   beforeEach(waitForAsync(() => {
-    fixture = TestBed.createComponent(PersonalInfoComponent)
+    fixture = TestBed.createComponent(PersonalDataComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   }))

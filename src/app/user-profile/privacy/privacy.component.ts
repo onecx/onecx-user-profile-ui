@@ -3,10 +3,10 @@ import { FormGroup, FormControl } from '@angular/forms'
 import { UserService } from '@onecx/portal-integration-angular'
 
 @Component({
-  selector: 'app-privacy-settings',
-  templateUrl: './privacy-settings.component.html'
+  selector: 'app-privacy',
+  templateUrl: './privacy.component.html'
 })
-export class PrivacySettingsComponent implements OnInit, OnChanges {
+export class PrivacyComponent implements OnInit, OnChanges {
   @Input() hideMyProfile: boolean | undefined = false
   @Output() hideMyProfileChange = new EventEmitter<boolean>()
   @Output() public applyChanges = new EventEmitter<boolean>()
