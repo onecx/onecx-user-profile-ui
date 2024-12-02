@@ -14,6 +14,10 @@ describe('LocaleTimezoneComponent', () => {
   let component: LocaleTimezoneComponent
   let fixture: ComponentFixture<LocaleTimezoneComponent>
 
+  const defaultLanguageItems = [
+    { label: 'LANGUAGE.EN', value: 'en' },
+    { label: 'LANGUAGE.DE', value: 'de' }
+  ]
   const configServiceSpy = jasmine.createSpyObj(ConfigurationService, ['getProperty'])
 
   const userServiceSpy = {
@@ -67,6 +71,14 @@ describe('LocaleTimezoneComponent', () => {
     expect(component.formGroup.value['timezone']).toEqual('HST')
   })
 
+  it('should using default languages', () => {
+    configServiceSpy.getProperty.and.returnValue(null)
+
+    component.ngOnChanges()
+
+    expect(component.localeSelectItems).toEqual(defaultLanguageItems)
+  })
+
   it('should saveLocale', () => {
     component.localeInput = 'gb'
     component.timezoneInput = 'HST'
@@ -93,106 +105,6 @@ describe('LocaleTimezoneComponent', () => {
 
     expect(component.applyChanges.emit).toHaveBeenCalled()
   })
-
-  //   it('should create', () => {
-  //     expect(component).toBeTruthy()
-  //     expect(component.locale).toBe('en')
-  //     expect(component.timezone).toBe('Europe/Berlin')
-  //     expect(component.localeSelectItems).toEqual([
-  //       {
-  //         label: 'LANGUAGE.' + 'EN',
-  //         value: 'en'
-  //       },
-  //       {
-  //         label: 'LANGUAGE.' + 'DE',
-  //         value: 'de'
-  //       }
-  //     ])
-  //     expect(component.timezoneUTC).toBe('GMT +1')
-  //     const editableLanguageElement = fixture.debugElement.query(By.css('#up_account_language_editable'))
-  //     expect(editableLanguageElement).toBeTruthy()
-  //     const uneditableLanguageElement = fixture.debugElement.query(By.css('#up_account_language_uneditable'))
-  //     expect(uneditableLanguageElement).toBeFalsy()
-  //     const editableTimezoneElement = fixture.debugElement.query(By.css('#up_account_timezone_editable'))
-  //     expect(editableTimezoneElement).toBeTruthy()
-  //     const uneditableTimezoneElement = fixture.debugElement.query(By.css('#up_account_timezone_uneditable'))
-  //     expect(uneditableTimezoneElement).toBeFalsy()
-  //   })
-
-  //   xit('should use localeTimezone if provided', () => {
-  //     const localeTimezoneInput: UserProfileAccountSettingsLocaleAndTimeSettings = {
-  //       locale: 'de',
-  //       timezone: 'Europe/London'
-  //     }
-  //     component.timezone = localeTimezoneInput
-
-  //     component.ngOnInit()
-
-  //     expect(component.locale).toBe(localeTimezoneInput.locale!)
-  //     expect(component.timezone).toBe(localeTimezoneInput.timezone!)
-  //     expect(component.timezoneUTC).toBe('GMT +0')
-  //   })
-
-  //   it('should allow to select other languages based on configuration', () => {
-  //     configServiceSpy.getProperty.and.returnValue('pr, pl')
-
-  //     component.ngOnInit()
-
-  //     expect(component.localeSelectItems).toEqual([
-  //       {
-  //         label: 'LANGUAGE.' + 'PR',
-  //         value: 'pr'
-  //       },
-  //       {
-  //         label: 'LANGUAGE.' + 'PL',
-  //         value: 'pl'
-  //       }
-  //     ])
-  //   })
-
-  //   it('when has no edit language permissions', () => {
-  //     authServiceSpy.hasPermission.withArgs('ACCOUNT_SETTINGS_LANGUAGE#EDIT').and.returnValue(false)
-
-  //     component.ngOnInit()
-  //     fixture.detectChanges()
-
-  //     const editableLanguageElement = fixture.debugElement.query(By.css('#up_account_language_editable'))
-  //     expect(editableLanguageElement).toBeFalsy()
-  //     const uneditableLanguageElement = fixture.debugElement.query(By.css('#up_account_language_uneditable'))
-  //     expect(uneditableLanguageElement).toBeTruthy()
-  //   })
-
-  //   it('when has no edit timezone permissions', () => {
-  //     authServiceSpy.hasPermission.withArgs('ACCOUNT_SETTINGS_TIMEZONE#EDIT').and.returnValue(false)
-
-  //     component.ngOnInit()
-  //     fixture.detectChanges()
-
-  //     const editableTimezoneElement = fixture.debugElement.query(By.css('#up_account_timezone_editable'))
-  //     expect(editableTimezoneElement).toBeFalsy()
-  //     const uneditableTimezoneElement = fixture.debugElement.query(By.css('#up_account_timezone_uneditable'))
-  //     expect(uneditableTimezoneElement).toBeTruthy()
-  //   })
-
-  //   xit('should emit formGroup value on saveLocale', () => {
-  //     let localeRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_locale_refresh'))
-  //     expect(localeRefreshButtonDebugEl).toBeNull()
-
-  //     const localeTimezoneChangeSpy = spyOn(component.localeTimezoneChange, 'emit')
-  //     const localeTimezoneValue: UserProfileAccountSettingsLocaleAndTimeSettings = {
-  //       locale: 'de',
-  //       timezone: 'Europe/Berlin'
-  //     }
-  //     component.formGroup.patchValue(localeTimezoneValue)
-
-  //     component.saveLocale()
-  //     fixture.detectChanges()
-
-  //     expect(component.locale).toBe(localeTimezoneValue.locale!)
-  //     expect(localeTimezoneChangeSpy).toHaveBeenCalledOnceWith(localeTimezoneValue)
-  //     localeRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_locale_refresh'))
-  //     expect(localeRefreshButtonDebugEl).toBeTruthy()
-  //   })
 
   it('should emit formGroup value on saveTimezone', () => {
     const timezoneRefreshButtonDebugEl = fixture.debugElement.query(By.css('#up_account_timezone_refresh'))
