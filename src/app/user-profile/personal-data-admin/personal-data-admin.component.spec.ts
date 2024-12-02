@@ -7,7 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
 
-import { PersonalDataAdminComponent } from './personal-info-admin.component'
+import { PersonalDataAdminComponent } from './personal-data-admin.component'
 import { UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 describe('PersonalDataAdminComponent', () => {

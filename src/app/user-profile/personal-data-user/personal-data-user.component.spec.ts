@@ -6,7 +6,7 @@ import { map, of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PhoneType, PortalMessageService, UserProfile } from '@onecx/portal-integration-angular'
-import { PersonalDataUserComponent } from './personal-info-user.component'
+import { PersonalDataUserComponent } from './personal-data-user.component'
 import { UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
 import { ActivatedRoute, Router } from '@angular/router'
 
