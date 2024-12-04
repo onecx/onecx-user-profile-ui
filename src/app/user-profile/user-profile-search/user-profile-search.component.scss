@@ -14,10 +14,10 @@
   .p-datatable .p-datatable-thead > tr > th,
   .p-datatable .p-datatable-tbody > tr > td {
     padding: 0.5rem;
-    text-align: center !important;
   }
   .p-datatable .p-datatable-thead > tr > th,
   .p-datatable .p-datatable-tbody > tr > td:first-of-type {
+    text-align: center !important;
     white-space: nowrap;
   }
 
@@ -32,5 +32,15 @@
   }
   ocx-column-group-selection {
     display: none;
+  }
+}
+
+:host ::ng-deep {
+  .buttonDialogScrollableContent {
+    max-height: unset !important;
+  }
+  .p-dialog .p-dialog-content {
+    z-index: 1000000 !important;
+    padding-bottom: 0;
   }
 }

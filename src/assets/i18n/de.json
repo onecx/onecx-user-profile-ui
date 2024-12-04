@@ -41,7 +41,7 @@
     },
     "VIEW": {
       "USER_PROFILE": "Nutzerprofil ansehen",
-      "PERMISSIONS": "Berechtigungen ansehen"
+      "PERMISSIONS": "Zugewiesene Berechtigungen"
     },
     "GENERAL": {
       "APPLY": "Anwenden",

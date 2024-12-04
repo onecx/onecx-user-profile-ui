@@ -15,11 +15,12 @@ import {
   PortalDialogService,
   PortalMessageService,
   RowListGridData,
+  UserProfile,
   UserService
 } from '@onecx/portal-integration-angular'
 
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { PermissionsDialogComponent } from './permissions-dialog/permissions-dialog.component'
+import { UserPermissionsComponent } from './user-permissions/user-permissions.component'
 
 @Component({
   selector: 'app-user-profile-search',
@@ -34,23 +35,24 @@ export class UserProfileSearchComponent implements OnInit {
   public criteriaGroup: UntypedFormGroup
   public columns: DataTableColumn[]
 
-  public resultData$ = new BehaviorSubject<RowListGridData[]>([])
-  public filteredData$ = new BehaviorSubject<RowListGridData[]>([])
+  public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
+  public filteredData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
   private filterData = ''
   public filterValue: string | undefined
-  public filterBy = 'firstName,lastName,email'
+  public filterBy = 'firstName,lastName,email,creationDate,modificationDate'
   public filterDataView: string | undefined
 
   /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
+
   public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
-  public userProfile: RowListGridData | undefined
+  public userProfile: UserProfile | undefined
+  public userProfileRow: RowListGridData | undefined
   public displayDetailDialog = false
   public displayDeleteDialog = false
-  public selectedUserName: string | undefined //used in deletion dialog
   public editPermission = false
-  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
+  public adminViewPermissionsSlotName = 'onecx-user-profile-permissions'
   public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
 
   constructor(
@@ -175,9 +177,7 @@ export class UserProfileSearchComponent implements OnInit {
     this.loading = true
     this.exceptionKey = undefined
     const userPersonCriteria = this.criteriaGroup.value
-    const criteria = {
-      userPersonCriteria: userPersonCriteria
-    }
+    const criteria = { userPersonCriteria: userPersonCriteria }
     this.userProfileAdminService
       .searchUserProfile(criteria)
       .pipe(
@@ -222,25 +222,60 @@ export class UserProfileSearchComponent implements OnInit {
     this.resultData$.next(this.resultData$.value)
   }
 
-  public onDetail(ev: RowListGridData) {
-    this.userProfile = ev
+  public onDetail(ev: any) {
+    this.userProfile = { id: ev.id.toString(), userId: ev.userId, person: { displayName: ev['person.displayName'] } }
     this.displayDetailDialog = true
   }
   public onCloseDetail(): void {
+    this.userProfile = undefined
     this.displayDetailDialog = false
+    this.displayDeleteDialog = false
   }
 
-  public onPermissions(ev: any) {
-    this.userProfile = ev
+  public onDelete(ev: any): void {
+    // update person data after the GET fired implizitely by interactive-data-view
+    this.resultData$
+      .pipe(
+        map((data) => {
+          data.forEach((up) => {
+            console.log('onDelete', up)
+            if (up.id === ev.id) {
+              this.userProfile = { id: up.id, userId: up.userId, person: up.person }
+              this.displayDeleteDialog = true
+            }
+          })
+        })
+      )
+      .subscribe()
+  }
+
+  public onDeleteConfirmation(): void {
+    if (this.userProfile?.id) {
+      this.userProfileAdminService.deleteUserProfile({ id: this.userProfile?.id }).subscribe({
+        next: () => {
+          this.userProfile = undefined
+          this.displayDeleteDialog = false
+          this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
+        },
+        error: (err) => {
+          console.error('deleteUserProfile', err)
+          this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
+        }
+      })
+    }
+    this.onSearch()
+  }
+
+  public onUserPermissions(ev: any) {
     this.portalDialogService
       .openDialog(
         'ACTIONS.VIEW.PERMISSIONS',
         {
-          type: PermissionsDialogComponent,
-          inputs: { userId: this.userProfile?.['userId'], displayName: this.userProfile?.['displayName'] }
+          type: UserPermissionsComponent,
+          inputs: { id: ev['id'], userId: ev['userId'], displayName: ev['displayName'] }
         },
         {
-          id: 'up_user_permissions_dialog_button_close',
+          id: 'up_user_permissions_action_close',
           key: 'ACTIONS.GENERAL.CLOSE',
           icon: PrimeIcons.TIMES,
           tooltipKey: 'ACTIONS.GENERAL.CLOSE.TOOLTIP',
@@ -253,39 +288,10 @@ export class UserProfileSearchComponent implements OnInit {
           resizable: true,
           dismissableMask: true,
           maximizable: true,
-          width: '1000px'
+          width: '900px'
         }
       )
       .subscribe(() => {})
-  }
-
-  public onDelete(ev: any): void {
-    this.selectedUserName = ev.displayName
-    this.resultData$
-      .pipe(
-        map((results) => {
-          results.forEach((result) => {
-            if (result.id === ev.id) this.userProfile = result
-          })
-        })
-      )
-      .subscribe()
-    this.displayDeleteDialog = true
-  }
-  public onDeleteConfirmation(): void {
-    const id: any = this.userProfile?.['userId']
-    if (id) {
-      this.userProfileAdminService.deleteUserProfile({ id: id?.toString() }).subscribe({
-        next: () => {
-          this.displayDeleteDialog = false
-          this.userProfile = undefined
-          this.selectedUserName = undefined
-          this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
-        },
-        error: () => this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
-      })
-    }
-    this.onSearch()
   }
 
   public prepareActionButtons(): void {
@@ -295,14 +301,14 @@ export class UserProfileSearchComponent implements OnInit {
         labelKey: 'ACTIONS.VIEW.USER_PROFILE',
         icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
         permission: this.editPermission ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#ADMIN_VIEW',
-        callback: (event: any) => this.onDetail(event)
+        callback: (event) => this.onDetail(event)
       },
       {
         id: 'permissions',
         labelKey: 'ACTIONS.VIEW.PERMISSIONS',
         icon: 'pi pi-lock',
         permission: 'ROLES_PERMISSIONS#ADMIN_VIEW',
-        callback: (event) => this.onPermissions(event)
+        callback: (event) => this.onUserPermissions(event)
       },
       {
         id: 'delete',

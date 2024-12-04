@@ -114,8 +114,9 @@
 
 <!-- DELETE -->
 <p-dialog
-  [(visible)]="displayDeleteDialog"
   [header]="'ACTIONS.DELETE.USER' | translate"
+  [(visible)]="displayDeleteDialog"
+  (hide)="onCloseDetail()"
   [closable]="true"
   [draggable]="true"
   [resizable]="true"
@@ -127,16 +128,17 @@
     <div>
       <div id="up_user_delete_message_text" class="font-bold">{{ 'ACTIONS.DELETE.MESSAGE_TEXT' | translate }}</div>
       <div id="up_user_delete_user_display_name" class="mt-2 text-center font-bold danger-action-text">
-        {{ selectedUserName }}
+        {{ userProfile?.person?.displayName }}
       </div>
       <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_HINT' | translate }}</div>
       <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_INFO' | translate }}</div>
     </div>
   </div>
+
   <ng-template pTemplate="footer">
     <div class="flex flex-wrap justify-content-end column-gap-2 row-gap-1">
       <p-button
-        id="up_user_delete_button_no"
+        id="up_user_delete_action_no"
         icon="pi pi-times"
         (onClick)="displayDeleteDialog = false"
         [label]="'ACTIONS.CONFIRMATION.NO' | translate"
@@ -146,7 +148,7 @@
         tooltipEvent="hover"
       ></p-button>
       <p-button
-        id="up_user_delete_button_yes"
+        id="up_user_delete_action_yes"
         icon="pi pi-check"
         (onClick)="onDeleteConfirmation()"
         [label]="'ACTIONS.CONFIRMATION.YES' | translate"
@@ -163,6 +165,7 @@
 <p-dialog
   [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
   [(visible)]="displayDetailDialog"
+  (hide)="onCloseDetail()"
   [modal]="true"
   [closable]="true"
   [draggable]="true"
@@ -174,12 +177,13 @@
   <app-personal-data-admin
     [displayDetailDialog]="displayDetailDialog"
     (hideDialog)="onCloseDetail()"
-    [userProfileId]="userProfile?.['userId']"
+    [userProfileId]="userProfile?.id"
   ></app-personal-data-admin>
+
   <ng-template pTemplate="footer">
     <div class="flex flex-wrap justify-content-end column-gap-2">
       <p-button
-        id="up_user_delete_button_close"
+        id="up_user_delete_action_close"
         icon="pi pi-times"
         (onClick)="onCloseDetail()"
         [label]="'ACTIONS.GENERAL.CLOSE' | translate"

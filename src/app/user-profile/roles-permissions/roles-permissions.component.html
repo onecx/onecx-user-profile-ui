@@ -13,6 +13,7 @@
     <ocx-slot
       *ngIf="isUserRolesAndPermissionsComponentDefined$ | async; else rolesPermissionsPlaceholder"
       [name]="userRolesAndPermissionsSlotName"
+      [inputs]="{ active: true }"
     >
       <ng-template #skeleton>
         <p-message

@@ -1,18 +1,19 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { PermissionsDialogComponent } from './permissions-dialog.component'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
 
-describe('PermissionsDialogComponent', () => {
-  let component: PermissionsDialogComponent
-  let fixture: ComponentFixture<PermissionsDialogComponent>
+import { UserPermissionsComponent } from './user-permissions.component'
+
+describe('UserPermissionsComponent', () => {
+  let component: UserPermissionsComponent
+  let fixture: ComponentFixture<UserPermissionsComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PermissionsDialogComponent],
+      declarations: [UserPermissionsComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -25,7 +26,7 @@ describe('PermissionsDialogComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PermissionsDialogComponent)
+    fixture = TestBed.createComponent(UserPermissionsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

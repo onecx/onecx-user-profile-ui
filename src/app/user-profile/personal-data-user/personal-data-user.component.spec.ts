@@ -14,9 +14,7 @@ describe('PersonalDataUserComponent', () => {
   let component: PersonalDataUserComponent
   let fixture: ComponentFixture<PersonalDataUserComponent>
   const activatedRouteMock = {}
-  const routerMock = {
-    navigate: jasmine.createSpy('navigate')
-  }
+  const routerMock = { navigate: jasmine.createSpy('navigate') }
 
   const userProfileServiceSpy = {
     updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
