@@ -144,6 +144,7 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   ngOnInit() {
+    console.log('user-profile-search ngOnInit')
     this.initFilter()
     this.prepareActionButtons()
     this.onSearch()

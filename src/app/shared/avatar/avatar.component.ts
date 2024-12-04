@@ -38,6 +38,7 @@ export class AvatarComponent implements OnChanges {
   ) {}
 
   public ngOnChanges(): void {
+    console.log('avatar.component ngOnChanges')
     this.imageUrl = undefined
     if (this.userProfileId) {
       this.getUserAvatarImage()

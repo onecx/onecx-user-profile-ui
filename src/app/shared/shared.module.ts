@@ -37,13 +37,15 @@ import { environment } from 'src/environments/environment'
 import { LabelResolver } from './label.resolver'
 import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
 import { ImageContainerComponent } from './image-container/image-container.component'
+import { AvatarComponent } from './avatar/avatar.component'
+import { PersonalDataComponent } from './personal-data/personal-data.component'
 
 export function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {
   return new PortalApiConfiguration(Configuration, environment.apiPrefix, configService, appStateService)
 }
 
 @NgModule({
-  declarations: [ImageContainerComponent],
+  declarations: [ImageContainerComponent, PersonalDataComponent, AvatarComponent],
   imports: [
     PortalCoreModule.forMicroFrontend(),
     AutoCompleteModule,
@@ -96,7 +98,9 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     ToastModule,
     TranslateModule,
     AngularRemoteComponentsModule,
-    ImageContainerComponent
+    ImageContainerComponent,
+    AvatarComponent,
+    PersonalDataComponent
   ],
   //this is not elegant, for some reason the injection token from primeng does not work across federated module
   providers: [
