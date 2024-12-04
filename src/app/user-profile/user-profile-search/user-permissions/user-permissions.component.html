@@ -1,19 +1,20 @@
 <ocx-slot
   *ngIf="isUserRolesAndPermissionsComponentDefined$ | async; else permissionsDialogPlaceholder"
   [name]="adminViewPermissionsSlotName"
-  [inputs]="{ userId: userId, displayName: displayName }"
+  [inputs]="{ userId: userId, displayName: displayName, active: true }"
 >
   <ng-template #skeleton>
     <p-message
+      id="up_user_permissions_loading"
       severity="info"
       styleClass="w-full flex flex-row justify-content-start"
       [text]="'ACTIONS.GENERAL.LOADING' | translate"
     ></p-message>
   </ng-template>
 </ocx-slot>
-<ng-template #permissionsDialogPlaceholder id="up_permissions_dialog_error">
+<ng-template #permissionsDialogPlaceholder>
   <p-message
-    id="ps_permissions_dialog_error_message"
+    id="up_user_permissions_error_message"
     severity="info"
     styleClass="p-2"
     [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_ADMIN' | translate"

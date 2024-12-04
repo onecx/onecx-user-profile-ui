@@ -14,10 +14,10 @@
   .p-datatable .p-datatable-thead > tr > th,
   .p-datatable .p-datatable-tbody > tr > td {
     padding: 0.5rem;
-    text-align: center !important;
   }
   .p-datatable .p-datatable-thead > tr > th,
   .p-datatable .p-datatable-tbody > tr > td:first-of-type {
+    text-align: center !important;
     white-space: nowrap;
   }
 
@@ -30,6 +30,7 @@
   .table-header-wrapper span:first-child {
     margin-right: 10px !important;
   }
+  // hide unusable stuff
   ocx-column-group-selection {
     display: none;
   }

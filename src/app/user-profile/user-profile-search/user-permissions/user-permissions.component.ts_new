@@ -1,0 +1,44 @@
+import { Component, Input, OnDestroy } from '@angular/core'
+import { combineLatest, Observable, map } from 'rxjs'
+
+import { SlotService, RemoteComponentConfig } from '@onecx/angular-remote-components'
+
+@Component({
+  selector: 'app-user-permissions',
+  templateUrl: './user-permissions.component.html',
+  styleUrls: ['./user-permissions.component.scss']
+})
+export class UserPermissionsComponent implements OnDestroy {
+  @Input() userId: string | undefined = undefined
+  @Input() displayName: string | undefined = undefined
+  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
+  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
+  public remoteComponentConfig$: Observable<RemoteComponentConfig> | undefined
+  public merged$: Observable<any> | undefined
+
+  constructor(private readonly slotService: SlotService) {
+    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+      this.adminViewPermissionsSlotName
+    )
+    this.remoteComponentConfig$ = this.slotService.getComponentsForSlot(this.adminViewPermissionsSlotName).pipe(
+      map((conf) => {
+        console.log(conf)
+        const config: RemoteComponentConfig = {
+          appId: conf[0].remoteComponent.appId,
+          productName: conf[0].remoteComponent.productName,
+          permissions: ['perm'],
+          baseUrl: conf[0].remoteComponent.baseUrl
+        }
+        return config
+      })
+    )
+    this.merged$ = combineLatest([this.isUserRolesAndPermissionsComponentDefined$, this.remoteComponentConfig$]).pipe(
+      //switchMap(([r: boolean, c: RemoteComponentConfig]) => {
+      //  return { ready: r, config: c }
+      map(([r, c]) => ({ r, c }))
+    )
+  }
+  public ngOnDestroy() {
+    console.log('UserPermissionsComponent ngOnDestroy')
+  }
+}

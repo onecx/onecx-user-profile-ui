@@ -16,7 +16,6 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnChanges {
-  @Input() adminView: boolean = false
   @Input() userProfileId: string | undefined = undefined
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
@@ -85,7 +84,7 @@ export class AvatarComponent implements OnChanges {
         next: () => {
           this.imageLoadError = true
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-          if (!this.adminView) this.reloadPage()
+          if (!this.userProfileId) this.reloadPage()
         },
         error: (error) => {
           console.error('deleteUserAvatar()', error)

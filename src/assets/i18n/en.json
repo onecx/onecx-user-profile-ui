@@ -41,7 +41,7 @@
     },
     "VIEW": {
       "USER_PROFILE": "View User Profile",
-      "PERMISSIONS": "View Permissions"
+      "PERMISSIONS": "Assigned Permissions"
     },
     "GENERAL": {
       "APPLY": "Apply",

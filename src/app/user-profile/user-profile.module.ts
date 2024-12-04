@@ -19,7 +19,7 @@ import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.compo
 import { PrivacyComponent } from './privacy/privacy.component'
 import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
 import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
-import { PermissionsDialogComponent } from './user-profile-search/permissions-dialog/permissions-dialog.component'
+import { UserPermissionsComponent } from './user-profile-search/user-permissions/user-permissions.component'
 
 const routes: Routes = [
   {
@@ -107,7 +107,7 @@ const routes: Routes = [
     LocaleTimezoneComponent,
     PrivacyComponent,
     RolesPermissionsComponent,
-    PermissionsDialogComponent
+    UserPermissionsComponent
   ],
   imports: [
     CommonModule,

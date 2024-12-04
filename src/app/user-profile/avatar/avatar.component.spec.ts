@@ -147,7 +147,6 @@ describe('AvatarComponent', () => {
 
   describe('onDeleteAvatarImage', () => {
     it('should delete successfully my Avatar image: user view => reload', () => {
-      component.adminView = false
       component.userProfileId = undefined
       avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
@@ -159,7 +158,6 @@ describe('AvatarComponent', () => {
     })
 
     it('should delete successfully my Avatar image: admin view => no page reload', () => {
-      component.adminView = true // do not reload
       component.userProfileId = undefined
       avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
@@ -172,7 +170,6 @@ describe('AvatarComponent', () => {
 
     it('should get error if deletion of my Avatar image fails', fakeAsync(() => {
       const errorResponse = { error: 'Error on removing my image', status: 400 }
-      component.adminView = true // do not reload
       component.userProfileId = undefined
 
       avatarUserSpy.deleteUserAvatar.and.returnValue(throwError(() => errorResponse))
@@ -186,7 +183,6 @@ describe('AvatarComponent', () => {
 
     it('should delete existing Avatar image of another user', () => {
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(of({}))
-      component.adminView = true // do not reload
       component.userProfileId = 'id'
 
       component.onDeleteAvatarImage()
@@ -208,7 +204,6 @@ describe('AvatarComponent', () => {
 
   describe('onFileUpload', () => {
     it('should compress img for large type', async () => {
-      component.adminView = true
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -226,7 +221,6 @@ describe('AvatarComponent', () => {
     })
 
     it('should compress img for medium type', async () => {
-      component.adminView = true
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -243,7 +237,6 @@ describe('AvatarComponent', () => {
     })
 
     it('should compress img for small type', async () => {
-      component.adminView = true
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -282,7 +275,6 @@ describe('AvatarComponent', () => {
     it('should display msg if upload failed', () => {
       const mockCompressedImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
-      component.adminView = false
       const updateErrorResponse: HttpErrorResponse = {
         status: 404,
         statusText: 'Not Found',
@@ -360,7 +352,6 @@ describe('AvatarComponent', () => {
       spyOn(component, 'reloadPage')
       avatarUserSpy.uploadAvatar.and.returnValue(of({}))
       component.userProfileId = undefined
-      component.adminView = false
 
       component.sendImage('image', RefType.Large)
 
@@ -371,7 +362,6 @@ describe('AvatarComponent', () => {
       spyOn(component, 'reloadPage')
       avatarUserSpy.uploadAvatar.and.returnValue(of({}))
       component.userProfileId = undefined
-      component.adminView = false
 
       component.sendImage('image', RefType.Small)
 
@@ -383,7 +373,6 @@ describe('AvatarComponent', () => {
       const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
       avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
       component.userProfileId = 'id'
-      component.adminView = true
 
       component.ngOnChanges()
 

@@ -10,8 +10,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
   selector: 'app-roles-permissions',
-  templateUrl: './roles-permissions.component.html',
-  styleUrls: ['./roles-permissions.component.scss']
+  templateUrl: './roles-permissions.component.html'
 })
 export class RolesPermissionsComponent {
   public personalInfo$: Observable<UserPerson> | undefined

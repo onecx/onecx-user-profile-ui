@@ -12,6 +12,7 @@ import { RowListGridData } from '@onecx/angular-accelerator'
 
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { UserProfileSearchComponent } from './user-profile-search.component'
+import { UserProfile } from '@onecx/integration-interface'
 
 describe('UserProfileSearchComponent', () => {
   let component: UserProfileSearchComponent
@@ -132,9 +133,9 @@ describe('UserProfileSearchComponent', () => {
     expect(component.onDetail).toHaveBeenCalled()
     expect(component.additionalActions[0].permission).toEqual('USERPROFILE#ADMIN_EDIT')
 
-    spyOn(component, 'onPermissions')
+    spyOn(component, 'onUserPermissions')
     component.additionalActions[1].callback({})
-    expect(component.onPermissions).toHaveBeenCalled()
+    expect(component.onUserPermissions).toHaveBeenCalled()
 
     spyOn(component, 'onDelete')
     component.additionalActions[2].callback({})
@@ -212,11 +213,20 @@ describe('UserProfileSearchComponent', () => {
 
   describe('onDetail', () => {
     it('should display detail dialog', () => {
-      const mockEvent = { id: '123', imagePath: '' } as RowListGridData
+      const mockEvent = {
+        id: 'id',
+        userId: 'userId',
+        'person.displayName': 'person.displayName',
+        imagePath: ''
+      } as RowListGridData
 
       component.onDetail(mockEvent)
 
-      expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
+      expect(component.userProfile).toEqual({
+        id: 'id',
+        userId: 'userId',
+        person: { displayName: 'person.displayName' }
+      })
       expect(component.displayDetailDialog).toBeTrue()
     })
   })
@@ -229,37 +239,52 @@ describe('UserProfileSearchComponent', () => {
     expect(component.displayDetailDialog).toBeFalse()
   })
 
-  describe('onPermission', () => {
+  describe('onUserPermission', () => {
     it('should display permission dialog', () => {
       mockDialogService.openDialog.and.returnValue(of({}))
-      const mockEvent = { id: '123', imagePath: '' } as RowListGridData
+      const mockEvent = {
+        id: 'id',
+        userId: 'userId',
+        'person.displayName': 'displayName',
+        imagePath: ''
+      } as any
 
-      component.onPermissions(mockEvent)
+      component.onUserPermissions(mockEvent)
 
-      expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
+      expect(mockDialogService.openDialog).toHaveBeenCalled()
     })
   })
 
   describe('onDelete', () => {
-    it('should display delete dialog', () => {
-      const mockEvent = { id: '123' } as RowListGridData
-      const mockResults: RowListGridData[] = [
-        { id: '123', imagePath: '' },
-        { id: '456', imagePath: '' }
+    it('should open dialogue and set userProfile when id match', () => {
+      const mockEvent = {
+        id: 'id',
+        userId: 'uid2',
+        'person.displayName': 'person.displayName',
+        imagePath: ''
+      } as any
+      const mockResults: any = [
+        { id: '123', userId: 'uid1', person: {}, imagePath: '' },
+        { id: 'id', userId: 'uid2', person: {}, imagePath: '' }
       ]
       component.resultData$ = new BehaviorSubject(mockResults)
 
       component.onDelete(mockEvent)
 
-      expect(component.userProfile).toEqual({ id: '123', imagePath: '' })
+      expect(component.userProfile).toEqual({ id: 'id', userId: 'uid2', person: {} })
       expect(component.displayDeleteDialog).toBeTrue()
     })
 
-    it('should not set userProfile when id does not match', () => {
-      const mockEvent = { id: '789' } as RowListGridData
-      const mockResults: RowListGridData[] = [
-        { id: '123', imagePath: '' },
-        { id: '456', imagePath: '' }
+    it('should not open dialogue and set userProfile when id does not match', () => {
+      const mockEvent = {
+        id: 'id',
+        userId: 'userId',
+        'person.displayName': 'person.displayName',
+        imagePath: ''
+      } as any
+      const mockResults: any = [
+        { id: '123', userId: 'uid1', person: {}, imagePath: '' },
+        { id: '456', userId: 'uid2', person: {}, imagePath: '' }
       ]
       component.resultData$ = new BehaviorSubject(mockResults)
       component.userProfile = undefined
@@ -267,14 +292,14 @@ describe('UserProfileSearchComponent', () => {
       component.onDelete(mockEvent)
 
       expect(component.userProfile).toBeUndefined()
-      expect(component.displayDeleteDialog).toBeTrue()
+      expect(component.displayDeleteDialog).toBeFalse()
     })
   })
 
   describe('onDeleteConfirmation', () => {
     it('should delete a user profile', () => {
       apiServiceSpy.deleteUserProfile.and.returnValue(of({}))
-      component.userProfile = userProfilepageResult.stream![0] as RowListGridData
+      component.userProfile = userProfilepageResult.stream![0] as UserProfile
 
       component.onDeleteConfirmation()
 
@@ -283,12 +308,15 @@ describe('UserProfileSearchComponent', () => {
     })
 
     it('should display error', () => {
-      apiServiceSpy.deleteUserProfile.and.returnValue(throwError(() => new Error()))
-      component.userProfile = userProfilepageResult.stream![0] as RowListGridData
+      const errorResponse = { status: 400, statusText: 'Bad Request' }
+      apiServiceSpy.deleteUserProfile.and.returnValue(throwError(() => errorResponse))
+      component.userProfile = userProfilepageResult.stream![0] as UserProfile
+      spyOn(console, 'error')
 
       component.onDeleteConfirmation()
 
       expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
+      expect(console.error).toHaveBeenCalledWith('deleteUserProfile', errorResponse)
     })
   })
 
