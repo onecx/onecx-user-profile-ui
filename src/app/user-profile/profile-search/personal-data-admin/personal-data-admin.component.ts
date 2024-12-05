@@ -11,7 +11,7 @@ import { UpdateUserPerson, UserPerson, UserProfileAdminAPIService } from 'src/ap
   templateUrl: './personal-data-admin.component.html'
 })
 export class PersonalDataAdminComponent implements OnChanges {
-  @Input() public displayDetailDialog = false
+  @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: string | undefined
   @Output() public hideDialog = new EventEmitter<boolean>()
 
@@ -60,7 +60,7 @@ export class PersonalDataAdminComponent implements OnChanges {
         .subscribe({
           next: (profile) => {
             this.showMessage('success')
-            this.userPerson$ = new Observable((person) => person.next(profile.person as UserPerson))
+            this.userPerson$ = new Observable((person) => person.next(profile.person))
           },
           error: (err) => {
             this.showMessage('error')
@@ -75,8 +75,8 @@ export class PersonalDataAdminComponent implements OnChanges {
       : this.msgService.error({ summaryKey: 'USER_PROFILE.MSG.SAVE_ERROR' })
   }
 
-  public onCloseDetail(): void {
+  public onCloseDialog(): void {
     this.hideDialog.emit(true)
-    this.displayDetailDialog = false
+    this.displayPersonalDataDialog = false
   }
 }

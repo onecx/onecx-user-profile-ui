@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
-import { InitializeModuleGuard, addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
+import { InitializeModuleGuard, addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { SharedModule } from 'src/app/shared/shared.module'

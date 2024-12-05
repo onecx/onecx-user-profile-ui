@@ -15,11 +15,10 @@ import {
   PortalDialogService,
   PortalMessageService,
   RowListGridData,
-  UserProfile,
   UserService
 } from '@onecx/portal-integration-angular'
 
-import { UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
@@ -49,7 +48,7 @@ export class ProfileSearchComponent implements OnInit {
   public dateFormat: string
   public userProfile: UserProfile | undefined
   public userProfileRow: RowListGridData | undefined
-  public displayDetailDialog = false
+  public displayPersonalDataDialog = false
   public displayDeleteDialog = false
   public editPermission = false
   public adminViewPermissionsSlotName = 'onecx-user-profile-permissions'
@@ -224,11 +223,11 @@ export class ProfileSearchComponent implements OnInit {
 
   public onDetail(ev: any) {
     this.userProfile = { id: ev.id.toString(), userId: ev.userId, person: { displayName: ev['person.displayName'] } }
-    this.displayDetailDialog = true
+    this.displayPersonalDataDialog = true
   }
   public onCloseDetail(): void {
     this.userProfile = undefined
-    this.displayDetailDialog = false
+    this.displayPersonalDataDialog = false
     this.displayDeleteDialog = false
   }
 

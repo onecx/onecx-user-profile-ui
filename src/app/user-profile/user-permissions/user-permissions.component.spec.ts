@@ -1,15 +1,16 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { ActivatedRoute, Router } from '@angular/router'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { ActivatedRoute, Router } from '@angular/router'
 import { of } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TableModule } from 'primeng/table'
 
-import { UserPermissionsComponent } from './user-permissions.component'
 import { PortalMessageService } from '@onecx/portal-integration-angular'
+
 import { PhoneType, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
+import { UserPermissionsComponent } from './user-permissions.component'
 
 describe('UserPermissionsComponent', () => {
   let component: UserPermissionsComponent

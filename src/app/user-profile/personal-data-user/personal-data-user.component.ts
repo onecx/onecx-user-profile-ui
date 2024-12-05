@@ -11,7 +11,7 @@ import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/sha
   templateUrl: './personal-data-user.component.html'
 })
 export class PersonalDataUserComponent implements AfterViewInit {
-  @Input() public displayDetailDialog = false
+  @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: any
   @Output() public hideDialog = new EventEmitter<boolean>()
 

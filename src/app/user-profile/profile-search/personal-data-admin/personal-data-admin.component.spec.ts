@@ -171,9 +171,9 @@ describe('PersonalDataAdminComponent', () => {
 
   describe('on update profile', () => {
     it('should close dialog and inform caller', () => {
-      component.onCloseDetail()
+      component.onCloseDialog()
 
-      expect(component.displayDetailDialog).toBeFalse()
+      expect(component.displayPersonalDataDialog).toBeFalse()
     })
   })
 })

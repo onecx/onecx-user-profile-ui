@@ -116,7 +116,7 @@
 <p-dialog
   [header]="'ACTIONS.DELETE.USER' | translate"
   [(visible)]="displayDeleteDialog"
-  (hide)="onCloseDetail()"
+  (onHide)="onCloseDetail()"
   [closable]="true"
   [draggable]="true"
   [resizable]="true"
@@ -163,7 +163,7 @@
 
 <!-- DETAIL -->
 <app-personal-data-admin
-  [displayDetailDialog]="displayDetailDialog"
+  [displayPersonalDataDialog]="displayPersonalDataDialog"
   [userProfileId]="userProfile?.id"
   (hideDialog)="onCloseDetail()"
 ></app-personal-data-admin>

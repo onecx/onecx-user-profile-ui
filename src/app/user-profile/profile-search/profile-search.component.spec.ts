@@ -10,9 +10,8 @@ import { PortalMessageService, UserService } from '@onecx/angular-integration-in
 import { PortalDialogService } from '@onecx/portal-integration-angular'
 import { RowListGridData } from '@onecx/angular-accelerator'
 
-import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
+import { UserProfile, UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { ProfileSearchComponent } from './profile-search.component'
-import { UserProfile } from '@onecx/integration-interface'
 
 describe('ProfileSearchComponent', () => {
   let component: ProfileSearchComponent
@@ -227,16 +226,16 @@ describe('ProfileSearchComponent', () => {
         userId: 'userId',
         person: { displayName: 'person.displayName' }
       })
-      expect(component.displayDetailDialog).toBeTrue()
+      expect(component.displayPersonalDataDialog).toBeTrue()
     })
   })
 
   it('should close detail dialog', () => {
-    component.displayDetailDialog = true
+    component.displayPersonalDataDialog = true
 
     component.onCloseDetail()
 
-    expect(component.displayDetailDialog).toBeFalse()
+    expect(component.displayPersonalDataDialog).toBeFalse()
   })
 
   describe('onUserPermission', () => {

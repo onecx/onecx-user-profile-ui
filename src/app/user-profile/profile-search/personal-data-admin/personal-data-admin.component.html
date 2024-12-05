@@ -1,8 +1,8 @@
 <p-dialog
   *ngIf="(userPerson$ | async) ?? {} as person"
   [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
-  [(visible)]="displayDetailDialog"
-  (hide)="onCloseDetail()"
+  [(visible)]="displayPersonalDataDialog"
+  (onHide)="onCloseDialog()"
   [modal]="true"
   [closable]="true"
   [draggable]="true"
@@ -25,7 +25,7 @@
       <p-button
         id="up_user_delete_action_close"
         icon="pi pi-times"
-        (onClick)="onCloseDetail()"
+        (onClick)="onCloseDialog()"
         [label]="'ACTIONS.GENERAL.CLOSE' | translate"
         [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
         [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
