@@ -7,13 +7,13 @@ import { of } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TableModule } from 'primeng/table'
 
-import { RolesPermissionsComponent } from './roles-permissions.component'
+import { UserPermissionsComponent } from './user-permissions.component'
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { PhoneType, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 
-describe('RolesPermissionsComponent', () => {
-  let component: RolesPermissionsComponent
-  let fixture: ComponentFixture<RolesPermissionsComponent>
+describe('UserPermissionsComponent', () => {
+  let component: UserPermissionsComponent
+  let fixture: ComponentFixture<UserPermissionsComponent>
   const activatedRouteMock = {}
 
   const defaultCurrentUser: UserProfile = {
@@ -50,7 +50,7 @@ describe('RolesPermissionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [RolesPermissionsComponent],
+      declarations: [UserPermissionsComponent],
       imports: [
         TableModule,
         TranslateTestingModule.withTranslations({
@@ -74,7 +74,7 @@ describe('RolesPermissionsComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(RolesPermissionsComponent)
+    fixture = TestBed.createComponent(UserPermissionsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })

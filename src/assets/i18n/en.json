@@ -175,7 +175,7 @@
       "REMOVE_ERROR": "File removing failed"
     }
   },
-  "ROLES_PERMISSIONS": {
+  "USER_PERMISSIONS": {
     "NAVIGATION.LABEL": "Permissions",
     "NAVIGATION.TOOLTIP": "Switch to view assigned Roles and Permissions",
     "SUBHEADER": "Roles and Permissions granted"
@@ -241,7 +241,7 @@
     "SEARCH": "User Profiles",
     "SETTINGS": "Settings",
     "PROFILE": "User Profile",
-    "ROLES_PERMISSIONS": "Permissions"
+    "USER_PERMISSIONS": "Permissions"
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {

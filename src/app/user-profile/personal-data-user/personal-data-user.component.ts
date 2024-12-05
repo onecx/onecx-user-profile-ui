@@ -69,8 +69,8 @@ export class PersonalDataUserComponent implements AfterViewInit {
       .get([
         'SETTINGS.NAVIGATION.LABEL',
         'SETTINGS.NAVIGATION.TOOLTIP',
-        'ROLES_PERMISSIONS.NAVIGATION.LABEL',
-        'ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'
+        'USER_PERMISSIONS.NAVIGATION.LABEL',
+        'USER_PERMISSIONS.NAVIGATION.TOOLTIP'
       ])
       .pipe(
         map((data) => {
@@ -84,8 +84,8 @@ export class PersonalDataUserComponent implements AfterViewInit {
               show: 'always'
             },
             {
-              label: data['ROLES_PERMISSIONS.NAVIGATION.LABEL'],
-              title: data['ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'],
+              label: data['USER_PERMISSIONS.NAVIGATION.LABEL'],
+              title: data['USER_PERMISSIONS.NAVIGATION.TOOLTIP'],
               actionCallback: () => this.router.navigate(['./roles'], { relativeTo: this.route }),
               permission: 'ROLES_PERMISSIONS#VIEW',
               icon: 'pi pi-lock',

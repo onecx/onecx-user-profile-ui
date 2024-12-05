@@ -14,7 +14,7 @@ import { AccountSettingsComponent } from './account-settings/account-settings.co
 import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
 import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
 import { PrivacyComponent } from './privacy/privacy.component'
-import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
+import { UserPermissionsComponent } from './user-permissions/user-permissions.component'
 
 const routes: Routes = [
   {
@@ -43,7 +43,7 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    loadChildren: () => import('./user-profile-search/profile-search.module').then((m) => m.ProfileSearchModule),
+    loadChildren: () => import('./profile-search/profile-search.module').then((m) => m.ProfileSearchModule),
     pathMatch: 'full',
     data: {
       breadcrumb: 'BREADCRUMBS.SEARCH',
@@ -55,10 +55,10 @@ const routes: Routes = [
   },
   {
     path: 'roles-and-perms',
-    component: RolesPermissionsComponent,
+    component: UserPermissionsComponent,
     pathMatch: 'full',
     data: {
-      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {
@@ -67,10 +67,10 @@ const routes: Routes = [
   },
   {
     path: 'permissions',
-    component: RolesPermissionsComponent,
+    component: UserPermissionsComponent,
     pathMatch: 'full',
     data: {
-      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {
@@ -79,10 +79,10 @@ const routes: Routes = [
   },
   {
     path: 'roles',
-    component: RolesPermissionsComponent,
+    component: UserPermissionsComponent,
     pathMatch: 'full',
     data: {
-      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {
@@ -97,7 +97,7 @@ const routes: Routes = [
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacyComponent,
-    RolesPermissionsComponent
+    UserPermissionsComponent
   ],
   imports: [
     CommonModule,

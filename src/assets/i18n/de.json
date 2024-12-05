@@ -175,7 +175,7 @@
       "REMOVE_ERROR": "Dateientfernung fehlgeschlagen"
     }
   },
-  "ROLES_PERMISSIONS": {
+  "USER_PERMISSIONS": {
     "NAVIGATION.LABEL": "Berechtigungen",
     "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Berechtigungen wechseln",
     "SUBHEADER": "Zugewiesene Rollen und Berechtigungen"
@@ -241,7 +241,7 @@
     "SEARCH": "Nutzerprofile",
     "SETTINGS": "Einstellungen",
     "PROFILE": "Nutzerprofil",
-    "ROLES_PERMISSIONS": "Berechtigungen"
+    "USER_PERMISSIONS": "Berechtigungen"
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {
