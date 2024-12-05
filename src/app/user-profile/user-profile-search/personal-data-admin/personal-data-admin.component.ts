@@ -1,8 +1,9 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
+import { catchError, finalize, map, Observable, of, tap } from 'rxjs'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
-import { catchError, finalize, map, Observable, of, tap } from 'rxjs'
+
 import { UpdateUserPerson, UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
@@ -58,7 +59,6 @@ export class PersonalDataAdminComponent implements OnChanges {
         .updateUserProfile({ id: this.userProfileId, updateUserPersonRequest: person as UpdateUserPerson })
         .subscribe({
           next: (profile) => {
-            console.log('updateUserProfile', profile.person)
             this.showMessage('success')
             this.userPerson$ = new Observable((person) => person.next(profile.person as UserPerson))
           },
