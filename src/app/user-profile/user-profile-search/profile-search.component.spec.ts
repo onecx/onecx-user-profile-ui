@@ -11,12 +11,12 @@ import { PortalDialogService } from '@onecx/portal-integration-angular'
 import { RowListGridData } from '@onecx/angular-accelerator'
 
 import { UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
-import { UserProfileSearchComponent } from './user-profile-search.component'
+import { ProfileSearchComponent } from './profile-search.component'
 import { UserProfile } from '@onecx/integration-interface'
 
-describe('UserProfileSearchComponent', () => {
-  let component: UserProfileSearchComponent
-  let fixture: ComponentFixture<UserProfileSearchComponent>
+describe('ProfileSearchComponent', () => {
+  let component: ProfileSearchComponent
+  let fixture: ComponentFixture<ProfileSearchComponent>
 
   const apiServiceSpy = {
     searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({})),
@@ -91,7 +91,7 @@ describe('UserProfileSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [UserProfileSearchComponent],
+      declarations: [ProfileSearchComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -99,9 +99,9 @@ describe('UserProfileSearchComponent', () => {
         }).withDefaultLanguage('en')
       ],
       providers: [
-        provideHttpClientTesting(),
         provideHttpClient(),
-        provideRouter([{ path: '', component: UserProfileSearchComponent }]),
+        provideHttpClientTesting(),
+        provideRouter([{ path: '', component: ProfileSearchComponent }]),
         { provide: UserProfileAdminAPIService, useValue: apiServiceSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
         { provide: UserService, useValue: mockUserService },
@@ -118,7 +118,7 @@ describe('UserProfileSearchComponent', () => {
   })
 
   beforeEach(async () => {
-    fixture = TestBed.createComponent(UserProfileSearchComponent)
+    fixture = TestBed.createComponent(ProfileSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
@@ -341,7 +341,7 @@ describe('UserProfileSearchComponent', () => {
 
   it('should set default date format', () => {
     mockUserService.lang$.getValue.and.returnValue('en')
-    fixture = TestBed.createComponent(UserProfileSearchComponent)
+    fixture = TestBed.createComponent(ProfileSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
     expect(component.dateFormat).toEqual('M/d/yy, h:mm a')

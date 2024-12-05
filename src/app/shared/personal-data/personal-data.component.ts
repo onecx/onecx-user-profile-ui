@@ -15,13 +15,16 @@ import { UserPerson } from 'src/app/shared/generated'
   styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnChanges {
-  @Input() person!: UserPerson
-  @Input() userProfileId: string | undefined = undefined
+  @Input() userPerson: UserPerson | undefined = undefined
+  @Input() userId: string | undefined = undefined // if set then it is admin view else user view
   @Input() tenantId: string | undefined = undefined
-  @Output() public personalInfoUpdate = new EventEmitter<UserPerson>()
+  @Input() exceptionKey: string | undefined = undefined
+  @Input() componentInUse = false
+  @Output() public personUpdate = new EventEmitter<UserPerson>()
 
+  public person: UserPerson | undefined = undefined
   public addressEdit = false
-  public phoneEdit = false
+  public phoneEditing = false
   public countries: SelectItem[] = [] // important default for init dropdown
   public selectedCountry: SelectItem | undefined
   public phoneTypes: SelectItem[] = [
@@ -29,7 +32,6 @@ export class PersonalDataComponent implements OnChanges {
     { value: PhoneType.LANDLINE, label: 'Landline' }
   ]
   public formGroup: UntypedFormGroup
-  public editPermission: string = ''
 
   constructor(
     public readonly http: HttpClient,
@@ -39,14 +41,23 @@ export class PersonalDataComponent implements OnChanges {
     this.formGroup = this.initFormGroup()
   }
 
+  /**
+   * This is triggered by the user and admin view.
+   *   Prevent displaying of default things (e.g. Avatar) if component is not in use.
+   */
   public ngOnChanges(): void {
-    if (Object.keys(this.person).length > 0) {
+    this.person = undefined
+    if (!this.componentInUse || this.exceptionKey) {
+      this.person = this.userId = undefined
+      return
+    } else {
+      this.person = this.userPerson
+    }
+    // update form: address and phone only!
+    if (this.person && Object.keys(this.person).length > 0) {
       this.formGroup?.patchValue(this.person)
       this.createCountryList()
     }
-    if (this.userProfileId && this.user.hasPermission('USERPROFILE#ADMIN_EDIT'))
-      this.editPermission = 'USERPROFILE#ADMIN_EDIT'
-    if (!this.userProfileId && this.user.hasPermission('USERPROFILE#EDIT')) this.editPermission = 'USERPROFILE#EDIT'
   }
 
   private initFormGroup(): UntypedFormGroup {
@@ -79,28 +90,28 @@ export class PersonalDataComponent implements OnChanges {
   public updateAddress(): void {
     if (this.person) {
       this.person.address = this.formGroup?.value.address
-      this.personalInfoUpdate.emit(this.person)
+      this.personUpdate.emit(this.person)
       this.addressEdit = false
       localStorage.removeItem('tkit_user_profile')
     }
   }
 
   public togglePhoneEdit(): void {
-    this.phoneEdit = !this.phoneEdit
+    this.phoneEditing = !this.phoneEditing
   }
 
   public cancelPhoneEdit(): void {
     if (this.person?.phone) {
       this.formGroup?.patchValue({ phone: this.person?.phone })
     }
-    this.phoneEdit = false
+    this.phoneEditing = false
   }
 
   public updatePhone(): void {
     if (this.person) {
       this.person.phone = this.formGroup?.value.phone
-      this.personalInfoUpdate.emit(this.person)
-      this.phoneEdit = false
+      this.personUpdate.emit(this.person)
+      this.phoneEditing = false
     }
     localStorage.removeItem('tkit_user_profile')
   }

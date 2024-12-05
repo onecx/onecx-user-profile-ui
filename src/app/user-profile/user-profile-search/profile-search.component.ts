@@ -20,14 +20,14 @@ import {
 } from '@onecx/portal-integration-angular'
 
 import { UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { UserPermissionsComponent } from './user-permissions/user-permissions.component'
+import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
-  selector: 'app-user-profile-search',
-  templateUrl: './user-profile-search.component.html',
-  styleUrls: ['./user-profile-search.component.scss']
+  selector: 'app-profile-search',
+  templateUrl: './profile-search.component.html',
+  styleUrls: ['./profile-search.component.scss']
 })
-export class UserProfileSearchComponent implements OnInit {
+export class ProfileSearchComponent implements OnInit {
   public loading = true
   public exceptionKey: string | undefined
   public actions$: Observable<Action[]> | undefined
@@ -144,7 +144,6 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   ngOnInit() {
-    console.log('user-profile-search ngOnInit')
     this.initFilter()
     this.prepareActionButtons()
     this.onSearch()
@@ -239,7 +238,6 @@ export class UserProfileSearchComponent implements OnInit {
       .pipe(
         map((data) => {
           data.forEach((up) => {
-            console.log('onDelete', up)
             if (up.id === ev.id) {
               this.userProfile = { id: up.id, userId: up.userId, person: up.person }
               this.displayDeleteDialog = true
@@ -272,7 +270,7 @@ export class UserProfileSearchComponent implements OnInit {
       .openDialog(
         'ACTIONS.VIEW.PERMISSIONS',
         {
-          type: UserPermissionsComponent,
+          type: UserPermissionsAdminComponent,
           inputs: { id: ev['id'], userId: ev['userId'], displayName: ev['displayName'] }
         },
         {

@@ -162,36 +162,8 @@
 </p-dialog>
 
 <!-- DETAIL -->
-<p-dialog
-  [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
-  [(visible)]="displayDetailDialog"
-  (hide)="onCloseDetail()"
-  [modal]="true"
-  [closable]="true"
-  [draggable]="true"
-  [resizable]="true"
-  [dismissableMask]="true"
-  contentStyleClass="p-0"
-  [style]="{ width: '860px' }"
->
-  <app-personal-data-admin
-    [displayDetailDialog]="displayDetailDialog"
-    (hideDialog)="onCloseDetail()"
-    [userProfileId]="userProfile?.id"
-  ></app-personal-data-admin>
-
-  <ng-template pTemplate="footer">
-    <div class="flex flex-wrap justify-content-end column-gap-2">
-      <p-button
-        id="up_user_delete_action_close"
-        icon="pi pi-times"
-        (onClick)="onCloseDetail()"
-        [label]="'ACTIONS.GENERAL.CLOSE' | translate"
-        [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
-        [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></p-button>
-    </div>
-  </ng-template>
-</p-dialog>
+<app-personal-data-admin
+  [displayDetailDialog]="displayDetailDialog"
+  [userProfileId]="userProfile?.id"
+  (hideDialog)="onCloseDetail()"
+></app-personal-data-admin>

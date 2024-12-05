@@ -70,8 +70,8 @@ describe('PersonalDataComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        provideHttpClientTesting(),
         provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: TranslateService, useValue: translateServiceSpy },
@@ -103,49 +103,73 @@ describe('PersonalDataComponent', () => {
 
   describe('initialize component: user mode', () => {
     it('should if person was provided then fill form and call createCountryList', fakeAsync(() => {
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       const spyCreateCountry = spyOn<any>(component, 'createCountryList')
 
       fixture.detectChanges()
       component.ngOnChanges()
 
-      expect(component.person.phone).toEqual(component.formGroup?.value.phone)
+      expect(component.person?.phone).toEqual(component.formGroup?.value.phone)
       expect(spyCreateCountry).toHaveBeenCalled()
-      expect(component.editPermission).toEqual('USERPROFILE#EDIT')
     }))
   })
 
   describe('initialize component: admin mode', () => {
     it('should if person was provided then fill form and call createCountryList', fakeAsync(() => {
-      component.userProfileId = defaultProfile.id
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
+      component.userId = defaultProfile.id
       const spyCreateCountry = spyOn<any>(component, 'createCountryList')
 
       fixture.detectChanges()
       component.ngOnChanges()
 
-      expect(component.person.phone).toEqual(component.formGroup?.value.phone)
+      expect(component.person?.phone).toEqual(component.formGroup?.value.phone)
       expect(spyCreateCountry).toHaveBeenCalled()
-      expect(component.editPermission).toEqual('USERPROFILE#ADMIN_EDIT')
     }))
 
     it('should if person was not provided then no form is filled and countries not filled', () => {
-      component.person = {}
+      component.componentInUse = true
+      component.userPerson = {}
 
       fixture.detectChanges()
       component.ngOnChanges()
 
-      expect(component.person.firstName).toEqual(undefined)
+      expect(component.person?.firstName).toEqual(undefined)
       expect(component.formGroup?.value.phone).toEqual({ type: 'MOBILE', number: '' })
       expect(component.countries).toEqual([])
+    })
+
+    it('should reset main objects used to fill the dialog in case dialog is not active or an exception occurs', () => {
+      component.userId = 'uid'
+      component.userPerson = defaultPerson
+      component.componentInUse = false
+
+      component.ngOnChanges()
+
+      expect(component.person).toBeUndefined()
+      expect(component.userId).toBeUndefined()
+    })
+
+    it('should reset main objects used to fill the dialog in case dialog is not active or an exception occurs', () => {
+      component.userId = 'uid'
+      component.userPerson = defaultPerson
+      component.componentInUse = true
+      component.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_403.PROFILE'
+
+      component.ngOnChanges()
+
+      expect(component.person).toBeUndefined()
+      expect(component.userId).toBeUndefined()
     })
   })
 
   describe('Manage address', () => {
     it('should change the Address when Address is not empty', () => {
       spyOn(localStorage, 'removeItem')
-      // initially the defaultPerson was filled into form
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       fixture.detectChanges()
       component.ngOnChanges()
       // now change address
@@ -156,14 +180,15 @@ describe('PersonalDataComponent', () => {
       component.updateAddress()
 
       // new address
-      expect(component.person.address).toEqual(testPerson.address)
+      expect(component.person?.address).toEqual(testPerson.address)
       expect(component.addressEdit).toBeFalse()
       expect(localStorage.removeItem).toHaveBeenCalled()
     })
 
     it('should cancel the Address editing', () => {
       // initially the defaultPerson was filled into form
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       fixture.detectChanges()
       component.ngOnChanges()
       // now change address
@@ -174,7 +199,7 @@ describe('PersonalDataComponent', () => {
       component.cancelAddressEdit()
 
       // old address
-      expect(component.person.address).toEqual(defaultPerson.address)
+      expect(component.person?.address).toEqual(defaultPerson.address)
       expect(component.addressEdit).toBeFalse()
     })
 
@@ -188,45 +213,48 @@ describe('PersonalDataComponent', () => {
     it('should change the phone number if not empty', () => {
       spyOn(localStorage, 'removeItem')
       // initially the defaultPerson was filled into form
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone number
-      component.phoneEdit = true
+      component.phoneEditing = true
       component.formGroup?.patchValue({ phone: testPerson.phone })
 
       fixture.detectChanges()
       component.updatePhone()
 
-      expect(component.person.phone).toEqual(testPerson.phone)
-      expect(component.phoneEdit).toBeFalse()
+      expect(component.person?.phone).toEqual(testPerson.phone)
+      expect(component.phoneEditing).toBeFalse()
       expect(localStorage.removeItem).toHaveBeenCalled()
     })
 
     it('should cancel the Phone editing', () => {
       // initially the defaultPerson was filled into form
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone
-      component.phoneEdit = true
+      component.phoneEditing = true
       component.formGroup?.patchValue({ phone: testPerson.phone })
 
       fixture.detectChanges()
       component.cancelPhoneEdit()
 
       // old address
-      expect(component.person.phone).toEqual(defaultPerson.phone)
-      expect(component.phoneEdit).toBeFalse()
+      expect(component.person?.phone).toEqual(defaultPerson.phone)
+      expect(component.phoneEditing).toBeFalse()
     })
 
     it('should set phone number to empty', () => {
       // initially the defaultPerson was filled into form
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone number
-      component.phoneEdit = true
+      component.phoneEditing = true
       const phone = { type: PhoneType.Mobile, number: '' }
       component.formGroup?.patchValue({ phone: phone })
 
@@ -234,17 +262,18 @@ describe('PersonalDataComponent', () => {
       component.updatePhone()
 
       // New phone number
-      expect(component.person.phone).toEqual(phone)
-      expect(component.phoneEdit).toBeFalse()
+      expect(component.person?.phone).toEqual(phone)
+      expect(component.phoneEditing).toBeFalse()
     })
 
     it('should choose a landline phone number', fakeAsync(() => {
       // initially the defaultPerson was filled into form
-      component.person = defaultPerson!
+      component.componentInUse = true
+      component.userPerson = defaultPerson
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone number
-      component.phoneEdit = true
+      component.phoneEditing = true
       const phone = { type: PhoneType.Landline, number: '' }
       component.formGroup?.patchValue({ phone: phone })
 
@@ -252,14 +281,14 @@ describe('PersonalDataComponent', () => {
       component.updatePhone()
 
       // New phone number
-      expect(component.person.phone).toEqual(phone)
-      expect(component.phoneEdit).toBeFalse()
+      expect(component.person?.phone).toEqual(phone)
+      expect(component.phoneEditing).toBeFalse()
     }))
 
     it('should toggle Phone editing', () => {
-      component.phoneEdit = true
+      component.phoneEditing = true
       component.togglePhoneEdit()
-      expect(component.phoneEdit).toBeFalse()
+      expect(component.phoneEditing).toBeFalse()
     })
   })
 

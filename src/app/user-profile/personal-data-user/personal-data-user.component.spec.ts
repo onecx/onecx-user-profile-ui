@@ -75,8 +75,8 @@ describe('PersonalDataUserComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [
-        provideHttpClientTesting(),
         provideHttpClient(),
+        provideHttpClientTesting(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: ActivatedRoute, useValue: activatedRouteMock },
@@ -100,38 +100,39 @@ describe('PersonalDataUserComponent', () => {
   it('should handle empty object returned by getUserProfile', () => {
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
 
-    component.personalInfo$?.subscribe((info) => {
+    component.userPerson$?.subscribe((info) => {
       expect(info).toEqual({})
     })
   })
 
   describe('getMyUserProfile', () => {
-    it('should set personalInfo$ to defaultCurrentUser.person', () => {
+    it('should set userPerson$ to defaultCurrentUser.person', () => {
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser as UserProfile))
       fixture = TestBed.createComponent(PersonalDataUserComponent)
       component = fixture.componentInstance
       fixture.detectChanges()
 
-      component.personalInfo$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
+      component.userPerson$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
 
-      component.personalInfo$.subscribe((test) => {
+      component.userPerson$.subscribe((test) => {
         expect(test).toEqual(defaultCurrentUser.person as UserPerson)
       })
     })
 
-    it('should set personalInfo$ empty when getMyUserProfile() returns empty UserProfile', () => {
+    it('should set userPerson$ empty when getMyUserProfile() returns empty UserProfile', () => {
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of({ person: undefined }))
+      expect().nothing()
 
-      component.personalInfo$.pipe(map((person) => expect(person).not.toBeUndefined()))
+      component.userPerson$.pipe(map((person) => expect(person).not.toBeUndefined()))
     })
   })
 
-  describe('onPersonalInfoUpdate', () => {
+  describe('onpersonUpdate', () => {
     it('should call messageService success when updateUserPerson() was successful', () => {
       spyOn(component, 'showMessage').and.callThrough()
       userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
 
-      component.onPersonalInfoUpdate(updatedPerson)
+      component.onpersonUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
     })
 
@@ -139,15 +140,16 @@ describe('PersonalDataUserComponent', () => {
       spyOn(component, 'showMessage').and.callThrough()
       userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
 
-      component.onPersonalInfoUpdate(updatedPerson)
+      component.onpersonUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
     })
 
     it('should call messageService error when updateUserPerson() not was successful', () => {
+      const errorResponse = { status: 400, statusText: 'Update person failed' }
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(throwError(() => new Error('testErrorMessage')))
+      userProfileServiceSpy.updateUserPerson.and.returnValue(throwError(() => errorResponse))
 
-      component.onPersonalInfoUpdate(updatedPerson)
+      component.onpersonUpdate(updatedPerson)
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')
     })
   })

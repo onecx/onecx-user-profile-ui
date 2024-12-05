@@ -4,10 +4,10 @@ import { Observable } from 'rxjs'
 import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
-  selector: 'app-user-permissions',
-  templateUrl: './user-permissions.component.html'
+  selector: 'app-user-permissions-admin',
+  templateUrl: './user-permissions-admin.component.html'
 })
-export class UserPermissionsComponent {
+export class UserPermissionsAdminComponent {
   @Input() userId: string | undefined = undefined
   @Input() displayName: string | undefined = undefined
   public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'

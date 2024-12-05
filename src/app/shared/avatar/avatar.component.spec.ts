@@ -16,13 +16,8 @@ describe('AvatarComponent', () => {
 
   const userServiceSpy = {
     removeAvatar: jasmine.createSpy('removeAvatar'),
-    hasPermission: jasmine.createSpy('hasPermission'),
     profile$: jasmine.createSpy('profile$')
   }
-  userServiceSpy.hasPermission.and.callFake((permission: string) => {
-    return ['PROFILE_AVATAR#EDIT', 'USERPROFILE#ADMIN_EDIT'].includes(permission)
-  })
-
   const avatarUserSpy = {
     deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({})),
     uploadAvatar: jasmine.createSpy('uploadAvatar').and.returnValue(of({})),
@@ -90,19 +85,19 @@ describe('AvatarComponent', () => {
 
   describe('onChanges', () => {
     it('should get the avatar image url - on user mode', () => {
-      userServiceSpy.hasPermission.and.returnValue(of('PROFILE_AVATAR#EDIT'))
-      component.userProfileId = undefined
+      component.componentInUse = true
+      component.userId = undefined
 
       component.ngOnChanges()
 
       expect(component.imageUrl).toBeDefined()
-      expect(component.editPermission).toEqual('PROFILE_AVATAR#EDIT')
     })
 
     it('should get the avatar image url failed - on admin mode', () => {
       const errorResponse = { status: 404, statusText: 'Not Found' }
       avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
       spyOn(console, 'error')
 
       component.ngOnChanges()
@@ -113,7 +108,8 @@ describe('AvatarComponent', () => {
     it('should get the avatar image url, but no avatar exists - on admin mode', () => {
       const errorResponse = { status: 204, statusText: 'No Content' }
       avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
       spyOn(console, 'error')
 
       component.ngOnChanges()
@@ -123,7 +119,8 @@ describe('AvatarComponent', () => {
 
     it('should get the avatar image url - on admin mode', () => {
       avatarAdminSpy.getUserAvatarById.and.returnValue(of(null))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
       spyOn(console, 'error')
 
       component.ngOnChanges()
@@ -138,7 +135,8 @@ describe('AvatarComponent', () => {
     const dummyImageData = new Uint8Array([137, 80, 78, 71])
     const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
     avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
-    component.userProfileId = 'id'
+    component.componentInUse = true
+    component.userId = 'id'
 
     component.ngOnChanges()
 
@@ -147,7 +145,8 @@ describe('AvatarComponent', () => {
 
   describe('onDeleteAvatarImage', () => {
     it('should delete successfully my Avatar image: user view => reload', () => {
-      component.userProfileId = undefined
+      component.componentInUse = true
+      component.userId = undefined
       avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
@@ -158,7 +157,8 @@ describe('AvatarComponent', () => {
     })
 
     it('should delete successfully my Avatar image: admin view => no page reload', () => {
-      component.userProfileId = undefined
+      component.componentInUse = true
+      component.userId = undefined
       avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
@@ -170,7 +170,8 @@ describe('AvatarComponent', () => {
 
     it('should get error if deletion of my Avatar image fails', fakeAsync(() => {
       const errorResponse = { error: 'Error on removing my image', status: 400 }
-      component.userProfileId = undefined
+      component.componentInUse = true
+      component.userId = undefined
 
       avatarUserSpy.deleteUserAvatar.and.returnValue(throwError(() => errorResponse))
 
@@ -183,7 +184,8 @@ describe('AvatarComponent', () => {
 
     it('should delete existing Avatar image of another user', () => {
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(of({}))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
 
       component.onDeleteAvatarImage()
 
@@ -194,7 +196,8 @@ describe('AvatarComponent', () => {
     it('should handle delete existing Avatar image of another user', () => {
       const errorResponse = { error: 'Error on removing image of another user', status: 400 }
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(throwError(() => errorResponse))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
 
       component.onDeleteAvatarImage()
 
@@ -351,7 +354,7 @@ describe('AvatarComponent', () => {
     it('should upload image of (me) user', () => {
       spyOn(component, 'reloadPage')
       avatarUserSpy.uploadAvatar.and.returnValue(of({}))
-      component.userProfileId = undefined
+      component.userId = undefined
 
       component.sendImage('image', RefType.Large)
 
@@ -361,7 +364,7 @@ describe('AvatarComponent', () => {
     it('should upload SMALL image of (me) user', () => {
       spyOn(component, 'reloadPage')
       avatarUserSpy.uploadAvatar.and.returnValue(of({}))
-      component.userProfileId = undefined
+      component.userId = undefined
 
       component.sendImage('image', RefType.Small)
 
@@ -372,7 +375,7 @@ describe('AvatarComponent', () => {
       const dummyImageData = new Uint8Array([137, 80, 78, 71])
       const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
       avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
-      component.userProfileId = 'id'
+      component.userId = 'id'
 
       component.ngOnChanges()
 
@@ -383,7 +386,7 @@ describe('AvatarComponent', () => {
 
     it('handle error trying to upload image of another user', () => {
       avatarAdminSpy.uploadAvatarById.and.returnValue(throwError(() => new Error()))
-      component.userProfileId = 'id'
+      component.userId = 'id'
 
       component.sendImage('image', RefType.Large)
 
@@ -398,7 +401,7 @@ describe('AvatarComponent', () => {
         error: { errorCode: 'WRONG_CONTENT_TYPE' }
       }
       avatarAdminSpy.uploadAvatarById.and.returnValue(throwError(() => err))
-      component.userProfileId = 'id'
+      component.userId = 'id'
 
       component.sendImage('image', RefType.Large)
 

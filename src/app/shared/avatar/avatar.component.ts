@@ -4,7 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
-import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { bffImageUrl } from 'src/app/shared/utils'
@@ -16,12 +16,13 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnChanges {
-  @Input() userProfileId: string | undefined = undefined
+  @Input() userId: string | undefined = undefined
+  @Input() componentInUse = false
+
   public showAvatarDeleteDialog = false
   public previewSrc: string | undefined
   public imageUrl$: Observable<any> | undefined
   protected placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
-  public editPermission: string = ''
 
   imageLoadError: boolean | undefined
   imageUrl: string | undefined
@@ -32,27 +33,24 @@ export class AvatarComponent implements OnChanges {
     private readonly avatarAdminService: UserAvatarAdminAPIService,
     private readonly avatarService: UserAvatarAPIService,
     private readonly location: Location,
-    private readonly user: UserService,
     private readonly msgService: PortalMessageService,
     private readonly imageCompress: NgxImageCompressService
   ) {}
 
   public ngOnChanges(): void {
-    console.log('avatar.component ngOnChanges')
     this.imageUrl = undefined
-    if (this.userProfileId) {
+    if (!this.componentInUse) return
+    if (this.userId) {
       this.getUserAvatarImage()
-      if (this.user.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = 'USERPROFILE#ADMIN_EDIT'
     } else {
       this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
-      if (this.user.hasPermission('PROFILE_AVATAR#EDIT')) this.editPermission = 'PROFILE_AVATAR#EDIT'
     }
   }
 
   private getUserAvatarImage() {
     this.imageLoadError = false
     this.avatarAdminService
-      .getUserAvatarById({ id: this.userProfileId!, refType: RefType.Large })
+      .getUserAvatarById({ id: this.userId!, refType: RefType.Large })
       .pipe(
         map((data) => {
           if (data) this.imageUrl = URL.createObjectURL(data)
@@ -69,8 +67,8 @@ export class AvatarComponent implements OnChanges {
     this.showAvatarDeleteDialog = false
     this.imageUrl = ''
     this.imageLoadError = false
-    if (this.userProfileId) {
-      this.avatarAdminService.deleteUserAvatarById({ id: this.userProfileId }).subscribe({
+    if (this.userId) {
+      this.avatarAdminService.deleteUserAvatarById({ id: this.userId }).subscribe({
         next: () => {
           this.imageLoadError = true
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
@@ -85,7 +83,7 @@ export class AvatarComponent implements OnChanges {
         next: () => {
           this.imageLoadError = true
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-          if (!this.userProfileId) this.reloadPage()
+          if (!this.userId) this.reloadPage()
         },
         error: (error) => {
           console.error('deleteUserAvatar()', error)
@@ -147,9 +145,9 @@ export class AvatarComponent implements OnChanges {
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
     this.imageUrl = undefined
-    if (this.userProfileId) {
+    if (this.userId) {
       // admin perspective: upload only, refresh large image
-      this.avatarAdminService.uploadAvatarById({ id: this.userProfileId, refType, body: blob }).subscribe({
+      this.avatarAdminService.uploadAvatarById({ id: this.userId, refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
             localStorage.removeItem('tkit_user_profile')

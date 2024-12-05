@@ -1,4 +1,4 @@
-<div class="relative flex flex-wrap justify-content-center sm:justify-content-start column-gap-2 row-gap-0">
+<div class="m-2 flex flex-wrap justify-content-center sm:justify-content-start column-gap-2 row-gap-0">
   <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
     <app-image-container
       [imageUrl]="imageUrl"
@@ -7,7 +7,7 @@
     ></app-image-container>
   </div>
 
-  <ng-container *ocxIfPermission="editPermission">
+  <ng-container *ocxIfPermission="(userId ? 'USERPROFILE#ADMIN_' : 'PROFILE_AVATAR#') + 'EDIT'">
     <div class="flex flex-row sm:flex-column flex-nowrap align-items-start row-gap-1 toolbar">
       <button
         pButton

@@ -1,8 +1,37 @@
-<ocx-portal-page permission="USERPROFILE#ADMIN_VIEW" class="p-0" helpArticleId="PAGE_PROFILE_PERSONAL_INFO">
+<p-dialog
+  *ngIf="(userPerson$ | async) ?? {} as person"
+  [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
+  [(visible)]="displayDetailDialog"
+  (hide)="onCloseDetail()"
+  [modal]="true"
+  [closable]="true"
+  [draggable]="true"
+  [resizable]="true"
+  [dismissableMask]="true"
+  contentStyleClass="p-0"
+  [style]="{ width: '860px' }"
+>
   <app-personal-data
-    [person]="(personalInfo$ | async) ?? {}"
-    [userProfileId]="userProfileId"
+    [userPerson]="person"
+    [userId]="userId"
     [tenantId]="tenantId"
-    (personalInfoUpdate)="onPersonalInfoUpdate($event)"
+    [exceptionKey]="exceptionKey"
+    [componentInUse]="componentInUse"
+    (personUpdate)="onUpdatePerson($event)"
   ></app-personal-data>
-</ocx-portal-page>
+
+  <ng-template pTemplate="footer">
+    <div class="flex flex-wrap justify-content-end column-gap-2">
+      <p-button
+        id="up_user_delete_action_close"
+        icon="pi pi-times"
+        (onClick)="onCloseDetail()"
+        [label]="'ACTIONS.GENERAL.CLOSE' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
+        [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
+        tooltipPosition="top"
+        tooltipEvent="hover"
+      ></p-button>
+    </div>
+  </ng-template>
+</p-dialog>
