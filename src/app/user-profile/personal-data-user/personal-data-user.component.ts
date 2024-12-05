@@ -86,7 +86,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
             {
               label: data['USER_PERMISSIONS.NAVIGATION.LABEL'],
               title: data['USER_PERMISSIONS.NAVIGATION.TOOLTIP'],
-              actionCallback: () => this.router.navigate(['./roles'], { relativeTo: this.route }),
+              actionCallback: () => this.router.navigate(['./permissions'], { relativeTo: this.route }),
               permission: 'ROLES_PERMISSIONS#VIEW',
               icon: 'pi pi-lock',
               show: 'always'
