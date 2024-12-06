@@ -124,7 +124,7 @@
       "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
       "SAVE_ERROR": "Daten konnten nicht gespeichert werden",
       "SLOT_NOT_DEFINED_USER": "Diese Funktionalität ist derzeit nicht vefügbar.",
-      "SLOT_NOT_DEFINED_ADMIN": "Für diesen Slot ist keine Remote-Komponente definiert."
+      "SLOT_NOT_DEFINED_ADMIN": "Für diesen Slot ist keine Komponente definiert."
     }
   },
   "SETTINGS": {

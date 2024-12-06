@@ -124,7 +124,7 @@
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data",
       "SLOT_NOT_DEFINED_USER": "This functionality is not available at the moment.",
-      "SLOT_NOT_DEFINED_ADMIN": "No remote component is defined for this slot."
+      "SLOT_NOT_DEFINED_ADMIN": "No component is defined for this slot."
     }
   },
   "SETTINGS": {
