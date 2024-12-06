@@ -138,7 +138,7 @@
     }
   },
   "AVATAR": {
-    "IMAGE": "Aktuelles Foto",
+    "PHOTO": "Aktuelles Foto",
     "PLACEHOLDER": "Platzhalter",
     "CHOOSE": "Foto auswählen",
     "REMOVE": "Foto entfernen",
