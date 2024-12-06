@@ -79,6 +79,7 @@
     }
   },
   "USER_PROFILE": {
+    "USER_NAME": "Name des Nutzers",
     "NAVIGATION.LABEL": "Persönliche Daten",
     "NAVIGATION.TOOLTIP": "Zur Ansicht der persönlichen Daten wechseln",
     "HEADER": {
@@ -172,6 +173,7 @@
     }
   },
   "USER_PERMISSIONS": {
+    "USER_NAME": "Name des Nutzers",
     "NAVIGATION.LABEL": "Berechtigungen",
     "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Berechtigungen wechseln",
     "SUBHEADER": "Zugewiesene Rollen und Berechtigungen"
