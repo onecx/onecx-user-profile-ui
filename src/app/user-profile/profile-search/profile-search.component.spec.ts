@@ -331,6 +331,15 @@ describe('ProfileSearchComponent', () => {
     expect(console.error).toHaveBeenCalledWith('searchUserProfile', errorResponse)
   })
 
+  it('should not set array for table actions if user does not have view permissions', () => {
+    component.additionalActions = []
+    component.hasViewPermission = false
+
+    component.prepareActionButtons()
+
+    expect(component.additionalActions).toEqual([])
+  })
+
   /**
    * Language tests
    */

@@ -139,7 +139,7 @@
     }
   },
   "AVATAR": {
-    "PHOTO": "Current Photo",
+    "AVATAR": "Current Photo",
     "PLACEHOLDER": "Placeholder",
     "CHOOSE": "Choose Photo",
     "REMOVE": "Remove Photo",
