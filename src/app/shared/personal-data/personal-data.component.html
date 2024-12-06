@@ -4,14 +4,14 @@
 <div
   *ngIf="!exceptionKey"
   class="flex flex-column row-gap-3 md:row-gap-4"
-  [ngClass]="userId ? 'pt-0 pb-1 px-3 sm:px-4' : 'p-3 sm:p-4'"
+  [ngClass]="userId ? 'mb-2 mx-3 sm:mx-4' : 'p-3 sm:p-4'"
 >
   <div class="flex flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-3">
     <div class="flex-1 min-w-max">
       <p-panel *ocxIfPermission="'USERPROFILE#VIEW'" styleClass="surface-50">
         <ng-template pTemplate="header">
           <div class="mt-0 mb-0 sm:mb-2 ml-1 w-full font-bold text-2xl">
-            {{ 'USER_PROFILE.HEADERS.BASIC' | translate }}
+            {{ 'USER_PROFILE.HEADER.BASIC' | translate }}
           </div>
         </ng-template>
         <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
@@ -98,7 +98,7 @@
             <div
               class="mt-0 mb-0 sm:mb-2 ml-1 w-full flex flex-row flex-wrap justify-content-between align-items-center"
             >
-              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADERS.ADDRESS' | translate }}</div>
+              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.ADDRESS' | translate }}</div>
               <div *ocxIfPermission="'USERPROFILE#' + (userId ? 'ADMIN_' : '') + 'EDIT'">
                 <button
                   *ngIf="!addressEdit"
@@ -108,7 +108,7 @@
                   icon="pi pi-pencil"
                   class="p-2 p-button-text"
                   id="up_personal_info_address_edit"
-                  (click)="toggleAddressEdit()"
+                  (click)="onToggleAddressEdit()"
                   [label]="'ACTIONS.GENERAL.EDIT' | translate"
                   [ariaLabel]="'ACTIONS.GENERAL.EDIT' | translate"
                   [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
@@ -123,7 +123,7 @@
                   icon="pi pi-times"
                   class="p-2 p-button-text"
                   id="up_personal_info_address_cancel"
-                  (click)="cancelAddressEdit()"
+                  (click)="onCancelAddressEdit()"
                   [label]="'ACTIONS.GENERAL.CANCEL' | translate"
                   [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
                   [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
@@ -242,7 +242,7 @@
             <div
               class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full flex flex-wrap justify-content-between align-items-center"
             >
-              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADERS.PHONE' | translate }}</div>
+              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.PHONE' | translate }}</div>
               <div *ocxIfPermission="'USERPROFILE#' + (userId ? 'ADMIN_' : '') + 'EDIT'">
                 <button
                   *ngIf="!this.phoneEditing"
@@ -251,7 +251,7 @@
                   id="up_personal_info_phone_edit"
                   class="p-2 p-button-text"
                   icon="pi pi-pencil"
-                  (click)="togglePhoneEdit()"
+                  (click)="onTogglePhoneEdit()"
                   [label]="'ACTIONS.GENERAL.EDIT' | translate"
                   [ariaLabel]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                   [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
@@ -265,7 +265,7 @@
                   id="up_personal_info_phone_cancel"
                   icon="pi pi-times"
                   class="p-2 p-button-text"
-                  (click)="cancelPhoneEdit()"
+                  (click)="onCancelPhoneEdit()"
                   [label]="'ACTIONS.GENERAL.CANCEL' | translate"
                   [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
                   [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"

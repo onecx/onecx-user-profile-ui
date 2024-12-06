@@ -112,10 +112,8 @@ describe('PersonalDataUserComponent', () => {
       component = fixture.componentInstance
       fixture.detectChanges()
 
-      component.userPerson$.pipe(map((person) => expect(person).toEqual(defaultCurrentUser.person as UserPerson)))
-
-      component.userPerson$.subscribe((test) => {
-        expect(test).toEqual(defaultCurrentUser.person as UserPerson)
+      component.userPerson$.subscribe((person) => {
+        expect(person).toEqual(defaultCurrentUser.person as UserPerson)
       })
     })
 

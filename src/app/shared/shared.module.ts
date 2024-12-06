@@ -31,12 +31,11 @@ import {
   PortalApiConfiguration,
   PortalCoreModule
 } from '@onecx/portal-integration-angular'
+import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
 
 import { Configuration } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
 import { LabelResolver } from './label.resolver'
-import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
-import { ImageContainerComponent } from './image-container/image-container.component'
 import { AvatarComponent } from './avatar/avatar.component'
 import { PersonalDataComponent } from './personal-data/personal-data.component'
 
@@ -45,7 +44,7 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
 }
 
 @NgModule({
-  declarations: [ImageContainerComponent, PersonalDataComponent, AvatarComponent],
+  declarations: [PersonalDataComponent, AvatarComponent],
   imports: [
     PortalCoreModule.forMicroFrontend(),
     AutoCompleteModule,
@@ -98,7 +97,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     ToastModule,
     TranslateModule,
     AngularRemoteComponentsModule,
-    ImageContainerComponent,
     AvatarComponent,
     PersonalDataComponent
   ],

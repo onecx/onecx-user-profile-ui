@@ -55,7 +55,7 @@
       "SAVE": "Speichern",
       "SAVE.TOOLTIP": "Speichern",
       "CLOSE": "Schließen",
-      "CLOSE.TOOLTIP": "Schließen",
+      "CLOSE.TOOLTIP": "Dialog sSchließen",
       "CANCEL": "Abbrechen",
       "CANCEL.TOOLTIP": "Bearbeitung abbrechen, ohne zu speichern"
     }
@@ -81,7 +81,7 @@
   "USER_PROFILE": {
     "NAVIGATION.LABEL": "Persönliche Daten",
     "NAVIGATION.TOOLTIP": "Zur Ansicht der persönlichen Daten wechseln",
-    "HEADERS": {
+    "HEADER": {
       "GENERAL": "Persönliche Daten",
       "SUBHEADER": "Persönliche Daten verwalten",
       "BASIC": "Person",
@@ -138,7 +138,6 @@
     }
   },
   "AVATAR": {
-    "UPDATE": "Foto aktualisieren",
     "IMAGE": "Aktuelles Foto",
     "PLACEHOLDER": "Platzhalter",
     "CHOOSE": "Foto auswählen",
@@ -146,9 +145,6 @@
     "REMOVE.MESSAGE": "Möchten Sie das Foto entfernen?",
     "UPLOAD": "Foto hochladen",
     "CANCEL": "Abbrechen",
-    "CHOOSE_ANOTHER": "Anderes Foto auswählen",
-    "REMOVE_CONFIRM": "Foto entfernen",
-    "REMOVE_CANCEL": "Aktuelles Foto behalten",
     "MSG": {
       "FILE_TOO_LARGE": {
         "SUMMARY": "Datei zu groß",
@@ -171,8 +167,8 @@
         "DETAIL": "Bitte stellen Sie eine PNG- oder JPEG-Datei bereit"
       },
       "UPLOAD_SUCCESS": "Datei erfolgreich hochgeladen",
-      "REMOVE_SUCCESS": "Datei erfolgreich entfernt",
-      "REMOVE_ERROR": "Dateientfernung fehlgeschlagen"
+      "REMOVE_SUCCESS": "Avatar erfolgreich gelöscht",
+      "REMOVE_ERROR": "Avatar konnte nicht gelöscht werden"
     }
   },
   "USER_PERMISSIONS": {

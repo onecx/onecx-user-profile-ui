@@ -2,9 +2,9 @@ import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { of } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
+import { of } from 'rxjs'
 
 import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 
@@ -149,7 +149,6 @@ describe('PersonalDataComponent', () => {
       component.ngOnChanges()
 
       expect(component.person).toBeUndefined()
-      expect(component.userId).toBeUndefined()
     })
 
     it('should reset main objects used to fill the dialog in case dialog is not active or an exception occurs', () => {
@@ -161,7 +160,6 @@ describe('PersonalDataComponent', () => {
       component.ngOnChanges()
 
       expect(component.person).toBeUndefined()
-      expect(component.userId).toBeUndefined()
     })
   })
 
@@ -196,7 +194,7 @@ describe('PersonalDataComponent', () => {
       component.formGroup?.patchValue({ address: testPerson.address })
 
       fixture.detectChanges()
-      component.cancelAddressEdit()
+      component.onCancelAddressEdit()
 
       // old address
       expect(component.person?.address).toEqual(defaultPerson.address)
@@ -204,7 +202,7 @@ describe('PersonalDataComponent', () => {
     })
 
     it('should toggle address editing', () => {
-      component.toggleAddressEdit()
+      component.onToggleAddressEdit()
       expect(component.addressEdit).toBe(true)
     })
   })
@@ -240,7 +238,7 @@ describe('PersonalDataComponent', () => {
       component.formGroup?.patchValue({ phone: testPerson.phone })
 
       fixture.detectChanges()
-      component.cancelPhoneEdit()
+      component.onCancelPhoneEdit()
 
       // old address
       expect(component.person?.phone).toEqual(defaultPerson.phone)
@@ -287,7 +285,7 @@ describe('PersonalDataComponent', () => {
 
     it('should toggle Phone editing', () => {
       component.phoneEditing = true
-      component.togglePhoneEdit()
+      component.onTogglePhoneEdit()
       expect(component.phoneEditing).toBeFalse()
     })
   })

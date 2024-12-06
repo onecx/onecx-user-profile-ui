@@ -1,8 +1,8 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
 import { HttpClient } from '@angular/common/http'
 import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
-import { SelectItem } from 'primeng/api'
 import { TranslateService } from '@ngx-translate/core'
+import { SelectItem } from 'primeng/api'
 import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType, UserService } from '@onecx/portal-integration-angular'
@@ -42,17 +42,14 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   /**
-   * This is triggered by the user and admin view.
-   *   Prevent displaying of default things (e.g. Avatar) if component is not in use.
+   * This is triggered by different views: user and admin (with userId)
+   * Prevent displaying of something if component is not in use.
    */
   public ngOnChanges(): void {
     this.person = undefined
-    if (!this.componentInUse || this.exceptionKey) {
-      this.person = this.userId = undefined
-      return
-    } else {
-      this.person = this.userPerson
-    }
+    if (!this.componentInUse || this.exceptionKey) return
+    else this.person = this.userPerson
+
     // update form: address and phone only!
     if (this.person && Object.keys(this.person).length > 0) {
       this.formGroup?.patchValue(this.person)
@@ -76,11 +73,11 @@ export class PersonalDataComponent implements OnChanges {
     })
   }
 
-  public toggleAddressEdit(): void {
+  public onToggleAddressEdit(): void {
     this.addressEdit = !this.addressEdit
   }
 
-  public cancelAddressEdit(): void {
+  public onCancelAddressEdit(): void {
     if (this.person?.address) {
       this.formGroup?.patchValue({ address: this.person.address })
     }
@@ -96,11 +93,11 @@ export class PersonalDataComponent implements OnChanges {
     }
   }
 
-  public togglePhoneEdit(): void {
+  public onTogglePhoneEdit(): void {
     this.phoneEditing = !this.phoneEditing
   }
 
-  public cancelPhoneEdit(): void {
+  public onCancelPhoneEdit(): void {
     if (this.person?.phone) {
       this.formGroup?.patchValue({ phone: this.person?.phone })
     }

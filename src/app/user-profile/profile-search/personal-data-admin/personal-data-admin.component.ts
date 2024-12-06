@@ -76,7 +76,9 @@ export class PersonalDataAdminComponent implements OnChanges {
   }
 
   public onCloseDialog(): void {
-    this.hideDialog.emit(true)
+    this.componentInUse = false
     this.displayPersonalDataDialog = false
+    this.userPerson$ = of({} as UserPerson)
+    this.hideDialog.emit(true)
   }
 }
