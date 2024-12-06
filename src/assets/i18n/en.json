@@ -40,7 +40,7 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "User Profile",
+      "PERSONAL_DATA": "Personal Data",
       "PERMISSIONS": "Assigned Permissions"
     },
     "GENERAL": {

@@ -140,8 +140,8 @@ describe('ProfileSearchComponent', () => {
     component.additionalActions[2].callback({})
     expect(component.onDelete).toHaveBeenCalled()
 
-    expect(component.editPermission).toBeTrue()
-    component.editPermission = false
+    expect(component.hasEditPermission).toBeTrue()
+    component.hasEditPermission = false
     component.prepareActionButtons()
     expect(component.additionalActions[0].permission).toEqual('USERPROFILE#ADMIN_VIEW')
   })
