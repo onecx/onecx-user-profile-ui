@@ -1,6 +1,5 @@
 <p-dialog
   *ngIf="(userPerson$ | async) ?? {} as person"
-  [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
   [(visible)]="displayPersonalDataDialog"
   (onHide)="onCloseDialog()"
   [modal]="true"
@@ -11,6 +10,19 @@
   contentStyleClass="p-0"
   [style]="{ width: '860px' }"
 >
+  <ng-template pTemplate="header">
+    <span class="p-dialog-title"> {{ 'ACTIONS.VIEW.USER_PROFILE' | translate }} </span>
+    <div
+      *ngIf="userId"
+      class="absolute user-profile-name"
+      [pTooltip]="'USER_ROLE_PERMISSIONS.USER_PROFILE' | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    >
+      {{ person.displayName }}
+    </div>
+  </ng-template>
+
   <app-personal-data
     [userPerson]="person"
     [userId]="userId"

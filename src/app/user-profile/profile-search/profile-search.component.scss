@@ -34,4 +34,12 @@
   ocx-column-group-selection {
     display: none;
   }
+
+  // used in personal-data-admin
+  .user-profile-name {
+    top: 1.55rem;
+    right: 8rem;
+    font-weight: var(--dialog-header-font-weight); // same as dialog-title
+    font-size: var(--dialog-header-font-size);
+  }
 }
