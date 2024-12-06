@@ -1,25 +1,20 @@
-import { CommonModule } from '@angular/common'
 import { NgModule } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { FormsModule } from '@angular/forms'
 import { RouterModule, Routes } from '@angular/router'
-import { InitializeModuleGuard, addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 
+import { InitializeModuleGuard, addInitializeModuleGuard } from '@onecx/angular-integration-interface'
 import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 import { LabelResolver } from 'src/app/shared/label.resolver'
 
-import { AvatarComponent } from './avatar/avatar.component'
-import { PersonalDataComponent } from './personal-data/personal-data.component'
 import { PersonalDataUserComponent } from './personal-data-user/personal-data-user.component'
-import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
 import { AccountSettingsComponent } from './account-settings/account-settings.component'
 import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
 import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
 import { PrivacyComponent } from './privacy/privacy.component'
-import { RolesPermissionsComponent } from './roles-permissions/roles-permissions.component'
-import { UserProfileSearchComponent } from './user-profile-search/user-profile-search.component'
-import { UserPermissionsComponent } from './user-profile-search/user-permissions/user-permissions.component'
+import { UserPermissionsComponent } from './user-permissions/user-permissions.component'
 
 const routes: Routes = [
   {
@@ -48,7 +43,7 @@ const routes: Routes = [
   },
   {
     path: 'search',
-    component: UserProfileSearchComponent,
+    loadChildren: () => import('./profile-search/profile-search.module').then((m) => m.ProfileSearchModule),
     pathMatch: 'full',
     data: {
       breadcrumb: 'BREADCRUMBS.SEARCH',
@@ -60,10 +55,10 @@ const routes: Routes = [
   },
   {
     path: 'roles-and-perms',
-    component: RolesPermissionsComponent,
+    component: UserPermissionsComponent,
     pathMatch: 'full',
     data: {
-      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {
@@ -72,10 +67,10 @@ const routes: Routes = [
   },
   {
     path: 'permissions',
-    component: RolesPermissionsComponent,
+    component: UserPermissionsComponent,
     pathMatch: 'full',
     data: {
-      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {
@@ -84,10 +79,10 @@ const routes: Routes = [
   },
   {
     path: 'roles',
-    component: RolesPermissionsComponent,
+    component: UserPermissionsComponent,
     pathMatch: 'full',
     data: {
-      breadcrumb: 'BREADCRUMBS.ROLES_PERMISSIONS',
+      breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {
@@ -97,16 +92,11 @@ const routes: Routes = [
 ]
 @NgModule({
   declarations: [
-    UserProfileSearchComponent,
     PersonalDataUserComponent,
-    PersonalDataAdminComponent,
-    PersonalDataComponent,
-    AvatarComponent,
     AccountSettingsComponent,
     LayoutThemeComponent,
     LocaleTimezoneComponent,
     PrivacyComponent,
-    RolesPermissionsComponent,
     UserPermissionsComponent
   ],
   imports: [

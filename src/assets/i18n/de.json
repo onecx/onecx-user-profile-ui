@@ -40,7 +40,7 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "Nutzerprofil ansehen",
+      "PERSONAL_DATA": "Persönliche Daten",
       "PERMISSIONS": "Zugewiesene Berechtigungen"
     },
     "GENERAL": {
@@ -55,7 +55,7 @@
       "SAVE": "Speichern",
       "SAVE.TOOLTIP": "Speichern",
       "CLOSE": "Schließen",
-      "CLOSE.TOOLTIP": "Schließen",
+      "CLOSE.TOOLTIP": "Dialog sSchließen",
       "CANCEL": "Abbrechen",
       "CANCEL.TOOLTIP": "Bearbeitung abbrechen, ohne zu speichern"
     }
@@ -79,9 +79,10 @@
     }
   },
   "USER_PROFILE": {
+    "USER_NAME": "Name des Nutzers",
     "NAVIGATION.LABEL": "Persönliche Daten",
     "NAVIGATION.TOOLTIP": "Zur Ansicht der persönlichen Daten wechseln",
-    "HEADERS": {
+    "HEADER": {
       "GENERAL": "Persönliche Daten",
       "SUBHEADER": "Persönliche Daten verwalten",
       "BASIC": "Person",
@@ -123,7 +124,7 @@
       "SAVE_SUCCESS": "Daten erfolgreich gespeichert",
       "SAVE_ERROR": "Daten konnten nicht gespeichert werden",
       "SLOT_NOT_DEFINED_USER": "Diese Funktionalität ist derzeit nicht vefügbar.",
-      "SLOT_NOT_DEFINED_ADMIN": "Für diesen Slot ist keine Remote-Komponente definiert."
+      "SLOT_NOT_DEFINED_ADMIN": "Für diesen Slot ist keine Komponente definiert."
     }
   },
   "SETTINGS": {
@@ -138,17 +139,13 @@
     }
   },
   "AVATAR": {
-    "UPDATE": "Foto aktualisieren",
-    "IMAGE": "Aktuelles Foto",
+    "AVATAR": "Aktuelles Foto",
     "PLACEHOLDER": "Platzhalter",
     "CHOOSE": "Foto auswählen",
     "REMOVE": "Foto entfernen",
     "REMOVE.MESSAGE": "Möchten Sie das Foto entfernen?",
     "UPLOAD": "Foto hochladen",
     "CANCEL": "Abbrechen",
-    "CHOOSE_ANOTHER": "Anderes Foto auswählen",
-    "REMOVE_CONFIRM": "Foto entfernen",
-    "REMOVE_CANCEL": "Aktuelles Foto behalten",
     "MSG": {
       "FILE_TOO_LARGE": {
         "SUMMARY": "Datei zu groß",
@@ -171,11 +168,12 @@
         "DETAIL": "Bitte stellen Sie eine PNG- oder JPEG-Datei bereit"
       },
       "UPLOAD_SUCCESS": "Datei erfolgreich hochgeladen",
-      "REMOVE_SUCCESS": "Datei erfolgreich entfernt",
-      "REMOVE_ERROR": "Dateientfernung fehlgeschlagen"
+      "REMOVE_SUCCESS": "Avatar erfolgreich gelöscht",
+      "REMOVE_ERROR": "Avatar konnte nicht gelöscht werden"
     }
   },
-  "ROLES_PERMISSIONS": {
+  "USER_PERMISSIONS": {
+    "USER_NAME": "Name des Nutzers",
     "NAVIGATION.LABEL": "Berechtigungen",
     "NAVIGATION.TOOLTIP": "Zur Ansicht der zugewiesenen Rollen und Berechtigungen wechseln",
     "SUBHEADER": "Zugewiesene Rollen und Berechtigungen"
@@ -241,28 +239,34 @@
     "SEARCH": "Nutzerprofile",
     "SETTINGS": "Einstellungen",
     "PROFILE": "Nutzerprofil",
-    "ROLES_PERMISSIONS": "Berechtigungen"
+    "USER_PERMISSIONS": "Berechtigungen"
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {
+      "PROFILE": "Es konnte kein Profil gefunden werden.",
       "PROFILES": "Es konnten keine Profile gefunden werden."
     },
     "HTTP_STATUS_0": {
+      "PROFILE": "Unbekanntes Problem beim Abrufen vom Profil. Bitte versuchen sie es noch einmal.",
       "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es noch einmal."
     },
     "HTTP_STATUS_400": {
-      "PROFILES": "Das Profil konnte nicht verarbeitet werden."
+      "PROFILE": "Das Profil konnte nicht verarbeitet werden."
     },
     "HTTP_STATUS_401": {
+      "PROFILE": "Sie sind nicht autorisiert um ihr Profil zu sehen.",
       "PROFILES": "Sie sind nicht autorisiert um Profile zu sehen."
     },
     "HTTP_STATUS_403": {
+      "PROFILE": "Sie haben keine Rechte um ihr Profil zu sehen.",
       "PROFILES": "Sie haben keine Rechte um Profile zu sehen."
     },
     "HTTP_STATUS_404": {
+      "PROFILE": "Es konnte kein Profil gefunden werden",
       "PROFILES": "Es konnten keine Profile gefunden werden"
     },
     "HTTP_STATUS_500": {
+      "PROFILE": "Unbekanntes Problem beim Abruf ihres Profils. Bitte versuchen sie es erneut.",
       "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es erneut."
     }
   }

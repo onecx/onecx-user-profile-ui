@@ -4,10 +4,10 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
-import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import { AppStateService } from '@onecx/angular-integration-interface'
+import { PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
-import { bffImageUrl } from 'src/app/shared/utils'
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -16,78 +16,102 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnChanges {
-  @Input() userProfileId: string | undefined = undefined
-  public showAvatarDeleteDialog = false
-  public previewSrc: string | undefined
+  @Input() userId: string | undefined = undefined
+  @Input() componentInUse = false // prevent displaying and reloading things
+
   public imageUrl$: Observable<any> | undefined
-  protected placeHolderPath = 'onecx-portal-lib/assets/images/default_avatar.png'
-  public editPermission: string = ''
-
-  imageLoadError: boolean | undefined
-  imageUrl: string | undefined
-
-  bffImagePath = this.avatarService.configuration.basePath
+  public defaultImageUrl: string | undefined
+  public displayAvatarDeleteDialog = false
+  public showPlaceholder = true
 
   constructor(
     private readonly avatarAdminService: UserAvatarAdminAPIService,
-    private readonly avatarService: UserAvatarAPIService,
+    private readonly avatarMeService: UserAvatarAPIService,
     private readonly location: Location,
-    private readonly user: UserService,
     private readonly msgService: PortalMessageService,
-    private readonly imageCompress: NgxImageCompressService
-  ) {}
-
-  public ngOnChanges(): void {
-    this.imageUrl = undefined
-    if (this.userProfileId) {
-      this.getUserAvatarImage()
-      if (this.user.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = 'USERPROFILE#ADMIN_EDIT'
-    } else {
-      this.imageUrl = bffImageUrl(this.bffImagePath, 'avatar', RefType.Large)
-      if (this.user.hasPermission('PROFILE_AVATAR#EDIT')) this.editPermission = 'PROFILE_AVATAR#EDIT'
-    }
-  }
-
-  private getUserAvatarImage() {
-    this.imageLoadError = false
-    this.avatarAdminService
-      .getUserAvatarById({ id: this.userProfileId!, refType: RefType.Large })
+    private readonly imageCompress: NgxImageCompressService,
+    private readonly appState: AppStateService
+  ) {
+    // get the placeholder image
+    appState.currentMfe$
       .pipe(
-        map((data) => {
-          if (data) this.imageUrl = URL.createObjectURL(data)
-          else this.imageLoadError = true
-        }),
-        catchError((error) => {
-          console.error('getUserAvatarById', error)
-          return of(new Blob([]))
+        map((mfe) => {
+          this.defaultImageUrl = Location.joinWithSlash(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
         })
       )
       .subscribe()
   }
+
+  public ngOnChanges(): void {
+    this.showPlaceholder = true
+    if (!this.componentInUse) return
+    if (this.userId) {
+      this.getUserAvatarImage() // admin view
+    } else {
+      this.getMeAvatarImage() // me view
+    }
+  }
+
+  /**
+   * Getting avatar image (blob) for me (the user logged in) ... if exists
+   * If not exists (204) or any error occur (4xx) then use placeholder
+   */
+  public getMeAvatarImage() {
+    this.imageUrl$ = this.avatarMeService.getUserAvatar({ refType: RefType.Large }).pipe(
+      map((data) => {
+        // data exists => 200 else 204
+        this.showPlaceholder = !data
+        return data ? URL.createObjectURL(data) : this.defaultImageUrl
+      }),
+      catchError((error) => {
+        this.showPlaceholder = true
+        console.error('getUserAvatar', error)
+        return of(this.defaultImageUrl)
+      })
+    )
+  }
+
+  /**
+   * Getting the avatar image (blob) for a certain user ... if exists
+   * If not exists (204) or any error occur (4xx) then use placeholder
+   */
+  public getUserAvatarImage() {
+    this.imageUrl$ = this.avatarAdminService.getUserAvatarById({ id: this.userId!, refType: RefType.Large }).pipe(
+      map((data) => {
+        // data exists => 200 else 204
+        this.showPlaceholder = !data
+        return data ? URL.createObjectURL(data) : this.defaultImageUrl
+      }),
+      catchError((error) => {
+        this.showPlaceholder = true
+        console.error('getUserAvatarById', error)
+        return of(this.defaultImageUrl)
+      })
+    )
+  }
+
   public onDeleteAvatarImage(): void {
-    this.showAvatarDeleteDialog = false
-    this.imageUrl = ''
-    this.imageLoadError = false
-    if (this.userProfileId) {
-      this.avatarAdminService.deleteUserAvatarById({ id: this.userProfileId }).subscribe({
+    this.displayAvatarDeleteDialog = false
+    if (this.userId) {
+      this.avatarAdminService.deleteUserAvatarById({ id: this.userId }).subscribe({
         next: () => {
-          this.imageLoadError = true
+          this.showPlaceholder = true
+          this.imageUrl$ = of(this.defaultImageUrl)
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
         },
         error: (error) => {
-          console.error('deleteUserAvatarById()', error)
+          console.error('deleteUserAvatarById', error)
           this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
         }
       })
     } else {
-      this.avatarService.deleteUserAvatar().subscribe({
+      this.avatarMeService.deleteUserAvatar().subscribe({
         next: () => {
-          this.imageLoadError = true
           this.msgService.success({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
-          if (!this.userProfileId) this.reloadPage()
+          if (!this.userId) this.reloadPage()
         },
         error: (error) => {
-          console.error('deleteUserAvatar()', error)
+          console.error('deleteUserAvatar', error)
           this.msgService.error({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
         }
       })
@@ -145,10 +169,9 @@ export class AvatarComponent implements OnChanges {
     }
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
-    this.imageUrl = undefined
-    if (this.userProfileId) {
+    if (this.userId) {
       // admin perspective: upload only, refresh large image
-      this.avatarAdminService.uploadAvatarById({ id: this.userProfileId, refType, body: blob }).subscribe({
+      this.avatarAdminService.uploadAvatarById({ id: this.userId, refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
             localStorage.removeItem('tkit_user_profile')
@@ -157,7 +180,6 @@ export class AvatarComponent implements OnChanges {
           }
         },
         error: (error: HttpErrorResponse) => {
-          this.imageLoadError = true
           if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {
             this.msgService.error({
               summaryKey: 'AVATAR.MSG.WRONG_CONTENT_TYPE.SUMMARY',
@@ -173,12 +195,12 @@ export class AvatarComponent implements OnChanges {
       })
     } else {
       // user perspective: upload and reload
-      this.avatarService.uploadAvatar({ refType: refType, body: blob }).subscribe({
+      this.avatarMeService.uploadAvatar({ refType: refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
             localStorage.removeItem('tkit_user_profile')
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-            this.imageUrl = URL.createObjectURL(blob)
+            this.imageUrl$ = of(URL.createObjectURL(blob))
           }
           if (refType === RefType.Small) this.reloadPage()
         },
@@ -197,10 +219,6 @@ export class AvatarComponent implements OnChanges {
         }
       })
     }
-  }
-
-  public onImageError(value: boolean): void {
-    this.imageLoadError = value
   }
 
   public reloadPage() {

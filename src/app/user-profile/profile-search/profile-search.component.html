@@ -5,7 +5,7 @@
     (searched)="onSearch()"
     (resetted)="onResetCriteria()"
     [manualBreadcrumbs]="false"
-    [actions]="(actions$ | async) ?? []"
+    [actions]="[]"
   >
     <div [formGroup]="criteriaGroup" class="flex flex-row flex-wrap gap-3">
       <span class="p-float-label">
@@ -74,19 +74,20 @@
       styleClass="p-2"
       [text]="'ACTIONS.GENERAL.LOADING' | translate"
     ></p-message>
-    <p-message *ngIf="exceptionKey" severity="info" styleClass="p-2" [text]="exceptionKey | translate"></p-message>
+    <p-message *ngIf="exceptionKey" severity="error" styleClass="p-2" [text]="exceptionKey | translate"></p-message>
   </div>
 
   <div *ngIf="!(loading || exceptionKey)" class="card pt-2 pb-0">
     <ocx-interactive-data-view
       *ngIf="(resultData$ | async) ?? []"
       [data]="(filteredData$ | async) ?? []"
-      [columns]="columns"
       [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
       [supportedViewLayouts]="['table']"
       [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
       [additionalActions]="additionalActions"
+      [columns]="columns"
       actionColumnPosition="left"
+      [frozenActionColumn]="true"
     >
       <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
         <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
@@ -116,7 +117,8 @@
 <p-dialog
   [header]="'ACTIONS.DELETE.USER' | translate"
   [(visible)]="displayDeleteDialog"
-  (hide)="onCloseDetail()"
+  (onHide)="onCloseDetail()"
+  [modal]="true"
   [closable]="true"
   [draggable]="true"
   [resizable]="true"
@@ -162,36 +164,8 @@
 </p-dialog>
 
 <!-- DETAIL -->
-<p-dialog
-  [header]="'ACTIONS.VIEW.USER_PROFILE' | translate"
-  [(visible)]="displayDetailDialog"
-  (hide)="onCloseDetail()"
-  [modal]="true"
-  [closable]="true"
-  [draggable]="true"
-  [resizable]="true"
-  [dismissableMask]="true"
-  contentStyleClass="p-0"
-  [style]="{ width: '860px' }"
->
-  <app-personal-data-admin
-    [displayDetailDialog]="displayDetailDialog"
-    (hideDialog)="onCloseDetail()"
-    [userProfileId]="userProfile?.id"
-  ></app-personal-data-admin>
-
-  <ng-template pTemplate="footer">
-    <div class="flex flex-wrap justify-content-end column-gap-2">
-      <p-button
-        id="up_user_delete_action_close"
-        icon="pi pi-times"
-        (onClick)="onCloseDetail()"
-        [label]="'ACTIONS.GENERAL.CLOSE' | translate"
-        [ariaLabel]="'ACTIONS.GENERAL.CLOSE' | translate"
-        [pTooltip]="'ACTIONS.GENERAL.CLOSE' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></p-button>
-    </div>
-  </ng-template>
-</p-dialog>
+<app-personal-data-admin
+  [displayPersonalDataDialog]="displayPersonalDataDialog"
+  [userProfileId]="userProfile?.id"
+  (hideDialog)="onCloseDetail()"
+></app-personal-data-admin>

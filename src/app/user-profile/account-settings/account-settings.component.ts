@@ -113,8 +113,8 @@ export class AccountSettingsComponent implements OnInit {
   private prepareActionButtons(): void {
     this.actions$ = this.translate
       .get([
-        'ROLES_PERMISSIONS.NAVIGATION.LABEL',
-        'ROLES_PERMISSIONS.NAVIGATION.TOOLTIP',
+        'USER_PERMISSIONS.NAVIGATION.LABEL',
+        'USER_PERMISSIONS.NAVIGATION.TOOLTIP',
         'USER_PROFILE.NAVIGATION.LABEL',
         'USER_PROFILE.NAVIGATION.TOOLTIP'
       ])
@@ -130,9 +130,9 @@ export class AccountSettingsComponent implements OnInit {
               show: 'always'
             },
             {
-              label: data['ROLES_PERMISSIONS.NAVIGATION.LABEL'],
-              title: data['ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'],
-              actionCallback: () => this.router.navigate(['../roles'], { relativeTo: this.route }),
+              label: data['USER_PERMISSIONS.NAVIGATION.LABEL'],
+              title: data['USER_PERMISSIONS.NAVIGATION.TOOLTIP'],
+              actionCallback: () => this.router.navigate(['../permissions'], { relativeTo: this.route }),
               permission: 'ROLES_PERMISSIONS#VIEW',
               icon: 'pi pi-lock',
               show: 'always'

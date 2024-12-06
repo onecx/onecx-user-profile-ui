@@ -1,33 +1,36 @@
-import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
-import { AppStateService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
-
-import { AvatarComponent } from './avatar.component'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
-import { of, throwError } from 'rxjs'
-import { NgxImageCompressService } from 'ngx-image-compress'
+import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
 import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { NgxImageCompressService } from 'ngx-image-compress'
+import { of, throwError } from 'rxjs'
+
+import { AppStateService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+
+import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
+import { AvatarComponent } from './avatar.component'
+
+class MockAppStateService {
+  currentMfe$ = of({
+    remoteBaseUrl: '/base/'
+  })
+}
 
 describe('AvatarComponent', () => {
   let component: AvatarComponent
   let fixture: ComponentFixture<AvatarComponent>
+  let mockAppStateService: MockAppStateService
 
   const userServiceSpy = {
     removeAvatar: jasmine.createSpy('removeAvatar'),
-    hasPermission: jasmine.createSpy('hasPermission'),
     profile$: jasmine.createSpy('profile$')
   }
-  userServiceSpy.hasPermission.and.callFake((permission: string) => {
-    return ['PROFILE_AVATAR#EDIT', 'USERPROFILE#ADMIN_EDIT'].includes(permission)
-  })
-
-  const avatarUserSpy = {
-    deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({})),
-    uploadAvatar: jasmine.createSpy('uploadAvatar').and.returnValue(of({})),
+  const avatarMeSpy = {
+    configuration: jasmine.createSpy('configuration'),
     getUserAvatar: jasmine.createSpy('getUserAvatar').and.returnValue(of({})),
-    configuration: jasmine.createSpy('configuration')
+    uploadAvatar: jasmine.createSpy('uploadAvatar').and.returnValue(of({})),
+    deleteUserAvatar: jasmine.createSpy('deleteUserAvatar').and.returnValue(of({}))
   }
   const avatarAdminSpy = {
     getUserAvatarById: jasmine.createSpy('getUserAvatarById').and.returnValue(of({})),
@@ -43,6 +46,8 @@ describe('AvatarComponent', () => {
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
 
   beforeEach(waitForAsync(() => {
+    mockAppStateService = new MockAppStateService()
+
     TestBed.configureTestingModule({
       declarations: [AvatarComponent],
       imports: [
@@ -56,10 +61,10 @@ describe('AvatarComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: UserService, useValue: userServiceSpy },
-        { provide: UserAvatarAPIService, useValue: avatarUserSpy },
+        { provide: UserAvatarAPIService, useValue: avatarMeSpy },
         { provide: UserAvatarAdminAPIService, useValue: avatarAdminSpy },
         { provide: PortalMessageService, useValue: msgServiceSpy },
-        { provide: AppStateService },
+        { provide: AppStateService, useValue: mockAppStateService },
         { provide: NgxImageCompressService, useValue: imageCompressSpy }
       ]
     }).compileComponents()
@@ -67,10 +72,10 @@ describe('AvatarComponent', () => {
     msgServiceSpy.error.calls.reset()
     imageCompressSpy.uploadFile.calls.reset()
     imageCompressSpy.compressFile.calls.reset()
-    avatarUserSpy.deleteUserAvatar.calls.reset()
-    avatarUserSpy.uploadAvatar.calls.reset()
-    avatarUserSpy.getUserAvatar.calls.reset()
-    avatarUserSpy.configuration.and.callFake(() => {
+    avatarMeSpy.deleteUserAvatar.calls.reset()
+    avatarMeSpy.uploadAvatar.calls.reset()
+    avatarMeSpy.getUserAvatar.calls.reset()
+    avatarMeSpy.configuration.and.callFake(() => {
       return { basePath: '/mocked-base-path' }
     })
     avatarAdminSpy.deleteUserAvatarById.calls.reset()
@@ -86,115 +91,213 @@ describe('AvatarComponent', () => {
 
   it('should create', () => {
     expect(component).toBeTruthy()
+    expect(component.defaultImageUrl).toEqual('/base/assets/images/default_avatar.png')
   })
 
-  describe('onChanges', () => {
-    it('should get the avatar image url - on user mode', () => {
-      userServiceSpy.hasPermission.and.returnValue(of('PROFILE_AVATAR#EDIT'))
-      component.userProfileId = undefined
+  describe('onChanges - basics', () => {
+    it('should do nothing if not in use', () => {
+      component.componentInUse = false
+      component.userId = undefined
+      spyOn(component, 'getMeAvatarImage')
+      spyOn(component, 'getUserAvatarImage')
 
       component.ngOnChanges()
 
-      expect(component.imageUrl).toBeDefined()
-      expect(component.editPermission).toEqual('PROFILE_AVATAR#EDIT')
+      expect(component.showPlaceholder).toBeTrue()
+      expect(component['getMeAvatarImage']).not.toHaveBeenCalled()
+      expect(component['getUserAvatarImage']).not.toHaveBeenCalled()
     })
 
-    it('should get the avatar image url failed - on admin mode', () => {
-      const errorResponse = { status: 404, statusText: 'Not Found' }
-      avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
-      component.userProfileId = 'id'
-      spyOn(console, 'error')
+    it('should trigger me avatar if component is in use', () => {
+      component.componentInUse = true
+      component.userId = undefined
+      spyOn(component, 'getMeAvatarImage')
+      spyOn(component, 'getUserAvatarImage')
 
       component.ngOnChanges()
 
-      expect(console.error).toHaveBeenCalledWith('getUserAvatarById', errorResponse)
+      expect(component.showPlaceholder).toBeTrue()
+      expect(component['getMeAvatarImage']).toHaveBeenCalled()
+      expect(component['getUserAvatarImage']).not.toHaveBeenCalled()
     })
 
-    it('should get the avatar image url, but no avatar exists - on admin mode', () => {
-      const errorResponse = { status: 204, statusText: 'No Content' }
-      avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
-      component.userProfileId = 'id'
-      spyOn(console, 'error')
+    it('should trigger me avatar if component is in use', () => {
+      component.componentInUse = true
+      component.userId = 'id'
+      spyOn(component, 'getMeAvatarImage')
+      spyOn(component, 'getUserAvatarImage')
 
       component.ngOnChanges()
 
-      expect(console.error).toHaveBeenCalledWith('getUserAvatarById', errorResponse)
-    })
-
-    it('should get the avatar image url - on admin mode', () => {
-      avatarAdminSpy.getUserAvatarById.and.returnValue(of(null))
-      component.userProfileId = 'id'
-      spyOn(console, 'error')
-
-      component.ngOnChanges()
-
-      expect(component.imageUrl).toBeUndefined()
-      expect(component.imageLoadError).toBeTrue()
-      expect(console.error).not.toHaveBeenCalled()
+      expect(component.showPlaceholder).toBeTrue()
+      expect(component['getMeAvatarImage']).not.toHaveBeenCalled()
+      expect(component['getUserAvatarImage']).toHaveBeenCalled()
     })
   })
 
-  it('should get the avatar image url for another user', () => {
-    const dummyImageData = new Uint8Array([137, 80, 78, 71])
-    const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
-    avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
-    component.userProfileId = 'id'
+  describe('onChanges - me', () => {
+    it('should get the avatar image url - on me mode - image exists', () => {
+      const blob = new Blob(['a'.repeat(10)], { type: 'image/png' })
+      avatarMeSpy.getUserAvatar.and.returnValue(of(blob as any))
+      component.componentInUse = true
+      component.userId = undefined
 
-    component.ngOnChanges()
+      component.ngOnChanges()
 
-    expect(component.imageUrl).toBeDefined()
+      expect(component.imageUrl$).toBeDefined()
+
+      if (component.imageUrl$)
+        component.imageUrl$.subscribe((url) => {
+          expect(component.showPlaceholder).toBeFalse()
+          expect(url).toContain('blob:http://localhost:9876/')
+        })
+    })
+
+    it('should get the avatar image url - on me mode - image not exist', () => {
+      avatarMeSpy.getUserAvatar.and.returnValue(of(null)) // no content = 204
+      component.componentInUse = true
+      component.userId = undefined
+
+      component.ngOnChanges()
+
+      expect(component.imageUrl$).toBeDefined()
+
+      if (component.imageUrl$)
+        component.imageUrl$.subscribe((url) => {
+          expect(component.showPlaceholder).toBeTrue()
+          expect(url).toEqual(component.defaultImageUrl)
+        })
+    })
+
+    it('should get the avatar image url - on me mode - failed', () => {
+      const errorResponse = { status: 400, statusText: 'Avatar could not be retrieved' }
+      avatarMeSpy.getUserAvatar.and.returnValue(throwError(() => errorResponse))
+      component.componentInUse = true
+      component.userId = undefined
+      spyOn(console, 'error')
+
+      component.ngOnChanges()
+
+      expect(component.imageUrl$).toBeDefined()
+
+      if (component.imageUrl$)
+        component.imageUrl$.subscribe((url) => {
+          expect(component.showPlaceholder).toBeTrue()
+          expect(url).toEqual(component.defaultImageUrl)
+          expect(console.error).toHaveBeenCalledWith('getUserAvatar', errorResponse)
+        })
+    })
+  })
+
+  describe('onChanges - admin', () => {
+    it('should get the avatar image url - on admin mode - image exists', () => {
+      const blob = new Blob(['a'.repeat(10)], { type: 'image/png' })
+      avatarAdminSpy.getUserAvatarById.and.returnValue(of(blob as any))
+      component.componentInUse = true
+      component.userId = 'id'
+
+      component.ngOnChanges()
+
+      expect(component.imageUrl$).toBeDefined()
+
+      if (component.imageUrl$)
+        component.imageUrl$.subscribe((url) => {
+          expect(component.showPlaceholder).toBeFalse()
+          expect(url).toContain('blob:http://localhost:9876/')
+        })
+    })
+
+    it('should get the avatar image url - on admin mode - image not exist', () => {
+      avatarAdminSpy.getUserAvatarById.and.returnValue(of(null)) // no content = 204
+      component.componentInUse = true
+      component.userId = 'id'
+
+      component.ngOnChanges()
+
+      expect(component.imageUrl$).toBeDefined()
+
+      if (component.imageUrl$)
+        component.imageUrl$.subscribe((url) => {
+          expect(component.showPlaceholder).toBeTrue()
+          expect(url).toEqual(component.defaultImageUrl)
+        })
+    })
+
+    it('should get the avatar image url - on admin mode - failed', () => {
+      const errorResponse = { status: 400, statusText: 'Avatar could not be retrieved' }
+      avatarAdminSpy.getUserAvatarById.and.returnValue(throwError(() => errorResponse))
+      component.componentInUse = true
+      component.userId = 'id'
+      spyOn(console, 'error')
+
+      component.ngOnChanges()
+
+      expect(component.imageUrl$).toBeDefined()
+
+      if (component.imageUrl$)
+        component.imageUrl$.subscribe((url) => {
+          expect(component.showPlaceholder).toBeTrue()
+          expect(url).toEqual(component.defaultImageUrl)
+          expect(console.error).toHaveBeenCalledWith('getUserAvatarById', errorResponse)
+        })
+    })
   })
 
   describe('onDeleteAvatarImage', () => {
     it('should delete successfully my Avatar image: user view => reload', () => {
-      component.userProfileId = undefined
-      avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
+      component.componentInUse = true
+      component.userId = undefined
+      avatarMeSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
 
-      expect(avatarUserSpy.deleteUserAvatar).toHaveBeenCalled()
-      expect(component.showAvatarDeleteDialog).toBeFalse()
+      expect(avatarMeSpy.deleteUserAvatar).toHaveBeenCalled()
+      expect(component.displayAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
     })
 
     it('should delete successfully my Avatar image: admin view => no page reload', () => {
-      component.userProfileId = undefined
-      avatarUserSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
+      component.componentInUse = true
+      component.userId = undefined
+      avatarMeSpy.deleteUserAvatar.and.returnValue(of({ refType: RefType.Medium }))
 
       component.onDeleteAvatarImage()
 
-      expect(avatarUserSpy.deleteUserAvatar).toHaveBeenCalled()
-      expect(component.showAvatarDeleteDialog).toBeFalse()
+      expect(avatarMeSpy.deleteUserAvatar).toHaveBeenCalled()
+      expect(component.displayAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
     })
 
     it('should get error if deletion of my Avatar image fails', fakeAsync(() => {
       const errorResponse = { error: 'Error on removing my image', status: 400 }
-      component.userProfileId = undefined
+      component.componentInUse = true
+      component.userId = undefined
 
-      avatarUserSpy.deleteUserAvatar.and.returnValue(throwError(() => errorResponse))
+      avatarMeSpy.deleteUserAvatar.and.returnValue(throwError(() => errorResponse))
 
       component.onDeleteAvatarImage()
 
-      expect(avatarUserSpy.deleteUserAvatar).toHaveBeenCalled()
-      expect(component.showAvatarDeleteDialog).toBeFalse()
+      expect(avatarMeSpy.deleteUserAvatar).toHaveBeenCalled()
+      expect(component.displayAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
     }))
 
     it('should delete existing Avatar image of another user', () => {
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(of({}))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
 
       component.onDeleteAvatarImage()
 
-      expect(component.showAvatarDeleteDialog).toBeFalse()
+      expect(component.displayAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_SUCCESS' })
     })
 
     it('should handle delete existing Avatar image of another user', () => {
       const errorResponse = { error: 'Error on removing image of another user', status: 400 }
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(throwError(() => errorResponse))
-      component.userProfileId = 'id'
+      component.componentInUse = true
+      component.userId = 'id'
 
       component.onDeleteAvatarImage()
 
@@ -212,8 +315,8 @@ describe('AvatarComponent', () => {
       imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
       imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
       imageCompressSpy.byteCount.and.returnValues(300001, 30001)
-      avatarUserSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
-      component.imageLoadError = false
+      avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+      //component.imageLoadError = false
 
       await component.onFileUpload()
 
@@ -229,7 +332,7 @@ describe('AvatarComponent', () => {
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
       imageCompressSpy.byteCount.and.returnValues(30001, 3001)
-      avatarUserSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+      avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
 
@@ -245,7 +348,7 @@ describe('AvatarComponent', () => {
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
       imageCompressSpy.byteCount.and.returnValues(3001, 3000)
-      avatarUserSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
+      avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
 
@@ -286,9 +389,9 @@ describe('AvatarComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       }
-      avatarUserSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+      avatarMeSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-      component.imageLoadError = true
+      //component.imageLoadError = true
       component.sendImage(mockCompressedImage, RefType.Small)
 
       expect(msgServiceSpy.error).toHaveBeenCalledWith({
@@ -309,9 +412,9 @@ describe('AvatarComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       }
-      avatarUserSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+      avatarMeSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-      component.imageLoadError = true
+      //component.imageLoadError = true
       component.sendImage('', RefType.Small)
 
       expect(msgServiceSpy.error).toHaveBeenCalledWith({
@@ -337,9 +440,9 @@ describe('AvatarComponent', () => {
         url: null,
         type: HttpEventType.ResponseHeader
       }
-      avatarUserSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
+      avatarMeSpy.uploadAvatar.and.returnValue(throwError(() => updateErrorResponse))
 
-      component.imageLoadError = true
+      //component.imageLoadError = true
       component.sendImage(mockCompressedImage, RefType.Small)
 
       expect(msgServiceSpy.error).toHaveBeenCalledWith({
@@ -350,8 +453,8 @@ describe('AvatarComponent', () => {
 
     it('should upload image of (me) user', () => {
       spyOn(component, 'reloadPage')
-      avatarUserSpy.uploadAvatar.and.returnValue(of({}))
-      component.userProfileId = undefined
+      avatarMeSpy.uploadAvatar.and.returnValue(of({}))
+      component.userId = undefined
 
       component.sendImage('image', RefType.Large)
 
@@ -360,8 +463,8 @@ describe('AvatarComponent', () => {
 
     it('should upload SMALL image of (me) user', () => {
       spyOn(component, 'reloadPage')
-      avatarUserSpy.uploadAvatar.and.returnValue(of({}))
-      component.userProfileId = undefined
+      avatarMeSpy.uploadAvatar.and.returnValue(of({}))
+      component.userId = undefined
 
       component.sendImage('image', RefType.Small)
 
@@ -372,7 +475,7 @@ describe('AvatarComponent', () => {
       const dummyImageData = new Uint8Array([137, 80, 78, 71])
       const imageBlob = new Blob([dummyImageData], { type: 'image/png' })
       avatarAdminSpy.getUserAvatarById.and.returnValue(of(imageBlob))
-      component.userProfileId = 'id'
+      component.userId = 'id'
 
       component.ngOnChanges()
 
@@ -383,7 +486,7 @@ describe('AvatarComponent', () => {
 
     it('handle error trying to upload image of another user', () => {
       avatarAdminSpy.uploadAvatarById.and.returnValue(throwError(() => new Error()))
-      component.userProfileId = 'id'
+      component.userId = 'id'
 
       component.sendImage('image', RefType.Large)
 
@@ -398,7 +501,7 @@ describe('AvatarComponent', () => {
         error: { errorCode: 'WRONG_CONTENT_TYPE' }
       }
       avatarAdminSpy.uploadAvatarById.and.returnValue(throwError(() => err))
-      component.userProfileId = 'id'
+      component.userId = 'id'
 
       component.sendImage('image', RefType.Large)
 
@@ -409,13 +512,8 @@ describe('AvatarComponent', () => {
     })
   })
 
-  it('should test onImageError', () => {
-    component.imageLoadError = false
-    component.onImageError(true)
-    expect(component.imageLoadError).toBeTrue()
-  })
-
   it('should reload page', () => {
+    expect().nothing()
     component.reloadPage()
   })
 })

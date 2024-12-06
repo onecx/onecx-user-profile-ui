@@ -38,8 +38,7 @@ app:
             CREATE: Create user profile
             DELETE: Delete user profile
             EDIT: Edit user profile
-            SAVE: Update and save user profile
-            SEARCH: Search user profile
+            SEARCH: Search user profiles
             VIEW: View mode for user profile
             ADMIN_VIEW: View user profiles of other users for admin
             ADMIN_EDIT: Edit user profiles of other users for admin

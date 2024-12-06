@@ -1,18 +1,18 @@
 import { Component } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
+import { Observable, map } from 'rxjs'
 
 import { Action } from '@onecx/portal-integration-angular'
-
-import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
-import { Observable, map } from 'rxjs'
 import { SlotService } from '@onecx/angular-remote-components'
 
+import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+
 @Component({
-  selector: 'app-roles-permissions',
-  templateUrl: './roles-permissions.component.html'
+  selector: 'app-user-permissions',
+  templateUrl: './user-permissions.component.html'
 })
-export class RolesPermissionsComponent {
+export class UserPermissionsComponent {
   public personalInfo$: Observable<UserPerson> | undefined
   public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
   public userRolesAndPermissionsSlotName = 'onecx-user-profile-permissions'

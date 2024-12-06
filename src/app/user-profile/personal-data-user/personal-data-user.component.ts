@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output } from '@angular/core'
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
 import { Observable, map, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
@@ -10,24 +10,27 @@ import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/sha
   selector: 'app-personal-data-user',
   templateUrl: './personal-data-user.component.html'
 })
-export class PersonalDataUserComponent {
-  @Input() public displayDetailDialog = false
+export class PersonalDataUserComponent implements AfterViewInit {
+  @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: any
   @Output() public hideDialog = new EventEmitter<boolean>()
 
+  public exceptionKey: string | undefined = undefined
   public actions$: Observable<Action[]> | undefined
-  public personalInfo$!: Observable<UserPerson>
+  public userPerson$!: Observable<UserPerson>
   public tenantId: string = ''
   public messages: { [key: string]: string } = {}
+  public componentInUse = false
 
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
     public readonly translate: TranslateService,
     private readonly userProfileService: UserProfileAPIService,
-    private readonly msgService: PortalMessageService
+    private readonly msgService: PortalMessageService,
+    private readonly cdRef: ChangeDetectorRef
   ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
+    this.userPerson$ = this.userProfileService.getMyUserProfile().pipe(
       tap((profile) => (this.tenantId = profile.tenantId!)),
       map((profile) => {
         this.prepareActionButtons()
@@ -36,14 +39,21 @@ export class PersonalDataUserComponent {
     )
   }
 
-  public onPersonalInfoUpdate(person: UserPerson): void {
+  public ngAfterViewInit() {
+    this.componentInUse = true
+    this.cdRef.detectChanges()
+  }
+
+  public onpersonUpdate(person: UserPerson): void {
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: (person) => {
         this.showMessage('success')
-        this.personalInfo$ = of(person)
+        this.userPerson$ = of(person)
       },
-      error: () => {
+      error: (err) => {
         this.showMessage('error')
+        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+        console.error('updateUserProfile', err)
       }
     })
   }
@@ -59,8 +69,8 @@ export class PersonalDataUserComponent {
       .get([
         'SETTINGS.NAVIGATION.LABEL',
         'SETTINGS.NAVIGATION.TOOLTIP',
-        'ROLES_PERMISSIONS.NAVIGATION.LABEL',
-        'ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'
+        'USER_PERMISSIONS.NAVIGATION.LABEL',
+        'USER_PERMISSIONS.NAVIGATION.TOOLTIP'
       ])
       .pipe(
         map((data) => {
@@ -74,9 +84,9 @@ export class PersonalDataUserComponent {
               show: 'always'
             },
             {
-              label: data['ROLES_PERMISSIONS.NAVIGATION.LABEL'],
-              title: data['ROLES_PERMISSIONS.NAVIGATION.TOOLTIP'],
-              actionCallback: () => this.router.navigate(['./roles'], { relativeTo: this.route }),
+              label: data['USER_PERMISSIONS.NAVIGATION.LABEL'],
+              title: data['USER_PERMISSIONS.NAVIGATION.TOOLTIP'],
+              actionCallback: () => this.router.navigate(['./permissions'], { relativeTo: this.route }),
               permission: 'ROLES_PERMISSIONS#VIEW',
               icon: 'pi pi-lock',
               show: 'always'

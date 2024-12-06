@@ -6,7 +6,6 @@ import { PrimeIcons } from 'primeng/api'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import {
-  Action,
   ColumnType,
   DataAction,
   DataTableColumn,
@@ -15,32 +14,29 @@ import {
   PortalDialogService,
   PortalMessageService,
   RowListGridData,
-  UserProfile,
   UserService
 } from '@onecx/portal-integration-angular'
 
-import { UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { UserPermissionsComponent } from './user-permissions/user-permissions.component'
+import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
-  selector: 'app-user-profile-search',
-  templateUrl: './user-profile-search.component.html',
-  styleUrls: ['./user-profile-search.component.scss']
+  selector: 'app-profile-search',
+  templateUrl: './profile-search.component.html',
+  styleUrls: ['./profile-search.component.scss']
 })
-export class UserProfileSearchComponent implements OnInit {
-  public loading = true
+export class ProfileSearchComponent implements OnInit {
+  public loading = false
   public exceptionKey: string | undefined
-  public actions$: Observable<Action[]> | undefined
-  public additionalActions!: DataAction[]
   public criteriaGroup: UntypedFormGroup
-  public columns: DataTableColumn[]
+  public columns: DataTableColumn[] = []
+  public additionalActions: DataAction[] = []
 
   public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
   public filteredData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
-  private filterData = ''
   public filterValue: string | undefined
   public filterBy = 'firstName,lastName,email,creationDate,modificationDate'
-  public filterDataView: string | undefined
+  private filterData = ''
 
   /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
@@ -48,11 +44,11 @@ export class UserProfileSearchComponent implements OnInit {
   public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
   public userProfile: UserProfile | undefined
-  public userProfileRow: RowListGridData | undefined
-  public displayDetailDialog = false
+  public displayPersonalDataDialog = false
   public displayDeleteDialog = false
-  public editPermission = false
-  public adminViewPermissionsSlotName = 'onecx-user-profile-permissions'
+  public hasEditPermission = false
+  public hasViewPermission = false
+  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
   public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
 
   constructor(
@@ -66,6 +62,8 @@ export class UserProfileSearchComponent implements OnInit {
     private readonly translate: TranslateService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
+    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.hasEditPermission = true
+    if (this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')) this.hasViewPermission = true
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
@@ -82,6 +80,7 @@ export class UserProfileSearchComponent implements OnInit {
       'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
       'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
     ]
+
     this.columns = [
       {
         columnType: ColumnType.STRING,
@@ -140,7 +139,6 @@ export class UserProfileSearchComponent implements OnInit {
         predefinedGroupKeys: commoneColumnSelectionKeys
       }
     ]
-    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.editPermission = true
   }
 
   ngOnInit() {
@@ -224,11 +222,11 @@ export class UserProfileSearchComponent implements OnInit {
 
   public onDetail(ev: any) {
     this.userProfile = { id: ev.id.toString(), userId: ev.userId, person: { displayName: ev['person.displayName'] } }
-    this.displayDetailDialog = true
+    this.displayPersonalDataDialog = true
   }
   public onCloseDetail(): void {
     this.userProfile = undefined
-    this.displayDetailDialog = false
+    this.displayPersonalDataDialog = false
     this.displayDeleteDialog = false
   }
 
@@ -238,7 +236,6 @@ export class UserProfileSearchComponent implements OnInit {
       .pipe(
         map((data) => {
           data.forEach((up) => {
-            console.log('onDelete', up)
             if (up.id === ev.id) {
               this.userProfile = { id: up.id, userId: up.userId, person: up.person }
               this.displayDeleteDialog = true
@@ -271,7 +268,7 @@ export class UserProfileSearchComponent implements OnInit {
       .openDialog(
         'ACTIONS.VIEW.PERMISSIONS',
         {
-          type: UserPermissionsComponent,
+          type: UserPermissionsAdminComponent,
           inputs: { id: ev['id'], userId: ev['userId'], displayName: ev['displayName'] }
         },
         {
@@ -295,12 +292,13 @@ export class UserProfileSearchComponent implements OnInit {
   }
 
   public prepareActionButtons(): void {
+    if (!this.hasViewPermission) return
     this.additionalActions = [
       {
-        id: 'view',
-        labelKey: 'ACTIONS.VIEW.USER_PROFILE',
-        icon: this.editPermission ? 'pi pi-pencil' : 'pi pi-eye',
-        permission: this.editPermission ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#ADMIN_VIEW',
+        id: 'view-n-edit',
+        labelKey: 'ACTIONS.VIEW.PERSONAL_DATA',
+        icon: this.hasEditPermission ? 'pi pi-pencil' : 'pi pi-eye',
+        permission: this.hasEditPermission ? 'USERPROFILE#ADMIN_EDIT' : 'USERPROFILE#ADMIN_VIEW',
         callback: (event) => this.onDetail(event)
       },
       {

@@ -40,7 +40,7 @@
       }
     },
     "VIEW": {
-      "USER_PROFILE": "View User Profile",
+      "PERSONAL_DATA": "Personal Data",
       "PERMISSIONS": "Assigned Permissions"
     },
     "GENERAL": {
@@ -79,9 +79,10 @@
     }
   },
   "USER_PROFILE": {
+    "USER_NAME": "User name",
     "NAVIGATION.LABEL": "Personal Data",
     "NAVIGATION.TOOLTIP": "Switch to view Personal Data",
-    "HEADERS": {
+    "HEADER": {
       "GENERAL": "Personal Data",
       "SUBHEADER": "Manage personal data",
       "BASIC": "Person",
@@ -123,7 +124,7 @@
       "SAVE_SUCCESS": "Data saved successfully",
       "SAVE_ERROR": "Failed to save data",
       "SLOT_NOT_DEFINED_USER": "This functionality is not available at the moment.",
-      "SLOT_NOT_DEFINED_ADMIN": "No remote component is defined for this slot."
+      "SLOT_NOT_DEFINED_ADMIN": "No component is defined for this slot."
     }
   },
   "SETTINGS": {
@@ -138,17 +139,13 @@
     }
   },
   "AVATAR": {
-    "UPDATE": "Update Photo",
-    "IMAGE": "Current Photo",
+    "AVATAR": "Current Photo",
     "PLACEHOLDER": "Placeholder",
     "CHOOSE": "Choose Photo",
     "REMOVE": "Remove Photo",
     "REMOVE.MESSAGE": "Do you want to remove the photo?",
     "UPLOAD": "Upload Photo",
     "CANCEL": "Cancel",
-    "CHOOSE_ANOTHER": "Choose another photo",
-    "REMOVE_CONFIRM": "Remove Photo",
-    "REMOVE_CANCEL": "Keep photo",
     "MSG": {
       "FILE_TOO_LARGE": {
         "SUMMARY": "File too large",
@@ -175,7 +172,8 @@
       "REMOVE_ERROR": "File removing failed"
     }
   },
-  "ROLES_PERMISSIONS": {
+  "USER_PERMISSIONS": {
+    "USER_NAME": "User name",
     "NAVIGATION.LABEL": "Permissions",
     "NAVIGATION.TOOLTIP": "Switch to view assigned Roles and Permissions",
     "SUBHEADER": "Roles and Permissions granted"
@@ -241,28 +239,35 @@
     "SEARCH": "User Profiles",
     "SETTINGS": "Settings",
     "PROFILE": "User Profile",
-    "ROLES_PERMISSIONS": "Permissions"
+    "USER_PERMISSIONS": "Permissions"
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {
+      "PROFILE": "No data could be found for your Profile.",
       "PROFILES": "No data could be found for this Profile."
     },
     "HTTP_STATUS_0": {
+      "PROFILE": "Unknown problem retrieving your Profile. Please try again.",
       "PROFILES": "Unknown problem retrieving Profiles. Please try again."
     },
     "HTTP_STATUS_400": {
+      "PROFILE": "The Profile could not be processed.",
       "PROFILES": "The Profile could not be processed."
     },
     "HTTP_STATUS_401": {
+      "PROFILE": "You are not authorized to see your Profile.",
       "PROFILES": "You are not authorized to see Profiles."
     },
     "HTTP_STATUS_403": {
+      "PROFILE": "You have no Permissions to see your Profile.",
       "PROFILES": "You have no Permissions to see Profiles."
     },
     "HTTP_STATUS_404": {
+      "PROFILE": "No data could be found for your Profile.",
       "PROFILES": "No data could be found for this Profile."
     },
     "HTTP_STATUS_500": {
+      "PROFILE": "Unknown problem retrieving your Profile. Please try again.",
       "PROFILES": "Unknown problem retrieving Profiles. Please try again."
     }
   }

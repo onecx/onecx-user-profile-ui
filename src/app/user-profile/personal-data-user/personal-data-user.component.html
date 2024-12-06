@@ -1,17 +1,18 @@
 <ocx-portal-page permission="USERPROFILE#VIEW" helpArticleId="PAGE_USER_PROFILE">
   <ocx-page-header
-    *ngIf="personalInfo$ | async"
-    [header]="'USER_PROFILE.HEADERS.GENERAL' | translate"
-    [subheader]="'USER_PROFILE.HEADERS.SUBHEADER' | translate"
+    [header]="'USER_PROFILE.HEADER.GENERAL' | translate"
+    [subheader]="'USER_PROFILE.HEADER.SUBHEADER' | translate"
     [actions]="(actions$ | async) ?? []"
   >
   </ocx-page-header>
 
   <ocx-page-content>
     <app-personal-data
-      [person]="(personalInfo$ | async) ?? {}"
+      [userPerson]="(userPerson$ | async) ?? {}"
       [tenantId]="tenantId"
-      (personalInfoUpdate)="onPersonalInfoUpdate($event)"
+      [exceptionKey]="exceptionKey"
+      [componentInUse]="componentInUse"
+      (personUpdate)="onpersonUpdate($event)"
     ></app-personal-data>
   </ocx-page-content>
 </ocx-portal-page>

@@ -5,15 +5,15 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 
-import { UserPermissionsComponent } from './user-permissions.component'
+import { UserPermissionsAdminComponent } from './user-permissions-admin.component'
 
-describe('UserPermissionsComponent', () => {
-  let component: UserPermissionsComponent
-  let fixture: ComponentFixture<UserPermissionsComponent>
+describe('UserPermissionsAdminComponent', () => {
+  let component: UserPermissionsAdminComponent
+  let fixture: ComponentFixture<UserPermissionsAdminComponent>
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserPermissionsComponent],
+      declarations: [UserPermissionsAdminComponent],
       imports: [
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -26,7 +26,7 @@ describe('UserPermissionsComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(UserPermissionsComponent)
+    fixture = TestBed.createComponent(UserPermissionsAdminComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
