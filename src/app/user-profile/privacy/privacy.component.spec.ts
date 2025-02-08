@@ -44,14 +44,23 @@ describe('PrivacyComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(PrivacyComponent)
     component = fixture.componentInstance
-    fixture.detectChanges()
   })
 
   afterEach(() => {
+    authServiceSpy.hasPermission.calls.reset()
     authServiceSpy.hasPermission.and.returnValue(true)
   })
 
-  it('should create', () => {
+  it('should create with permissions', () => {
+    fixture.detectChanges()
+    expect(component).toBeTruthy()
+  })
+
+  it('should create without permissions', () => {
+    mockUserService.hasPermission.and.returnValue(false)
+    fixture = TestBed.createComponent(PrivacyComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
     expect(component).toBeTruthy()
   })
 
