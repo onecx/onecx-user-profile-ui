@@ -189,13 +189,13 @@ export class ProfileSearchComponent implements OnInit {
       )
       .subscribe({
         next: (stream) => {
-          if (stream.length === 0) {
+          if (stream?.length === 0) {
             this.portalMessageService.success({
               summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
               detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
             })
           }
-          stream = stream.map((row: any) => ({
+          stream = stream?.map((row: any) => ({
             ...row,
             lastName: row.person.lastName,
             firstName: row.person.firstName,

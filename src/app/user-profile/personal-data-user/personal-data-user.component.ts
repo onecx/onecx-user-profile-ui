@@ -44,7 +44,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
     this.cdRef.detectChanges()
   }
 
-  public onpersonUpdate(person: UserPerson): void {
+  public onPersonUpdate(person: UserPerson): void {
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: (person) => {
         this.showMessage('success')
@@ -53,7 +53,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
       error: (err) => {
         this.showMessage('error')
         this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
-        console.error('updateUserProfile', err)
+        console.error('updateUserPerson', err)
       }
     })
   }

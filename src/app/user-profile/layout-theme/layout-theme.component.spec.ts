@@ -1,13 +1,16 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { UserProfileAccountSettingsLayoutAndThemeSettings, UserService } from '@onecx/portal-integration-angular'
-
-import { LayoutThemeComponent } from './layout-theme.component'
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { of } from 'rxjs'
-import { ColorScheme, MenuMode } from 'src/app/shared/generated'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { of } from 'rxjs'
+
+import { UserService } from '@onecx/angular-integration-interface'
+import { UserProfileAccountSettingsLayoutAndThemeSettings } from '@onecx/portal-integration-angular'
+
+import { ColorScheme, MenuMode } from 'src/app/shared/generated'
+
+import { LayoutThemeComponent } from './layout-theme.component'
 
 describe('LayoutThemeComponent', () => {
   let component: LayoutThemeComponent
@@ -17,10 +20,7 @@ describe('LayoutThemeComponent', () => {
     menuMode: 'HORIZONTAL',
     colorScheme: 'LIGHT'
   }
-
-  const userServiceSpy = {
-    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
-  }
+  const userServiceSpy = { hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of()) }
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -34,7 +34,6 @@ describe('LayoutThemeComponent', () => {
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: userServiceSpy }]
     }).compileComponents()
-    userServiceSpy.hasPermission.and.returnValue(true)
   }))
 
   beforeEach(() => {
@@ -42,6 +41,10 @@ describe('LayoutThemeComponent', () => {
     component = fixture.componentInstance
     component.formGroup.patchValue(defaultLayoutAndTheme)
     fixture.detectChanges()
+  })
+
+  afterEach(() => {
+    userServiceSpy.hasPermission.and.returnValue(true)
   })
 
   it('should create', () => {

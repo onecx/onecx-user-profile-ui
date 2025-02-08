@@ -7,8 +7,44 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 
-import { PersonalDataAdminComponent } from './personal-data-admin.component'
 import { PhoneType, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { PersonalDataAdminComponent } from './personal-data-admin.component'
+
+const defaultPerson: UserPerson = {
+  modificationCount: 0,
+  firstName: 'John',
+  lastName: 'Doe',
+  displayName: 'John Doe Display Name',
+  email: 'john.doe@example.com',
+  address: {
+    street: 'Candy Lane',
+    streetNo: '12',
+    city: 'Candy Town',
+    postalCode: '80-243',
+    country: 'EN'
+  },
+  phone: { number: '123456789', type: PhoneType.Mobile }
+}
+const defaultProfile: UserProfile = {
+  id: 'pid',
+  userId: '15',
+  person: defaultPerson
+}
+const updatedPerson: UserPerson = {
+  modificationCount: 1,
+  firstName: 'newName',
+  lastName: 'newLastName',
+  displayName: 'newDisplayName',
+  email: 'newmail@example.com',
+  address: {
+    street: 'newStreet',
+    streetNo: 'newStreetNo',
+    city: 'newCity',
+    postalCode: 'newCode',
+    country: 'newCountry'
+  },
+  phone: { number: '987654321', type: PhoneType.Mobile }
+}
 
 describe('PersonalDataAdminComponent', () => {
   let component: PersonalDataAdminComponent
@@ -18,43 +54,6 @@ describe('PersonalDataAdminComponent', () => {
     getUserProfile: jasmine.createSpy('getUserProfile').and.returnValue(of({})),
     updateUserProfile: jasmine.createSpy('updateUserProfile').and.returnValue(of({}))
   }
-
-  const defaultPerson: UserPerson = {
-    modificationCount: 0,
-    firstName: 'John',
-    lastName: 'Doe',
-    displayName: 'John Doe Display Name',
-    email: 'john.doe@example.com',
-    address: {
-      street: 'Candy Lane',
-      streetNo: '12',
-      city: 'Candy Town',
-      postalCode: '80-243',
-      country: 'EN'
-    },
-    phone: { number: '123456789', type: PhoneType.Mobile }
-  }
-  const defaultProfile: UserProfile = {
-    id: 'pid',
-    userId: '15',
-    person: defaultPerson
-  }
-  const updatedPerson: UserPerson = {
-    modificationCount: 1,
-    firstName: 'newName',
-    lastName: 'newLastName',
-    displayName: 'newDisplayName',
-    email: 'newmail@example.com',
-    address: {
-      street: 'newStreet',
-      streetNo: 'newStreetNo',
-      city: 'newCity',
-      postalCode: 'newCode',
-      country: 'newCountry'
-    },
-    phone: { number: '987654321', type: PhoneType.Mobile }
-  }
-
   const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
     'PortalMessageService',
     ['success', 'error']
@@ -84,6 +83,9 @@ describe('PersonalDataAdminComponent', () => {
     fixture = TestBed.createComponent(PersonalDataAdminComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
+  })
+
+  afterEach(() => {
     adminServiceSpy.getUserProfile.calls.reset()
     adminServiceSpy.updateUserProfile.calls.reset()
   })
@@ -124,8 +126,8 @@ describe('PersonalDataAdminComponent', () => {
       const errorResponse = { status: 403, statusText: 'No permissions to see user profile' }
       adminServiceSpy.getUserProfile.and.returnValue(throwError(() => errorResponse))
       component.userProfileId = defaultProfile.id
-      spyOn(console, 'error')
       spyOn(component, 'showMessage').and.callThrough()
+      spyOn(console, 'error')
       expect().nothing()
 
       component.ngOnChanges()
@@ -145,9 +147,10 @@ describe('PersonalDataAdminComponent', () => {
     it('should call messageService success when update user profile was successful', (done) => {
       component.componentInUse = true
       component.userProfileId = defaultProfile.id
-      spyOn(component, 'showMessage').and.callThrough()
       const updatedProfile: UserProfile = { ...defaultProfile, person: updatedPerson }
       adminServiceSpy.updateUserProfile.and.returnValue(of(updatedProfile))
+      spyOn(component, 'showMessage').and.callThrough()
+
       component.onUpdatePerson(updatedPerson)
 
       component.userPerson$.subscribe({
@@ -160,12 +163,15 @@ describe('PersonalDataAdminComponent', () => {
 
     it('should call messageService error when updateUserProfile() not was successful', () => {
       component.userProfileId = defaultProfile.id
-      spyOn(component, 'showMessage').and.callThrough()
       const errorResponse = { status: 400, statusText: 'Profile update failed' }
       adminServiceSpy.updateUserProfile.and.returnValue(throwError(() => errorResponse))
+      spyOn(component, 'showMessage').and.callThrough()
+      spyOn(console, 'error')
 
       component.onUpdatePerson(updatedPerson)
+
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')
+      expect(console.error).toHaveBeenCalledOnceWith('updateUserProfile', errorResponse)
     })
   })
 
