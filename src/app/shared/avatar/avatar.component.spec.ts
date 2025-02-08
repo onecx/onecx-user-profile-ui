@@ -6,7 +6,8 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { NgxImageCompressService } from 'ngx-image-compress'
 import { of, throwError } from 'rxjs'
 
-import { AppStateService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import { AppStateService, UserService } from '@onecx/angular-integration-interface'
+import { PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { AvatarComponent } from './avatar.component'
@@ -68,6 +69,15 @@ describe('AvatarComponent', () => {
         { provide: NgxImageCompressService, useValue: imageCompressSpy }
       ]
     }).compileComponents()
+  }))
+
+  beforeEach(() => {
+    fixture = TestBed.createComponent(AvatarComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  })
+
+  afterEach(() => {
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
     imageCompressSpy.uploadFile.calls.reset()
@@ -81,12 +91,6 @@ describe('AvatarComponent', () => {
     avatarAdminSpy.deleteUserAvatarById.calls.reset()
     avatarAdminSpy.uploadAvatarById.calls.reset()
     avatarAdminSpy.getUserAvatarById.calls.reset()
-  }))
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(AvatarComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
   })
 
   it('should create', () => {
@@ -269,17 +273,18 @@ describe('AvatarComponent', () => {
     })
 
     it('should get error if deletion of my Avatar image fails', fakeAsync(() => {
-      const errorResponse = { error: 'Error on removing my image', status: 400 }
+      const errorResponse = { status: 400, statusText: 'Error on removing my avatar' }
       component.componentInUse = true
       component.userId = undefined
-
       avatarMeSpy.deleteUserAvatar.and.returnValue(throwError(() => errorResponse))
+      spyOn(console, 'error')
 
       component.onDeleteAvatarImage()
 
       expect(avatarMeSpy.deleteUserAvatar).toHaveBeenCalled()
       expect(component.displayAvatarDeleteDialog).toBeFalse()
       expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
+      expect(console.error).toHaveBeenCalledWith('deleteUserAvatar', errorResponse)
     }))
 
     it('should delete existing Avatar image of another user', () => {
@@ -296,12 +301,14 @@ describe('AvatarComponent', () => {
     it('should handle delete existing Avatar image of another user', () => {
       const errorResponse = { error: 'Error on removing image of another user', status: 400 }
       avatarAdminSpy.deleteUserAvatarById.and.returnValue(throwError(() => errorResponse))
+      spyOn(console, 'error')
       component.componentInUse = true
       component.userId = 'id'
 
       component.onDeleteAvatarImage()
 
       expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.REMOVE_ERROR' })
+      expect(console.error).toHaveBeenCalledWith('deleteUserAvatarById', errorResponse)
     })
   })
 

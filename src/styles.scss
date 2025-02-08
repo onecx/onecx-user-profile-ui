@@ -1,4 +1,3 @@
-/* USED only in STANDALONE mode */
 /* You can add global styles to this file, and also import other style files */
 
 @import 'node_modules/primeng/resources/primeng.min.css';
@@ -8,3 +7,9 @@
 @import 'node_modules/@onecx/portal-layout-styles/src/styles/shell/shell.scss';
 @import 'node_modules/@onecx/portal-layout-styles/src/styles/primeng/theme-light.scss';
 @import 'node_modules/@onecx/portal-integration-angular/assets/styles.scss';
+
+// disable default settings of dialogs created by portal dialog service
+.buttonDialogScrollableContent {
+  max-height: unset !important;
+  margin-bottom: 1rem !important;
+}

@@ -1,9 +1,8 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { UserPermissionsAdminComponent } from './user-permissions-admin.component'
 

@@ -1,14 +1,16 @@
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-
-import { LocaleTimezoneComponent } from './locale-timezone.component'
-import { ConfigurationService, UserService } from '@onecx/portal-integration-angular'
 import { LOCALE_ID, NO_ERRORS_SCHEMA } from '@angular/core'
-import { TranslateTestingModule } from 'ngx-translate-testing'
-import { LocalAndTimezoneService } from './service/localAndTimezone.service'
-import { of, throwError } from 'rxjs'
-import { HttpErrorResponse, HttpEventType, HttpHeaders, provideHttpClient } from '@angular/common/http'
-import { By } from '@angular/platform-browser'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { By } from '@angular/platform-browser'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+import { of, throwError } from 'rxjs'
+
+import { UserService } from '@onecx/angular-integration-interface'
+import { ConfigurationService } from '@onecx/portal-integration-angular'
+
+import { LocalAndTimezoneService } from './service/localAndTimezone.service'
+import { LocaleTimezoneComponent } from './locale-timezone.component'
 
 describe('LocaleTimezoneComponent', () => {
   let component: LocaleTimezoneComponent
@@ -100,6 +102,7 @@ describe('LocaleTimezoneComponent', () => {
 
   it('should applyChange', () => {
     spyOn(component.applyChanges, 'emit')
+
     component.ngOnChanges()
     component.applyChange()
 
@@ -131,14 +134,8 @@ describe('LocaleTimezoneComponent Error', () => {
   let fixture: ComponentFixture<LocaleTimezoneComponent>
 
   const configServiceSpy = jasmine.createSpyObj(ConfigurationService, ['getProperty'])
-
-  const userServiceSpy = {
-    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(true)
-  }
-
-  const localeAndTimezoneServiceSpy = {
-    getTimezoneData: jasmine.createSpy('getTimezoneData').and.returnValue(of({}))
-  }
+  const userServiceSpy = { hasPermission: jasmine.createSpy('hasPermission').and.returnValue(true) }
+  const localeAndTimezoneServiceSpy = { getTimezoneData: jasmine.createSpy('getTimezoneData').and.returnValue(of({})) }
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -163,30 +160,24 @@ describe('LocaleTimezoneComponent Error', () => {
   }))
 
   beforeEach(() => {
-    userServiceSpy.hasPermission.calls.reset()
-    userServiceSpy.hasPermission.and.returnValue(true)
-
     fixture = TestBed.createComponent(LocaleTimezoneComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
   })
 
-  it('should throw a timezone error', () => {
-    const updateErrorResponse: HttpErrorResponse = {
-      status: 404,
-      statusText: 'Not Found',
-      name: 'HttpErrorResponse',
-      message: '',
-      error: undefined,
-      ok: false,
-      headers: new HttpHeaders(),
-      url: null,
-      type: HttpEventType.ResponseHeader
-    }
+  afterEach(() => {
+    userServiceSpy.hasPermission.calls.reset()
+    userServiceSpy.hasPermission.and.returnValue(true)
+  })
 
-    localeAndTimezoneServiceSpy.getTimezoneData.and.returnValue(throwError(() => updateErrorResponse))
+  it('should throw a timezone error', () => {
+    const errorResponse = { status: 404, statusText: 'Not Found' }
+    localeAndTimezoneServiceSpy.getTimezoneData.and.returnValue(throwError(() => errorResponse))
+    spyOn(console, 'error')
 
     component.ngOnChanges()
+
     expect(component.timezoneSelectItems).toEqual([])
+    expect(console.error).toHaveBeenCalledWith('getTimezoneData', errorResponse)
   })
 })

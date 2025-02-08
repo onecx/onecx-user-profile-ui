@@ -60,9 +60,9 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     this.initLocalesAndTimezones()
   }
 
-  public initLocalesAndTimezones(): void {
-    this.localAndTimezoneService.getTimezoneData().subscribe(
-      (response) => {
+  private initLocalesAndTimezones(): void {
+    this.localAndTimezoneService.getTimezoneData().subscribe({
+      next: (response) => {
         this.timezoneSelectItems = response.map((tz) => ({
           label: tz.name,
           value: tz.name,
@@ -70,8 +70,10 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
           factor: tz.factor
         }))
       },
-      (error) => console.error(error)
-    )
+      error: (err) => {
+        console.error('getTimezoneData', err)
+      }
+    })
     const supportedLanguagesProperty = this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES)
     const supportedLanguages = supportedLanguagesProperty
       ? supportedLanguagesProperty.split(',').map((l) => l.trim())

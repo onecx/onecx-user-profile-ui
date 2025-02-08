@@ -12,42 +12,37 @@ import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { PhoneType, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 import { UserPermissionsComponent } from './user-permissions.component'
 
+const defaultCurrentUser: UserProfile = {
+  userId: '15',
+  person: {
+    firstName: 'John',
+    lastName: 'Doe',
+    displayName: 'John Doe Display Name',
+    email: 'john.doe@example.com',
+    address: {
+      street: 'Candy Lane',
+      streetNo: '12',
+      city: 'Candy Town',
+      postalCode: '80-243',
+      country: 'EN'
+    },
+    phone: {
+      type: PhoneType.Mobile,
+      number: '123456789'
+    }
+  }
+}
+
 describe('UserPermissionsComponent', () => {
   let component: UserPermissionsComponent
   let fixture: ComponentFixture<UserPermissionsComponent>
+
   const activatedRouteMock = {}
-
-  const defaultCurrentUser: UserProfile = {
-    userId: '15',
-    person: {
-      firstName: 'John',
-      lastName: 'Doe',
-      displayName: 'John Doe Display Name',
-      email: 'john.doe@example.com',
-      address: {
-        street: 'Candy Lane',
-        streetNo: '12',
-        city: 'Candy Town',
-        postalCode: '80-243',
-        country: 'EN'
-      },
-      phone: {
-        type: PhoneType.Mobile,
-        number: '123456789'
-      }
-    }
-  }
-
+  const routerMock = jasmine.createSpyObj<Router>('Router', ['navigate'])
   const userProfileServiceSpy = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
   }
-
-  const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
-    'PortalMessageService',
-    ['info', 'error']
-  )
-
-  const routerMock = jasmine.createSpyObj<Router>('Router', ['navigate'])
+  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -64,20 +59,23 @@ describe('UserPermissionsComponent', () => {
         provideHttpClientTesting(),
         provideHttpClient(),
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
-        { provide: PortalMessageService, useValue: messageServiceMock },
+        { provide: PortalMessageService, useValue: msgServiceSpy },
         { provide: Router, useValue: routerMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock }
       ]
     }).compileComponents()
-    userProfileServiceSpy.getMyUserProfile.calls.reset()
-    messageServiceMock.info.calls.reset()
-    messageServiceMock.error.calls.reset()
   }))
 
   beforeEach(() => {
     fixture = TestBed.createComponent(UserPermissionsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
+  })
+
+  afterEach(() => {
+    userProfileServiceSpy.getMyUserProfile.calls.reset()
+    msgServiceSpy.success.calls.reset()
+    msgServiceSpy.error.calls.reset()
   })
 
   it('should create', () => {

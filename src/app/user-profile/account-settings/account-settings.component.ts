@@ -61,7 +61,7 @@ export class AccountSettingsComponent implements OnInit {
         this.settingsInitial = { ...this.settings }
       },
       error: (error) => {
-        console.error(error)
+        console.error('getUserSettings', error)
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
@@ -94,7 +94,7 @@ export class AccountSettingsComponent implements OnInit {
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
       },
       error: (error) => {
-        console.error(error)
+        console.error('updateUserSettings', error)
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
