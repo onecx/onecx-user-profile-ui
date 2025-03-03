@@ -13,6 +13,6 @@
     "src/app/onecx-user-profile-remote.module.ts",
     "src/app/remotes/avatar-image.component.main.ts"
   ],
-  "include": ["src/**/*.d.ts"],
+  "include": ["src/**/*.ts"],
   "exclude": ["src/test.ts", "src/**/*.spec.ts"]
 }
