@@ -1,6 +1,6 @@
 <ocx-slot
-  *ngIf="isUserRolesAndPermissionsComponentDefined$ | async; else permissionsDialogPlaceholder"
-  [name]="adminViewPermissionsSlotName"
+  *ngIf="isRemoteComponentDefined$ | async; else dialogPlaceholder"
+  [name]="slotName"
   [inputs]="{ userId: userId, displayName: displayName, active: true }"
 >
   <ng-template #skeleton>
@@ -13,7 +13,7 @@
   </ng-template>
 </ocx-slot>
 
-<ng-template #permissionsDialogPlaceholder>
+<ng-template #dialogPlaceholder>
   <p-message
     id="up_user_permissions_error_message"
     severity="info"

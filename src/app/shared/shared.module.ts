@@ -4,11 +4,8 @@ import { FormsModule, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig } from '@ngneat/error-tailor'
 
-import { ConfirmationService } from 'primeng/api'
 import { AutoCompleteModule } from 'primeng/autocomplete'
 import { CalendarModule } from 'primeng/calendar'
-import { ConfirmDialogModule } from 'primeng/confirmdialog'
-import { ConfirmPopupModule } from 'primeng/confirmpopup'
 import { DataViewModule } from 'primeng/dataview'
 import { DialogModule } from 'primeng/dialog'
 import { DropdownModule } from 'primeng/dropdown'
@@ -17,7 +14,6 @@ import { InputTextModule } from 'primeng/inputtext'
 import { InputTextareaModule } from 'primeng/inputtextarea'
 import { KeyFilterModule } from 'primeng/keyfilter'
 import { ListboxModule } from 'primeng/listbox'
-import { MultiSelectModule } from 'primeng/multiselect'
 import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
 import { SelectButtonModule } from 'primeng/selectbutton'
@@ -25,12 +21,8 @@ import { TableModule } from 'primeng/table'
 import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
 
-import {
-  AppStateService,
-  ConfigurationService,
-  PortalApiConfiguration,
-  PortalCoreModule
-} from '@onecx/portal-integration-angular'
+import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
+import { PortalApiConfiguration, PortalCoreModule } from '@onecx/portal-integration-angular'
 import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
 
 import { Configuration } from 'src/app/shared/generated'
@@ -50,8 +42,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     AutoCompleteModule,
     CalendarModule,
     CommonModule,
-    ConfirmDialogModule,
-    ConfirmPopupModule,
     DataViewModule,
     DialogModule,
     DropdownModule,
@@ -61,7 +51,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     InputTextareaModule,
     KeyFilterModule,
     ListboxModule,
-    MultiSelectModule,
     PanelModule,
     ReactiveFormsModule,
     RippleModule,
@@ -76,8 +65,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     AutoCompleteModule,
     CalendarModule,
     CommonModule,
-    ConfirmDialogModule,
-    ConfirmPopupModule,
     DataViewModule,
     DialogModule,
     DropdownModule,
@@ -87,7 +74,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     InputTextareaModule,
     KeyFilterModule,
     ListboxModule,
-    MultiSelectModule,
     PanelModule,
     ReactiveFormsModule,
     RippleModule,
@@ -102,7 +88,6 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
   ],
   //this is not elegant, for some reason the injection token from primeng does not work across federated module
   providers: [
-    ConfirmationService,
     LabelResolver,
     { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
     provideErrorTailorConfig({

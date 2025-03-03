@@ -11,12 +11,11 @@ export class UserPermissionsAdminComponent {
   @Input() id: string | undefined = 'undefined' // why ever this is required
   @Input() userId: string | undefined = undefined
   @Input() displayName: string | undefined = undefined
-  public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
+
+  public slotName = 'onecx-user-profile-admin-view-permissions'
+  public isRemoteComponentDefined$: Observable<boolean> | undefined
 
   constructor(private readonly slotService: SlotService) {
-    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
-      this.adminViewPermissionsSlotName
-    )
+    this.isRemoteComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.slotName)
   }
 }

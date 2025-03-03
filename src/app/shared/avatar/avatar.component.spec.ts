@@ -153,7 +153,7 @@ describe('AvatarComponent', () => {
       if (component.imageUrl$)
         component.imageUrl$.subscribe((url) => {
           expect(component.showPlaceholder).toBeFalse()
-          expect(url).toContain('blob:http://localhost:9876/')
+          expect(url).toContain('blob:http://localhost:')
         })
     })
 
@@ -207,7 +207,7 @@ describe('AvatarComponent', () => {
       if (component.imageUrl$)
         component.imageUrl$.subscribe((url) => {
           expect(component.showPlaceholder).toBeFalse()
-          expect(url).toContain('blob:http://localhost:9876/')
+          expect(url).toContain('blob:http://localhost:')
         })
     })
 

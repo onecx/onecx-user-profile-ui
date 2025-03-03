@@ -2,7 +2,6 @@
 .husky/**
 .docusaurus/
 .github/**
-.scannerwork/
 .dockerignore
 .prettierignore
 .browserslistrc
@@ -18,5 +17,5 @@ README.md
 Dockerfile
 *.log
 *.sh
-src/app/shared/generated/**
+src/app/shared/generated
 src/assets/api
