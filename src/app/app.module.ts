@@ -1,25 +1,18 @@
+import { APP_INITIALIZER, NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { APP_INITIALIZER, NgModule } from '@angular/core'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule, Routes } from '@angular/router'
 import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { KeycloakAuthModule } from '@onecx/keycloak-auth'
-import {
-  APP_CONFIG,
-  AppStateService,
-  PortalCoreModule,
-  UserService,
-  createTranslateLoader,
-  translateServiceInitializer
-} from '@onecx/portal-integration-angular'
+import { createTranslateLoader, TRANSLATION_PATH, translationPathFactory } from '@onecx/angular-utils'
+import { APP_CONFIG, AppStateService, UserService } from '@onecx/angular-integration-interface'
+import { translateServiceInitializer, PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { environment } from 'src/environments/environment'
 import { AppComponent } from './app.component'
-
-import { SharedModule } from 'src/app/shared/shared.module'
 
 const routes: Routes = [
   {
@@ -33,21 +26,16 @@ const routes: Routes = [
   imports: [
     CommonModule,
     BrowserModule,
-    KeycloakAuthModule,
     BrowserAnimationsModule,
-    SharedModule,
+    KeycloakAuthModule,
+    PortalCoreModule.forRoot('onecx-user-profile-ui'),
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking',
       enableTracing: true
     }),
-    PortalCoreModule.forRoot('onecx-user-profile-ui'),
     TranslateModule.forRoot({
       isolate: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService]
-      }
+      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] }
     })
   ],
   providers: [
@@ -58,11 +46,17 @@ const routes: Routes = [
       multi: true,
       deps: [UserService, TranslateService]
     },
+    {
+      provide: TRANSLATION_PATH,
+      useFactory: (appStateService: AppStateService) => translationPathFactory('assets/i18n/')(appStateService),
+      multi: true,
+      deps: [AppStateService]
+    },
     provideHttpClient(withInterceptorsFromDi())
   ]
 })
 export class AppModule {
   constructor() {
-    console.info('App Module constructor')
+    console.info('OneCX User Profile Module constructor')
   }
 }

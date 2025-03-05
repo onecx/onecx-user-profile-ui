@@ -1,11 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
-import { HttpClient, provideHttpClient } from '@angular/common/http'
+import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateModule, TranslateLoader } from '@ngx-translate/core'
+import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { AppStateService, UserService } from '@onecx/angular-integration-interface'
-import { createTranslateLoader } from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/angular-integration-interface'
 
 import { PrivacyComponent } from './privacy.component'
 
@@ -27,14 +26,10 @@ describe('PrivacyComponent', () => {
     TestBed.configureTestingModule({
       declarations: [PrivacyComponent],
       imports: [
-        TranslateModule.forRoot({
-          isolate: true,
-          loader: {
-            provide: TranslateLoader,
-            useFactory: createTranslateLoader,
-            deps: [HttpClient, AppStateService]
-          }
-        })
+        TranslateTestingModule.withTranslations({
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
+        }).withDefaultLanguage('en')
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: mockUserService }]

@@ -1,12 +1,12 @@
 import { APP_INITIALIZER, DoBootstrap, Injector, NgModule } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { RouterModule, Routes, Router } from '@angular/router'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { RouterModule, Routes, Router } from '@angular/router'
 import { TranslateLoader, TranslateModule, MissingTranslationHandler } from '@ngx-translate/core'
 
 import { AngularAuthModule } from '@onecx/angular-auth'
-import { createTranslateLoader } from '@onecx/angular-accelerator'
+import { createTranslateLoader, TRANSLATION_PATH, translationPathFactory } from '@onecx/angular-utils'
 import { createAppEntrypoint, initializeRouter, startsWith } from '@onecx/angular-webcomponents'
 import { addInitializeModuleGuard, AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import {
@@ -21,7 +21,7 @@ import { Configuration } from './shared/generated'
 import { environment } from 'src/environments/environment'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 
-export function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {
+function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {
   return new PortalApiConfiguration(Configuration, environment.apiPrefix, configService, appStateService)
 }
 
@@ -41,11 +41,7 @@ const routes: Routes = [
     RouterModule.forRoot(addInitializeModuleGuard(routes)),
     TranslateModule.forRoot({
       isolate: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient, AppStateService]
-      },
+      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
       missingTranslationHandler: { provide: MissingTranslationHandler, useClass: PortalMissingTranslationHandler }
     })
   ],
@@ -58,6 +54,12 @@ const routes: Routes = [
       useFactory: initializeRouter,
       multi: true,
       deps: [Router, AppStateService]
+    },
+    {
+      provide: TRANSLATION_PATH,
+      useFactory: (appStateService: AppStateService) => translationPathFactory('assets/i18n/')(appStateService),
+      multi: true,
+      deps: [AppStateService]
     },
     provideHttpClient(withInterceptorsFromDi()),
     providePortalDialogService()
