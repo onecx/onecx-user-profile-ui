@@ -82,6 +82,9 @@ app:
             ADMIN_VIEW: View roles and permissions of other users for admin
           CHANGE_PASSWORD:
             VIEW: Change password in IAM
+          IAM_ROLE:
+            VIEW: View iam user roles
+    # Slot
     slot:
       enabled: true
       specs:
@@ -94,5 +97,3 @@ app:
         onecx-user-profile-admin-view-permissions:
           name: 'onecx-user-profile-admin-view-permissions'
           description: 'User Profile show other user roles and permissions for admin'
-
-# PIPE Config
