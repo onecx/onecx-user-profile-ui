@@ -41,7 +41,7 @@
     },
     "VIEW": {
       "PERSONAL_DATA": "Personal Data",
-      "PERMISSIONS": "Assigned Permissions"
+      "PERMISSIONS": "User Permissions"
     },
     "GENERAL": {
       "APPLY": "Apply",
