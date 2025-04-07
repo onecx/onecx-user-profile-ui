@@ -64,54 +64,61 @@ describe('OneCXAvatarImageComponent', () => {
     baseUrlSubject.next('base_url_mock')
   })
 
-  it('should create', () => {
-    const { component } = setUp()
+  describe('initialize', () => {
+    it('should create', () => {
+      const { component } = setUp()
 
-    expect(component).toBeTruthy()
-  })
-
-  it('should init remote component', (done: DoneFn) => {
-    const { component } = setUp()
-
-    component.ocxInitRemoteComponent({
-      baseUrl: 'base_url_avatar'
-    } as RemoteComponentConfig)
-
-    expect(userAvatarAPIServiceSpy.configuration.basePath).toEqual('base_url_avatar/bff')
-    baseUrlSubject.asObservable().subscribe((item) => {
-      expect(item).toEqual('base_url_avatar')
-      done()
+      expect(component).toBeTruthy()
     })
-  })
 
-  it('should call ocxInitRemoteComponent with the correct config', () => {
-    const mockConfig: RemoteComponentConfig = {
-      appId: 'appId',
-      productName: 'prodName',
-      permissions: ['permission'],
-      baseUrl: 'base'
-    }
-    const { component } = setUp()
-    spyOn(component, 'ocxInitRemoteComponent')
+    it('should init remote component', (done: DoneFn) => {
+      const { component } = setUp()
 
-    component.ocxRemoteComponentConfig = mockConfig
+      component.ocxInitRemoteComponent({
+        baseUrl: 'base_url_avatar'
+      } as RemoteComponentConfig)
 
-    expect(component.ocxInitRemoteComponent).toHaveBeenCalledWith(mockConfig)
-  })
+      expect(userAvatarAPIServiceSpy.configuration.basePath).toEqual('base_url_avatar/bff')
+      baseUrlSubject.asObservable().subscribe((item) => {
+        expect(item).toEqual('base_url_avatar')
+        done()
+      })
+    })
 
-  it('should set imagePath to placeholder onImageError', (done) => {
-    const { component } = setUp()
+    it('should call ocxInitRemoteComponent with the correct config', () => {
+      const mockConfig: RemoteComponentConfig = {
+        appId: 'appId',
+        productName: 'prodName',
+        permissions: ['permission'],
+        baseUrl: 'base'
+      }
+      const { component } = setUp()
+      spyOn(component, 'ocxInitRemoteComponent')
 
-    component.ocxInitRemoteComponent({
-      baseUrl: 'base_url_avatar'
-    } as RemoteComponentConfig)
+      component.ocxRemoteComponentConfig = mockConfig
 
-    component.onImageError()
-    expect(component.imagePath$).toBeDefined()
+      expect(component.ocxInitRemoteComponent).toHaveBeenCalledWith(mockConfig)
+    })
 
-    component.imagePath$?.subscribe((res) => {
-      expect(res).toEqual(component.placeHolderPath)
-      done()
+    it('should set imagePath to placeholder onImageError', (done) => {
+      const { component } = setUp()
+
+      component.ocxInitRemoteComponent({
+        baseUrl: 'base_url_avatar'
+      } as RemoteComponentConfig)
+
+      component.onImageError()
+      expect(component.imagePath$).toBeDefined()
+
+      component.imagePath$?.subscribe((res) => {
+        expect(res).toEqual(component.placeHolderPath)
+        done()
+      })
+    })
+
+    it('should emit image loaded', () => {
+      const { component } = setUp()
+      component.onImageLoad()
     })
   })
 
