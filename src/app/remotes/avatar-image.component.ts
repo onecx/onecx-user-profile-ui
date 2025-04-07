@@ -1,4 +1,4 @@
-import { Component, Inject, Input, OnInit, NO_ERRORS_SCHEMA } from '@angular/core'
+import { Component, EventEmitter, Inject, Input, OnInit, NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule, Location } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
 import { RouterModule } from '@angular/router'
@@ -52,7 +52,10 @@ import { environment } from 'src/environments/environment'
   ]
 })
 export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
-  imagePath$: Observable<string> | undefined
+  @Input() id: string | undefined = undefined
+  @Input() imageLoaded = new EventEmitter<boolean>()
+
+  public imagePath$: Observable<string> | undefined
   public placeHolderPath = ''
 
   constructor(
@@ -81,5 +84,9 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
 
   public onImageError(): void {
     this.imagePath$ = of(this.placeHolderPath)
+    this.imageLoaded.emit(false)
+  }
+  public onImageLoad(): void {
+    this.imageLoaded.emit(true)
   }
 }
