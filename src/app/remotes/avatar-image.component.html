@@ -1,5 +1,12 @@
-<div style="height: 32px" *ngIf="imagePath$ | async as imagePath; else placeholder">
-  <img [ocxSrc]="imagePath" alt="avatar" class="user-avatar-image" (error)="onImageError()" />
+<div style="height: 2.5rem" *ngIf="imagePath$ | async as imagePath; else placeholder">
+  <img
+    [ocxSrc]="imagePath"
+    [id]="id"
+    alt="Avatar"
+    class="user-avatar-image"
+    (error)="onImageError()"
+    (load)="onImageLoad()"
+  />
 </div>
 
 <ng-template #placeholder>

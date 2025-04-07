@@ -29,6 +29,24 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile
           tagName: ocx-avatar-image-component
+    # Microservice
+    microservice:
+      spec:
+        name: OneCX User Profile UI
+        description: OneCX User Profile Frontend
+    # Slot
+    slot:
+      enabled: true
+      specs:
+        onecx-user-profile-change-password:
+          name: 'onecx-user-profile-change-password'
+          description: 'User Profile change password'
+        onecx-user-profile-permissions:
+          name: 'onecx-user-profile-permissions'
+          description: 'User Profile show user roles and permissions'
+        onecx-user-profile-admin-view-permissions:
+          name: 'onecx-user-profile-admin-view-permissions'
+          description: 'User Profile show other user roles and permissions for admin'
     # Permission
     permission:
       enabled: true
@@ -84,16 +102,3 @@ app:
             VIEW: Change password in IAM
           IAM_ROLE:
             VIEW: View iam user roles
-    # Slot
-    slot:
-      enabled: true
-      specs:
-        onecx-user-profile-change-password:
-          name: 'onecx-user-profile-change-password'
-          description: 'User Profile change password'
-        onecx-user-profile-permissions:
-          name: 'onecx-user-profile-permissions'
-          description: 'User Profile show user roles and permissions'
-        onecx-user-profile-admin-view-permissions:
-          name: 'onecx-user-profile-admin-view-permissions'
-          description: 'User Profile show other user roles and permissions for admin'
