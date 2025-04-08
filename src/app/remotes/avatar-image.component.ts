@@ -52,7 +52,11 @@ import { environment } from 'src/environments/environment'
   ]
 })
 export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
+  // input
   @Input() id: string | undefined = undefined
+  @Input() styleClass: string | undefined = undefined // image container
+  @Input() imageStyleClass: string | undefined = undefined // image
+  // output
   @Input() imageLoaded = new EventEmitter<boolean>()
 
   public imagePath$: Observable<string> | undefined
