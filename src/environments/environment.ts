@@ -10,7 +10,7 @@ export const environment = {
   skipRemoteConfigLoad: true,
   apiPrefix: 'bff',
   DEFAULT_LOGO_PATH: '/assets/images/default_avatar.png',
-  AVATAR_SIZE_LARGE: 110000,
+  AVATAR_SIZE_LARGE: 100000,
   AVATAR_SIZE_MEDIUM: 50000,
   AVATAR_SIZE_SMALL: 10000
 }

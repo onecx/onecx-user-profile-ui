@@ -118,8 +118,7 @@ export class AvatarComponent implements OnChanges {
     }
   }
 
-  public onFileUpload(): void {
-    const debug = false
+  public onFileUpload(debug: boolean = false): void {
     const log = function (text: string): void {
       if (debug) console.log(text)
     }
