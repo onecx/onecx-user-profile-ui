@@ -118,49 +118,63 @@ export class AvatarComponent implements OnChanges {
     }
   }
 
-  onFileUpload() {
+  public onFileUpload(debug: boolean = false): void {
+    const log = function (text: string): void {
+      if (debug) console.log(text)
+    }
     this.imageCompress.uploadFile().then(({ image }) => {
-      this.imageCompress.compressFile(image, 0, 100, 100).then(async (compressedImage) => {
-        let bytes = this.imageCompress.byteCount(compressedImage)
-        let img = compressedImage
-        // Large
-        if (bytes > environment.AVATAR_SIZE_LARGE) {
-          img = await this.compressByRatio(img, environment.AVATAR_SIZE_LARGE) // limit by service: 110.000
-          bytes = this.imageCompress.byteCount(img)
-        }
-        this.sendImage(img, RefType.Large)
-        // Medium
-        if (bytes > environment.AVATAR_SIZE_MEDIUM) {
-          img = await this.compressByRatio(img, environment.AVATAR_SIZE_MEDIUM)
-          bytes = this.imageCompress.byteCount(img)
-        }
-        this.sendImage(img, RefType.Medium)
-        // Small (topbar icon)
-        if (bytes > environment.AVATAR_SIZE_SMALL) {
-          img = await this.compressByRatio(img, environment.AVATAR_SIZE_SMALL) // below 3000 the image has too low quality
-        }
-        this.sendImage(img, RefType.Small)
-      })
+      const bytes = this.imageCompress.byteCount(image)
+      const ratio = 50
+      log('initialBytes: ' + bytes)
+      if (bytes <= environment.AVATAR_SIZE_SMALL) {
+        log('small')
+        this.sendImage(image, RefType.Large)
+        this.sendImage(image, RefType.Medium)
+        this.sendImage(image, RefType.Small)
+      } else if (bytes <= environment.AVATAR_SIZE_MEDIUM) {
+        log('medium')
+        this.sendImage(image, RefType.Large)
+        this.sendImage(image, RefType.Medium)
+        this.compressImage(image, ratio, environment.AVATAR_SIZE_SMALL, RefType.Small, log, true)
+      } else if (bytes <= environment.AVATAR_SIZE_LARGE) {
+        log('large')
+        this.sendImage(image, RefType.Large)
+        this.compressImage(image, ratio, environment.AVATAR_SIZE_MEDIUM, RefType.Medium, log)
+        this.compressImage(image, ratio, environment.AVATAR_SIZE_SMALL, RefType.Small, log, true)
+      } else {
+        log('> large')
+        this.compressImage(image, ratio, environment.AVATAR_SIZE_LARGE, RefType.Large, log)
+        this.compressImage(image, ratio, environment.AVATAR_SIZE_MEDIUM, RefType.Medium, log)
+        this.compressImage(image, ratio, environment.AVATAR_SIZE_SMALL, RefType.Small, log, true)
+      }
+    })
+  }
+  /* Rescale the image by suitable scale factor in a few steps */
+  private compressImage(
+    image: string,
+    ratio: number,
+    limit: number,
+    refType: RefType,
+    log: (s: string) => void,
+    reload: boolean = false
+  ): void {
+    this.imageCompress.compressFile(image, 0, ratio).then(async (image) => {
+      const img = await this.compressByRatio(image, ratio, limit)
+      const bytes = this.imageCompress.byteCount(img)
+      log('compressed => limit: ' + limit + '  bytes: ' + bytes)
+      this.sendImage(img, refType, reload)
     })
   }
 
-  /* Rescale the image by suitable scale factor in a few steps */
-  private async compressByRatio(image: string, limit: number): Promise<string> {
-    const ratio = this.calculateRatio(this.imageCompress.byteCount(image), limit)
+  private async compressByRatio(image: string, ratio: number, limit: number): Promise<string> {
     const img = await this.imageCompress.compressFile(image, 0, ratio, 100)
     if (this.imageCompress.byteCount(img) > limit) {
-      return this.compressByRatio(img, limit)
+      return this.compressByRatio(img, ratio, limit)
     } else return img
-  }
-  /* Calculate the scale factor to avoid to many compression steps */
-  private calculateRatio(bytes: number, targetSize: number): number {
-    const proportion = parseFloat(parseFloat('' + bytes / targetSize).toFixed(1))
-    const ratio = Math.round(100 / proportion)
-    return ratio >= 100 ? 97 : ratio // a change by compression is mandatory
   }
 
   /* Send compressed images to avatar service */
-  public sendImage(image: string, refType: RefType): void {
+  public sendImage(image: string, refType: RefType, reload: boolean = false): void {
     const base64Png = image.split(',').at(1) ?? ''
     const decodedData = atob(base64Png)
     const uint8Array = new Uint8Array(decodedData.length)
@@ -202,7 +216,7 @@ export class AvatarComponent implements OnChanges {
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
             this.imageUrl$ = of(URL.createObjectURL(blob))
           }
-          if (refType === RefType.Small) this.reloadPage()
+          if (reload) this.reloadPage()
         },
         error: (error: HttpErrorResponse) => {
           if (error.error?.errorCode === 'WRONG_CONTENT_TYPE') {

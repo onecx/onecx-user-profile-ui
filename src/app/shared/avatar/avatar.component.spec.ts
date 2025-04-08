@@ -10,6 +10,7 @@ import { AppStateService, UserService } from '@onecx/angular-integration-interfa
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
+import { environment } from 'src/environments/environment'
 import { AvatarComponent } from './avatar.component'
 
 class MockAppStateService {
@@ -313,7 +314,7 @@ describe('AvatarComponent', () => {
   })
 
   describe('onFileUpload', () => {
-    it('should compress img for large type', async () => {
+    it('should compress image - > large', async () => {
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -321,16 +322,31 @@ describe('AvatarComponent', () => {
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
       imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
       imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
-      imageCompressSpy.byteCount.and.returnValues(300001, 30001)
+      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_LARGE * 2, 30001)
       avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
-      //component.imageLoadError = false
+
+      await component.onFileUpload(true)
+
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(3)
+    })
+
+    it('should compress image - large', async () => {
+      const mockImage =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
+      const mockOrientation = 0
+      const mockCompressedImage =
+        'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
+      imageCompressSpy.uploadFile.and.resolveTo({ image: mockImage, orientation: mockOrientation })
+      imageCompressSpy.compressFile.and.resolveTo(mockCompressedImage)
+      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_LARGE, 30001)
+      avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
 
-      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(2)
     })
 
-    it('should compress img for medium type', async () => {
+    it('should compress image - medium', async () => {
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -338,7 +354,7 @@ describe('AvatarComponent', () => {
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
-      imageCompressSpy.byteCount.and.returnValues(30001, 3001)
+      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_MEDIUM, 15001)
       avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
@@ -346,7 +362,7 @@ describe('AvatarComponent', () => {
       expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
     })
 
-    it('should compress img for small type', async () => {
+    it('should compress image - small', async () => {
       const mockImage =
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGAAAAAd0SU1FB9sJEw0tLz5pZ4AAAAIdEVYdENvbW1lbnQA9syWvwAAAuFJREFUaN7t2z1rFEEQBuDfQkKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqKQqK'
       const mockOrientation = 0
@@ -354,30 +370,21 @@ describe('AvatarComponent', () => {
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
-      imageCompressSpy.byteCount.and.returnValues(3001, 3000)
+      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_SMALL, 3000)
       avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
 
-      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
-    })
-
-    it('should compress the image within the limit in one step', async () => {
-      imageCompressSpy.byteCount.and.returnValues(1500, 800)
-      imageCompressSpy.compressFile.and.returnValue(Promise.resolve('compressed-image'))
-
-      const result = await component['compressByRatio']('image', 1000)
-      expect(result).toBe('compressed-image')
       expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
     })
 
     it('should compress the image exceeding the limit in several steps', async () => {
-      imageCompressSpy.byteCount.and.returnValues(300000, 800)
+      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_LARGE, 800)
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve('compressed-image'))
 
-      const result = await component['compressByRatio']('image', 500)
+      const result = await component['compressByRatio']('image', 50, 500)
       expect(result).toBe('compressed-image')
-      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(2)
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(3)
     })
   })
 
@@ -466,16 +473,6 @@ describe('AvatarComponent', () => {
       component.sendImage('image', RefType.Large)
 
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
-    })
-
-    it('should upload SMALL image of (me) user', () => {
-      spyOn(component, 'reloadPage')
-      avatarMeSpy.uploadAvatar.and.returnValue(of({}))
-      component.userId = undefined
-
-      component.sendImage('image', RefType.Small)
-
-      expect(component.reloadPage).toHaveBeenCalled()
     })
 
     it('should upload LARGE image of another user', () => {

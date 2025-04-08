@@ -1,13 +1,13 @@
-<div style="height: 2.5rem" *ngIf="imagePath$ | async as imagePath; else placeholder">
+<ng-container *ngIf="imagePath$ | async as imagePath; else placeholder">
   <img
     [ocxSrc]="imagePath"
     [id]="id"
     alt="Avatar"
-    class="user-avatar-image"
+    [class]="'user-avatar-image ' + (imageStyleClass ?? '')"
     (error)="onImageError()"
     (load)="onImageLoad()"
   />
-</div>
+</ng-container>
 
 <ng-template #placeholder>
   <div class="flex align-items-center h-full justify-content-center" style="width: 56px">
