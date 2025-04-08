@@ -354,7 +354,7 @@ describe('AvatarComponent', () => {
         'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAALQAAAC0CAYAAAA9zQYyAAAABGdBTUEAALGPC/xhBQAAAAlwSFlzAAALEwAACxMBAJqcGA'
       imageCompressSpy.uploadFile.and.returnValue(Promise.resolve({ image: mockImage, orientation: mockOrientation }))
       imageCompressSpy.compressFile.and.returnValue(Promise.resolve(mockCompressedImage))
-      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_MEDIUM, 5001)
+      imageCompressSpy.byteCount.and.returnValues(environment.AVATAR_SIZE_MEDIUM, 15001)
       avatarMeSpy.uploadAvatar.and.returnValue(of({ id: 'jpgTestImageId' }))
 
       await component.onFileUpload()
@@ -375,7 +375,7 @@ describe('AvatarComponent', () => {
 
       await component.onFileUpload()
 
-      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(0)
+      expect(imageCompressSpy.compressFile).toHaveBeenCalledTimes(1)
     })
 
     it('should compress the image exceeding the limit in several steps', async () => {

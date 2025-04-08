@@ -11,6 +11,6 @@ export const environment = {
   apiPrefix: 'bff',
   DEFAULT_LOGO_PATH: '/assets/images/default_avatar.png',
   AVATAR_SIZE_LARGE: 500000, // corresponding with backend limit
-  AVATAR_SIZE_MEDIUM: 10000,
+  AVATAR_SIZE_MEDIUM: 50000,
   AVATAR_SIZE_SMALL: 10000
 }
