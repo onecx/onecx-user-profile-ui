@@ -1,7 +1,7 @@
 <ng-container *ngIf="imagePath$ | async as imagePath; else placeholder">
   <img
     [ocxSrc]="imagePath"
-    [id]="id"
+    [id]="id ?? ''"
     alt="Avatar"
     [class]="'user-avatar-image ' + (imageStyleClass ?? '')"
     (error)="onImageError()"
