@@ -7,7 +7,7 @@ import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType, UserService } from '@onecx/portal-integration-angular'
 
-import { UserPerson } from 'src/app/shared/generated'
+import { UserPerson, UserProfile } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data',
@@ -16,6 +16,7 @@ import { UserPerson } from 'src/app/shared/generated'
 })
 export class PersonalDataComponent implements OnChanges {
   @Input() userPerson: UserPerson | undefined = undefined
+  @Input() userProfile: UserProfile | undefined = undefined
   @Input() userId: string | undefined = undefined // if set then it is admin view else user view
   @Input() tenantId: string | undefined = undefined
   @Input() exceptionKey: string | undefined = undefined

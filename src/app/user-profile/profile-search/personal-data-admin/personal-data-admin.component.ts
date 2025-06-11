@@ -4,7 +4,7 @@ import { catchError, finalize, map, Observable, of, tap } from 'rxjs'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 
-import { UpdateUserPerson, UserPerson, UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { UpdateUserPerson, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data-admin',
@@ -17,6 +17,7 @@ export class PersonalDataAdminComponent implements OnChanges {
 
   public exceptionKey: string | undefined = undefined
   public userPerson$!: Observable<UserPerson>
+  public userProfile$!: Observable<UserProfile>
 
   public userId: string | undefined = undefined // needed to get avatar
   public tenantId: string = ''
@@ -35,7 +36,7 @@ export class PersonalDataAdminComponent implements OnChanges {
   }
 
   private getProfile() {
-    if (this.userProfileId)
+    if (this.userProfileId) {
       this.userPerson$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId }).pipe(
         tap((profile) => {
           this.tenantId = profile.tenantId ?? ''
@@ -51,6 +52,18 @@ export class PersonalDataAdminComponent implements OnChanges {
         }),
         finalize(() => (this.componentInUse = true))
       )
+      this.userProfile$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId }).pipe(
+        tap((profile) => {
+          this.userId = profile.userId
+        }),
+        catchError((err) => {
+          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+          console.error('getUserProfile', err)
+          return of({} as UserPerson)
+        }),
+        finalize(() => (this.componentInUse = true))
+      )
+    }
   }
 
   public onUpdatePerson(person: UserPerson): void {

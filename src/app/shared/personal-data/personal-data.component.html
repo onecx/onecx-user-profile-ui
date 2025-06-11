@@ -14,7 +14,7 @@
             {{ 'USER_PROFILE.HEADER.BASIC' | translate }}
           </div>
         </ng-template>
-        <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4 md:gap-4">
+        <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4">
           <span class="p-float-label">
             <input
               id="up_personal_info_first_name"
@@ -22,7 +22,7 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="person?.firstName"
+              [value]="userProfile?.person?.firstName"
               aria-labelledby="up_personal_info_first_name"
               [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
               tooltipPosition="top"
@@ -37,7 +37,7 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="person?.lastName"
+              [value]="userProfile?.person?.lastName"
               aria-labelledby="up_personal_info_last_name"
               [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
               tooltipPosition="top"
@@ -52,7 +52,7 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="person?.email"
+              [value]="userProfile?.person?.email"
               aria-labelledby="up_personal_info_email"
               [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
               tooltipPosition="top"
@@ -60,6 +60,7 @@
             />
             <label for="up_personal_info_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
           </span>
+
           <span class="p-float-label">
             <input
               id="up_personal_info_tenant"
@@ -67,13 +68,44 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="tenantId"
+              [value]="userProfile?.tenantId"
               aria-labelledby="up_personal_info_tenant"
               [pTooltip]="'USER_PROFILE.TENANT.TOOLTIP' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
             />
             <label for="up_personal_info_tenant">{{ 'USER_PROFILE.TENANT' | translate }}</label>
+          </span>
+
+          <span class="p-float-label">
+            <input
+              id="up_personal_info_provider"
+              pInputText
+              type="text"
+              readonly
+              class="w-full pt-3 pb-2 text-responsive"
+              [value]="userProfile?.identityProvider"
+              [attr.aria-label]="'USER_PROFILE.PROVIDER' | translate"
+              [pTooltip]="'USER_PROFILE.PROVIDER.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_provider">{{ 'USER_PROFILE.PROVIDER' | translate }}</label>
+          </span>
+          <span class="p-float-label">
+            <input
+              id="up_personal_info_issuer"
+              pInputText
+              type="text"
+              readonly
+              class="w-full pt-3 pb-2 text-responsive"
+              [value]="userProfile?.issuer"
+              [attr.aria-label]="'USER_PROFILE.ISSUER' | translate"
+              [pTooltip]="'USER_PROFILE.ISSUER.TOOLTIP' | translate"
+              tooltipPosition="top"
+              tooltipEvent="hover"
+            />
+            <label for="up_personal_info_issuer">{{ 'USER_PROFILE.ISSUER' | translate }}</label>
           </span>
         </div>
       </p-panel>

@@ -9,6 +9,7 @@
   <ocx-page-content>
     <app-personal-data
       [userPerson]="(userPerson$ | async) ?? {}"
+      [userProfile]="(userProfile$ | async) ?? {}"
       [tenantId]="tenantId"
       [exceptionKey]="exceptionKey"
       [componentInUse]="componentInUse"

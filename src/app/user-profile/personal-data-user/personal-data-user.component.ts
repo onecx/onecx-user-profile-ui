@@ -4,7 +4,7 @@ import { Observable, map, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 
 import { Action, PortalMessageService } from '@onecx/portal-integration-angular'
-import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+import { UpdateUserPerson, UserProfileAPIService, UserPerson, UserProfile } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data-user',
@@ -18,6 +18,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
   public exceptionKey: string | undefined = undefined
   public actions$: Observable<Action[]> | undefined
   public userPerson$!: Observable<UserPerson>
+  public userProfile$!: Observable<UserProfile>
   public tenantId: string = ''
   public messages: { [key: string]: string } = {}
   public componentInUse = false
@@ -35,6 +36,12 @@ export class PersonalDataUserComponent implements AfterViewInit {
       map((profile) => {
         this.prepareActionButtons()
         return profile.person ?? {}
+      })
+    )
+    this.userProfile$ = this.userProfileService.getMyUserProfile().pipe(
+      tap((profile) => {
+        this.tenantId = profile.tenantId!
+        this.prepareActionButtons()
       })
     )
   }

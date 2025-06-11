@@ -24,6 +24,7 @@ export interface UserProfile {
     userId?: string;
     identityProvider?: string;
     identityProviderId?: string;
+    issuer?: string;
     organization?: string;
     person?: UserPerson;
     accountSettings?: UserProfileAccountSettings;
