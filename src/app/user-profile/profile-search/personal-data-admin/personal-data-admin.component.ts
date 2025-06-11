@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core'
 import { TranslateService } from '@ngx-translate/core'
-import { catchError, finalize, map, Observable, of, tap } from 'rxjs'
+import { catchError, finalize, Observable, of, tap } from 'rxjs'
 
 import { PortalMessageService } from '@onecx/portal-integration-angular'
 
@@ -16,7 +16,6 @@ export class PersonalDataAdminComponent implements OnChanges {
   @Output() public hideDialog = new EventEmitter<boolean>()
 
   public exceptionKey: string | undefined = undefined
-  public userPerson$!: Observable<UserPerson>
   public userProfile$!: Observable<UserProfile>
 
   public userId: string | undefined = undefined // needed to get avatar
@@ -37,21 +36,6 @@ export class PersonalDataAdminComponent implements OnChanges {
 
   private getProfile() {
     if (this.userProfileId) {
-      this.userPerson$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId }).pipe(
-        tap((profile) => {
-          this.tenantId = profile.tenantId ?? ''
-          this.userId = profile.userId
-        }),
-        map((profile) => {
-          return profile.person ?? {}
-        }),
-        catchError((err) => {
-          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
-          console.error('getUserProfile', err)
-          return of({} as UserPerson)
-        }),
-        finalize(() => (this.componentInUse = true))
-      )
       this.userProfile$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId }).pipe(
         tap((profile) => {
           this.userId = profile.userId
@@ -59,7 +43,7 @@ export class PersonalDataAdminComponent implements OnChanges {
         catchError((err) => {
           this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
           console.error('getUserProfile', err)
-          return of({} as UserPerson)
+          return of({} as UserProfile)
         }),
         finalize(() => (this.componentInUse = true))
       )
@@ -73,7 +57,7 @@ export class PersonalDataAdminComponent implements OnChanges {
         .subscribe({
           next: (profile) => {
             this.showMessage('success')
-            this.userPerson$ = new Observable((person) => person.next(profile.person))
+            this.userProfile$ = new Observable((prof) => prof.next({ ...profile, person: person }))
           },
           error: (err) => {
             this.showMessage('error')
@@ -91,7 +75,7 @@ export class PersonalDataAdminComponent implements OnChanges {
   public onCloseDialog(): void {
     this.componentInUse = false
     this.displayPersonalDataDialog = false
-    this.userPerson$ = of({} as UserPerson)
+    this.userProfile$ = of({})
     this.hideDialog.emit(true)
   }
 }

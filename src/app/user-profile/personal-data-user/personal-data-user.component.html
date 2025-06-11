@@ -7,13 +7,14 @@
   </ocx-page-header>
 
   <ocx-page-content>
-    <app-personal-data
-      [userPerson]="(userPerson$ | async) ?? {}"
-      [userProfile]="(userProfile$ | async) ?? {}"
-      [tenantId]="tenantId"
-      [exceptionKey]="exceptionKey"
-      [componentInUse]="componentInUse"
-      (personUpdate)="onPersonUpdate($event)"
-    ></app-personal-data>
+    <ng-container *ngIf="userProfile$ | async as profile">
+      <app-personal-data
+        [userProfile]="profile"
+        [tenantId]="tenantId"
+        [exceptionKey]="exceptionKey"
+        [componentInUse]="componentInUse"
+        (personUpdate)="onPersonUpdate($event, profile)"
+      ></app-personal-data>
+    </ng-container>
   </ocx-page-content>
 </ocx-portal-page>

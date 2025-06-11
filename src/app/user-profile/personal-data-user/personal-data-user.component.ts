@@ -1,6 +1,6 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable, map, of, tap } from 'rxjs'
+import { catchError, map, Observable, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 
 import { Action, PortalMessageService } from '@onecx/portal-integration-angular'
@@ -17,8 +17,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
 
   public exceptionKey: string | undefined = undefined
   public actions$: Observable<Action[]> | undefined
-  public userPerson$!: Observable<UserPerson>
-  public userProfile$!: Observable<UserProfile>
+  public userProfile$: Observable<UserProfile>
   public tenantId: string = ''
   public messages: { [key: string]: string } = {}
   public componentInUse = false
@@ -31,17 +30,15 @@ export class PersonalDataUserComponent implements AfterViewInit {
     private readonly msgService: PortalMessageService,
     private readonly cdRef: ChangeDetectorRef
   ) {
-    this.userPerson$ = this.userProfileService.getMyUserProfile().pipe(
-      tap((profile) => (this.tenantId = profile.tenantId!)),
-      map((profile) => {
-        this.prepareActionButtons()
-        return profile.person ?? {}
-      })
-    )
     this.userProfile$ = this.userProfileService.getMyUserProfile().pipe(
       tap((profile) => {
         this.tenantId = profile.tenantId!
         this.prepareActionButtons()
+      }),
+      catchError((err) => {
+        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+        console.error('getMyUserProfile', err)
+        return of({} as UserProfile)
       })
     )
   }
@@ -51,11 +48,11 @@ export class PersonalDataUserComponent implements AfterViewInit {
     this.cdRef.detectChanges()
   }
 
-  public onPersonUpdate(person: UserPerson): void {
+  public onPersonUpdate(person: UserPerson, profile: UserProfile): void {
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: (person) => {
         this.showMessage('success')
-        this.userPerson$ = of(person)
+        this.userProfile$ = new Observable((prof) => prof.next({ ...profile, person: person }))
       },
       error: (err) => {
         this.showMessage('error')

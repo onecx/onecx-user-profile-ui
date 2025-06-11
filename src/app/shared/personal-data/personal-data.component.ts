@@ -15,8 +15,7 @@ import { UserPerson, UserProfile } from 'src/app/shared/generated'
   styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnChanges {
-  @Input() userPerson: UserPerson | undefined = undefined
-  @Input() userProfile: UserProfile | undefined = undefined
+  @Input() userProfile!: UserProfile
   @Input() userId: string | undefined = undefined // if set then it is admin view else user view
   @Input() tenantId: string | undefined = undefined
   @Input() exceptionKey: string | undefined = undefined
@@ -49,7 +48,7 @@ export class PersonalDataComponent implements OnChanges {
   public ngOnChanges(): void {
     this.person = undefined
     if (!this.componentInUse || this.exceptionKey) return
-    else this.person = this.userPerson
+    else this.person = this.userProfile?.person
 
     // update form: address and phone only!
     if (this.person && Object.keys(this.person).length > 0) {
