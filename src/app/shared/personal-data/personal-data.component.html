@@ -12,9 +12,7 @@
       <div *ocxIfPermission="'USERPROFILE#VIEW'" class="flex-1">
         <p-panel styleClass="surface-50">
           <ng-template pTemplate="header">
-            <div class="mt-0 mb-0 sm:mb-2 ml-1 w-full font-bold text-2xl">
-              {{ 'USER_PROFILE.HEADER.BASIC' | translate }}
-            </div>
+            <div class="my-0 sm:mb-2 ml-1 w-full font-bold text-2xl">{{ 'USER_PROFILE.HEADER.BASIC' | translate }}</div>
           </ng-template>
           <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4">
             <span class="p-float-label">
@@ -159,7 +157,7 @@
     <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'" class="flex-1">
       <p-panel styleClass="surface-50 h-full">
         <ng-template pTemplate="header">
-          <div class="mt-0 mb-0 sm:mb-1 md:mb-3 ml-1 w-full font-bold text-2xl">Avatar</div>
+          <div class="my-0 sm:mb-2 ml-1 w-full font-bold text-2xl">Avatar</div>
         </ng-template>
         <app-avatar [componentInUse]="componentInUse" [userId]="userId"> </app-avatar>
       </p-panel>

@@ -8,13 +8,13 @@
     flex: unset;
   }
   .avatar-image {
-    height: 150px;
-    width: 150px;
+    max-height: 150px;
+    max-width: 150px;
   }
   @media screen and (min-width: 670px) {
     &.sm\:avatar-image {
-      height: unset;
-      width: unset;
+      max-height: 280px;
+      max-width: 280px;
     }
   }
 }
