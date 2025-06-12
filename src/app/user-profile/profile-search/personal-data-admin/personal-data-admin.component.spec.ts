@@ -26,8 +26,9 @@ const defaultPerson: UserPerson = {
   phone: { number: '123456789', type: PhoneType.Mobile }
 }
 const defaultProfile: UserProfile = {
-  id: 'pid',
-  userId: '15',
+  id: 'id',
+  userId: 'userId',
+  tenantId: 'tenantId',
   person: defaultPerson
 }
 const updatedPerson: UserPerson = {
@@ -97,13 +98,13 @@ describe('PersonalDataAdminComponent', () => {
 
   describe('get user profile', () => {
     it('should set userPerson$ to defaultProfile.person', (done) => {
-      adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile as UserProfile))
+      adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile))
       component.userProfileId = defaultProfile.id
 
       component.ngOnChanges()
-      component.userPerson$.subscribe({
+      component.userProfile$.subscribe({
         next: (data) => {
-          expect(data).toEqual(defaultProfile.person as UserPerson)
+          expect(data).toEqual(defaultProfile)
           done()
         },
         error: done.fail
@@ -116,7 +117,7 @@ describe('PersonalDataAdminComponent', () => {
 
       component.ngOnChanges()
 
-      component.userPerson$.subscribe((data) => {
+      component.userProfile$.subscribe((data) => {
         expect(data).toEqual({})
         return data
       })
@@ -132,7 +133,7 @@ describe('PersonalDataAdminComponent', () => {
 
       component.ngOnChanges()
 
-      component.userPerson$.subscribe({
+      component.userProfile$.subscribe({
         next: () => done(),
         error: () => {
           expect(component.showMessage).toHaveBeenCalledOnceWith('error')
@@ -153,9 +154,9 @@ describe('PersonalDataAdminComponent', () => {
 
       component.onUpdatePerson(updatedPerson)
 
-      component.userPerson$.subscribe({
+      component.userProfile$.subscribe({
         next: (data) => {
-          expect(data).toEqual(updatedPerson as UserPerson)
+          expect(data).toEqual(updatedProfile)
           done()
         }
       })

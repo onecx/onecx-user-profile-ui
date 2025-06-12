@@ -1,10 +1,10 @@
 import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
 import { ActivatedRoute, Router } from '@angular/router'
-import { Observable, map, of, tap } from 'rxjs'
+import { catchError, map, Observable, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 
 import { Action, PortalMessageService } from '@onecx/portal-integration-angular'
-import { UpdateUserPerson, UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+import { UpdateUserPerson, UserProfileAPIService, UserPerson, UserProfile } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data-user',
@@ -17,24 +17,26 @@ export class PersonalDataUserComponent implements AfterViewInit {
 
   public exceptionKey: string | undefined = undefined
   public actions$: Observable<Action[]> | undefined
-  public userPerson$!: Observable<UserPerson>
-  public tenantId: string = ''
+  public userProfile$: Observable<UserProfile>
   public messages: { [key: string]: string } = {}
   public componentInUse = false
 
   constructor(
+    public readonly translate: TranslateService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    public readonly translate: TranslateService,
     private readonly userProfileService: UserProfileAPIService,
     private readonly msgService: PortalMessageService,
     private readonly cdRef: ChangeDetectorRef
   ) {
-    this.userPerson$ = this.userProfileService.getMyUserProfile().pipe(
-      tap((profile) => (this.tenantId = profile.tenantId!)),
-      map((profile) => {
+    this.userProfile$ = this.userProfileService.getMyUserProfile().pipe(
+      tap(() => {
         this.prepareActionButtons()
-        return profile.person ?? {}
+      }),
+      catchError((err) => {
+        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+        console.error('getMyUserProfile', err)
+        return of({})
       })
     )
   }
@@ -44,11 +46,11 @@ export class PersonalDataUserComponent implements AfterViewInit {
     this.cdRef.detectChanges()
   }
 
-  public onPersonUpdate(person: UserPerson): void {
+  public onPersonUpdate(person: UserPerson, profile: UserProfile): void {
     this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
       next: (person) => {
         this.showMessage('success')
-        this.userPerson$ = of(person)
+        this.userProfile$ = new Observable((prof) => prof.next({ ...profile, person: person }))
       },
       error: (err) => {
         this.showMessage('error')

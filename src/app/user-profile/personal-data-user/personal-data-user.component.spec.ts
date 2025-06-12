@@ -11,25 +11,28 @@ import { PortalMessageService } from '@onecx/portal-integration-angular'
 import { PhoneType, UserPerson, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 import { PersonalDataUserComponent } from './personal-data-user.component'
 
-const myUserProfile: UserProfile = {
-  userId: '15',
-  person: {
-    firstName: 'John',
-    lastName: 'Doe',
-    displayName: 'John Doe Display Name',
-    email: 'john.doe@example.com',
-    address: {
-      street: 'Candy Lane',
-      streetNo: '12',
-      city: 'Candy Town',
-      postalCode: '80-243',
-      country: 'EN'
-    },
-    phone: {
-      type: PhoneType.Mobile,
-      number: '123456789'
-    }
+const myPerson: UserPerson = {
+  firstName: 'John',
+  lastName: 'Doe',
+  displayName: 'John Doe Display Name',
+  email: 'john.doe@example.com',
+  address: {
+    street: 'Candy Lane',
+    streetNo: '12',
+    city: 'Candy Town',
+    postalCode: '80-243',
+    country: 'EN'
+  },
+  phone: {
+    type: PhoneType.Mobile,
+    number: '123456789'
   }
+}
+const myProfile: UserProfile = {
+  id: 'id',
+  userId: 'userId',
+  tenantId: 'tenantId',
+  person: myPerson
 }
 const updatedPerson: UserPerson = {
   firstName: 'newName',
@@ -85,56 +88,84 @@ describe('PersonalDataUserComponent', () => {
     fixture = TestBed.createComponent(PersonalDataUserComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-    userProfileServiceSpy.updateUserPerson.calls.reset()
-    userProfileServiceSpy.getMyUserProfile.calls.reset()
   })
 
   it('should create', () => {
     expect(component).toBeTruthy()
   })
 
-  it('should handle empty object returned by getUserProfile', () => {
-    userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
-
-    component.userPerson$?.subscribe((info) => {
-      expect(info).toEqual({})
+  describe('get my profile data', () => {
+    afterAll(() => {
+      userProfileServiceSpy.updateUserPerson.calls.reset()
+      userProfileServiceSpy.getMyUserProfile.calls.reset()
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
     })
-  })
 
-  describe('getMyUserProfile', () => {
-    it('should set userPerson$ to myUserProfile.person', () => {
-      userProfileServiceSpy.getMyUserProfile.and.returnValue(of(myUserProfile as UserProfile))
+    it('should handle empty object returned', () => {
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
+
+      component.userProfile$?.subscribe((data) => {
+        expect(data).toEqual({})
+      })
+    })
+
+    it('should handle empty profile', () => {
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
+      expect().nothing()
+
+      component.userProfile$.pipe(map((data) => expect(data).not.toBeUndefined()))
+    })
+
+    it('should handle profile data', () => {
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(of(myProfile))
       fixture = TestBed.createComponent(PersonalDataUserComponent)
       component = fixture.componentInstance
       fixture.detectChanges()
 
-      component.userPerson$.subscribe((person) => {
-        expect(person).toEqual(myUserProfile.person as UserPerson)
+      component.userProfile$.subscribe((data) => {
+        expect(data).toEqual(myProfile)
       })
     })
 
-    it('should set userPerson$ empty when getMyUserProfile() returns empty UserProfile', () => {
-      userProfileServiceSpy.getMyUserProfile.and.returnValue(of({ person: undefined }))
-      expect().nothing()
+    it('should handle error case', (done) => {
+      const errorResponse = { status: 404, statusText: 'Not Found' }
+      userProfileServiceSpy.getMyUserProfile.and.returnValue(throwError(() => errorResponse))
+      spyOn(console, 'error')
+      fixture = TestBed.createComponent(PersonalDataUserComponent)
+      component = fixture.componentInstance
+      fixture.detectChanges()
 
-      component.userPerson$.pipe(map((person) => expect(person).not.toBeUndefined()))
+      component.userProfile$?.subscribe({
+        next: (data) => {
+          expect(data).toEqual({})
+          expect(component.exceptionKey).toEqual('EXCEPTIONS.HTTP_STATUS_' + errorResponse.status + '.PROFILE')
+          expect(console.error).toHaveBeenCalledWith('getMyUserProfile', errorResponse)
+          done()
+        },
+        error: done.fail
+      })
     })
   })
 
   describe('onPersonUpdate', () => {
     it('should call messageService success when updateUserPerson() was successful', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
+      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson))
 
-      component.onPersonUpdate(updatedPerson)
+      component.onPersonUpdate(updatedPerson, myProfile)
+
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
+      component.userProfile$.subscribe((data) => {
+        expect(data).toEqual({ ...myProfile, person: updatedPerson })
+      })
     })
 
     it('should call messageService success when updateUserPerson() was successful with empty response', () => {
       spyOn(component, 'showMessage').and.callThrough()
       userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
 
-      component.onPersonUpdate(updatedPerson)
+      component.onPersonUpdate(updatedPerson, myProfile)
+
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
     })
 
@@ -144,25 +175,28 @@ describe('PersonalDataUserComponent', () => {
       spyOn(component, 'showMessage').and.callThrough()
       spyOn(console, 'error')
 
-      component.onPersonUpdate(updatedPerson)
+      component.onPersonUpdate(updatedPerson, myProfile)
+
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')
       expect(console.error).toHaveBeenCalledWith('updateUserPerson', errorResponse)
     })
   })
 
-  it('should navigate to accout settings', () => {
-    component.actions$?.subscribe((action) => {
-      action[0].actionCallback()
+  describe('navigate', () => {
+    it('should navigate to account settings', () => {
+      component.actions$?.subscribe((action) => {
+        action[0].actionCallback()
+      })
+
+      expect(routerMock.navigate).toHaveBeenCalled()
     })
 
-    expect(routerMock.navigate).toHaveBeenCalled()
-  })
+    it('should navigate to user roles', () => {
+      component.actions$?.subscribe((action) => {
+        action[1].actionCallback()
+      })
 
-  it('should navigate to user roles', () => {
-    component.actions$?.subscribe((action) => {
-      action[1].actionCallback()
+      expect(routerMock.navigate).toHaveBeenCalled()
     })
-
-    expect(routerMock.navigate).toHaveBeenCalled()
   })
 })

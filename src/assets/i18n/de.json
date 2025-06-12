@@ -85,9 +85,18 @@
     "HEADER": {
       "GENERAL": "Persönliche Daten",
       "SUBHEADER": "Persönliche Daten verwalten",
+      "INTERNAL": "Intern",
       "BASIC": "Person",
       "ADDRESS": "Adresse",
       "PHONE": "Telefon"
+    },
+    "INTERN": {
+      "TENANT": "Tenant ID",
+      "TENANT.TOOLTIP": "ID des Tenants dem der Benutzer zugeordnet ist",
+      "PROVIDER": "Identitätsmanagement",
+      "PROVIDER.TOOLTIP": "Identity Management (Identity Provider, stellt Basisdienste für Benutzerauthentifizierung bereit)",
+      "ISSUER": "Identitätsaussteller",
+      "ISSUER.TOOLTIP": "Teil des Identitätsmanagements, der speziell den Benutzer und seine zugewiesenen Rollen verwaltet und zur Benutzerauthentifizierung verwendet wird"
     },
     "FIRST_NAME": "Vorname",
     "FIRST_NAME.TOOLTIP": "Vorname(n)",
@@ -97,8 +106,6 @@
     "USER_ID.TOOLTIP": "Nutzer-ID aus dem IAM-Service",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse",
-    "TENANT": "Tenant-ID",
-    "TENANT.TOOLTIP": "Tenant-Id, abgeleitet aus der IAM-Kennung",
     "COUNTRY": "Land",
     "COUNTRY.TOOLTIP": "Name des Landes",
     "CITY": "Ort",
@@ -139,7 +146,7 @@
     }
   },
   "AVATAR": {
-    "AVATAR": "Aktuelles Foto",
+    "AVATAR": "Hochgeladenes Bild, mit originalem Seitenverhältnis: nur quadratische Bilder ergeben einen Kreis",
     "PLACEHOLDER": "Platzhalter",
     "CHOOSE": "Foto auswählen",
     "REMOVE": "Foto entfernen",
@@ -254,11 +261,11 @@
       "PROFILE": "Das Profil konnte nicht verarbeitet werden."
     },
     "HTTP_STATUS_401": {
-      "PROFILE": "Sie sind nicht autorisiert um ihr Profil zu sehen.",
+      "PROFILE": "Sie sind nicht autorisiert um das Profil zu sehen.",
       "PROFILES": "Sie sind nicht autorisiert um Profile zu sehen."
     },
     "HTTP_STATUS_403": {
-      "PROFILE": "Sie haben keine Rechte um ihr Profil zu sehen.",
+      "PROFILE": "Sie haben keine Rechte um das Profil zu sehen.",
       "PROFILES": "Sie haben keine Rechte um Profile zu sehen."
     },
     "HTTP_STATUS_404": {
@@ -266,7 +273,7 @@
       "PROFILES": "Es konnten keine Profile gefunden werden"
     },
     "HTTP_STATUS_500": {
-      "PROFILE": "Unbekanntes Problem beim Abruf ihres Profils. Bitte versuchen sie es erneut.",
+      "PROFILE": "Unbekanntes Problem beim Abruf des Profils. Bitte versuchen sie es erneut.",
       "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es erneut."
     }
   }

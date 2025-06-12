@@ -7,7 +7,7 @@ import * as countriesInfo from 'i18n-iso-countries'
 
 import { PhoneType, UserService } from '@onecx/portal-integration-angular'
 
-import { UserPerson } from 'src/app/shared/generated'
+import { UserPerson, UserProfile } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data',
@@ -15,9 +15,8 @@ import { UserPerson } from 'src/app/shared/generated'
   styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnChanges {
-  @Input() userPerson: UserPerson | undefined = undefined
+  @Input() userProfile: UserProfile | undefined = undefined
   @Input() userId: string | undefined = undefined // if set then it is admin view else user view
-  @Input() tenantId: string | undefined = undefined
   @Input() exceptionKey: string | undefined = undefined
   @Input() componentInUse = false
   @Output() public personUpdate = new EventEmitter<UserPerson>()
@@ -48,7 +47,7 @@ export class PersonalDataComponent implements OnChanges {
   public ngOnChanges(): void {
     this.person = undefined
     if (!this.componentInUse || this.exceptionKey) return
-    else this.person = this.userPerson
+    else this.person = this.userProfile?.person
 
     // update form: address and phone only!
     if (this.person && Object.keys(this.person).length > 0) {
@@ -114,9 +113,9 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   private async createCountryList() {
-    if (!this.translate.currentLang) this.translate.currentLang = 'en'
-    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
-    const countryList = countriesInfo.getNames(this.translate.currentLang)
+    const lang = this.user.lang$.getValue()
+    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + lang + '.json'))
+    const countryList = countriesInfo.getNames(lang)
     const countryCodes = Object.keys(countryList)
     const countryNames = Object.values(countryList)
     this.countries = [] // important: trigger UI update

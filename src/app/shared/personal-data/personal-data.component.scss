@@ -1,6 +1,7 @@
 @import '/src/app/_up-mixins.scss';
 
 @include displaying-text-responsive;
+@include dropdown-zebra-rows;
 
 :host ::ng-deep {
   .p-panel {

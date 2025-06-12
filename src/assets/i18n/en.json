@@ -85,20 +85,27 @@
     "HEADER": {
       "GENERAL": "Personal Data",
       "SUBHEADER": "Manage personal data",
+      "INTERNAL": "Internal",
       "BASIC": "Person",
       "ADDRESS": "Address",
       "PHONE": "Phone"
+    },
+    "INTERN": {
+      "TENANT": "Tenant ID",
+      "TENANT.TOOLTIP": "ID of the Tenant to which the User is assigned",
+      "PROVIDER": "Identity Management",
+      "PROVIDER.TOOLTIP": "Identity Management (Identity Provider, provides basic services for user authentication)",
+      "ISSUER": "Identity Issuer",
+      "ISSUER.TOOLTIP": "Part of identity management that specifically manages the user and their assigned roles and is used for user authentication"
     },
     "FIRST_NAME": "First name",
     "FIRST_NAME.TOOLTIP": "First names",
     "LAST_NAME": "Last name",
     "LAST_NAME.TOOLTIP": "Last name",
     "USER_ID": "User ID",
-    "USER_ID.TOOLTIP": "The user's ID provided in the IAM Service",
-    "EMAIL": "E-mail",
-    "EMAIL.TOOLTIP": "E-mail Adress",
-    "TENANT": "Tenant Id",
-    "TENANT.TOOLTIP": " Tenant Id, derived from IAM identifier",
+    "USER_ID.TOOLTIP": "The user's ID provided in the Identity Management (IDM)",
+    "EMAIL": "E-Mail",
+    "EMAIL.TOOLTIP": "E-Mail Address",
     "COUNTRY": "Country",
     "COUNTRY.TOOLTIP": "Name of the country",
     "CITY": "City",
@@ -139,12 +146,12 @@
     }
   },
   "AVATAR": {
-    "AVATAR": "Current Photo",
+    "AVATAR": "Uploaded Image, with original aspect ratio: only square images result in a circle",
     "PLACEHOLDER": "Placeholder",
-    "CHOOSE": "Choose Photo",
-    "REMOVE": "Remove Photo",
-    "REMOVE.MESSAGE": "Do you want to remove the photo?",
-    "UPLOAD": "Upload Photo",
+    "CHOOSE": "Choose Image",
+    "REMOVE": "Remove Image",
+    "REMOVE.MESSAGE": "Do you want to remove the Image?",
+    "UPLOAD": "Upload Image",
     "CANCEL": "Cancel",
     "MSG": {
       "FILE_TOO_LARGE": {
@@ -243,11 +250,11 @@
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {
-      "PROFILE": "No data could be found for your Profile.",
+      "PROFILE": "No data could be found for the Profile.",
       "PROFILES": "No data could be found for this Profile."
     },
     "HTTP_STATUS_0": {
-      "PROFILE": "Unknown problem retrieving your Profile. Please try again.",
+      "PROFILE": "Unknown problem retrieving the Profile. Please try again.",
       "PROFILES": "Unknown problem retrieving Profiles. Please try again."
     },
     "HTTP_STATUS_400": {
@@ -255,19 +262,19 @@
       "PROFILES": "The Profile could not be processed."
     },
     "HTTP_STATUS_401": {
-      "PROFILE": "You are not authorized to see your Profile.",
+      "PROFILE": "You are not authorized to see the Profile.",
       "PROFILES": "You are not authorized to see Profiles."
     },
     "HTTP_STATUS_403": {
-      "PROFILE": "You have no Permissions to see your Profile.",
+      "PROFILE": "You have no Permissions to see the Profile.",
       "PROFILES": "You have no Permissions to see Profiles."
     },
     "HTTP_STATUS_404": {
-      "PROFILE": "No data could be found for your Profile.",
+      "PROFILE": "No data could be found for the Profile.",
       "PROFILES": "No data could be found for this Profile."
     },
     "HTTP_STATUS_500": {
-      "PROFILE": "Unknown problem retrieving your Profile. Please try again.",
+      "PROFILE": "Unknown problem retrieving of the Profile. Please try again.",
       "PROFILES": "Unknown problem retrieving Profiles. Please try again."
     }
   }
