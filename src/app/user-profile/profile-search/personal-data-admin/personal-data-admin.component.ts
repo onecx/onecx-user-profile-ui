@@ -16,7 +16,7 @@ export class PersonalDataAdminComponent implements OnChanges {
   @Output() public hideDialog = new EventEmitter<boolean>()
 
   public exceptionKey: string | undefined = undefined
-  public userProfile$!: Observable<UserProfile>
+  public userProfile$!: Observable<UserProfile | undefined>
 
   public userId: string | undefined = undefined // needed to get avatar
   public messages: { [key: string]: string } = {}
@@ -42,7 +42,7 @@ export class PersonalDataAdminComponent implements OnChanges {
         catchError((err) => {
           this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
           console.error('getUserProfile', err)
-          return of({} as UserProfile)
+          return of(undefined)
         }),
         finalize(() => (this.componentInUse = true))
       )

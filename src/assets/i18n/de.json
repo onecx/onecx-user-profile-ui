@@ -146,7 +146,7 @@
     }
   },
   "AVATAR": {
-    "AVATAR": "Aktuelles Foto",
+    "AVATAR": "Hochgeladenes Bild, mit originalem Seitenverhältnis: nur quadratische Bilder ergeben einen Kreis",
     "PLACEHOLDER": "Platzhalter",
     "CHOOSE": "Foto auswählen",
     "REMOVE": "Foto entfernen",
@@ -261,11 +261,11 @@
       "PROFILE": "Das Profil konnte nicht verarbeitet werden."
     },
     "HTTP_STATUS_401": {
-      "PROFILE": "Sie sind nicht autorisiert um ihr Profil zu sehen.",
+      "PROFILE": "Sie sind nicht autorisiert um das Profil zu sehen.",
       "PROFILES": "Sie sind nicht autorisiert um Profile zu sehen."
     },
     "HTTP_STATUS_403": {
-      "PROFILE": "Sie haben keine Rechte um ihr Profil zu sehen.",
+      "PROFILE": "Sie haben keine Rechte um das Profil zu sehen.",
       "PROFILES": "Sie haben keine Rechte um Profile zu sehen."
     },
     "HTTP_STATUS_404": {
@@ -273,7 +273,7 @@
       "PROFILES": "Es konnten keine Profile gefunden werden"
     },
     "HTTP_STATUS_500": {
-      "PROFILE": "Unbekanntes Problem beim Abruf ihres Profils. Bitte versuchen sie es erneut.",
+      "PROFILE": "Unbekanntes Problem beim Abruf des Profils. Bitte versuchen sie es erneut.",
       "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es erneut."
     }
   }

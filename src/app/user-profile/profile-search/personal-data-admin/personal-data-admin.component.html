@@ -1,5 +1,5 @@
 <p-dialog
-  *ngIf="(userProfile$ | async) ?? {} as profile"
+  *ngIf="userProfile$ | async as profile"
   [(visible)]="displayPersonalDataDialog"
   (onHide)="onCloseDialog()"
   [modal]="true"
