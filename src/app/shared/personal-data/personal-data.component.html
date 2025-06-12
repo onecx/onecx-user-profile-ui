@@ -22,7 +22,7 @@
                 type="text"
                 readonly
                 class="w-full pt-3 pb-2 text-responsive"
-                [value]="userProfile.person?.firstName"
+                [value]="userProfile?.person?.firstName"
                 aria-labelledby="up_personal_info_first_name"
                 [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
@@ -37,7 +37,7 @@
                 type="text"
                 readonly
                 class="w-full pt-3 pb-2 text-responsive"
-                [value]="userProfile.person?.lastName"
+                [value]="userProfile?.person?.lastName"
                 aria-labelledby="up_personal_info_last_name"
                 [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
                 tooltipPosition="top"
@@ -52,7 +52,7 @@
                 type="text"
                 readonly
                 class="w-full pt-3 pb-2 text-responsive"
-                [value]="userProfile.person?.email"
+                [value]="userProfile?.person?.email"
                 aria-labelledby="up_personal_info_email"
                 [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
                 tooltipPosition="top"
@@ -323,7 +323,7 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="userProfile.tenantId"
+              [value]="userProfile?.tenantId"
               [attr.aria-label]="'USER_PROFILE.INTERN.TENANT' | translate"
               [pTooltip]="'USER_PROFILE.INTERN.TENANT.TOOLTIP' | translate"
               tooltipPosition="top"
@@ -339,7 +339,7 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="userProfile.identityProvider"
+              [value]="userProfile?.identityProvider"
               [attr.aria-label]="'USER_PROFILE.INTERN.PROVIDER' | translate"
               [pTooltip]="'USER_PROFILE.PROVIDER.TOOLTIP' | translate"
               tooltipPosition="top"
@@ -354,7 +354,7 @@
               type="text"
               readonly
               class="w-full pt-3 pb-2 text-responsive"
-              [value]="userProfile.issuer"
+              [value]="userProfile?.issuer"
               [attr.aria-label]="'USER_PROFILE.INTERN.ISSUER' | translate"
               [pTooltip]="'USER_PROFILE.INTERN.ISSUER.TOOLTIP' | translate"
               tooltipPosition="top"

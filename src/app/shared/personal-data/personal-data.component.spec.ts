@@ -2,7 +2,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
 
@@ -41,10 +40,14 @@ describe('PersonalDataComponent', () => {
       postalCode: 'newCode',
       country: 'DE'
     },
-    phone: { type: PhoneType.Mobile, number: '+4916883930' }
+    phone: { type: PhoneType.Mobile, number: '+00123456789' }
   }
   const defaultProfile: UserProfile = {
-    id: 'userId',
+    id: 'id',
+    userId: 'userId',
+    tenantId: 'tenantId',
+    identityProvider: 'keycloak',
+    issuer: 'http://keycloak/realms/OneCX',
     person: defaultPerson
   }
   const userProfileServiceSpy = {
@@ -55,9 +58,11 @@ describe('PersonalDataComponent', () => {
     'PortalMessageService',
     ['success', 'error']
   )
-  const translateServiceSpy = { get: jasmine.createSpy('get').and.returnValue('en') }
   const countriesInfoMock = jasmine.createSpyObj('countriesInfo', ['registerLocale', 'getNames'])
-  const userServiceSpy = { hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of()) }
+  const userServiceSpy = {
+    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of()),
+    lang$: { getValue: jasmine.createSpy('getValue').and.returnValue('en') }
+  }
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -74,7 +79,6 @@ describe('PersonalDataComponent', () => {
         provideHttpClientTesting(),
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
-        { provide: TranslateService, useValue: translateServiceSpy },
         { provide: UserService, useValue: userServiceSpy }
       ]
     }).compileComponents()
@@ -91,11 +95,11 @@ describe('PersonalDataComponent', () => {
     })
   }))
 
-  beforeEach(waitForAsync(() => {
+  beforeEach(() => {
     fixture = TestBed.createComponent(PersonalDataComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
-  }))
+  })
 
   it('should create', async () => {
     expect(component).toBeTruthy()
@@ -104,7 +108,8 @@ describe('PersonalDataComponent', () => {
   describe('initialize component: user mode', () => {
     it('should if person was provided then fill form and call createCountryList', fakeAsync(() => {
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userId = undefined
+      component.userProfile = defaultProfile
       const spyCreateCountry = spyOn<any>(component, 'createCountryList')
 
       fixture.detectChanges()
@@ -118,8 +123,7 @@ describe('PersonalDataComponent', () => {
   describe('initialize component: admin mode', () => {
     it('should if person was provided then fill form and call createCountryList', fakeAsync(() => {
       component.componentInUse = true
-      component.userPerson = defaultPerson
-      component.userId = defaultProfile.id
+      component.userProfile = defaultProfile
       const spyCreateCountry = spyOn<any>(component, 'createCountryList')
 
       fixture.detectChanges()
@@ -131,7 +135,7 @@ describe('PersonalDataComponent', () => {
 
     it('should if person was not provided then no form is filled and countries not filled', () => {
       component.componentInUse = true
-      component.userPerson = {}
+      component.userId = undefined
 
       fixture.detectChanges()
       component.ngOnChanges()
@@ -143,7 +147,7 @@ describe('PersonalDataComponent', () => {
 
     it('should reset main objects used to fill the dialog in case dialog is not active or an exception occurs', () => {
       component.userId = 'uid'
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       component.componentInUse = false
 
       component.ngOnChanges()
@@ -153,7 +157,7 @@ describe('PersonalDataComponent', () => {
 
     it('should reset main objects used to fill the dialog in case dialog is not active or an exception occurs', () => {
       component.userId = 'uid'
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       component.componentInUse = true
       component.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_403.PROFILE'
 
@@ -167,7 +171,7 @@ describe('PersonalDataComponent', () => {
     it('should change the Address when Address is not empty', () => {
       spyOn(localStorage, 'removeItem')
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       fixture.detectChanges()
       component.ngOnChanges()
       // now change address
@@ -186,7 +190,7 @@ describe('PersonalDataComponent', () => {
     it('should cancel the Address editing', () => {
       // initially the defaultPerson was filled into form
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       fixture.detectChanges()
       component.ngOnChanges()
       // now change address
@@ -212,7 +216,7 @@ describe('PersonalDataComponent', () => {
       spyOn(localStorage, 'removeItem')
       // initially the defaultPerson was filled into form
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone number
@@ -230,7 +234,7 @@ describe('PersonalDataComponent', () => {
     it('should cancel the Phone editing', () => {
       // initially the defaultPerson was filled into form
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone
@@ -248,7 +252,7 @@ describe('PersonalDataComponent', () => {
     it('should set phone number to empty', () => {
       // initially the defaultPerson was filled into form
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone number
@@ -267,7 +271,7 @@ describe('PersonalDataComponent', () => {
     it('should choose a landline phone number', fakeAsync(() => {
       // initially the defaultPerson was filled into form
       component.componentInUse = true
-      component.userPerson = defaultPerson
+      component.userProfile = defaultProfile
       fixture.detectChanges()
       component.ngOnChanges()
       // now change phone number

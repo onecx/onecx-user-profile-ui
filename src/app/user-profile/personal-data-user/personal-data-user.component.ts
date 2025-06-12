@@ -36,7 +36,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
       catchError((err) => {
         this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
         console.error('getMyUserProfile', err)
-        return of({} as UserProfile)
+        return of({})
       })
     )
   }

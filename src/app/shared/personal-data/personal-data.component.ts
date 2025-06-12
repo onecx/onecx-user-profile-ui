@@ -15,7 +15,7 @@ import { UserPerson, UserProfile } from 'src/app/shared/generated'
   styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnChanges {
-  @Input() userProfile!: UserProfile
+  @Input() userProfile: UserProfile | undefined = undefined
   @Input() userId: string | undefined = undefined // if set then it is admin view else user view
   @Input() exceptionKey: string | undefined = undefined
   @Input() componentInUse = false
@@ -113,9 +113,9 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   private async createCountryList() {
-    if (!this.translate.currentLang) this.translate.currentLang = 'en'
-    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + this.translate.currentLang + '.json'))
-    const countryList = countriesInfo.getNames(this.translate.currentLang)
+    const lang = this.user.lang$.getValue()
+    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + lang + '.json'))
+    const countryList = countriesInfo.getNames(lang)
     const countryCodes = Object.keys(countryList)
     const countryNames = Object.values(countryList)
     this.countries = [] // important: trigger UI update
