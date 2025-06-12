@@ -10,7 +10,6 @@
     <ng-container *ngIf="userProfile$ | async as profile">
       <app-personal-data
         [userProfile]="profile"
-        [tenantId]="tenantId"
         [exceptionKey]="exceptionKey"
         [componentInUse]="componentInUse"
         (personUpdate)="onPersonUpdate($event, profile)"

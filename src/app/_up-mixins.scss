@@ -52,12 +52,7 @@
 /* disable preset of opacity in form: not readable */
 @mixin readable-disabled-form-controls {
   :host ::ng-deep {
-    .p-inputtext.p-component:disabled,
-    .p-dropdown.p-component.p-disabled,
-    .p-checkbox-box.p-disabled,
-    .p-checkbox-label.p-disabled {
-      opacity: unset;
-    }
+    --disabled-opacity: 0.7;
   }
 }
 
@@ -399,8 +394,8 @@
 @mixin dataview-list-zebra-rows {
   :host ::ng-deep {
     .p-dataview-list .p-dataview-content .p-grid > div {
-      &:nth-child(odd) {
-        background-color: #f8f9fa;
+      &:nth-child(even) {
+        background-color: var(--table-body-row-even-bg);
       }
     }
   }
@@ -408,24 +403,24 @@
 @mixin dataview-list-flex-zebra-rows {
   :host ::ng-deep {
     .p-dataview-list .p-dataview-content > div {
-      &:nth-child(odd) {
-        background-color: #f8f9fa;
+      &:nth-child(even) {
+        background-color: var(--table-body-row-even-bg);
       }
     }
   }
 }
 @mixin dropdown-zebra-rows {
   :host ::ng-deep {
-    .p-dropdown-panel .p-dropdown-items *:nth-child(odd) .p-dropdown-item {
-      background-color: #f8f9fa;
+    .p-dropdown-panel .p-dropdown-items *:nth-child(even) .p-dropdown-item {
+      background-color: var(--table-body-row-even-bg);
     }
   }
 }
 @mixin listbox-zebra-rows {
   :host ::ng-deep {
     .p-listbox:not(.p-disabled) .p-listbox-item:not(.p-highlight):not(.p-disabled) {
-      &:nth-child(odd) {
-        background-color: #f8f9fa;
+      &:nth-child(even) {
+        background-color: var(--table-body-row-even-bg);
       }
     }
   }
@@ -433,15 +428,16 @@
 @mixin picklist-zebra-rows {
   :host ::ng-deep {
     .p-picklist-list li {
-      &:nth-child(odd) {
-        background-color: #f8f9fa;
+      &:nth-child(even) {
+        background-color: var(--table-body-row-even-bg);
       }
     }
   }
 }
 @mixin table-zebra-rows {
   :host ::ng-deep {
-    .p-datatable .p-datatable-tbody > tr:nth-child(even) > td:not(:first-of-type) {
+    /* this works only on non-frozen columns (table.p-datatable-striped does not work) */
+    .p-datatable .p-datatable-tbody > tr:nth-child(even) > td:not(.p-frozen-column) {
       background-color: var(--table-body-row-even-bg);
     }
   }

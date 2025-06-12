@@ -18,21 +18,19 @@ export class PersonalDataUserComponent implements AfterViewInit {
   public exceptionKey: string | undefined = undefined
   public actions$: Observable<Action[]> | undefined
   public userProfile$: Observable<UserProfile>
-  public tenantId: string = ''
   public messages: { [key: string]: string } = {}
   public componentInUse = false
 
   constructor(
+    public readonly translate: TranslateService,
     private readonly route: ActivatedRoute,
     private readonly router: Router,
-    public readonly translate: TranslateService,
     private readonly userProfileService: UserProfileAPIService,
     private readonly msgService: PortalMessageService,
     private readonly cdRef: ChangeDetectorRef
   ) {
     this.userProfile$ = this.userProfileService.getMyUserProfile().pipe(
-      tap((profile) => {
-        this.tenantId = profile.tenantId!
+      tap(() => {
         this.prepareActionButtons()
       }),
       catchError((err) => {

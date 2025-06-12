@@ -19,7 +19,6 @@ export class PersonalDataAdminComponent implements OnChanges {
   public userProfile$!: Observable<UserProfile>
 
   public userId: string | undefined = undefined // needed to get avatar
-  public tenantId: string = ''
   public messages: { [key: string]: string } = {}
   public componentInUse = false
 
