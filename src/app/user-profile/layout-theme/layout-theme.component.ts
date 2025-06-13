@@ -38,9 +38,9 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
       { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorScheme.Dark, disabled: true }
     ]
     this.formGroup = new FormGroup({
-      menuMode: new FormControl({ value: null, disable: true }),
-      colorScheme: new FormControl({ value: null, disable: true }),
-      breadcrumbs: new FormControl({ value: true, disable: true })
+      menuMode: new FormControl({ value: null, disabled: true }),
+      colorScheme: new FormControl({ value: null, disabled: true }),
+      breadcrumbs: new FormControl({ value: true, disabled: true })
     })
   }
 

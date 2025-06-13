@@ -5,7 +5,7 @@ import { RefType } from './generated'
 import {
   bffImageUrl,
   copyToClipboard,
-  dropDownSortItemsByLabel,
+  sortByLabel,
   dropDownGetLabelByValue,
   forceFormValidation,
   getLocale,
@@ -64,14 +64,14 @@ describe('util functions', () => {
     })
   })
 
-  describe('dropDownSortItemsByLabel', () => {
+  describe('sortByLabel', () => {
     it('should correctly sort items by label', () => {
       const items: SelectItem[] = [
         { label: 'label2', value: 2 },
         { label: 'label1', value: 1 }
       ]
 
-      const sortedItems = items.sort(dropDownSortItemsByLabel)
+      const sortedItems = items.sort(sortByLabel)
 
       expect(sortedItems[0].label).toEqual('label1')
     })
@@ -82,7 +82,7 @@ describe('util functions', () => {
         { label: 'label1', value: 2 }
       ]
 
-      const sortedItems = items.sort(dropDownSortItemsByLabel)
+      const sortedItems = items.sort(sortByLabel)
 
       expect(sortedItems[0].label).toEqual(undefined)
     })

@@ -56,34 +56,41 @@ describe('LocaleTimezoneComponent', () => {
     fixture.detectChanges()
   })
 
-  it('should create', () => {
-    expect(component).toBeTruthy()
-    expect(component.locale).toBe('en')
-    expect(component.timezone).toBe('Europe/Berlin')
+  describe('initialize', () => {
+    it('should create', () => {
+      expect(component).toBeTruthy()
+      expect(component.locale).toBe('en')
+      expect(component.timezone).toBe('Europe/Berlin')
 
-    expect(component.editLanguage).toBe(true)
-    expect(component.editTimezone).toBe(true)
+      expect(component.editLanguage).toBe(true)
+      expect(component.editTimezone).toBe(true)
+      expect(component.timeZones.length).toBeGreaterThan(0)
+    })
   })
 
-  it('should apply Changes', () => {
-    component.localeInput = 'gb'
-    component.timezoneInput = 'HST'
-    component.ngOnChanges()
-    expect(component.formGroup.value['locale']).toEqual('gb')
-    expect(component.formGroup.value['timezone']).toEqual('HST')
-  })
+  describe('on changes', () => {
+    it('should fill form', () => {
+      component.localeInput = 'gb'
+      component.timezoneInput = 'Europe/Paris'
 
-  it('should using default languages', () => {
-    configServiceSpy.getProperty.and.returnValue(null)
+      component.ngOnChanges()
 
-    component.ngOnChanges()
+      expect(component.formGroup.get('locale')?.value).toEqual(component.localeInput)
+      expect(component.formGroup.get('timezone')?.value).toEqual(component.timezoneInput)
+    })
 
-    expect(component.localeSelectItems).toEqual(defaultLanguageItems)
+    it('should using default languages', () => {
+      configServiceSpy.getProperty.and.returnValue(null)
+
+      component.ngOnChanges()
+
+      expect(component.localeSelectItems).toEqual(defaultLanguageItems)
+    })
   })
 
   it('should saveLocale', () => {
     component.localeInput = 'gb'
-    component.timezoneInput = 'HST'
+    component.timezoneInput = 'Europe/Paris'
     component.ngOnChanges()
     component.saveLocale()
 
@@ -92,11 +99,11 @@ describe('LocaleTimezoneComponent', () => {
   })
 
   it('should saveTimezone', () => {
-    component.timezoneInput = 'HST'
+    component.timezoneInput = 'Europe/Paris'
     component.ngOnChanges()
     component.saveTimezone()
 
-    expect(component.timezone).toEqual('HST')
+    expect(component.timezone).toEqual('Europe/Paris')
     expect(component.changedTimezone).toEqual(true)
   })
 
@@ -174,10 +181,11 @@ describe('LocaleTimezoneComponent Error', () => {
     const errorResponse = { status: 404, statusText: 'Not Found' }
     localeAndTimezoneServiceSpy.getTimezoneData.and.returnValue(throwError(() => errorResponse))
     spyOn(console, 'error')
+    fixture = TestBed.createComponent(LocaleTimezoneComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
 
-    component.ngOnChanges()
-
-    expect(component.timezoneSelectItems).toEqual([])
+    expect(component.timeZones).toEqual([])
     expect(console.error).toHaveBeenCalledWith('getTimezoneData', errorResponse)
   })
 })
