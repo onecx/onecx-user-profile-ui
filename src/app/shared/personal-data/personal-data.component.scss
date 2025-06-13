@@ -1,5 +1,6 @@
 @import '/src/app/_up-mixins.scss';
 
+@include readable-disabled-form-controls;
 @include displaying-text-responsive;
 @include dropdown-zebra-rows;
 

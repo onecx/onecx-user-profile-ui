@@ -96,7 +96,7 @@
       "PROVIDER": "Identitätsmanagement",
       "PROVIDER.TOOLTIP": "Identity Management (Identity Provider, stellt Basisdienste für Benutzerauthentifizierung bereit)",
       "ISSUER": "Identitätsaussteller",
-      "ISSUER.TOOLTIP": "Teil des Identitätsmanagements, der speziell den Benutzer und seine zugewiesenen Rollen verwaltet und zur Benutzerauthentifizierung verwendet wird"
+      "ISSUER.TOOLTIP": "Teil des Identitätsmanagements, der speziell den Benutzer und seine zugewiesenen Rollen verwaltet und zur Benutzerauthentifizierung verwendet wird. Wird beim ersten Anmelden gesetzt."
     },
     "FIRST_NAME": "Vorname",
     "FIRST_NAME.TOOLTIP": "Vorname(n)",
@@ -148,10 +148,10 @@
   "AVATAR": {
     "AVATAR": "Hochgeladenes Bild, mit originalem Seitenverhältnis: nur quadratische Bilder ergeben einen Kreis",
     "PLACEHOLDER": "Platzhalter",
-    "CHOOSE": "Foto auswählen",
-    "REMOVE": "Foto entfernen",
-    "REMOVE.MESSAGE": "Möchten Sie das Foto entfernen?",
-    "UPLOAD": "Foto hochladen",
+    "CHOOSE": "Bild auswählen",
+    "REMOVE": "Bild entfernen",
+    "REMOVE.MESSAGE": "Möchten Sie das Bild entfernen?",
+    "UPLOAD": "Bild hochladen",
     "CANCEL": "Abbrechen",
     "MSG": {
       "FILE_TOO_LARGE": {
@@ -215,8 +215,8 @@
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
     "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Einstellungen zu Darstellung und Aussehen",
-    "BREADCRUMBS": "Seitenpfad",
-    "BREADCRUMBS.TOOLTIP": "Sichtbarkeit des Seitenpfads: sichtbar/unsichtbar",
+    "BREADCRUMBS": "Seitenpfad anzeigen",
+    "BREADCRUMBS.TOOLTIP": "Sichtbarkeit des Seitenpfads auf der Seite: sichtbar/unsichtbar",
     "MENU_MODE": "Menüdarstellung",
     "MENU_MODES": {
       "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Sidebar (Mobil)",

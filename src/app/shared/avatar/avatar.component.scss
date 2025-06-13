@@ -11,8 +11,14 @@
     max-height: 150px;
     max-width: 150px;
   }
-  @media screen and (min-width: 670px) {
+  @media screen and (min-width: 576px) {
     &.sm\:avatar-image {
+      max-height: 230px;
+      max-width: 230px;
+    }
+  }
+  @media screen and (min-width: 670px) {
+    &.md\:avatar-image {
       max-height: 280px;
       max-width: 280px;
     }

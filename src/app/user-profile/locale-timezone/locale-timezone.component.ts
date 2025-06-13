@@ -1,9 +1,11 @@
 import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core'
-import { FormControl, UntypedFormGroup } from '@angular/forms'
+import { FormControl, FormGroup } from '@angular/forms'
+import { SelectItem } from 'primeng/api'
 
 import { ConfigurationService, CONFIG_KEY, UserService } from '@onecx/portal-integration-angular'
-import { SelectItem } from 'primeng/api'
+
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
+import { sortByLabel } from 'src/app/shared/utils'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 
@@ -23,8 +25,8 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
   public editTimezone = false
   public changedLanguage = false
   public changedTimezone = false
-  public formGroup: UntypedFormGroup
-  public timezoneSelectItems: SelectTimeZone[] = []
+  public formGroup: FormGroup
+  public timeZones: SelectTimeZone[] = []
   public localeSelectItems: SelectItem[] = []
   public locale = 'en'
   public timezone = 'Europe/Berlin'
@@ -37,43 +39,45 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     private readonly configService: ConfigurationService,
     private readonly userService: UserService
   ) {
-    this.formGroup = new UntypedFormGroup({
-      timezone: new FormControl(''),
-      locale: new FormControl('')
+    this.loadTimezones()
+    this.formGroup = new FormGroup({
+      timezone: new FormControl(null),
+      locale: new FormControl(null)
     })
   }
 
   public ngOnInit(): void {
     this.editLanguage = this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
     this.editTimezone = this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
-    if (this.locale) {
-      this.formGroup.patchValue({ locale: this.locale })
-    }
-    if (this.timezone) {
-      this.formGroup.patchValue({ timezone: this.timezone })
-    }
+    if (this.locale) this.formGroup.patchValue({ locale: this.locale })
+    if (this.timezone) this.formGroup.patchValue({ timezone: this.timezone })
   }
 
   public ngOnChanges(): void {
     if (this.localeInput) this.formGroup.patchValue({ locale: this.localeInput })
     if (this.timezoneInput) this.formGroup.patchValue({ timezone: this.timezoneInput })
+    this.formGroup.get('timezone')?.disable()
     this.initLocalesAndTimezones()
   }
 
-  private initLocalesAndTimezones(): void {
+  private loadTimezones(): void {
     this.localAndTimezoneService.getTimezoneData().subscribe({
       next: (response) => {
-        this.timezoneSelectItems = response.map((tz) => ({
+        this.timeZones = response.map((tz) => ({
           label: tz.name,
           value: tz.name,
           utc: tz.utc,
           factor: tz.factor
         }))
+        this.timeZones.sort(sortByLabel)
       },
       error: (err) => {
         console.error('getTimezoneData', err)
       }
     })
+  }
+
+  private initLocalesAndTimezones(): void {
     const supportedLanguagesProperty = this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES)
     const supportedLanguages = supportedLanguagesProperty
       ? supportedLanguagesProperty.split(',').map((l) => l.trim())
@@ -102,7 +106,7 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
 
   public refreshTimezoneExample(): void {
     this.timezoneExampleDate = new Date()
-    const tz = this.timezoneSelectItems.filter((tz) => tz.label === this.timezone)[0]
+    const tz = this.timeZones.filter((tz) => tz.label === this.timezone)[0]
     if (tz) {
       this.timezoneUTC = tz.factor
     }

@@ -3,18 +3,21 @@
     <div class="font-bold my-2">{{ 'LAYOUT_THEME.MENU_MODE' | translate }}</div>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
       <div *ocxIfBreakpoint="'mobile'">{{ 'LAYOUT_THEME.MENU_MODES.VERTICAL_SIDEBAR_ON_MOBILE' | translate }}</div>
-      <p-selectButton
-        *ocxIfBreakpoint="'desktop'"
-        id="up_layout_theme_menu_mode"
-        [options]="menuModeSelectItems"
-        formControlName="menuMode"
-        (onChange)="saveMenuMode()"
-        [pTooltip]="'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      >
-        <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
-      </p-selectButton>
+      <div class="search-criteria-selectbutton">
+        <p-selectButton
+          *ocxIfBreakpoint="'desktop'"
+          id="up_layout_theme_menu_mode"
+          [options]="menuModeSelectItems"
+          formControlName="menuMode"
+          (onChange)="saveMenuMode()"
+          [ariaLabel]="'LAYOUT_THEME.MENU_MODE' | translate"
+          [pTooltip]="'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+          <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
+        </p-selectButton>
+      </div>
       <button
         *ngIf="changedMenuMode"
         pButton
@@ -25,6 +28,7 @@
         id="up_layout_theme_menu_mode_refresh"
         (click)="applyChange()"
         [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
         [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
@@ -33,17 +37,20 @@
 
     <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LAYOUT_THEME.COLOR_SCHEME' | translate }}</div>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
-      <p-selectButton
-        id="up_layout_theme_color_scheme"
-        [options]="colorSchemeSelectItems"
-        formControlName="colorScheme"
-        (onChange)="saveColorScheme()"
-        [pTooltip]="'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      >
-        <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
-      </p-selectButton>
+      <div class="search-criteria-selectbutton">
+        <p-selectButton
+          id="up_layout_theme_color_scheme"
+          [options]="colorSchemeSelectItems"
+          formControlName="colorScheme"
+          (onChange)="saveColorScheme()"
+          [ariaLabel]="'LAYOUT_THEME.COLOR_SCHEME' | translate"
+          [pTooltip]="'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+          <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
+        </p-selectButton>
+      </div>
       <button
         *ngIf="changedColorScheme"
         pButton
@@ -54,6 +61,7 @@
         id="up_layout_theme_color_scheme_refresh"
         (click)="applyChange()"
         [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
         [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
@@ -63,7 +71,7 @@
     <div class="font-bold mt-4 sm:mt-5 mb-3">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</div>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
       <p-inputSwitch
-        inputId="up_layout_theme_breadcrumbs"
+        inputId="up_layout_theme_display_breadcrumbs"
         formControlName="breadcrumbs"
         (onChange)="saveBreadcrumbs()"
         [ariaLabel]="'LAYOUT_THEME.BREADCRUMBS' | translate"
@@ -80,9 +88,10 @@
         type="button"
         icon="pi pi-refresh"
         class="ml-5 p-2 p-button-text"
-        id="up_layout_theme_breadcrumbs_refresh"
+        id="up_layout_theme_display_breadcrumbs_refresh"
         (click)="applyChange()"
         [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
         [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"

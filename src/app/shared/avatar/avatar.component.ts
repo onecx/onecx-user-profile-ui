@@ -188,7 +188,6 @@ export class AvatarComponent implements OnChanges {
       this.avatarAdminService.uploadAvatarById({ id: this.userId, refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
-            localStorage.removeItem('tkit_user_profile')
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
             this.getUserAvatarImage()
           }
@@ -212,7 +211,6 @@ export class AvatarComponent implements OnChanges {
       this.avatarMeService.uploadAvatar({ refType: refType, body: blob }).subscribe({
         next: () => {
           if (refType === RefType.Large) {
-            localStorage.removeItem('tkit_user_profile')
             this.msgService.success({ summaryKey: 'AVATAR.MSG.UPLOAD_SUCCESS' })
             this.imageUrl$ = of(URL.createObjectURL(blob))
           }

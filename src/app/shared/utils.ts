@@ -36,11 +36,6 @@ export function forceFormValidation(form: AbstractControl): void {
  */
 export type DropDownChangeEvent = MouseEvent & { value: any }
 
-export function dropDownSortItemsByLabel(a: SelectItem, b: SelectItem): number {
-  return (a.label ? (a.label as string).toUpperCase() : '').localeCompare(
-    b.label ? (b.label as string).toUpperCase() : ''
-  )
-}
 export function dropDownGetLabelByValue(ddArray: SelectItem[], val: string): string | undefined {
   const a: any = ddArray.find((item: SelectItem) => {
     return item?.value == val
@@ -49,6 +44,9 @@ export function dropDownGetLabelByValue(ddArray: SelectItem[], val: string): str
 }
 export function sortByLocale(a: any, b: any): number {
   return a.toUpperCase().localeCompare(b.toUpperCase())
+}
+export function sortByLabel(a: any, b: any): number {
+  return (a.label ? a.label.toUpperCase() : '').localeCompare(b.label ? b.label.toUpperCase() : '')
 }
 
 /***************** Time functions for calendar */
