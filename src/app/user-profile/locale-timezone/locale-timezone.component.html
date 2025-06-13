@@ -87,6 +87,7 @@
         type="text"
         class="w-full xs:w-20rem"
         id="up_account_timezone_example"
+        [disabled]="true"
         [value]="timezoneExampleDate | date: 'long' : timezoneUTC : locale"
         [ariaLabel]="'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate"
         [pTooltip]="'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate"

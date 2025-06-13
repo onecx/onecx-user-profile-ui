@@ -96,7 +96,7 @@
       "PROVIDER": "Identity Management",
       "PROVIDER.TOOLTIP": "Identity Management (Identity Provider, provides basic services for user authentication)",
       "ISSUER": "Identity Issuer",
-      "ISSUER.TOOLTIP": "Part of identity management that specifically manages the user and their assigned roles and is used for user authentication"
+      "ISSUER.TOOLTIP": "Part of identity management that specifically manages the user and their assigned roles and is used for user authentication. Set when logging in for the first time."
     },
     "FIRST_NAME": "First name",
     "FIRST_NAME.TOOLTIP": "First names",
@@ -205,18 +205,18 @@
     "TAB_NAME_PRIVACY": "Privacy",
     "TAB_NAME_PRIVACY.TOOLTIP": "The user's privacy settings",
     "HIDE_MY_PROFILE": "Hide my profile",
-    "HIDE_MY_PROFILE.TOOLTIP": "Enable/Disable hiding the profile"
+    "HIDE_MY_PROFILE.TOOLTIP": "Enable/Disable hiding the Profile"
   },
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Password",
-    "TAB_NAME_PASSWORD.TOOLTIP": "The user's password",
+    "TAB_NAME_PASSWORD.TOOLTIP": "The user's Password",
     "NOT_AVAILABLE": "Password change functionality is not available"
   },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Layout & Theme",
-    "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Layout and theme settings",
-    "BREADCRUMBS": "Breadcrumbs",
-    "BREADCRUMBS.TOOLTIP": "Show/Hide Breadcrumbs",
+    "TAB_NAME_LAYOUT_THEME.TOOLTIP": "Layout and Theme settings",
+    "BREADCRUMBS": "Display Breadcrumbs",
+    "BREADCRUMBS.TOOLTIP": "Show/Hide Breadcrumbs on a Page",
     "MENU_MODE": "Menu View Mode",
     "MENU_MODES": {
       "VERTICAL_SIDEBAR_ON_MOBILE": "Only Sidebar (Mobile)",
@@ -225,7 +225,7 @@
       "OVERLAY": "Overlay",
       "SLIM": "Slim",
       "SLIMPLUS": "Slim +",
-      "TOOLTIP": "Choose your preferred displaying of the menu"
+      "TOOLTIP": "Choose your preferred displaying of the Menu"
     },
     "COLOR_SCHEME": "Color Scheme",
     "COLOR_SCHEMES": {

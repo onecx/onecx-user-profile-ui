@@ -90,7 +90,6 @@ export class PersonalDataComponent implements OnChanges {
       this.person.address = this.formGroup?.value.address
       this.personUpdate.emit(this.person)
       this.onToggleAddressEdit()
-      localStorage.removeItem('tkit_user_profile')
     }
   }
 
@@ -113,7 +112,6 @@ export class PersonalDataComponent implements OnChanges {
       this.personUpdate.emit(this.person)
       this.onTogglePhoneEdit()
     }
-    localStorage.removeItem('tkit_user_profile')
   }
 
   private async createCountryList() {

@@ -38,8 +38,8 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     private readonly userService: UserService
   ) {
     this.formGroup = new UntypedFormGroup({
-      timezone: new FormControl(''),
-      locale: new FormControl('')
+      timezone: new FormControl({ value: null, disabled: true }),
+      locale: new FormControl(null)
     })
   }
 

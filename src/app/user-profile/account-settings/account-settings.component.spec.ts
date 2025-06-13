@@ -127,10 +127,7 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should reloadPage', () => {
-    localStorage.setItem('tkit_user_profile', 'testItem')
     component.reloadPage()
-    expect(localStorage.getItem('tkit_user_profile')).toBeNull()
-    expect(msgServiceSpy.info).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.CLEAR_CACHE_INFO' })
   })
 
   describe('on change settings', () => {

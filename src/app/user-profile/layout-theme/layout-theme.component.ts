@@ -1,5 +1,5 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'
-import { UntypedFormGroup, UntypedFormControl } from '@angular/forms'
+import { FormControl, FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
 import { UserService } from '@onecx/portal-integration-angular'
@@ -20,7 +20,7 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
   public changedMenuMode = false
   public changedColorScheme = false
   public changedBreadcrumbs = false
-  public formGroup: UntypedFormGroup
+  public formGroup: FormGroup
   public menuModeSelectItems: SelectItem[]
   public colorSchemeSelectItems: SelectItem[]
 
@@ -37,21 +37,20 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
       { label: 'LAYOUT_THEME.COLOR_SCHEMES.LIGHT', value: ColorScheme.Light, disabled: true },
       { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorScheme.Dark, disabled: true }
     ]
-    this.formGroup = new UntypedFormGroup({
-      menuMode: new UntypedFormControl(),
-      colorScheme: new UntypedFormControl(),
-      breadcrumbs: new UntypedFormControl()
+    this.formGroup = new FormGroup({
+      menuMode: new FormControl({ value: null, disable: true }),
+      colorScheme: new FormControl({ value: null, disable: true }),
+      breadcrumbs: new FormControl({ value: true, disable: true })
     })
   }
 
   public ngOnInit(): void {
-    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT')) {
-      this.formGroup.get('menuMode')?.disable()
+    if (this.userService.hasPermission('ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT')) {
+      this.formGroup.get('menuMode')?.enable()
     }
-    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
-      this.formGroup.get('colorScheme')?.disable() // UI is not ready to offer it
+    if (this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
+      this.formGroup.get('colorScheme')?.enable() // UI is not ready to offer it
     }
-    this.formGroup.get('breadcrumbs')?.disable()
   }
 
   public ngOnChanges(): void {
@@ -61,6 +60,8 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
     if (this.menuMode) {
       this.formGroup.patchValue({ menuMode: this.menuMode })
     }
+    this.formGroup.patchValue({ breadcrumbs: true })
+    this.formGroup.get('breadcrumbs')?.disable() // UI is not ready to offer it
   }
 
   public saveMenuMode(): void {

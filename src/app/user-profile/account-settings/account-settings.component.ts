@@ -31,10 +31,6 @@ export class AccountSettingsComponent implements OnInit {
   public settingsInitial: UserProfileAccountSettings = {}
   public changePasswordSlotName = 'onecx-user-profile-change-password'
 
-  private readonly cacheItem = 'httpCache'
-  // This is the local-cache-key for the user profile, containing the localization and timezone setting
-  private readonly profileCacheItem = 'tkit_user_profile'
-
   constructor(
     private readonly route: ActivatedRoute,
     private readonly router: Router,
@@ -99,14 +95,7 @@ export class AccountSettingsComponent implements OnInit {
       }
     })
   }
-
-  private clearProfileCache(): void {
-    localStorage.removeItem(this.profileCacheItem)
-    this.msgService.info({ summaryKey: 'USER_SETTINGS.CLEAR_CACHE_INFO' })
-  }
-
   public reloadPage(): void {
-    this.clearProfileCache()
     this.location.historyGo(0) // load current page = reload (trick for code coverage)
   }
 
