@@ -22,8 +22,6 @@ export class PersonalDataComponent implements OnChanges {
   @Output() public personUpdate = new EventEmitter<UserPerson>()
 
   public person: UserPerson | undefined = undefined
-  public addressEdit = false
-  public phoneEditing = false
   public countries: SelectItem[] = [] // important default for init dropdown
   public selectedCountry: SelectItem | undefined
   public phoneTypes: SelectItem[] = [
@@ -52,6 +50,8 @@ export class PersonalDataComponent implements OnChanges {
     // update form: address and phone only!
     if (this.person && Object.keys(this.person).length > 0) {
       this.formGroup?.patchValue(this.person)
+      this.formGroup.get('address')?.disable()
+      this.formGroup.get('phone')?.disable()
       this.createCountryList()
     }
   }
@@ -73,41 +73,45 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onToggleAddressEdit(): void {
-    this.addressEdit = !this.addressEdit
+    this.formGroup.get('address')?.disabled
+      ? this.formGroup.get('address')?.enable()
+      : this.formGroup.get('address')?.disable()
   }
 
   public onCancelAddressEdit(): void {
     if (this.person?.address) {
       this.formGroup?.patchValue({ address: this.person.address })
     }
-    this.addressEdit = false
+    this.onToggleAddressEdit()
   }
 
   public updateAddress(): void {
     if (this.person) {
       this.person.address = this.formGroup?.value.address
       this.personUpdate.emit(this.person)
-      this.addressEdit = false
+      this.onToggleAddressEdit()
       localStorage.removeItem('tkit_user_profile')
     }
   }
 
   public onTogglePhoneEdit(): void {
-    this.phoneEditing = !this.phoneEditing
+    this.formGroup.get('phone')?.disabled
+      ? this.formGroup.get('phone')?.enable()
+      : this.formGroup.get('phone')?.disable()
   }
 
   public onCancelPhoneEdit(): void {
     if (this.person?.phone) {
       this.formGroup?.patchValue({ phone: this.person?.phone })
     }
-    this.phoneEditing = false
+    this.onTogglePhoneEdit()
   }
 
   public updatePhone(): void {
     if (this.person) {
       this.person.phone = this.formGroup?.value.phone
       this.personUpdate.emit(this.person)
-      this.phoneEditing = false
+      this.onTogglePhoneEdit()
     }
     localStorage.removeItem('tkit_user_profile')
   }

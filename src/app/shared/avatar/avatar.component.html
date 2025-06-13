@@ -1,11 +1,11 @@
 <div
   *ngIf="componentInUse"
-  class="mx-2 h-full flex flex-wrap justify-content-center sm:justify-content-start column-gap-2 row-gap-0"
+  class="mx-2 h-full flex flex-wrap justify-content-center md:justify-content-start row-gap-0"
 >
   <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
     <img
       [ocxSrc]="imageUrl$ | async"
-      class="border-circle avatar-image sm:avatar-image"
+      class="border-circle avatar-image sm:avatar-image md:avatar-image"
       [alt]="'AVATAR.' + (showPlaceholder ? 'PLACEHOLDER' : 'AVATAR') | translate"
       [pTooltip]="'AVATAR.' + (showPlaceholder ? 'PLACEHOLDER' : 'AVATAR') | translate"
       tooltipPosition="top"
