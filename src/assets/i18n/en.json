@@ -93,10 +93,10 @@
     "INTERN": {
       "TENANT": "Tenant ID",
       "TENANT.TOOLTIP": "ID of the Tenant to which the User is assigned",
-      "PROVIDER": "Identity Management",
-      "PROVIDER.TOOLTIP": "Identity Management (Identity Provider, provides basic services for user authentication)",
+      "PROVIDER": "Identity Provider",
+      "PROVIDER.TOOLTIP": "Identity Provider: provides basic services for user authentication",
       "ISSUER": "Identity Issuer",
-      "ISSUER.TOOLTIP": "Part of identity management that specifically manages the user and their assigned roles and is used for user authentication. Set when logging in for the first time."
+      "ISSUER.TOOLTIP": "Basic service of identity provider that specifically manages the user and their assigned roles and is used for user authentication. Set when logging in for the first time."
     },
     "FIRST_NAME": "First name",
     "FIRST_NAME.TOOLTIP": "First names",
