@@ -93,10 +93,10 @@
     "INTERN": {
       "TENANT": "Tenant ID",
       "TENANT.TOOLTIP": "ID des Tenants dem der Benutzer zugeordnet ist",
-      "PROVIDER": "Identitätsmanagement",
-      "PROVIDER.TOOLTIP": "Identity Management (Identity Provider, stellt Basisdienste für Benutzerauthentifizierung bereit)",
+      "PROVIDER": "Identitätsanbieter",
+      "PROVIDER.TOOLTIP": "Identity Provider, stellt Basisdienste für Benutzerauthentifizierung bereit",
       "ISSUER": "Identitätsaussteller",
-      "ISSUER.TOOLTIP": "Teil des Identitätsmanagements, der speziell den Benutzer und seine zugewiesenen Rollen verwaltet und zur Benutzerauthentifizierung verwendet wird. Wird beim ersten Anmelden gesetzt."
+      "ISSUER.TOOLTIP": "Basisdienst der Benutzerauthentifizierung, der speziell den Benutzer und seine zugewiesenen Rollen verwaltet und zur Benutzerauthentifizierung verwendet wird. Wird beim ersten Anmelden gesetzt."
     },
     "FIRST_NAME": "Vorname",
     "FIRST_NAME.TOOLTIP": "Vorname(n)",
