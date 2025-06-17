@@ -5,7 +5,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { of, throwError } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { PhoneType, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
 import { PersonalDataAdminComponent } from './personal-data-admin.component'

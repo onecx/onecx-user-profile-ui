@@ -7,7 +7,7 @@ import { of } from 'rxjs'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { TableModule } from 'primeng/table'
 
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { PhoneType, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 import { UserPermissionsComponent } from './user-permissions.component'

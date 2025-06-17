@@ -3,8 +3,8 @@ import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateService } from '@ngx-translate/core'
 import { Observable, map } from 'rxjs'
 
-import { Action } from '@onecx/portal-integration-angular'
 import { SlotService } from '@onecx/angular-remote-components'
+import { Action } from '@onecx/angular-accelerator'
 
 import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 

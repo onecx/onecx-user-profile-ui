@@ -6,8 +6,7 @@ import { By } from '@angular/platform-browser'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of, throwError } from 'rxjs'
 
-import { UserService } from '@onecx/angular-integration-interface'
-import { ConfigurationService } from '@onecx/portal-integration-angular'
+import { ConfigurationService, UserService } from '@onecx/angular-integration-interface'
 
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { LocaleTimezoneComponent } from './locale-timezone.component'

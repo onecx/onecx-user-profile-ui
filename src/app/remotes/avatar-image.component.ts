@@ -14,7 +14,8 @@ import {
   ocxRemoteWebcomponent,
   provideTranslateServiceForRoot
 } from '@onecx/angular-remote-components'
-import { PortalCoreModule, createRemoteComponentTranslateLoader } from '@onecx/portal-integration-angular'
+import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
+import { PortalCoreModule } from '@onecx/portal-integration-angular'
 
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
 import { Configuration, RefType, UserAvatarAPIService } from 'src/app/shared/generated'

@@ -6,8 +6,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { NgxImageCompressService } from 'ngx-image-compress'
 import { of, throwError } from 'rxjs'
 
-import { AppStateService, UserService } from '@onecx/angular-integration-interface'
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { AppStateService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'

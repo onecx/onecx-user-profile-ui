@@ -5,17 +5,9 @@ import { TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import {
-  ColumnType,
-  DataAction,
-  DataTableColumn,
-  DataViewControlTranslations,
-  InteractiveDataViewComponent,
-  PortalDialogService,
-  PortalMessageService,
-  RowListGridData,
-  UserService
-} from '@onecx/portal-integration-angular'
+import { DataAction, DataTableColumn, RowListGridData, InteractiveDataViewComponent } from '@onecx/angular-accelerator'
+import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { ColumnType, DataViewControlTranslations, PortalDialogService } from '@onecx/portal-integration-angular'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
