@@ -7,7 +7,7 @@ import { Observable } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
-import { Action } from '@onecx/portal-integration-angular'
+import { Action } from '@onecx/angular-accelerator'
 
 import {
   UpdateUserSettings,

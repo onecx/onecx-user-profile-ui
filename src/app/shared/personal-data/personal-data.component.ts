@@ -6,7 +6,7 @@ import { SelectItem } from 'primeng/api'
 import * as countriesInfo from 'i18n-iso-countries'
 
 import { UserService } from '@onecx/angular-integration-interface'
-import { PhoneType } from '@onecx/portal-integration-angular'
+import { PhoneType } from '@onecx/integration-interface'
 
 import { UserPerson, UserProfile } from 'src/app/shared/generated'
 

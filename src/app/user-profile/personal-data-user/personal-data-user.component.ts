@@ -4,7 +4,8 @@ import { catchError, map, Observable, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/angular-integration-interface'
-import { Action } from '@onecx/portal-integration-angular'
+import { Action } from '@onecx/angular-accelerator'
+
 import { UpdateUserPerson, UserProfileAPIService, UserPerson, UserProfile } from 'src/app/shared/generated'
 
 @Component({
