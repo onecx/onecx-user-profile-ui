@@ -2,7 +2,8 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
 import { FormControl, FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
-import { UserService } from '@onecx/portal-integration-angular'
+import { UserService } from '@onecx/angular-integration-interface'
+
 import { ColorScheme, MenuMode } from 'src/app/shared/generated'
 
 @Component({

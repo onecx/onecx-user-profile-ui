@@ -4,8 +4,7 @@ import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
 
-import { AppStateService } from '@onecx/angular-integration-interface'
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'

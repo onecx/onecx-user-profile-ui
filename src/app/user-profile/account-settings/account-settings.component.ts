@@ -5,7 +5,10 @@ import { TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs/operators'
 import { Observable } from 'rxjs'
 
-import { Action, ConfigurationService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { SlotService } from '@onecx/angular-remote-components'
+import { ConfigurationService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { Action } from '@onecx/portal-integration-angular'
+
 import {
   UpdateUserSettings,
   UserProfileAPIService,
@@ -13,7 +16,6 @@ import {
   UserProfileAccountSettings
 } from 'src/app/shared/generated'
 import { PrivacyComponent } from '../privacy/privacy.component'
-import { SlotService } from '@onecx/angular-remote-components'
 
 @Component({
   selector: 'app-account-settings',

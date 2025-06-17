@@ -2,7 +2,8 @@ import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angu
 import { FormControl, FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
-import { ConfigurationService, CONFIG_KEY, UserService } from '@onecx/portal-integration-angular'
+import { ConfigurationService, UserService } from '@onecx/angular-integration-interface'
+import { CONFIG_KEY } from '@onecx/portal-integration-angular'
 
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { sortByLabel } from 'src/app/shared/utils'

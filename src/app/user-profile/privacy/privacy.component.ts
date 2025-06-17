@@ -1,6 +1,7 @@
 import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
 import { FormGroup, FormControl } from '@angular/forms'
-import { UserService } from '@onecx/portal-integration-angular'
+
+import { UserService } from '@onecx/angular-integration-interface'
 
 @Component({
   selector: 'app-privacy',

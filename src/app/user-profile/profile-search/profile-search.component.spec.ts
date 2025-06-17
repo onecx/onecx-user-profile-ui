@@ -7,8 +7,8 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
 import { RowListGridData } from '@onecx/angular-accelerator'
-import { UserService } from '@onecx/angular-integration-interface'
-import { PortalDialogService, PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { PortalDialogService } from '@onecx/portal-integration-angular'
 
 import { UserProfile, UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { ProfileSearchComponent } from './profile-search.component'

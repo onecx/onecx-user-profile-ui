@@ -2,7 +2,7 @@ import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core
 import { TranslateService } from '@ngx-translate/core'
 import { catchError, finalize, Observable, of, tap } from 'rxjs'
 
-import { PortalMessageService } from '@onecx/portal-integration-angular'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { UpdateUserPerson, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
