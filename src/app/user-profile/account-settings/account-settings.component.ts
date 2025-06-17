@@ -6,7 +6,7 @@ import { map } from 'rxjs/operators'
 import { Observable } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { ConfigurationService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action } from '@onecx/portal-integration-angular'
 
 import {
