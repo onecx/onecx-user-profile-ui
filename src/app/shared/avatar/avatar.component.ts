@@ -119,29 +119,29 @@ export class AvatarComponent implements OnChanges {
 
   public onFileUpload(debug: boolean = false): void {
     const log = function (text: string): void {
-      if (debug) console.log(text)
+      if (debug) console.info('file upload: ' + text)
     }
     this.imageCompress.uploadFile().then(({ image }) => {
       const bytes = this.imageCompress.byteCount(image)
       const ratio = 50
       log('initialBytes: ' + bytes)
       if (bytes <= environment.AVATAR_SIZE_SMALL) {
-        log('small')
+        log('size: small')
         this.sendImage(image, RefType.Large)
         this.sendImage(image, RefType.Medium)
         this.sendImage(image, RefType.Small)
       } else if (bytes <= environment.AVATAR_SIZE_MEDIUM) {
-        log('medium')
+        log('size: medium')
         this.sendImage(image, RefType.Large)
         this.sendImage(image, RefType.Medium)
         this.compressImage(image, ratio, environment.AVATAR_SIZE_SMALL, RefType.Small, log, true)
       } else if (bytes <= environment.AVATAR_SIZE_LARGE) {
-        log('large')
+        log('size: large')
         this.sendImage(image, RefType.Large)
         this.compressImage(image, ratio, environment.AVATAR_SIZE_MEDIUM, RefType.Medium, log)
         this.compressImage(image, ratio, environment.AVATAR_SIZE_SMALL, RefType.Small, log, true)
       } else {
-        log('> large')
+        log('size: > large')
         this.compressImage(image, ratio, environment.AVATAR_SIZE_LARGE, RefType.Large, log)
         this.compressImage(image, ratio, environment.AVATAR_SIZE_MEDIUM, RefType.Medium, log)
         this.compressImage(image, ratio, environment.AVATAR_SIZE_SMALL, RefType.Small, log, true)

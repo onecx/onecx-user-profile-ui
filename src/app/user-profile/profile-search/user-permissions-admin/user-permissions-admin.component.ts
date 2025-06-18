@@ -10,6 +10,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 export class UserPermissionsAdminComponent {
   @Input() id: string | undefined = 'undefined' // why ever this is required
   @Input() userId: string | undefined = undefined
+  @Input() issuer: string | undefined = undefined
   @Input() displayName: string | undefined = undefined
 
   public slotName = 'onecx-user-profile-admin-view-permissions'

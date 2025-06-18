@@ -186,14 +186,14 @@ export class ProfileSearchComponent implements OnInit {
               summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
               detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
             })
-          }
-          stream = stream?.map((row: any) => ({
-            ...row,
-            lastName: row.person.lastName,
-            firstName: row.person.firstName,
-            displayName: row.person.displayName,
-            email: row.person.email
-          }))
+          } else
+            stream = stream?.map((row: any) => ({
+              ...row,
+              lastName: row.person.lastName,
+              firstName: row.person.firstName,
+              displayName: row.person.displayName,
+              email: row.person.email
+            }))
           this.resultData$.next(stream)
           this.filteredData$.next(stream)
         }
@@ -261,7 +261,7 @@ export class ProfileSearchComponent implements OnInit {
         'ACTIONS.VIEW.PERMISSIONS',
         {
           type: UserPermissionsAdminComponent,
-          inputs: { id: ev['id'], userId: ev['userId'], displayName: ev['displayName'] }
+          inputs: { id: ev['id'], userId: ev['userId'], displayName: ev['displayName'], issuer: ev['issuer'] }
         },
         {
           id: 'up_user_permissions_action_close',
