@@ -1,7 +1,7 @@
 <ocx-slot
   *ngIf="isRemoteComponentDefined$ | async; else dialogPlaceholder"
   [name]="slotName"
-  [inputs]="{ userId: userId, displayName: displayName, active: true }"
+  [inputs]="{ userId: userId, displayName: displayName, issuer: issuer, active: true }"
 >
   <ng-template #skeleton>
     <p-message
