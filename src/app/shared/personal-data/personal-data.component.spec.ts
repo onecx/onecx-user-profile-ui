@@ -284,6 +284,7 @@ describe('PersonalDataComponent', () => {
     }))
   })
 
+  // Reason: to be reworked
   xdescribe('createCountryList', () => {
     let countriesInfo: any
 

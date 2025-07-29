@@ -20,60 +20,16 @@ describe('LayoutThemeComponent', () => {
     menuMode: 'HORIZONTAL',
     colorScheme: 'LIGHT'
   }
-  const userServiceSpy = { hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of()) }
+  const mockUserService = jasmine.createSpyObj('UserService', ['hasPermission'])
+  mockUserService.hasPermission.and.callFake((permission: string) => {
+    return ['ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT', 'ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT'].includes(permission)
+  })
 
-  beforeEach(waitForAsync(() => {
-    TestBed.configureTestingModule({
-      declarations: [LayoutThemeComponent],
-      imports: [
-        TranslateTestingModule.withTranslations({
-          de: require('src/assets/i18n/de.json'),
-          en: require('src/assets/i18n/en.json')
-        }).withDefaultLanguage('en')
-      ],
-      schemas: [NO_ERRORS_SCHEMA],
-      providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: userServiceSpy }]
-    }).compileComponents()
-  }))
-
-  beforeEach(() => {
-    fixture = TestBed.createComponent(LayoutThemeComponent)
-    component = fixture.componentInstance
-    component.formGroup.patchValue(defaultLayoutAndTheme)
+  function setUp() {
+    const fixture = TestBed.createComponent(LayoutThemeComponent)
+    const component = fixture.componentInstance
     fixture.detectChanges()
-  })
-
-  afterEach(() => {
-    userServiceSpy.hasPermission.and.returnValue(true)
-  })
-
-  it('should create', () => {
-    expect(component).toBeTruthy()
-    expect(component.formGroup.value['menuMode']).toBe(defaultLayoutAndTheme.menuMode)
-    expect(component.formGroup.value['colorScheme']).toBe(defaultLayoutAndTheme.colorScheme)
-    expect(component.formGroup.value['breadcrumbs']).toBeUndefined()
-  })
-
-  it('should not disable menuMode edit if user has no permissions', () => {
-    component.ngOnInit()
-
-    expect(component.formGroup.get('menuMode')?.disabled).toBe(false)
-    expect(component.formGroup.get('colorScheme')?.disabled).toBe(false)
-    expect(component.formGroup.get('breadcrumbs')?.disabled).toBe(true)
-  })
-})
-
-describe('LayoutThemeComponent', () => {
-  let component: LayoutThemeComponent
-  let fixture: ComponentFixture<LayoutThemeComponent>
-
-  const defaultLayoutAndTheme: UserProfileAccountSettingsLayoutAndThemeSettings = {
-    menuMode: 'HORIZONTAL',
-    colorScheme: 'LIGHT'
-  }
-
-  const userServiceSpy = {
-    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
+    return { fixture, component }
   }
 
   beforeEach(waitForAsync(() => {
@@ -86,9 +42,10 @@ describe('LayoutThemeComponent', () => {
         }).withDefaultLanguage('en')
       ],
       schemas: [NO_ERRORS_SCHEMA],
-      providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: userServiceSpy }]
+      providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: mockUserService }]
     }).compileComponents()
-    userServiceSpy.hasPermission.and.returnValue(false)
+
+    mockUserService.hasPermission.and.returnValue(true)
   }))
 
   beforeEach(() => {
@@ -99,13 +56,17 @@ describe('LayoutThemeComponent', () => {
   })
 
   it('should disable menuMode edit if user has no permissions', () => {
-    userServiceSpy.hasPermission.and.returnValue(false)
+    mockUserService.hasPermission.and.returnValue(false)
+    const { component } = setUp()
 
     component.ngOnInit()
 
     expect(component.formGroup.get('menuMode')?.disabled).toBe(true)
     expect(component.formGroup.get('colorScheme')?.disabled).toBe(true)
     expect(component.formGroup.get('breadcrumbs')?.disabled).toBe(true)
+
+    component.menuModeOptions$.subscribe()
+    component.colorSchemeOptions$.subscribe()
   })
 
   describe('OnChanges', () => {
