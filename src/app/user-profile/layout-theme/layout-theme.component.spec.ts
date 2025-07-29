@@ -3,7 +3,6 @@ import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
-import { of } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { UserProfileAccountSettingsLayoutAndThemeSettings } from '@onecx/portal-integration-angular'
