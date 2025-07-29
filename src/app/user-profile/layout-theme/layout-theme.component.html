@@ -1,22 +1,22 @@
 <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
   <form [formGroup]="formGroup">
-    <div class="font-bold my-2">{{ 'LAYOUT_THEME.MENU_MODE' | translate }}</div>
+    <h2 class="my-2 text-base">{{ 'LAYOUT_THEME.MENU_MODE' | translate }}</h2>
+    <div *ocxIfBreakpoint="'mobile'" class="mb-2">
+      {{ 'LAYOUT_THEME.MENU_MODES.VERTICAL_SIDEBAR_ON_MOBILE' | translate }}
+    </div>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
-      <div *ocxIfBreakpoint="'mobile'">{{ 'LAYOUT_THEME.MENU_MODES.VERTICAL_SIDEBAR_ON_MOBILE' | translate }}</div>
       <div class="search-criteria-selectbutton">
         <p-selectButton
           *ocxIfBreakpoint="'desktop'"
           id="up_layout_theme_menu_mode"
-          [options]="menuModeSelectItems"
+          [options]="(menuModeOptions$ | async) ?? []"
           formControlName="menuMode"
           (onChange)="saveMenuMode()"
           [ariaLabel]="'LAYOUT_THEME.MENU_MODE' | translate"
           [pTooltip]="'LAYOUT_THEME.MENU_MODES.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
-        >
-          <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
-        </p-selectButton>
+        ></p-selectButton>
       </div>
       <button
         *ngIf="changedMenuMode"
@@ -35,21 +35,19 @@
       ></button>
     </div>
 
-    <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LAYOUT_THEME.COLOR_SCHEME' | translate }}</div>
+    <h2 class="mt-4 sm:mt-5 mb-2 text-base">{{ 'LAYOUT_THEME.COLOR_SCHEME' | translate }}</h2>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
       <div class="search-criteria-selectbutton">
         <p-selectButton
           id="up_layout_theme_color_scheme"
-          [options]="colorSchemeSelectItems"
+          [options]="(colorSchemeOptions$ | async) ?? []"
           formControlName="colorScheme"
           (onChange)="saveColorScheme()"
           [ariaLabel]="'LAYOUT_THEME.COLOR_SCHEME' | translate"
           [pTooltip]="'LAYOUT_THEME.COLOR_SCHEMES.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
-        >
-          <ng-template let-item pTemplate>{{ item.label | translate }}</ng-template>
-        </p-selectButton>
+        ></p-selectButton>
       </div>
       <button
         *ngIf="changedColorScheme"
@@ -68,7 +66,7 @@
       ></button>
     </div>
 
-    <div class="font-bold mt-4 sm:mt-5 mb-3">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</div>
+    <h2 class="mt-4 sm:mt-5 mb-3 text-base">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</h2>
     <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
       <p-inputSwitch
         inputId="up_layout_theme_display_breadcrumbs"

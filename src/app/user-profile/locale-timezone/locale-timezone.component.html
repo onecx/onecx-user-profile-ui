@@ -1,6 +1,6 @@
 <div class="sm:py-2 px-3">
   <form [formGroup]="formGroup">
-    <div class="font-bold my-2">{{ 'LANGUAGE_TIMEZONE.LANGUAGE' | translate }}</div>
+    <h2 class="my-2 text-base">{{ 'LANGUAGE_TIMEZONE.LANGUAGE' | translate }}</h2>
     <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editLanguage">
       {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | uppercase | translate) : 'no-value' }}
     </div>
@@ -43,7 +43,7 @@
       ></button>
     </div>
 
-    <div class="font-bold mt-4 sm:mt-5 mb-2">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</div>
+    <h2 class="mt-4 sm:mt-5 mb-2 text-base">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</h2>
     <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editTimezone">
       {{ this.formGroup.value['timezone'] ? formGroup.value['timezone'] : 'no-value' }}
     </div>
@@ -94,7 +94,9 @@
         tooltipPosition="top"
         tooltipEvent="hover"
       />
-      <label for="up_account_timezone_example">Example</label>
+      <label for="up_account_timezone_example" aria-hidden="true">
+        {{ 'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE' | translate }}
+      </label>
     </span>
     <br />
   </form>
