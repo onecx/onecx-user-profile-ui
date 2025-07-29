@@ -2,7 +2,7 @@ import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angu
 import { FormControl, FormGroup } from '@angular/forms'
 import { TranslateService } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
-import { finalize, Observable, map, of } from 'rxjs'
+import { map, Observable, of } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
 
