@@ -1,6 +1,8 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'
 import { FormControl, FormGroup } from '@angular/forms'
+import { TranslateService } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
+import { finalize, Observable, map, of } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
 
@@ -22,22 +24,14 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
   public changedColorScheme = false
   public changedBreadcrumbs = false
   public formGroup: FormGroup
-  public menuModeSelectItems: SelectItem[]
-  public colorSchemeSelectItems: SelectItem[]
 
-  constructor(private readonly userService: UserService) {
-    this.menuModeSelectItems = [
-      { label: 'LAYOUT_THEME.MENU_MODES.HORIZONTAL', value: MenuMode.Horizontal },
-      { label: 'LAYOUT_THEME.MENU_MODES.STATIC', value: MenuMode.Static },
-      { label: 'LAYOUT_THEME.MENU_MODES.OVERLAY', value: MenuMode.Overlay, disabled: true },
-      { label: 'LAYOUT_THEME.MENU_MODES.SLIM', value: MenuMode.Slim, disabled: true }
-      //{ label: 'LAYOUT_THEME.MENU_MODES.SLIMPLUS', value: MenuMode.SLIMPLUS },
-    ]
-    this.colorSchemeSelectItems = [
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.AUTO', value: ColorScheme.Auto, disabled: true },
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.LIGHT', value: ColorScheme.Light, disabled: true },
-      { label: 'LAYOUT_THEME.COLOR_SCHEMES.DARK', value: ColorScheme.Dark, disabled: true }
-    ]
+  public menuModeOptions$: Observable<SelectItem[]> = of([])
+  public colorSchemeOptions$: Observable<SelectItem[]> = of([])
+
+  constructor(
+    private readonly userService: UserService,
+    private readonly translate: TranslateService
+  ) {
     this.formGroup = new FormGroup({
       menuMode: new FormControl({ value: null, disabled: true }),
       colorScheme: new FormControl({ value: null, disabled: true }),
@@ -46,6 +40,7 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
+    this.prepareDropDownOptions()
     if (this.userService.hasPermission('ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT')) {
       this.formGroup.get('menuMode')?.enable()
     }
@@ -80,5 +75,51 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
 
   public applyChange() {
     this.applyChanges.emit(true)
+  }
+
+  private prepareDropDownOptions() {
+    this.menuModeOptions$ = this.translate
+      .get([
+        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Horizontal,
+        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Static,
+        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Overlay,
+        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Slim
+        //'LAYOUT_THEME.MENU_MODES.' + MenuMode.Slimplus
+      ])
+      .pipe(
+        map((data) => {
+          return [
+            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Horizontal], value: MenuMode.Horizontal },
+            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Static], value: MenuMode.Static },
+            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Overlay], value: MenuMode.Overlay, disabled: true },
+            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Slim], value: MenuMode.Slim, disabled: true }
+            //{ label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Slimplus], value: MenuMode.Slimplus }
+          ]
+        })
+      )
+    this.colorSchemeOptions$ = this.translate
+      .get([
+        'LAYOUT_THEME.COLOR_SCHEMES.' + ColorScheme.Auto,
+        'LAYOUT_THEME.COLOR_SCHEMES.' + ColorScheme.Light,
+        'LAYOUT_THEME.COLOR_SCHEMES.' + ColorScheme.Dark
+      ])
+      .pipe(
+        map((data) => {
+          return [
+            {
+              label: data['LAYOUT_THEME.COLOR_SCHEMES.' + ColorScheme.Auto],
+              value: ColorScheme.Auto
+            },
+            {
+              label: data['LAYOUT_THEME.COLOR_SCHEMES.' + ColorScheme.Light],
+              value: ColorScheme.Light
+            },
+            {
+              label: data['LAYOUT_THEME.COLOR_SCHEMES.' + ColorScheme.Dark],
+              value: ColorScheme.Dark
+            }
+          ]
+        })
+      )
   }
 }

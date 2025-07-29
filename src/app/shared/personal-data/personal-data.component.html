@@ -12,7 +12,7 @@
       <div *ocxIfPermission="'USERPROFILE#VIEW'" class="flex-1">
         <p-panel styleClass="surface-50">
           <ng-template pTemplate="header">
-            <div class="my-0 sm:mb-2 ml-1 w-full font-bold text-2xl">{{ 'USER_PROFILE.HEADER.BASIC' | translate }}</div>
+            <h2 class="my-0 sm:mb-2 ml-1 w-full text-base">{{ 'USER_PROFILE.HEADER.BASIC' | translate }}</h2>
           </ng-template>
           <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4">
             <span class="p-float-label">
@@ -28,7 +28,9 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
+              <label for="up_personal_info_first_name" aria-hidden="true"
+                >{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label
+              >
             </span>
             <span class="p-float-label">
               <input
@@ -43,7 +45,9 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
+              <label for="up_personal_info_last_name" aria-hidden="true"
+                >{{ 'USER_PROFILE.LAST_NAME' | translate }}</label
+              >
             </span>
             <span class="p-float-label">
               <input
@@ -58,7 +62,7 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
+              <label for="up_personal_info_email" aria-hidden="true">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
             </span>
           </div>
         </p-panel>
@@ -66,8 +70,8 @@
       <div *ocxIfPermission="'PROFILE_PHONE#VIEW'" class="flex-1">
         <p-panel styleClass="surface-50" formGroupName="phone">
           <ng-template pTemplate="header">
-            <div class="my-0 sm:mb-2 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
-              <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.PHONE' | translate }}</div>
+            <div class="sm:mb-2 ml-1 w-full flex flex-wrap justify-content-between align-items-center">
+              <h2 class="my-0 text-base">{{ 'USER_PROFILE.HEADER.PHONE' | translate }}</h2>
               <div
                 *ocxIfPermission="'USERPROFILE#' + (userId ? 'ADMIN_' : '') + 'EDIT'"
                 class="flex flex-row column-gap-3"
@@ -131,7 +135,9 @@
                 tooltipEvent="hover"
               >
               </p-dropdown>
-              <label for="up_personal_info_phone_type"> {{ 'USER_PROFILE.PHONE_TYPE' | translate }} </label>
+              <label for="up_personal_info_phone_type" aria-hidden="true">
+                {{ 'USER_PROFILE.PHONE_TYPE' | translate }}
+              </label>
             </span>
             <span class="p-float-label flex-grow-1" controlErrorAnchor>
               <input
@@ -146,17 +152,19 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_phone_number">{{ 'USER_PROFILE.PHONE_NUMBER' | translate }}</label>
+              <label for="up_personal_info_phone_number" aria-hidden="true"
+                >{{ 'USER_PROFILE.PHONE_NUMBER' | translate }}</label
+              >
             </span>
           </div>
         </p-panel>
       </div>
     </div>
     <!-- AVATAR -->
-    <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'" class="flex-1">
+    <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'" class="flex-1" aria-hidden="true">
       <p-panel styleClass="surface-50 h-full">
         <ng-template pTemplate="header">
-          <div class="my-0 sm:mb-2 ml-1 w-full font-bold text-2xl">Avatar</div>
+          <h2 class="my-0 sm:mb-2 ml-1 w-full text-base">Avatar</h2>
         </ng-template>
         <app-avatar [componentInUse]="componentInUse" [userId]="userId"> </app-avatar>
       </p-panel>
@@ -168,8 +176,8 @@
       <!-- ADDRESS -->
       <p-panel formGroupName="address" styleClass="surface-50">
         <ng-template pTemplate="header">
-          <div class="my-0 sm:mb-2 ml-1 w-full flex flex-row flex-wrap justify-content-between align-items-center">
-            <div class="font-bold text-2xl">{{ 'USER_PROFILE.HEADER.ADDRESS' | translate }}</div>
+          <div class="sm:mb-2 ml-1 w-full flex flex-row flex-wrap justify-content-between align-items-center">
+            <h2 class="my-0 text-base">{{ 'USER_PROFILE.HEADER.ADDRESS' | translate }}</h2>
             <div
               *ocxIfPermission="'USERPROFILE#' + (userId ? 'ADMIN_' : '') + 'EDIT'"
               class="flex flex-row column-gap-3"
@@ -238,7 +246,9 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_street">{{ 'USER_PROFILE.STREET' | translate }}</label>
+              <label for="up_personal_info_address_street" aria-hidden="true"
+                >{{ 'USER_PROFILE.STREET' | translate }}</label
+              >
             </span>
             <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
               <input
@@ -252,7 +262,9 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_street_no"> {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }} </label>
+              <label for="up_personal_info_address_street_no" aria-hidden="true">
+                {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }}
+              </label>
             </span>
           </div>
           <div class="flex flex-row flex-wrap gap-3">
@@ -268,7 +280,9 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_city">{{ 'USER_PROFILE.CITY' | translate }}</label>
+              <label for="up_personal_info_address_city" aria-hidden="true"
+                >{{ 'USER_PROFILE.CITY' | translate }}</label
+              >
             </span>
             <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
               <input
@@ -282,7 +296,9 @@
                 tooltipPosition="top"
                 tooltipEvent="hover"
               />
-              <label for="up_personal_info_address_postal_code"> {{ 'USER_PROFILE.POSTAL_CODE' | translate }} </label>
+              <label for="up_personal_info_address_postal_code" aria-hidden="true">
+                {{ 'USER_PROFILE.POSTAL_CODE' | translate }}
+              </label>
             </span>
           </div>
           <span class="p-float-label">
@@ -298,7 +314,9 @@
               tooltipEvent="hover"
             >
             </p-dropdown>
-            <label for="up_personal_info_address_country">{{ 'USER_PROFILE.COUNTRY' | translate }}</label>
+            <label for="up_personal_info_address_country" aria-hidden="true"
+              >{{ 'USER_PROFILE.COUNTRY' | translate }}</label
+            >
           </span>
         </div>
       </p-panel>
@@ -308,9 +326,7 @@
     <div class="flex-1">
       <p-panel styleClass="surface-50 h-full">
         <ng-template pTemplate="header">
-          <div class="my-0 sm:mb-2 ml-1 w-full font-bold text-2xl">
-            {{ 'USER_PROFILE.HEADER.INTERNAL' | translate }}
-          </div>
+          <h2 class="my-0 sm:mb-2 ml-1 w-full text-base">{{ 'USER_PROFILE.HEADER.INTERNAL' | translate }}</h2>
         </ng-template>
         <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4">
           <span class="p-float-label">
@@ -326,7 +342,9 @@
               tooltipPosition="top"
               tooltipEvent="hover"
             />
-            <label for="up_personal_info_tenant">{{ 'USER_PROFILE.INTERN.TENANT' | translate }}</label>
+            <label for="up_personal_info_tenant" aria-hidden="true"
+              >{{ 'USER_PROFILE.INTERN.TENANT' | translate }}</label
+            >
           </span>
 
           <span class="p-float-label">
@@ -342,7 +360,9 @@
               tooltipPosition="top"
               tooltipEvent="hover"
             />
-            <label for="up_personal_info_provider">{{ 'USER_PROFILE.INTERN.PROVIDER' | translate }}</label>
+            <label for="up_personal_info_provider" aria-hidden="true"
+              >{{ 'USER_PROFILE.INTERN.PROVIDER' | translate }}</label
+            >
           </span>
           <span class="p-float-label">
             <input
@@ -357,7 +377,9 @@
               tooltipPosition="top"
               tooltipEvent="hover"
             />
-            <label for="up_personal_info_issuer">{{ 'USER_PROFILE.INTERN.ISSUER' | translate }}</label>
+            <label for="up_personal_info_issuer" aria-hidden="true"
+              >{{ 'USER_PROFILE.INTERN.ISSUER' | translate }}</label
+            >
           </span>
         </div>
       </p-panel>
