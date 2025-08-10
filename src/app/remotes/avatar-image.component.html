@@ -4,6 +4,7 @@
     [id]="id ?? ''"
     alt="Avatar"
     [class]="'user-avatar-image ' + (imageStyleClass ?? '')"
+    [style]="imageStyle ?? ''"
     (error)="onImageError()"
     (load)="onImageLoad()"
   />
