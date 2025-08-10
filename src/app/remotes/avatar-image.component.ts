@@ -58,6 +58,7 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   @Input() styleClass: string | undefined = undefined // image container
   @Input() imageStyleClass: string | undefined = undefined // image
   @Input() imageStyle: string | undefined = undefined // image
+  @Input() imageType: RefType = RefType.Small // image
   // output
   @Input() imageLoaded = new EventEmitter<boolean>()
 
@@ -85,7 +86,7 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
     // imagePath$ is an observable on purpose, so this component can be easily extended to
     // also display avatars of other user where a call the bff is needed to get the url
     // To do this, call the bff here and set the observable as imagePath$ here
-    this.imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', RefType.Medium))
+    this.imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
   }
 
   public onImageError(): void {
