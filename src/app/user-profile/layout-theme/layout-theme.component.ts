@@ -45,7 +45,7 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
       this.formGroup.get('menuMode')?.enable()
     }
     if (this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
-      this.formGroup.get('colorScheme')?.enable() // UI is not ready to offer it
+      this.formGroup.get('colorScheme')?.enable()
     }
   }
 
@@ -58,6 +58,7 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
     }
     this.formGroup.patchValue({ breadcrumbs: true })
     this.formGroup.get('breadcrumbs')?.disable() // UI is not ready to offer it
+    this.formGroup.get('colorScheme')?.disable()
   }
 
   public saveMenuMode(): void {
