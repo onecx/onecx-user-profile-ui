@@ -304,7 +304,7 @@ export class ProfileSearchComponent implements OnInit {
         id: 'delete',
         labelKey: 'ACTIONS.DELETE.USER.TOOLTIP',
         icon: 'pi pi-trash',
-        classes: ['danger-action-text'],
+        classes: ['p-button-danger'],
         permission: 'USERPROFILE#ADMIN_DELETE',
         callback: (event) => this.onDelete(event)
       }
