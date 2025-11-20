@@ -221,10 +221,10 @@
     "MENU_MODES": {
       "VERTICAL_SIDEBAR_ON_MOBILE": "Only Sidebar (Mobile)",
       "HORIZONTAL": "Horizontal",
-      "STATIC": "Static",
+      "STATIC": "Vertical",
       "OVERLAY": "Overlay",
       "SLIM": "Slim",
-      "SLIMPLUS": "Slim +",
+      "SLIMPLUS": "Slim+",
       "TOOLTIP": "Choose your preferred displaying of the Menu"
     },
     "COLOR_SCHEME": "Color Scheme",
@@ -232,7 +232,7 @@
       "AUTO": "Auto",
       "LIGHT": "Light",
       "DARK": "Dark",
-      "TOOLTIP": "Choose your preferred screen mode"
+      "TOOLTIP": "Choose your preferred color scheme"
     }
   },
   "LANGUAGE": {
