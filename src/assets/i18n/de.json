@@ -219,12 +219,12 @@
     "BREADCRUMBS.TOOLTIP": "Sichtbarkeit des Seitenpfads auf der Seite: sichtbar/unsichtbar",
     "MENU_MODE": "Menüdarstellung",
     "MENU_MODES": {
-      "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Sidebar (Mobil)",
+      "VERTICAL_SIDEBAR_ON_MOBILE": "Nur Seitenleiste (Mobil)",
       "HORIZONTAL": "Horizontal",
-      "STATIC": "Statisch",
+      "STATIC": "Vertikal",
       "OVERLAY": "Überlagerung",
-      "SLIM": "Schlank",
-      "SLIMPLUS": "Schlank +",
+      "SLIM": "Schmal",
+      "SLIMPLUS": "Schmal+",
       "TOOLTIP": "Wählen Sie die Darstellung des Menüs"
     },
     "COLOR_SCHEME": "Farbschema",
@@ -232,7 +232,7 @@
       "AUTO": "Automatisch",
       "LIGHT": "Hell",
       "DARK": "Dunkel",
-      "TOOLTIP": "Wählen Sie den Bildschirmmodus"
+      "TOOLTIP": "Wählen Sie das Farbschema"
     }
   },
   "LANGUAGE": {
