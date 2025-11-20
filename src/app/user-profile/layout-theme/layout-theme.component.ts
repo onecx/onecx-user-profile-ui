@@ -83,18 +83,18 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
       .get([
         'LAYOUT_THEME.MENU_MODES.' + MenuMode.Horizontal,
         'LAYOUT_THEME.MENU_MODES.' + MenuMode.Static,
-        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Overlay,
-        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Slim
-        //'LAYOUT_THEME.MENU_MODES.' + MenuMode.Slimplus
+        //'LAYOUT_THEME.MENU_MODES.' + MenuMode.Overlay,
+        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Slim,
+        'LAYOUT_THEME.MENU_MODES.' + MenuMode.Slimplus
       ])
       .pipe(
         map((data) => {
           return [
             { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Horizontal], value: MenuMode.Horizontal },
             { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Static], value: MenuMode.Static },
-            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Overlay], value: MenuMode.Overlay, disabled: true },
-            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Slim], value: MenuMode.Slim, disabled: true }
-            //{ label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Slimplus], value: MenuMode.Slimplus }
+            //{ label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Overlay], value: MenuMode.Overlay, disabled: true },
+            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Slim], value: MenuMode.Slim },
+            { label: data['LAYOUT_THEME.MENU_MODES.' + MenuMode.Slimplus], value: MenuMode.Slimplus }
           ]
         })
       )

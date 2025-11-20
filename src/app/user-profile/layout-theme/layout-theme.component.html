@@ -66,34 +66,36 @@
       ></button>
     </div>
 
-    <h2 class="mt-4 sm:mt-5 mb-3 text-base">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</h2>
-    <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
-      <p-inputSwitch
-        inputId="up_layout_theme_display_breadcrumbs"
-        formControlName="breadcrumbs"
-        (onChange)="saveBreadcrumbs()"
-        [ariaLabel]="'LAYOUT_THEME.BREADCRUMBS' | translate"
-        [pTooltip]="'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      >
-      </p-inputSwitch>
-      <button
-        *ngIf="changedBreadcrumbs"
-        pButton
-        pRipple
-        [disabled]="true"
-        type="button"
-        icon="pi pi-refresh"
-        class="ml-5 p-2 p-button-text"
-        id="up_layout_theme_display_breadcrumbs_refresh"
-        (click)="applyChange()"
-        [label]="'ACTIONS.GENERAL.RELOAD' | translate"
-        [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
-        [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></button>
-    </div>
+    <ng-container *ngIf="false">
+      <h2 class="mt-4 sm:mt-5 mb-3 text-base">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</h2>
+      <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
+        <p-inputSwitch
+          inputId="up_layout_theme_display_breadcrumbs"
+          formControlName="breadcrumbs"
+          (onChange)="saveBreadcrumbs()"
+          [ariaLabel]="'LAYOUT_THEME.BREADCRUMBS' | translate"
+          [pTooltip]="'LAYOUT_THEME.BREADCRUMBS.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        >
+        </p-inputSwitch>
+        <button
+          *ngIf="changedBreadcrumbs"
+          pButton
+          pRipple
+          [disabled]="true"
+          type="button"
+          icon="pi pi-refresh"
+          class="ml-5 p-2 p-button-text"
+          id="up_layout_theme_display_breadcrumbs_refresh"
+          (click)="applyChange()"
+          [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+          [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
+          [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+      </div>
+    </ng-container>
   </form>
 </div>
