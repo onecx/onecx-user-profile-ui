@@ -323,7 +323,7 @@
     </div>
 
     <!-- INTERNAL -->
-    <div class="flex-1">
+    <div *ocxIfPermission="'PROFILE_IDM#VIEW'" class="flex-1">
       <p-panel styleClass="surface-50 h-full">
         <ng-template pTemplate="header">
           <h2 class="my-0 sm:mb-2 ml-1 w-full text-base">{{ 'USER_PROFILE.HEADER.INTERNAL' | translate }}</h2>

@@ -90,6 +90,8 @@ app:
           PROFILE_AVATAR:
             EDIT: Edit avatar
             VIEW: View avatar
+          PROFILE_IDM:
+            VIEW: View IDM informations
           PROFILE_PERSONAL_INFO:
             VIEW: View personal info
           PROFILE_PHONE:
