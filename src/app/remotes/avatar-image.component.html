@@ -5,6 +5,7 @@
     alt="Avatar"
     [class]="'user-avatar-image ' + (imageStyleClass ?? '')"
     [style]="imageStyle ?? ''"
+    [ngStyle]="{ display: displayImage ? 'inline' : 'none' }"
     (error)="onImageError()"
     (load)="onImageLoad()"
   />
