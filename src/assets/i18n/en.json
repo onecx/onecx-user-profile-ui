@@ -135,8 +135,8 @@
     }
   },
   "SETTINGS": {
-    "NAVIGATION.LABEL": "Account Settings",
-    "NAVIGATION.TOOLTIP": "Go to Account Settings",
+    "NAVIGATION.LABEL": "Settings",
+    "NAVIGATION.TOOLTIP": "Go to Settings",
     "SUBHEADER": "My Settings & Preferences",
     "PREFERENCE_ITEM": {
       "APPLICATION_ID": "Application ID",

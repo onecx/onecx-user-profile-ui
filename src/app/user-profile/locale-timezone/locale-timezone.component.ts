@@ -107,10 +107,8 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
 
   public refreshTimezoneExample(): void {
     this.timezoneExampleDate = new Date()
-    const tz = this.timeZones.filter((tz) => tz.label === this.timezone)[0]
-    if (tz) {
-      this.timezoneUTC = tz.factor
-    }
+    const tz = this.timeZones.find((tz) => tz.label === this.timezone)
+    if (tz) this.timezoneUTC = tz.factor
   }
 
   public applyChange() {
