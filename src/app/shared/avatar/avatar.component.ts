@@ -177,9 +177,9 @@ export class AvatarComponent implements OnChanges {
     const base64Png = image.split(',').at(1) ?? ''
     const decodedData = atob(base64Png)
     const uint8Array = new Uint8Array(decodedData.length)
-    for (let i = 0; i < decodedData.length; ++i) {
-      uint8Array[i] = decodedData.charCodeAt(i)
-    }
+    for (let i = 0; i < decodedData.length; ++i)
+      if (decodedData.codePointAt(i)) uint8Array[i] = decodedData.codePointAt(i)!
+
     const blob = new Blob([uint8Array], { type: 'image/*' })
 
     if (this.userId) {

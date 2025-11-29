@@ -64,6 +64,7 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
 
   public imagePath$: Observable<string> | undefined
   public placeHolderPath = ''
+  public displayImage = false
 
   constructor(
     @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
@@ -95,5 +96,6 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   }
   public onImageLoad(): void {
     this.imageLoaded.emit(true)
+    this.displayImage = true
   }
 }
