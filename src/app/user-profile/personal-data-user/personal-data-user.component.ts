@@ -6,7 +6,7 @@ import { TranslateService } from '@ngx-translate/core'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action } from '@onecx/angular-accelerator'
 
-import { UpdateUserPerson, UserProfileAPIService, UserPerson, UserProfile } from 'src/app/shared/generated'
+import { UserProfileAPIService, UserPerson, UserProfile, UpdateUserProfileRequest } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data-user',
@@ -49,10 +49,11 @@ export class PersonalDataUserComponent implements AfterViewInit {
   }
 
   public onPersonUpdate(person: UserPerson, profile: UserProfile): void {
-    this.userProfileService.updateUserPerson({ updateUserPerson: person as UpdateUserPerson }).subscribe({
-      next: (person) => {
+    const updatePayload = this.getUpdateRequest(person, profile)
+    this.userProfileService.updateMyUserProfile({ updateUserProfileRequest: updatePayload }).subscribe({
+      next: (updatedProfile) => {
         this.showMessage('success')
-        this.userProfile$ = new Observable((prof) => prof.next({ ...profile, person: person }))
+        this.userProfile$ = new Observable((prof) => prof.next({ ...updatedProfile }))
       },
       error: (err) => {
         this.showMessage('error')
@@ -66,6 +67,15 @@ export class PersonalDataUserComponent implements AfterViewInit {
     severity === 'success'
       ? this.msgService.success({ summaryKey: 'USER_PROFILE.MSG.SAVE_SUCCESS' })
       : this.msgService.error({ summaryKey: 'USER_PROFILE.MSG.SAVE_ERROR' })
+  }
+
+  private getUpdateRequest(person: UserPerson, profile: UserProfile): UpdateUserProfileRequest {
+    return {
+      modificationCount: profile.modificationCount,
+      organization: profile.organization,
+      person: person,
+      settings: profile.settings
+    }
   }
 
   private prepareActionButtons(): void {
