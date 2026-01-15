@@ -1,6 +1,6 @@
 /**
  * onecx-user-profile-bff
- * OneCx user profile Bff
+ * Backend-For-Frontend (BFF) service for onecx-user-profile. This API provides endpoints to manage User Profiles, Account Settings and Avatars
  *
  * The version of the OpenAPI document: 1.0
  * 

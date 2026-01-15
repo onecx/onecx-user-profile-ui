@@ -1,6 +1,6 @@
 /**
  * onecx-user-profile-bff
- * OneCx user profile Bff
+ * Backend-For-Frontend (BFF) service for onecx-user-profile. This API provides endpoints to manage User Profiles, Account Settings and Avatars
  *
  * The version of the OpenAPI document: 1.0
  * 
@@ -117,7 +117,7 @@ export class UserProfileAdminAPIService {
     }
 
     /**
-     * Delete user profile by ID
+     * Delete a user profile by its id
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -176,7 +176,7 @@ export class UserProfileAdminAPIService {
     }
 
     /**
-     * Return user profile by id
+     * Get a user profile by its id
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
@@ -304,7 +304,7 @@ export class UserProfileAdminAPIService {
     }
 
     /**
-     * Update workspace by ID
+     * Update a user profile its id
      * @param requestParameters
      * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
      * @param reportProgress flag to report request and response progress.
