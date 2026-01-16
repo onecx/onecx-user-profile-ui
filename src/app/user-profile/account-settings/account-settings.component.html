@@ -20,8 +20,8 @@
           </span>
         </ng-template>
         <app-locale-timezone
-          [localeInput]="settingsInitial.locale"
-          [timezoneInput]="settingsInitial.timezone"
+          [localeInput]="settingsInitial['locale']"
+          [timezoneInput]="settingsInitial['timezone']"
           (localeChange)="localeChange($event)"
           (timezoneChange)="timezoneChange($event)"
           (applyChanges)="reloadPage()"
@@ -39,8 +39,8 @@
           </span>
         </ng-template>
         <app-layout-theme
-          [colorScheme]="settingsInitial.colorScheme"
-          [menuMode]="settingsInitial.menuMode"
+          [colorScheme]="settingsInitial['colorScheme']"
+          [menuMode]="settingsInitial['menuMode']"
           (colorSchemeChange)="colorSchemeChange($event)"
           (menuModeChange)="menuModeChange($event)"
           (applyChanges)="reloadPage()"
