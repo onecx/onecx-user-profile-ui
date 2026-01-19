@@ -13,7 +13,7 @@ import { UserPerson } from './userPerson';
 
 
 export interface UpdateUserProfileRequest { 
-    modificationCount?: number;
+    modificationCount: number;
     organization?: string;
     person?: UserPerson;
     settings?: object;

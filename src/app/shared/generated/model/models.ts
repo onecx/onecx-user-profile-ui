@@ -6,8 +6,6 @@ export * from './problemDetailInvalidParam';
 export * from './problemDetailParam';
 export * from './problemDetailResponse';
 export * from './refType';
-export * from './updateUserPerson';
-export * from './updateUserPersonRequest';
 export * from './updateUserProfileRequest';
 export * from './userPerson';
 export * from './userPersonAddress';

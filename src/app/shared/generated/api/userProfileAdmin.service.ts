@@ -21,7 +21,7 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { ProblemDetailResponse } from '../model/problemDetailResponse';
 // @ts-ignore
-import { UpdateUserPersonRequest } from '../model/updateUserPersonRequest';
+import { UpdateUserProfileRequest } from '../model/updateUserProfileRequest';
 // @ts-ignore
 import { UserPersonCriteria } from '../model/userPersonCriteria';
 // @ts-ignore
@@ -48,7 +48,7 @@ export interface SearchUserProfileRequestParams {
 
 export interface UpdateUserProfileRequestParams {
     id: string;
-    updateUserPersonRequest: UpdateUserPersonRequest;
+    updateUserProfileRequest: UpdateUserProfileRequest;
 }
 
 
@@ -317,9 +317,9 @@ export class UserProfileAdminAPIService {
         if (id === null || id === undefined) {
             throw new Error('Required parameter id was null or undefined when calling updateUserProfile.');
         }
-        const updateUserPersonRequest = requestParameters.updateUserPersonRequest;
-        if (updateUserPersonRequest === null || updateUserPersonRequest === undefined) {
-            throw new Error('Required parameter updateUserPersonRequest was null or undefined when calling updateUserProfile.');
+        const updateUserProfileRequest = requestParameters.updateUserProfileRequest;
+        if (updateUserProfileRequest === null || updateUserProfileRequest === undefined) {
+            throw new Error('Required parameter updateUserProfileRequest was null or undefined when calling updateUserProfile.');
         }
 
         let localVarHeaders = this.defaultHeaders;
@@ -366,7 +366,7 @@ export class UserProfileAdminAPIService {
         return this.httpClient.request<UserProfile>('put', `${this.configuration.basePath}${localVarPath}`,
             {
                 context: localVarHttpContext,
-                body: updateUserPersonRequest,
+                body: updateUserProfileRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,
