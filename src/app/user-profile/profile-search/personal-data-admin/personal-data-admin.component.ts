@@ -84,10 +84,10 @@ export class PersonalDataAdminComponent implements OnChanges {
 
   private getUpdateRequest(person: UserPerson): UpdateUserProfileRequest {
     return {
-      modificationCount: this.profile!.modificationCount!,
-      organization: this.profile!.organization,
+      modificationCount: this.profile?.modificationCount || 0,
+      organization: this.profile?.organization,
       person: person,
-      settings: this.profile!.settings
+      settings: this.profile?.settings
     }
   }
 }
