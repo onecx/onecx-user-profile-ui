@@ -52,8 +52,10 @@ export class AccountSettingsComponent implements OnInit {
     this.userProfileService.getMyUserProfile().subscribe({
       next: (profile) => {
         this.profile = profile
-        this.settings = profile.settings!
-        this.settingsInitial = { ...this.settings }
+        if (profile.settings) {
+          this.settings = profile.settings!
+          this.settingsInitial = { ...this.settings }
+        }
       },
       error: (error) => {
         console.error('getUserSettings', error)
@@ -86,7 +88,7 @@ export class AccountSettingsComponent implements OnInit {
     const updateRequest = this.getUpdateRequest()
     this.userProfileService.updateMyUserProfile({ updateUserProfileRequest: updateRequest }).subscribe({
       next: (res) => {
-        this.settings = res
+        this.settings = res.settings!
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
       },
       error: (error) => {

@@ -25,7 +25,6 @@ const userProfile1: UserProfile = {
   identityProviderId: '',
   organization: '',
   person: {
-    modificationCount: 27,
     firstName: 'Admin',
     lastName: 'Keycloak',
     displayName: 'Admin Keycloak',
@@ -50,7 +49,6 @@ const userProfile2: UserProfile = {
   identityProviderId: '',
   organization: '',
   person: {
-    modificationCount: 0,
     firstName: 'Max',
     lastName: 'Admin',
     displayName: 'Max Admin',

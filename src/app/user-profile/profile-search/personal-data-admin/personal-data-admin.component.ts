@@ -21,8 +21,7 @@ export class PersonalDataAdminComponent implements OnChanges {
   public userId: string | undefined = undefined // needed to get avatar
   public messages: { [key: string]: string } = {}
   public componentInUse = false
-
-  private profile?: UserProfile
+  public profile: UserProfile = {}
 
   constructor(
     public readonly translate: TranslateService,
