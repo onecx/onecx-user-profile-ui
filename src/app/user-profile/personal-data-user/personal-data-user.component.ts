@@ -71,7 +71,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
 
   private getUpdateRequest(person: UserPerson, profile: UserProfile): UpdateUserProfileRequest {
     return {
-      modificationCount: profile.modificationCount,
+      modificationCount: profile.modificationCount!,
       organization: profile.organization,
       person: person,
       settings: profile.settings

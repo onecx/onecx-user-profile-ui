@@ -4,7 +4,7 @@ import { catchError, finalize, Observable, of, tap } from 'rxjs'
 
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 
-import { UpdateUserPerson, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { UpdateUserProfileRequest, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data-admin',
@@ -22,6 +22,8 @@ export class PersonalDataAdminComponent implements OnChanges {
   public messages: { [key: string]: string } = {}
   public componentInUse = false
 
+  private profile?: UserProfile
+
   constructor(
     public readonly translate: TranslateService,
     public readonly userProfileAdminService: UserProfileAdminAPIService,
@@ -38,6 +40,7 @@ export class PersonalDataAdminComponent implements OnChanges {
       this.userProfile$ = this.userProfileAdminService.getUserProfile({ id: this.userProfileId }).pipe(
         tap((profile) => {
           this.userId = profile.userId
+          this.profile = { ...profile }
         }),
         catchError((err) => {
           this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
@@ -50,9 +53,10 @@ export class PersonalDataAdminComponent implements OnChanges {
   }
 
   public onUpdatePerson(person: UserPerson): void {
-    if (this.userProfileId)
+    if (this.userProfileId) {
+      const payload = this.getUpdateRequest(person)
       this.userProfileAdminService
-        .updateUserProfile({ id: this.userProfileId, updateUserPersonRequest: person as UpdateUserPerson })
+        .updateUserProfile({ id: this.userProfileId, updateUserProfileRequest: payload })
         .subscribe({
           next: (profile) => {
             this.showMessage('success')
@@ -63,6 +67,7 @@ export class PersonalDataAdminComponent implements OnChanges {
             console.error('updateUserProfile', err)
           }
         })
+    }
   }
 
   public showMessage(severity: 'success' | 'error'): void {
@@ -76,5 +81,14 @@ export class PersonalDataAdminComponent implements OnChanges {
     this.displayPersonalDataDialog = false
     this.userProfile$ = of({})
     this.hideDialog.emit(true)
+  }
+
+  private getUpdateRequest(person: UserPerson): UpdateUserProfileRequest {
+    return {
+      modificationCount: this.profile!.modificationCount!,
+      organization: this.profile!.organization,
+      person: person,
+      settings: this.profile!.settings
+    }
   }
 }

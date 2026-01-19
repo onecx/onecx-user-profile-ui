@@ -101,7 +101,7 @@ export class AccountSettingsComponent implements OnInit {
 
   private getUpdateRequest(): UpdateUserProfileRequest {
     return {
-      modificationCount: this.profile.modificationCount,
+      modificationCount: this.profile.modificationCount!,
       organization: this.profile.organization,
       person: this.profile.person,
       settings: { ...this.settings }
