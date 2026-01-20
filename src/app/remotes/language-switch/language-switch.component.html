@@ -1,1 +1,7 @@
-<p>language-switch works!</p>
+<div>
+  <form *ngIf="shouldShowForm()" [formGroup]="languageFormGroup">
+    <div class="language-selector-compact">
+      <p-selectButton [options]="availableLanguages" formControlName="language"> </p-selectButton>
+    </div>
+  </form>
+</div>
