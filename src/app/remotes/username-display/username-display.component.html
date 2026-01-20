@@ -1,0 +1,5 @@
+<div *ngIf="username$ | async as username" class="w-full pr-2 text-right" aria-label="Username Information" role="note">
+  <span aria-label="Username" pTooltip="Username" tooltipPosition="top" tooltipEvent="hover" role="note">
+    {{ username }}
+  </span>
+</div>
