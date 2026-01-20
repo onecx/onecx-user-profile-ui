@@ -11,7 +11,6 @@ import { PhoneType, UserPerson, UserProfile, UserProfileAdminAPIService } from '
 import { PersonalDataAdminComponent } from './personal-data-admin.component'
 
 const defaultPerson: UserPerson = {
-  modificationCount: 0,
   firstName: 'John',
   lastName: 'Doe',
   displayName: 'John Doe Display Name',
@@ -29,10 +28,10 @@ const defaultProfile: UserProfile = {
   id: 'id',
   userId: 'userId',
   tenantId: 'tenantId',
+  modificationCount: 0,
   person: defaultPerson
 }
 const updatedPerson: UserPerson = {
-  modificationCount: 1,
   firstName: 'newName',
   lastName: 'newLastName',
   displayName: 'newDisplayName',
@@ -148,6 +147,7 @@ describe('PersonalDataAdminComponent', () => {
     it('should call messageService success when update user profile was successful', (done) => {
       component.componentInUse = true
       component.userProfileId = defaultProfile.id
+      component.profile = defaultProfile
       const updatedProfile: UserProfile = { ...defaultProfile, person: updatedPerson }
       adminServiceSpy.updateUserProfile.and.returnValue(of(updatedProfile))
       spyOn(component, 'showMessage').and.callThrough()
@@ -174,9 +174,7 @@ describe('PersonalDataAdminComponent', () => {
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')
       expect(console.error).toHaveBeenCalledOnceWith('updateUserProfile', errorResponse)
     })
-  })
 
-  describe('on update profile', () => {
     it('should close dialog and inform caller', () => {
       component.onCloseDialog()
 

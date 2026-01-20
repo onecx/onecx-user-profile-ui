@@ -9,17 +9,13 @@
  * https://openapi-generator.tech
  * Do not edit the class manually.
  */
-import { UserProfile } from './userProfile';
+import { UserPerson } from './userPerson';
 
 
-export interface UserProfilePageResult { 
-    /**
-     * The total elements in the resource.
-     */
-    totalElements?: number;
-    number?: number;
-    size?: number;
-    totalPages?: number;
-    stream?: Array<UserProfile>;
+export interface UpdateUserProfileRequest { 
+    modificationCount: number;
+    organization?: string;
+    person?: UserPerson;
+    settings?: object;
 }
 

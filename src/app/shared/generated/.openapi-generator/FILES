@@ -12,7 +12,6 @@ encoder.ts
 git_push.sh
 index.ts
 model/colorScheme.ts
-model/createUserPreference.ts
 model/imageInfo.ts
 model/menuMode.ts
 model/models.ts
@@ -21,15 +20,11 @@ model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts
 model/problemDetailResponse.ts
 model/refType.ts
-model/updateUserPerson.ts
-model/updateUserPersonRequest.ts
-model/updateUserSettings.ts
+model/updateUserProfileRequest.ts
 model/userPerson.ts
 model/userPersonAddress.ts
 model/userPersonCriteria.ts
 model/userPersonPhone.ts
-model/userPreference.ts
-model/userPreferences.ts
 model/userProfile.ts
 model/userProfileAccountSettings.ts
 model/userProfilePageResult.ts
