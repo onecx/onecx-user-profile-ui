@@ -6,7 +6,8 @@ const config = withModuleFederationPlugin({
   filename: 'remoteEntry.js',
   exposes: {
     './OneCXUserProfileModule': 'src/main.ts',
-    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.main.ts'
+    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.main.ts',
+    './OneCXLanguageSwitchComponent': 'src/app/remotes/language-switch/language-switch.component.main.ts'
   },
   shared: share({
     '@angular/core': { requiredVersion: 'auto', includeSecondaries: true },
