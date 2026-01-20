@@ -29,6 +29,13 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile
           tagName: ocx-avatar-image-component
+        language-switch:
+          exposedModule: "./OneCXLanguageSwitchComponent"
+          description: "Simple language swtich component"
+          type: COMPONENT
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-language-switch
+          tagName: ocx-language-switch-component
     # Microservice
     microservice:
       spec:
