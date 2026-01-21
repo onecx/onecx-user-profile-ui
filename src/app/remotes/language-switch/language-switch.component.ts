@@ -1,9 +1,9 @@
-import { CommonModule } from '@angular/common'
+import { CommonModule, Location } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { Component, inject, Input, OnInit } from '@angular/core'
+import { Component, Inject, Input, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { UntilDestroy } from '@ngneat/until-destroy'
-import { TranslateLoader, TranslateService } from '@ngx-translate/core'
+import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
 import { AngularAcceleratorModule, createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
 import {
   AngularRemoteComponentsModule,
@@ -14,11 +14,14 @@ import {
   REMOTE_COMPONENT_CONFIG,
   RemoteComponentConfig
 } from '@onecx/angular-remote-components'
-import { CONFIG_KEY, ConfigurationService, UserProfileAPIService, UserService } from '@onecx/portal-integration-angular'
-import { ReplaySubject, take } from 'rxjs'
+import { CONFIG_KEY, ConfigurationService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import { ReplaySubject } from 'rxjs'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
+import { UserProfileAPIService, UserProfile, UpdateUserProfileRequest, Configuration } from 'src/app/shared/generated'
+import { environment } from 'src/environments/environment'
+import { ButtonModule } from 'primeng/button'
 
 @Component({
   selector: 'app-ocx-language-switch',
@@ -32,9 +35,12 @@ import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.m
     ControlErrorsDirective,
     ReactiveFormsModule,
     SelectButtonModule,
-    SharedModuleUserProfile
+    SharedModuleUserProfile,
+    ButtonModule,
+    TranslateModule
   ],
   providers: [
+    PortalMessageService,
     {
       provide: REMOTE_COMPONENT_CONFIG,
       useValue: new ReplaySubject<string>(1)
@@ -55,14 +61,6 @@ import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.m
 })
 @UntilDestroy()
 export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
-  private readonly rcConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
-  private readonly userApiService = inject(UserProfileAPIService)
-  private readonly userService = inject(UserService)
-  private readonly baseUrl: ReplaySubject<string> = inject<ReplaySubject<string>>(BASE_URL)
-  private readonly translateService: TranslateService = inject(TranslateService)
-  private readonly formBuilder = inject(FormBuilder)
-  private readonly configService = inject(ConfigurationService)
-
   @Input() set ocxRemoteComponentConfig(conf: RemoteComponentConfig) {
     this.ocxInitRemoteComponent(conf)
   }
@@ -72,20 +70,49 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   public languageFormGroup!: FormGroup
   public initialLanguage?: string
 
+  private profile: UserProfile = {}
+
+  constructor(
+    @Inject(REMOTE_COMPONENT_CONFIG) private readonly rcConfig: ReplaySubject<RemoteComponentConfig>,
+    private readonly userApiService: UserProfileAPIService,
+    private readonly userService: UserService,
+    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    private readonly translateService: TranslateService,
+    private readonly formBuilder: FormBuilder,
+    private readonly configService: ConfigurationService,
+    private readonly messageService: PortalMessageService,
+    private readonly location: Location
+  ) {
+    this.userService.lang$.subscribe((lang) => this.translateService.use(lang))
+  }
+
   ngOnInit(): void {
     this.setAvailableLanguages()
     this.setLanguageForm()
     this.setDefaultLangAndMakeSubs()
-    this.makeSubscriptions()
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig): void {
     this.baseUrl.next(config.baseUrl)
+    this.userApiService.configuration = new Configuration({
+      basePath: Location.joinWithSlash(config.baseUrl, environment.apiPrefix)
+    })
     this.rcConfig.next(config)
   }
 
   shouldShowForm(): boolean {
     return !!this.languageFormGroup && this.availableLanguages.length > 0 && !!this.initialLanguage
+  }
+
+  wasLanguageChanged(): boolean {
+    if (!this.languageFormGroup) {
+      return false
+    }
+    const { language } = this.languageFormGroup.value
+    if (!language) {
+      return false
+    }
+    return language !== this.initialLanguage
   }
 
   private setAvailableLanguages() {
@@ -112,19 +139,47 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private setDefaultLangAndMakeSubs() {
-    this.userService.lang$
-      .asObservable()
-      .pipe(take(1))
-      .subscribe((usedLanguage) => {
-        this.languageFormGroup.patchValue({ language: usedLanguage })
-        this.initialLanguage = usedLanguage
-        this.makeSubscriptions()
-      })
+    this.userApiService.getMyUserProfile().subscribe((profile) => {
+      this.profile = { ...profile }
+      const usedLanguage = (profile.settings as Record<string, any>)['locale']
+      this.languageFormGroup.patchValue({ language: usedLanguage })
+      this.initialLanguage = usedLanguage
+      this.makeSubscriptions()
+    })
   }
 
   private makeSubscriptions() {
     this.languageFormGroup.get('language')?.valueChanges.subscribe(this.handleLanguageUpdate.bind(this))
   }
 
-  private handleLanguageUpdate(language: string) {}
+  private handleLanguageUpdate(language: string) {
+    const payload = this.getUpdateProfileRequest(language)
+    this.userApiService.updateMyUserProfile({ updateUserProfileRequest: payload }).subscribe({
+      next: this.handleUpdateSuccess.bind(this),
+      error: this.handleUpdateFail.bind(this)
+    })
+  }
+
+  private handleUpdateSuccess(profile: UserProfile) {
+    this.profile = { ...profile }
+    this.messageService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
+    this.location.historyGo(0)
+  }
+
+  private handleUpdateFail() {
+    this.languageFormGroup.patchValue({ language: this.initialLanguage }, { emitEvent: false })
+    this.messageService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
+  }
+
+  private getUpdateProfileRequest(language: string): UpdateUserProfileRequest {
+    return {
+      modificationCount: this.profile.modificationCount || 0,
+      organization: this.profile.organization,
+      person: this.profile.person,
+      settings: {
+        ...this.profile.settings,
+        locale: language
+      }
+    }
+  }
 }
