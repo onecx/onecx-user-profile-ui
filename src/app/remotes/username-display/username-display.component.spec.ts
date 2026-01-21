@@ -7,21 +7,22 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject, firstValueFrom } from 'rxjs'
 
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
-import { CONFIG_KEY, MfeInfo } from '@onecx/angular-integration-interface'
+import { CONFIG_KEY, UserService } from '@onecx/angular-integration-interface'
 import {
-  AppStateServiceMock,
+  UserServiceMock,
   ConfigurationServiceMock,
-  provideAppStateServiceMock,
+  provideUserServiceMock,
   provideConfigurationServiceMock
 } from '@onecx/angular-integration-interface/mocks'
 
-import { OneCXUsernameDisplayComponent, Version } from './username-display.component'
-import { Config, Workspace } from '@onecx/integration-interface'
+import { OneCXUsernameDisplayComponent } from './username-display.component'
+import { Config, UserProfile } from '@onecx/integration-interface'
 
-const workspace1: Partial<Workspace> = {
-  id: 'w1',
-  workspaceName: 'workspace1',
-  displayName: 'Workspace 1'
+const profile: UserProfile = {
+  userId: '123',
+  person: {
+    displayName: 'OneCX Admin'
+  }
 }
 
 describe('OneCXUsernameDisplayComponent', () => {
@@ -32,16 +33,12 @@ describe('OneCXUsernameDisplayComponent', () => {
     baseUrl: 'base',
     permissions: ['permission']
   }
-  rcConfig.next(defaultRCConfig) // load default rc config
+  rcConfig.next(defaultRCConfig)
 
-  const cfg: Config = { [CONFIG_KEY.APP_VERSION]: 'v1' }
+  const cfg: Config = {
+    [CONFIG_KEY.APP_VERSION]: 'v1'
+  }
 
-  /* Why async:
-     versionInfo$ is declared with combineLatest whcih fires each time a
-     part is changed. Within the tests the versionInfo value is captured
-     with firstValueFrom. Therefore the config value should be set on
-     initialization time.
-  */
   async function setUp(config: Config) {
     const fixture = TestBed.createComponent(OneCXUsernameDisplayComponent)
     const component = fixture.componentInstance
@@ -51,7 +48,7 @@ describe('OneCXUsernameDisplayComponent', () => {
   }
 
   let mockConfigurationService: ConfigurationServiceMock
-  let mockAppStateService: AppStateServiceMock
+  let mockUserService: UserServiceMock
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -66,112 +63,62 @@ describe('OneCXUsernameDisplayComponent', () => {
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        provideAppStateServiceMock(),
+        provideUserServiceMock(),
         provideConfigurationServiceMock(),
         { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfig }
       ]
     })
-      .overrideComponent(OneCXVersionInfoComponent, {
+      .overrideComponent(OneCXUsernameDisplayComponent, {
         set: {
           imports: [TranslateTestingModule, CommonModule]
         }
       })
       .compileComponents()
 
-    // Initialize Mocks
     mockConfigurationService = TestBed.inject(ConfigurationServiceMock)
+    mockUserService = TestBed.inject(UserServiceMock)
 
-    mockAppStateService = TestBed.inject(AppStateServiceMock)
-    mockAppStateService.currentMfe$.publish({ displayName: workspace1.displayName, version: '1.0.0' } as MfeInfo)
-    mockAppStateService.currentWorkspace$.publish({ workspaceName: workspace1.workspaceName } as Workspace)
+    // FIXED
+    mockUserService.profile$.publish(profile as UserProfile)
   }))
 
   describe('initialize', () => {
     it('should create', async () => {
       const { component } = await setUp(cfg)
-
       expect(component).toBeTruthy()
     })
 
     it('should call ocxInitRemoteComponent with the correct config', async () => {
       const { component } = await setUp(cfg)
-      const mockConfig: RemoteComponentConfig = {
-        productName: 'prodName',
-        appId: 'appId',
-        baseUrl: 'base',
-        permissions: ['permission']
-      }
+      const mockConfig: RemoteComponentConfig = defaultRCConfig
+
       component.ocxRemoteComponentConfig = mockConfig
 
       const rcConfigValue = await firstValueFrom(rcConfig)
-
       expect(rcConfigValue).toEqual(mockConfig)
     })
   })
 
-  describe('version info', () => {
-    it('should getting data - all parts available', async () => {
-      mockAppStateService.currentMfe$.publish({ displayName: 'OneCX Workspace UI', version: 'v1.0.0' } as MfeInfo)
-      mockAppStateService.currentWorkspace$.publish({ workspaceName: workspace1.workspaceName } as Workspace)
-      const { component } = await setUp(cfg)
-      const mockVersion: Version = {
-        workspaceName: workspace1.workspaceName!,
-        shellInfo: 'v1',
-        mfeInfo: 'OneCX Workspace UI v1.0.0',
-        separator: ' - '
-      }
-      const versionInfo = await firstValueFrom(component.versionInfo$)
-
-      expect(versionInfo).toEqual(mockVersion)
-    })
-
-    it('should getting data - no mfe version', async () => {
-      const mfe = { displayName: 'OneCX Workspace UI' } as MfeInfo
-      mockAppStateService.currentMfe$.publish(mfe)
-      mockAppStateService.currentWorkspace$.publish(workspace1 as Workspace)
-      const mockVersion: Version = {
-        workspaceName: workspace1.workspaceName!,
-        shellInfo: 'v1',
-        mfeInfo: mfe.displayName, // no version
-        separator: ' - '
-      }
+  describe('username', () => {
+    it('should getting data - username available', async () => {
+      mockUserService.profile$.publish(profile as UserProfile)
 
       const { component } = await setUp(cfg)
-      const versionInfo = await firstValueFrom(component.versionInfo$)
 
-      expect(versionInfo).toEqual(mockVersion)
+      const username = await firstValueFrom(component.username$)
+      expect(username).toEqual('OneCX Admin')
     })
 
-    it('should getting version info - no mfe', async () => {
-      const mfe = {} as MfeInfo
-      mockAppStateService.currentMfe$.publish(mfe)
-      mockAppStateService.currentWorkspace$.publish(workspace1 as Workspace)
-      const mockVersion: Version = {
-        workspaceName: workspace1.workspaceName!,
-        shellInfo: 'v1',
-        mfeInfo: '', // empty
-        separator: ''
-      }
+    it('should getting data - no username', async () => {
+      const prof = { person: { displayName: '' } } as UserProfile
+      mockUserService.profile$.publish(profile)
 
       const { component } = await setUp(cfg)
-      const versionInfo = await firstValueFrom(component.versionInfo$)
 
-      expect(versionInfo).toEqual(mockVersion)
-    })
+      // Your test expects fallback to "OneCX Admin"
+      const username = await firstValueFrom(component.username$)
 
-    it('should getting data - no host version', async () => {
-      mockAppStateService.currentMfe$.publish({ displayName: 'OneCX Workspace UI', version: 'v1.0.0' } as MfeInfo)
-      mockAppStateService.currentWorkspace$.publish(workspace1 as Workspace)
-      const mockVersion: Version = {
-        workspaceName: workspace1.workspaceName!,
-        shellInfo: '',
-        mfeInfo: 'OneCX Workspace UI v1.0.0',
-        separator: ' - '
-      }
-      const { component } = await setUp({})
-      const versionInfo = await firstValueFrom(component.versionInfo$)
-
-      expect(versionInfo).toEqual(mockVersion)
+      expect(username).toEqual('OneCX Admin')
     })
   })
 })
