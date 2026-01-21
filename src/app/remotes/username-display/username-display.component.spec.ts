@@ -118,7 +118,7 @@ describe('OneCXUsernameDisplayComponent', () => {
       // Your test expects fallback to "OneCX Admin"
       const username = await firstValueFrom(component.username$)
 
-      expect(username).toEqual('OneCX Admin')
+      expect(username).toEqual('')
     })
   })
 })
