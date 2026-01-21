@@ -1,3 +1,10 @@
+.language-form-container {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  column-gap: 0.5rem;
+}
+
 .language-selector-compact {
   ::ng-deep .p-selectbutton {
     .p-button {
