@@ -7,7 +7,7 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject, firstValueFrom } from 'rxjs'
 
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
-import { CONFIG_KEY, UserService } from '@onecx/angular-integration-interface'
+import { CONFIG_KEY } from '@onecx/angular-integration-interface'
 import {
   UserServiceMock,
   ConfigurationServiceMock,
@@ -110,7 +110,7 @@ describe('OneCXUsernameDisplayComponent', () => {
     })
 
     it('should getting data - no username', async () => {
-      const prof = { person: { displayName: '' } } as UserProfile
+      const profile = { person: { displayName: '' } } as UserProfile
       mockUserService.profile$.publish(profile)
 
       const { component } = await setUp(cfg)
