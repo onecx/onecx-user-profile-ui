@@ -104,32 +104,12 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
     return !!this.languageFormGroup && this.availableLanguages.length > 0 && !!this.initialLanguage
   }
 
-  wasLanguageChanged(): boolean {
-    if (!this.languageFormGroup) {
-      return false
-    }
-    const { language } = this.languageFormGroup.value
-    if (!language) {
-      return false
-    }
-    return language !== this.initialLanguage
-  }
-
   private setAvailableLanguages() {
-    const browserLang = this.translateService.getBrowserLang()
     const translateLanguages = (this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de').split(
       ','
     )
 
-    this.availableLanguages = [
-      ...translateLanguages
-        .sort((a, b) => {
-          if (a === browserLang) return -1
-          if (b !== browserLang) return 1
-          return 0
-        })
-        .slice(0, this.shownLanguagesNumber)
-    ]
+    this.availableLanguages = [...translateLanguages.slice(0, this.shownLanguagesNumber)]
   }
 
   private setLanguageForm() {
