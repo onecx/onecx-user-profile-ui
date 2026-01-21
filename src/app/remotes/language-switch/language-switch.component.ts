@@ -14,7 +14,13 @@ import {
   REMOTE_COMPONENT_CONFIG,
   RemoteComponentConfig
 } from '@onecx/angular-remote-components'
-import { CONFIG_KEY, ConfigurationService, PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import {
+  CONFIG_KEY,
+  ConfigurationService,
+  PortalMessageService,
+  PrimeNgModule,
+  UserService
+} from '@onecx/portal-integration-angular'
 import { ReplaySubject } from 'rxjs'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
 import { SelectButtonModule } from 'primeng/selectbutton'
@@ -37,7 +43,8 @@ import { ButtonModule } from 'primeng/button'
     SelectButtonModule,
     SharedModuleUserProfile,
     ButtonModule,
-    TranslateModule
+    TranslateModule,
+    PrimeNgModule
   ],
   providers: [
     PortalMessageService,

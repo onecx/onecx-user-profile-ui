@@ -1,7 +1,13 @@
 <div>
   <form *ngIf="shouldShowForm()" [formGroup]="languageFormGroup" class="language-form-container">
     <div class="language-selector-compact">
-      <p-selectButton [options]="availableLanguages" formControlName="language"> </p-selectButton>
+      <p-selectButton
+        [options]="availableLanguages"
+        [pTooltip]="'LANGUAGE_SWITCH.TOOLTIP' | translate"
+        tooltipPosition="bottom"
+        formControlName="language"
+      >
+      </p-selectButton>
     </div>
   </form>
 </div>
