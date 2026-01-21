@@ -9,9 +9,9 @@ import { bootstrapRemoteComponent } from '@onecx/angular-webcomponents'
 
 import { environment } from 'src/environments/environment'
 
-import { OneCXUsernameDisplayComponent } from './username-display.component'
+import { OneCXUsernameComponent } from './username.component'
 
-bootstrapRemoteComponent(OneCXUsernameDisplayComponent, 'ocx-username-display-component', environment.production, [
+bootstrapRemoteComponent(OneCXUsernameComponent, 'ocx-username-component', environment.production, [
   provideHttpClient(withInterceptorsFromDi()),
   importProvidersFrom(AngularAuthModule),
   importProvidersFrom(BrowserModule),

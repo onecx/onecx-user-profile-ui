@@ -29,13 +29,13 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile
           tagName: ocx-avatar-image-component
-        username-display:
-          exposedModule: "./OneCXUsernameDisplayComponent"
+        username:
+          exposedModule: "./OneCXUsernameComponent"
           description: "Display username information"
           type: COMPONENT
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile
-          tagName: ocx-username-display-component
+          tagName: ocx-username-component
     # Microservice
     microservice:
       spec:

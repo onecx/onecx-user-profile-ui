@@ -7,7 +7,7 @@ const config = withModuleFederationPlugin({
   exposes: {
     './OneCXUserProfileModule': 'src/main.ts',
     './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.main.ts',
-    './OneCXUsernameDisplayComponent': 'src/app/remotes/username-display/username-display.component.main.ts'
+    './OneCXUsernameComponent': 'src/app/remotes/username/username.component.main.ts'
   },
   shared: share({
     '@angular/core': { requiredVersion: 'auto', includeSecondaries: true },

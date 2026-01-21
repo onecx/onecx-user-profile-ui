@@ -78,7 +78,6 @@ describe('OneCXUsernameDisplayComponent', () => {
     mockConfigurationService = TestBed.inject(ConfigurationServiceMock)
     mockUserService = TestBed.inject(UserServiceMock)
 
-    // FIXED
     mockUserService.profile$.publish(profile as UserProfile)
   }))
 
@@ -100,7 +99,7 @@ describe('OneCXUsernameDisplayComponent', () => {
   })
 
   describe('username', () => {
-    it('should getting data - username available', async () => {
+    it('should show username', async () => {
       mockUserService.profile$.publish(profile as UserProfile)
 
       const { component } = await setUp(cfg)
@@ -109,13 +108,12 @@ describe('OneCXUsernameDisplayComponent', () => {
       expect(username).toEqual('OneCX Admin')
     })
 
-    it('should getting data - no username', async () => {
+    it('should have empty username', async () => {
       const profile = { person: { displayName: '' } } as UserProfile
       mockUserService.profile$.publish(profile)
 
       const { component } = await setUp(cfg)
 
-      // Your test expects fallback to "OneCX Admin"
       const username = await firstValueFrom(component.username$)
 
       expect(username).toEqual('')

@@ -13,14 +13,14 @@ import {
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 @Component({
-  selector: 'app-ocx-username-display',
-  templateUrl: './username-display.component.html',
+  selector: 'app-ocx-username',
+  templateUrl: './username.component.html',
   standalone: true,
   imports: [AngularRemoteComponentsModule, CommonModule, AngularAcceleratorModule],
   providers: [{ provide: REMOTE_COMPONENT_CONFIG, useValue: new ReplaySubject<string>(1) }]
 })
 @UntilDestroy()
-export class OneCXUsernameDisplayComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+export class OneCXUsernameComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
   private readonly rcConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
   public readonly config = inject(ConfigurationService)
   public readonly userService = inject(UserService)
@@ -29,7 +29,7 @@ export class OneCXUsernameDisplayComponent implements ocxRemoteComponent, ocxRem
     this.ocxInitRemoteComponent(rcConfig)
   }
 
-  public username$: Observable<string | undefined> = combineLatest([this.userService.profile$.asObservable()]).pipe(
+  public username$: Observable<string | undefined> = this.userService.profile$.pipe(
     map(([profile]) => {
       const username = profile.person.displayName
 
