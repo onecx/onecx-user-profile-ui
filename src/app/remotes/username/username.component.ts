@@ -1,7 +1,7 @@
 import { CommonModule } from '@angular/common'
 import { Component, inject, Input } from '@angular/core'
 import { UntilDestroy } from '@ngneat/until-destroy'
-import { combineLatest, map, Observable, ReplaySubject } from 'rxjs'
+import { map, Observable, ReplaySubject } from 'rxjs'
 
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { UserService, ConfigurationService } from '@onecx/angular-integration-interface'
