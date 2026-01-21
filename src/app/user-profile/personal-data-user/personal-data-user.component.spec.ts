@@ -58,7 +58,7 @@ describe('PersonalDataUserComponent', () => {
   const routerMock = { navigate: jasmine.createSpy('navigate') }
 
   const userProfileServiceSpy = {
-    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
+    updateMyUserProfile: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
   }
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
@@ -96,7 +96,7 @@ describe('PersonalDataUserComponent', () => {
 
   describe('get my profile data', () => {
     afterAll(() => {
-      userProfileServiceSpy.updateUserPerson.calls.reset()
+      userProfileServiceSpy.updateMyUserProfile.calls.reset()
       userProfileServiceSpy.getMyUserProfile.calls.reset()
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
     })
@@ -150,7 +150,7 @@ describe('PersonalDataUserComponent', () => {
   describe('onPersonUpdate', () => {
     it('should call messageService success when updateUserPerson() was successful', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson))
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of({ ...myProfile, person: updatedPerson }))
 
       component.onPersonUpdate(updatedPerson, myProfile)
 
@@ -162,7 +162,7 @@ describe('PersonalDataUserComponent', () => {
 
     it('should call messageService success when updateUserPerson() was successful with empty response', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateUserPerson.and.returnValue(of(updatedPerson as UserPerson))
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(updatedPerson as UserPerson))
 
       component.onPersonUpdate(updatedPerson, myProfile)
 
@@ -171,7 +171,7 @@ describe('PersonalDataUserComponent', () => {
 
     it('should call messageService error when updateUserPerson() not was successful', () => {
       const errorResponse = { status: 400, statusText: 'Update person failed' }
-      userProfileServiceSpy.updateUserPerson.and.returnValue(throwError(() => errorResponse))
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(throwError(() => errorResponse))
       spyOn(component, 'showMessage').and.callThrough()
       spyOn(console, 'error')
 

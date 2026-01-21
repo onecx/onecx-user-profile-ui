@@ -9,12 +9,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action } from '@onecx/angular-accelerator'
 
-import {
-  UpdateUserSettings,
-  UserProfileAPIService,
-  UserPerson,
-  UserProfileAccountSettings
-} from 'src/app/shared/generated'
+import { UserProfileAPIService, UserPerson, UserProfile, UpdateUserProfileRequest } from 'src/app/shared/generated'
 import { PrivacyComponent } from '../privacy/privacy.component'
 
 @Component({
@@ -29,8 +24,9 @@ export class AccountSettingsComponent implements OnInit {
   public actions$: Observable<Action[]> | undefined
   public personalInfo$: Observable<UserPerson>
   public isChangePasswordComponentDefined$: Observable<boolean>
-  public settings: UserProfileAccountSettings = {}
-  public settingsInitial: UserProfileAccountSettings = {}
+  public profile: UserProfile = {}
+  public settings: Record<string, any> = {}
+  public settingsInitial: Record<string, any> = {}
   public changePasswordSlotName = 'onecx-user-profile-change-password'
 
   constructor(
@@ -53,10 +49,13 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   public ngOnInit(): void {
-    this.userProfileService.getUserSettings().subscribe({
+    this.userProfileService.getMyUserProfile().subscribe({
       next: (profile) => {
-        this.settings = profile
-        this.settingsInitial = { ...this.settings }
+        this.profile = profile
+        if (profile.settings) {
+          this.settings = profile.settings!
+          this.settingsInitial = { ...this.settings }
+        }
       },
       error: (error) => {
         console.error('getUserSettings', error)
@@ -65,30 +64,31 @@ export class AccountSettingsComponent implements OnInit {
     })
   }
   public localeChange(ev: any) {
-    this.settings.locale = ev
+    this.settings = { ...this.settings, locale: ev }
     this.saveUserSettingsInfo()
   }
   public timezoneChange(ev: any) {
-    this.settings.timezone = ev
+    this.settings = { ...this.settings, timezone: ev }
     this.saveUserSettingsInfo()
   }
   public colorSchemeChange(ev: any) {
-    this.settings.colorScheme = ev
+    this.settings = { ...this.settings, colorScheme: ev }
     this.saveUserSettingsInfo()
   }
   public menuModeChange(ev: any) {
-    this.settings.menuMode = ev
+    this.settings = { ...this.settings, menuMode: ev }
     this.saveUserSettingsInfo()
   }
   public privacySettingsChange(ev: any) {
-    this.settings.hideMyProfile = ev.hideMyProfile
+    this.settings = { ...this.settings, hideMyProfile: ev.hideMyProfile }
     this.saveUserSettingsInfo()
   }
 
   public saveUserSettingsInfo(): void {
-    this.userProfileService.updateUserSettings({ updateUserSettings: this.settings as UpdateUserSettings }).subscribe({
+    const updateRequest = this.getUpdateRequest()
+    this.userProfileService.updateMyUserProfile({ updateUserProfileRequest: updateRequest }).subscribe({
       next: (res) => {
-        this.settings = res
+        this.settings = res.settings!
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
       },
       error: (error) => {
@@ -99,6 +99,15 @@ export class AccountSettingsComponent implements OnInit {
   }
   public reloadPage(): void {
     this.location.historyGo(0) // load current page = reload (trick for code coverage)
+  }
+
+  private getUpdateRequest(): UpdateUserProfileRequest {
+    return {
+      modificationCount: this.profile.modificationCount!,
+      organization: this.profile.organization,
+      person: this.profile.person,
+      settings: { ...this.settings }
+    }
   }
 
   private prepareActionButtons(): void {

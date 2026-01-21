@@ -9,22 +9,20 @@ import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 
-import {
-  ColorScheme,
-  MenuMode,
-  UpdateUserSettings,
-  UserProfileAPIService,
-  UserProfileAccountSettings
-} from 'src/app/shared/generated'
+import { ColorScheme, MenuMode, UserProfile, UserProfileAPIService } from 'src/app/shared/generated'
 import { AccountSettingsComponent } from './account-settings.component'
 
-const accountSettings: UserProfileAccountSettings = {
-  modificationCount: 0,
+const accountSettings: object = {
   hideMyProfile: false,
   locale: 'DE',
   timezone: 'UTC',
   menuMode: MenuMode.Horizontal,
   colorScheme: ColorScheme.Auto
+}
+
+const profile: UserProfile = {
+  modificationCount: 0,
+  settings: accountSettings
 }
 
 describe('AccountSettingsComponent', () => {
@@ -36,8 +34,7 @@ describe('AccountSettingsComponent', () => {
   }
   const userProfileServiceSpy = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
-    getUserSettings: jasmine.createSpy('getUserSettings').and.returnValue(of({})),
-    updateUserSettings: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
+    updateMyUserProfile: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
   }
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const locationSpy = jasmine.createSpyObj<Location>('Location', ['historyGo'])
@@ -65,7 +62,7 @@ describe('AccountSettingsComponent', () => {
   }))
 
   beforeEach(() => {
-    userProfileServiceSpy.getUserSettings.and.returnValue(of(accountSettings))
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(profile))
     fixture = TestBed.createComponent(AccountSettingsComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
@@ -75,17 +72,15 @@ describe('AccountSettingsComponent', () => {
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
     userProfileServiceSpy.getMyUserProfile.calls.reset()
-    userProfileServiceSpy.getUserSettings.calls.reset()
-    userProfileServiceSpy.updateUserSettings.calls.reset()
+    userProfileServiceSpy.updateMyUserProfile.calls.reset()
     locationSpy.historyGo.calls.reset()
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
-    userProfileServiceSpy.getUserSettings.and.returnValue(of({}))
-    userProfileServiceSpy.updateUserSettings.and.returnValue(of({}))
+    userProfileServiceSpy.updateMyUserProfile.and.returnValue(of({}))
   })
 
   it('should display error if loading fails', fakeAsync(() => {
     const errorResponse = { status: 400, statusText: 'Error on loading user settings' }
-    userProfileServiceSpy.getUserSettings.and.returnValue(throwError(() => errorResponse))
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(throwError(() => errorResponse))
     spyOn(console, 'error')
 
     component.ngOnInit()
@@ -98,7 +93,7 @@ describe('AccountSettingsComponent', () => {
   }))
 
   it('should handle loading of empty settings', () => {
-    userProfileServiceSpy.getUserSettings.and.returnValue(of({}))
+    userProfileServiceSpy.getMyUserProfile.and.returnValue(of({ settings: {} }))
 
     component.ngOnInit()
 
@@ -107,18 +102,18 @@ describe('AccountSettingsComponent', () => {
 
   it('should saveUserSettingsInfo', () => {
     component.settings = accountSettings
-    const response: UpdateUserSettings = { ...accountSettings, modificationCount: 1 }
-    userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+    const response: UserProfile = { ...accountSettings, modificationCount: 1 }
+    userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
 
     component.saveUserSettingsInfo()
 
     expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-    expect(component.settings).toEqual(response)
+    expect(component.settings).toEqual(response.settings!)
   })
 
   it('should handle error on update in saveUserSettingsInfo', () => {
     const errorResponse = { status: 400, statusText: 'Error on updating user settings' }
-    userProfileServiceSpy.updateUserSettings.and.returnValue(throwError(() => errorResponse))
+    userProfileServiceSpy.updateMyUserProfile.and.returnValue(throwError(() => errorResponse))
     spyOn(console, 'error')
 
     component.saveUserSettingsInfo()
@@ -133,61 +128,77 @@ describe('AccountSettingsComponent', () => {
   describe('on change settings', () => {
     it('should call localeChange', () => {
       component.settings = { ...accountSettings }
-      const response: UserProfileAccountSettings = { ...accountSettings, modificationCount: 1, locale: 'EN' }
-      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+      const response: UserProfile = { ...profile, modificationCount: 1, settings: { ...accountSettings, locale: 'EN' } }
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
 
       component.localeChange('EN')
 
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-      expect(component.settings).toEqual(response)
+      expect(component.settings).toEqual(response.settings!)
     })
 
     it('should call timezoneChange', () => {
       component.settings = accountSettings
       const val = 'HST'
-      const response: UpdateUserSettings = { ...accountSettings, modificationCount: 1, timezone: val }
-      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+      const response: UserProfile = {
+        ...profile,
+        modificationCount: 1,
+        settings: { ...accountSettings, timezone: val }
+      }
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
 
       component.timezoneChange(val)
 
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-      expect(component.settings).toEqual(response)
+      expect(component.settings).toEqual(response.settings!)
     })
 
     it('should call colorSchemeChange', () => {
       component.settings = accountSettings
       const val = ColorScheme.Dark
-      const response: UpdateUserSettings = { ...accountSettings, modificationCount: 1, colorScheme: val }
-      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+      const response: UserProfile = {
+        ...profile,
+        modificationCount: 1,
+        settings: { ...accountSettings, colorScheme: val }
+      }
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
 
       component.colorSchemeChange(val)
 
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-      expect(component.settings).toEqual(response)
+      expect(component.settings).toEqual(response.settings!)
     })
 
     it('should call menuModeChange', () => {
       component.settings = accountSettings
       const val = MenuMode.Horizontal
-      const response: UpdateUserSettings = { ...accountSettings, modificationCount: 1, menuMode: val }
-      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+      const response: UserProfile = {
+        ...profile,
+        modificationCount: 1,
+        settings: { ...accountSettings, menuMode: val }
+      }
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
 
       component.menuModeChange(MenuMode.Slim)
 
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-      expect(component.settings).toEqual(response)
+      expect(component.settings).toEqual(response.settings!)
     })
 
     it('should call privacySettingsChange', () => {
       component.settings = accountSettings
       const val = false
-      const response: UpdateUserSettings = { ...accountSettings, modificationCount: 1, hideMyProfile: val }
-      userProfileServiceSpy.updateUserSettings.and.returnValue(of(response))
+      const response: UserProfile = {
+        ...profile,
+        modificationCount: 1,
+        settings: { ...accountSettings, hideMyProfile: val }
+      }
+      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
 
       component.privacySettingsChange({ hideMyProfile: true })
 
       expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.SUCCESS' })
-      expect(component.settings).toEqual(response)
+      expect(component.settings).toEqual(response.settings!)
     })
   })
 
