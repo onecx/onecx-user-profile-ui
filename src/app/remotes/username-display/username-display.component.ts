@@ -12,13 +12,6 @@ import {
 } from '@onecx/angular-remote-components'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
-export type Version = {
-  workspaceName: string
-  shellInfo?: string
-  mfeInfo?: string
-  separator?: string
-}
-
 @Component({
   selector: 'app-ocx-username-display',
   templateUrl: './username-display.component.html',
