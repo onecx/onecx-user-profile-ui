@@ -31,7 +31,7 @@ app:
           tagName: ocx-avatar-image-component
         username:
           exposedModule: "./OneCXUsernameComponent"
-          description: "Display username information"
+          description: "Display user name"
           type: COMPONENT
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile

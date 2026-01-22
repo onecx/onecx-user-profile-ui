@@ -1,1 +1,1 @@
-import('./username-display.component.bootstrap').catch((err) => console.error(err))
+import('./username.component.bootstrap').catch((err) => console.error(err))

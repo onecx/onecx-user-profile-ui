@@ -15,7 +15,7 @@ import {
   provideConfigurationServiceMock
 } from '@onecx/angular-integration-interface/mocks'
 
-import { OneCXUsernameDisplayComponent } from './username-display.component'
+import { OneCXUsernameComponent } from './username.component'
 import { Config, UserProfile } from '@onecx/integration-interface'
 
 const profile: UserProfile = {
@@ -25,7 +25,7 @@ const profile: UserProfile = {
   }
 }
 
-describe('OneCXUsernameDisplayComponent', () => {
+describe('OneCXUsernameComponent', () => {
   const rcConfig = new ReplaySubject<RemoteComponentConfig>(1)
   const defaultRCConfig = {
     productName: 'prodName',
@@ -40,7 +40,7 @@ describe('OneCXUsernameDisplayComponent', () => {
   }
 
   async function setUp(config: Config) {
-    const fixture = TestBed.createComponent(OneCXUsernameDisplayComponent)
+    const fixture = TestBed.createComponent(OneCXUsernameComponent)
     const component = fixture.componentInstance
     await mockConfigurationService.init(config)
     fixture.detectChanges()
@@ -68,7 +68,7 @@ describe('OneCXUsernameDisplayComponent', () => {
         { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfig }
       ]
     })
-      .overrideComponent(OneCXUsernameDisplayComponent, {
+      .overrideComponent(OneCXUsernameComponent, {
         set: {
           imports: [TranslateTestingModule, CommonModule]
         }

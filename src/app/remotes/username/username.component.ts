@@ -30,9 +30,8 @@ export class OneCXUsernameComponent implements ocxRemoteComponent, ocxRemoteWebc
   }
 
   public username$: Observable<string | undefined> = this.userService.profile$.pipe(
-    map(([profile]) => {
-      const username = profile.person.displayName
-
+    map((profile) => {
+      const username = profile.person?.displayName
       return username
     })
   )
