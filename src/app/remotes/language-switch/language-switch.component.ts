@@ -76,8 +76,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   public availableLanguages: string[] = []
   public languageFormGroup!: FormGroup
   public initialLanguage?: string
-
-  private profile: UserProfile = {}
+  public profile: UserProfile = {}
 
   constructor(
     @Inject(REMOTE_COMPONENT_CONFIG) private readonly rcConfig: ReplaySubject<RemoteComponentConfig>,
@@ -116,7 +115,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
       ','
     )
 
-    this.availableLanguages = [...translateLanguages.slice(0, this.shownLanguagesNumber)]
+    this.availableLanguages = translateLanguages.slice(0, this.shownLanguagesNumber)
   }
 
   private setLanguageForm() {
@@ -149,7 +148,6 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
 
   private handleUpdateSuccess(profile: UserProfile) {
     this.profile = { ...profile }
-    this.messageService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
     this.location.historyGo(0)
   }
 
