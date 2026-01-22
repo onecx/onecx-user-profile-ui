@@ -104,6 +104,7 @@
     "LAST_NAME.TOOLTIP": "Nachname",
     "USER_ID": "Nutzer-ID",
     "USER_ID.TOOLTIP": "Nutzer-ID aus dem IAM-Service",
+    "USER_NAME.TOOLTIP": "Benutzername",
     "EMAIL": "E-Mail-Adresse",
     "EMAIL.TOOLTIP": "E-Mail-Adresse",
     "COUNTRY": "Land",
