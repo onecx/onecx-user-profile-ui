@@ -248,6 +248,9 @@
     "PROFILE": "User Profile",
     "USER_PERMISSIONS": "Permissions"
   },
+  "LANGUAGE_SWITCH": {
+    "TOOLTIP": "Change used language. This operation will trigger page refresh"
+  },
   "EXCEPTIONS": {
     "NOT_FOUND": {
       "PROFILE": "No data could be found for the Profile.",
