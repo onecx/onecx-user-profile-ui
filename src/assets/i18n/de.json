@@ -249,6 +249,9 @@
     "PROFILE": "Nutzerprofil",
     "USER_PERMISSIONS": "Berechtigungen"
   },
+  "LANGUAGE_SWITCH": {
+    "TOOLTIP": "Verwendete Sprache ändern. Dieser Vorgang löst eine Seitenaktualisierung aus."
+  },
   "EXCEPTIONS": {
     "NOT_FOUND": {
       "PROFILE": "Es konnte kein Profil gefunden werden.",
