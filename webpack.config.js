@@ -6,7 +6,7 @@ const config = withModuleFederationPlugin({
   filename: 'remoteEntry.js',
   exposes: {
     './OneCXUserProfileModule': 'src/main.ts',
-    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image.component.main.ts',
+    './OneCXAvatarImageComponent': 'src/app/remotes/avatar-image/avatar-image.component.main.ts',
     './OneCXUsernameComponent': 'src/app/remotes/username/username.component.main.ts',
     './OneCXLanguageSwitchComponent': 'src/app/remotes/language-switch/language-switch.component.main.ts'
   },
