@@ -5,7 +5,7 @@ app:
   routing:
     enabled: true
     path: /mfe/user-profile/
-  
+
   operator:
     # Microfrontend
     microfrontend:
@@ -21,7 +21,7 @@ app:
           tagName: ocx-user-profile-component
           endpoints:
             - name: search
-              path: /search          
+              path: /search
         avatar-image:
           exposedModule: "./OneCXAvatarImageComponent"
           description: "User avatar image component"
@@ -29,6 +29,13 @@ app:
           technology: WEBCOMPONENTMODULE
           remoteName: onecx-user-profile
           tagName: ocx-avatar-image-component
+        username:
+          exposedModule: "./OneCXUsernameComponent"
+          description: "Display user name"
+          type: COMPONENT
+          technology: WEBCOMPONENTMODULE
+          remoteName: onecx-user-profile
+          tagName: ocx-username-component
         language-switch:
           exposedModule: "./OneCXLanguageSwitchComponent"
           description: "Simple language swtich component"

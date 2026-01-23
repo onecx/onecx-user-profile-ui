@@ -104,6 +104,7 @@
     "LAST_NAME.TOOLTIP": "Last name",
     "USER_ID": "User ID",
     "USER_ID.TOOLTIP": "The user's ID provided in the Identity Management (IDM)",
+    "USER_NAME.TOOLTIP": "User name",
     "EMAIL": "E-Mail",
     "EMAIL.TOOLTIP": "E-Mail Address",
     "COUNTRY": "Country",

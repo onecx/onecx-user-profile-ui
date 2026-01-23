@@ -1,0 +1,8 @@
+<div
+  *ngIf="username$ | async as username"
+  pTooltip="'USER_NAME.TOOLTIP' | translate"
+  aria-label="User name"
+  role="note"
+>
+  {{ username }}
+</div>
