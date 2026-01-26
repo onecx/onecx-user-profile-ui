@@ -9,7 +9,7 @@ import { ReplaySubject } from 'rxjs'
 import { CommonModule } from '@angular/common'
 import { provideRouter, RouterModule } from '@angular/router'
 
-import { UserAvatarAPIService } from '../shared/generated'
+import { UserAvatarAPIService } from '../../shared/generated'
 import { OneCXAvatarImageComponent } from './avatar-image.component'
 import { OneCXAvatarImageComponentHarness } from './avatar-image.harness'
 
