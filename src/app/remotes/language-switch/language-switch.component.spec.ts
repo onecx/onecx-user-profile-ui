@@ -1,11 +1,17 @@
-import { ComponentFixture, TestBed } from '@angular/core/testing'
+import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { CommonModule, Location } from '@angular/common'
 import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-remote-components'
-import { ConfigurationServiceMock, provideConfigurationServiceMock } from '@onecx/angular-integration-interface/mocks'
+import {
+  ConfigurationServiceMock,
+  provideConfigurationServiceMock,
+  UserServiceMock,
+  provideUserServiceMock,
+  MockUserService
+} from '@onecx/angular-integration-interface/mocks'
 import { UserProfileAPIService, UserProfile } from 'src/app/shared/generated'
 import { OneCXLanguageSwitchComponent } from './language-switch.component'
 import { provideHttpClient } from '@angular/common/http'
@@ -32,16 +38,17 @@ const rcConfig: RemoteComponentConfig = {
 describe('OneCXLanguageSwitchComponent - Business Logic', () => {
   let component: OneCXLanguageSwitchComponent
   let fixture: ComponentFixture<OneCXLanguageSwitchComponent>
-  let translateService: jasmine.SpyObj<TranslateService>
   let configService: ConfigurationServiceMock
+  let userService: MockUserService
   let rcConfigSubject: ReplaySubject<any>
 
   const userApiService = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
-    updateMyUserProfile: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
+    updateMyUserProfile: jasmine.createSpy('updateMyUserProfile').and.returnValue(of({}))
   }
   const locationSpy = jasmine.createSpyObj('Location', ['historyGo'])
   const messageServiceSpy = jasmine.createSpyObj('PortalMessageService', ['success', 'error'])
+  const initialProfileLanguage = (mockProfile.settings as Record<string, any>)['locale']
 
   beforeEach(async () => {
     rcConfigSubject = new ReplaySubject(1)
@@ -63,6 +70,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
         provideHttpClientTesting(),
         { provide: TranslateService, useValue: translateServiceSpy },
         provideConfigurationServiceMock(),
+        provideUserServiceMock(),
         { provide: Location, useValue: locationSpy },
         { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfigSubject }
       ]
@@ -78,8 +86,8 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       })
       .compileComponents()
 
-    translateService = TestBed.inject(TranslateService) as jasmine.SpyObj<TranslateService>
     configService = TestBed.inject(ConfigurationServiceMock)
+    userService = TestBed.inject(UserServiceMock)
 
     fixture = TestBed.createComponent(OneCXLanguageSwitchComponent)
     component = fixture.componentInstance
@@ -87,6 +95,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
   describe('Component initial configuration', () => {
     beforeEach(() => {
+      userService.profile$.publish(mockProfile as any)
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
       spyOn(configService, 'getProperty').and.returnValue('en,de')
     })
@@ -98,22 +107,17 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       }
     })
 
-    it('should init all component data properly', (done) => {
+    it('should init all component data properly', fakeAsync(() => {
       component.ngOnInit()
-      const initialProfileLanguage = (mockProfile.settings as Record<string, any>)['locale']
+      tick()
+      userService.lang$.next(initialProfileLanguage) // simulate delayed completion of getMyUserProfile request called from shell UI
+      flush()
 
-      component.profile$.subscribe((profile) => {
-        expect(userApiService.getMyUserProfile).toHaveBeenCalled()
-        expect(configService.getProperty).toHaveBeenCalled()
-
-        expect(component.availableLanguages.length).toBeGreaterThan(0)
-        expect(component.languageFormGroup).toBeTruthy()
-        expect(component.initialLanguage).toEqual(initialProfileLanguage)
-        expect(profile).toEqual(mockProfile)
-        expect(component.languageFormGroup.get('language')?.value).toEqual(initialProfileLanguage)
-        done()
-      })
-    })
+      expect(configService.getProperty).toHaveBeenCalled()
+      expect(component.availableLanguages.length).toBeGreaterThan(0)
+      expect(component.languageFormGroup).toBeTruthy()
+      expect(component.languageFormGroup.get('language')?.value).toEqual(initialProfileLanguage)
+    }))
 
     it('should init remote component config properly', (done) => {
       rcConfigSubject.subscribe((config) => {
@@ -125,20 +129,20 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     })
   })
 
-  describe('Available Languages Sorting', () => {
+  describe('Available languages display', () => {
     beforeEach(() => {
       userApiService.getMyUserProfile.and.returnValue(new Subject())
     })
 
-    it('should limit available languages to shownLanguagesNumber', () => {
+    it('should limit available languages to shownLanguagesNumber', fakeAsync(() => {
       spyOn(configService, 'getProperty').and.returnValue('en,de,fr,it,es')
-      translateService.getBrowserLang.and.returnValue('en')
       component.shownLanguagesNumber = 2
 
       component.ngOnInit()
+      flush()
 
       expect(component.availableLanguages.length).toBe(2)
-    })
+    }))
   })
 
   describe('shouldShowForm', () => {
@@ -152,40 +156,42 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       expect(component.shouldShowForm()).toBe(false)
     })
 
-    it('should return false when availableLanguages is empty', () => {
+    it('should return false when availableLanguages is empty', fakeAsync(() => {
       spyOn(configService, 'getProperty').and.returnValue('en')
-      translateService.getBrowserLang.and.returnValue('en')
       component.shownLanguagesNumber = 3
       component.ngOnInit()
+      flush()
 
       component.availableLanguages = []
 
       expect(component.shouldShowForm()).toBe(false)
-    })
+    }))
 
-    it('should return false when initialLanguage is undefined', () => {
+    it('should return false when default language is not set', fakeAsync(() => {
       spyOn(configService, 'getProperty').and.returnValue('en,de')
-      translateService.getBrowserLang.and.returnValue('en')
       component.shownLanguagesNumber = 3
       component.ngOnInit()
+      flush()
 
-      component.initialLanguage = undefined
+      component.defaultLangSet = false
 
       expect(component.shouldShowForm()).toBe(false)
-    })
+    }))
 
-    it('should show form when all conditions are met', () => {
+    it('should show form when all conditions are met', fakeAsync(() => {
       spyOn(configService, 'getProperty').and.returnValue('en,de')
-      translateService.getBrowserLang.and.returnValue('en')
       component.shownLanguagesNumber = 3
       component.ngOnInit()
-
+      tick()
+      userService.lang$.next(initialProfileLanguage) // simulate delayed completion of getMyUserProfile request called from shell UI
+      flush()
       expect(component.shouldShowForm()).toBeTrue()
-    })
+    }))
   })
 
   describe('Language settings update', () => {
     beforeEach(() => {
+      userService.profile$.publish(mockProfile as any)
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
       userApiService.updateMyUserProfile.and.returnValue(of(updatedProfile))
     })
@@ -196,41 +202,44 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       locationSpy.historyGo.calls.reset()
     })
 
-    it('should handle update success', (done) => {
+    it('should handle update success', fakeAsync(() => {
       component.ngOnInit()
-      const newLanguage = (updatedProfile.settings as Record<string, any>)['locale']
+      tick()
 
+      const newLanguage = (updatedProfile.settings as Record<string, any>)['locale']
       component.languageFormGroup.patchValue({ language: newLanguage })
 
-      component.profile$.subscribe((profile) => {
-        expect(userApiService.updateMyUserProfile).toHaveBeenCalled()
-        expect(locationSpy.historyGo).toHaveBeenCalled()
-        expect(profile).toEqual(updatedProfile)
-        expect(userApiService.updateMyUserProfile).toHaveBeenCalledWith(
-          jasmine.objectContaining({
-            updateUserProfileRequest: jasmine.objectContaining({
-              settings: jasmine.objectContaining({
-                locale: newLanguage
-              })
+      flush()
+
+      expect(userApiService.updateMyUserProfile).toHaveBeenCalled()
+      expect(locationSpy.historyGo).toHaveBeenCalled()
+      expect(userApiService.updateMyUserProfile).toHaveBeenCalledWith(
+        jasmine.objectContaining({
+          updateUserProfileRequest: jasmine.objectContaining({
+            settings: jasmine.objectContaining({
+              locale: newLanguage
             })
           })
-        )
-        done()
-      })
-    })
+        })
+      )
+    }))
 
-    it('should handle update error', () => {
+    it('should handle update error', fakeAsync(() => {
       userApiService.updateMyUserProfile.and.returnValue(throwError(() => new Error('Error')))
 
       component.ngOnInit()
+      tick()
+
       const newLanguage = (updatedProfile.settings as Record<string, any>)['locale']
       const oldLanguage = (mockProfile.settings as Record<string, any>)['locale']
       component.languageFormGroup.patchValue({ language: newLanguage })
+
+      flush()
 
       expect(messageServiceSpy.error).toHaveBeenCalled()
       expect(component.languageFormGroup.get('language')?.value).toEqual(oldLanguage)
       expect(userApiService.updateMyUserProfile).toHaveBeenCalledTimes(1)
       expect(locationSpy.historyGo).not.toHaveBeenCalled()
-    })
+    }))
   })
 })

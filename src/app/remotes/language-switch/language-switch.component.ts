@@ -121,7 +121,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
     //TODO uncomment when parameters service fix is introduced
     // const translatedLanguages = (await this.parameterService
     //     .get('primary-languages', this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de'))
-    this.availableLanguages = translatedLanguages.split(',')
+    this.availableLanguages = translatedLanguages.split(',').slice(0, this.shownLanguagesNumber)
   }
 
   private setLanguageForm() {
