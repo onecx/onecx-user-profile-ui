@@ -76,7 +76,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   public languageFormGroup!: FormGroup
   public defaultLangSet = false // needed for ommiting visible language switch on the component
 
-  private subscriptions = new Subscription()
+  private readonly subscriptions = new Subscription()
 
   constructor(
     @Inject(REMOTE_COMPONENT_CONFIG) private readonly rcConfig: ReplaySubject<RemoteComponentConfig>,
@@ -114,11 +114,11 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private async setAvailableLanguages() {
-    //TODO temporary solution until parameters service fix is instroduced
-    const translatedLanguages: string = await new Promise((resolve) => {
-      resolve(this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de')
-    })
-    //TODO uncomment when parameters service fix is introduced
+    // Temporary solution until parameters service fix is instroduced
+    const translatedLanguages: string = await Promise.resolve(
+      this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de'
+    )
+    // Uncomment when parameters service fix is introduced
     // const translatedLanguages = (await this.parameterService
     //     .get('primary-languages', this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de'))
     this.availableLanguages = translatedLanguages.split(',').slice(0, this.shownLanguagesNumber)
