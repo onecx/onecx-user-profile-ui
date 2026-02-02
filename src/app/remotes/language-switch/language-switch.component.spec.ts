@@ -94,6 +94,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
     fixture = TestBed.createComponent(OneCXLanguageSwitchComponent)
     component = fixture.componentInstance
+    component.ocxRemoteComponentConfig = rcConfig
   })
 
   describe('Component initial configuration', () => {
@@ -141,8 +142,6 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
         expect(config).toEqual(rcConfig)
         done()
       })
-
-      component.ocxRemoteComponentConfig = rcConfig
     })
   })
 

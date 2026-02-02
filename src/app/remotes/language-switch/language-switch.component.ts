@@ -115,9 +115,12 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
 
   private async setAvailableLanguages() {
     const defaultLangs = 'en,de'
+    const { productName, appId } = await firstValueFrom(this.rcConfig.asObservable())
     let translatedLanguages = await this.parameterService.get(
       'primary-languages',
-      this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || defaultLangs
+      this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || defaultLangs,
+      productName,
+      appId
     )
     if (!translatedLanguages) {
       translatedLanguages = defaultLangs
