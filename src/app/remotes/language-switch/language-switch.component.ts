@@ -13,7 +13,7 @@ import {
   REMOTE_COMPONENT_CONFIG,
   RemoteComponentConfig
 } from '@onecx/angular-remote-components'
-import { firstValueFrom, ReplaySubject, skip, Subscription } from 'rxjs'
+import { firstValueFrom, lastValueFrom, ReplaySubject, Subscription } from 'rxjs'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
@@ -76,7 +76,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   public languageFormGroup!: FormGroup
   public defaultLangSet = false // needed for ommiting visible language switch on the component
 
-  private readonly subscriptions = new Subscription()
+  private readonly subscriptions: Subscription = new Subscription()
 
   constructor(
     @Inject(REMOTE_COMPONENT_CONFIG) private readonly rcConfig: ReplaySubject<RemoteComponentConfig>,
@@ -114,13 +114,14 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private async setAvailableLanguages() {
-    // Temporary solution until parameters service fix is instroduced
-    const translatedLanguages: string = await Promise.resolve(
-      this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de'
+    const defaultLangs = 'en,de'
+    let translatedLanguages = await this.parameterService.get(
+      'primary-languages',
+      this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || defaultLangs
     )
-    // Uncomment when parameters service fix is introduced
-    // const translatedLanguages = (await this.parameterService
-    //     .get('primary-languages', this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || 'en,de'))
+    if (!translatedLanguages) {
+      translatedLanguages = defaultLangs
+    }
     this.availableLanguages = translatedLanguages.split(',').slice(0, this.shownLanguagesNumber)
   }
 
@@ -131,18 +132,20 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   }
 
   private makeSubscriptions() {
-    this.subscriptions.add(
-      this.userService.lang$
-        .pipe(skip(1)) // skipping initial lang$ value which always defaults to en
-        .subscribe(this.handleProfileLanguageChange.bind(this))
-    )
+    this.subscriptions.add(this.userService.lang$.subscribe(this.handleProfileLanguageChange.bind(this)))
     this.subscriptions.add(
       this.languageFormGroup.get('language')!.valueChanges.subscribe(this.handleLanguageUpdate.bind(this))
     )
   }
 
   private handleProfileLanguageChange(usedLang: string) {
-    this.languageFormGroup.patchValue({ language: usedLang }, { emitEvent: false })
+    if (this.availableLanguages.includes(usedLang)) {
+      this.languageFormGroup.patchValue({ language: usedLang }, { emitEvent: false })
+      this.languageFormGroup.get('language')!.enable({ emitEvent: false })
+    } else {
+      console.warn(`Profile language ${usedLang} is not set as available, disabling c1omponent`)
+      this.languageFormGroup.get('language')!.disable({ emitEvent: false })
+    }
     this.defaultLangSet = true
   }
 
