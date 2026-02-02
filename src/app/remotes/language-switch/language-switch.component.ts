@@ -13,7 +13,7 @@ import {
   REMOTE_COMPONENT_CONFIG,
   RemoteComponentConfig
 } from '@onecx/angular-remote-components'
-import { firstValueFrom, lastValueFrom, ReplaySubject, Subscription } from 'rxjs'
+import { firstValueFrom, ReplaySubject, Subscription } from 'rxjs'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'

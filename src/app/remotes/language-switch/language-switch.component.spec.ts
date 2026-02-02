@@ -4,6 +4,7 @@ import { CommonModule, Location } from '@angular/common'
 import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
+import { ParametersService } from '@onecx/angular-integration-interface'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-remote-components'
 import {
   ConfigurationServiceMock,
@@ -48,6 +49,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
   }
   const locationSpy = jasmine.createSpyObj('Location', ['historyGo'])
   const messageServiceSpy = jasmine.createSpyObj('PortalMessageService', ['success', 'error'])
+  const parameterServiceSpy = jasmine.createSpyObj('ParametersService', ['get'])
   const initialProfileLanguage = (mockProfile.settings as Record<string, any>)['locale']
 
   beforeEach(async () => {
@@ -80,7 +82,8 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
           imports: [TranslateTestingModule, CommonModule],
           providers: [
             { provide: UserProfileAPIService, useValue: userApiService },
-            { provide: PortalMessageService, useValue: messageServiceSpy }
+            { provide: PortalMessageService, useValue: messageServiceSpy },
+            { provide: ParametersService, useValue: parameterServiceSpy }
           ]
         }
       })
@@ -98,10 +101,12 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       userService.profile$.publish(mockProfile as any)
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
       spyOn(configService, 'getProperty').and.returnValue('en,de')
+      parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
     })
 
     afterEach(() => {
       userApiService.getMyUserProfile.calls.reset()
+      parameterServiceSpy.get.calls.reset()
       if (configService.getProperty && (configService.getProperty as jasmine.Spy).calls) {
         ;(configService.getProperty as jasmine.Spy).calls.reset()
       }
@@ -117,6 +122,18 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       expect(component.availableLanguages.length).toBeGreaterThan(0)
       expect(component.languageFormGroup).toBeTruthy()
       expect(component.languageFormGroup.get('language')?.value).toEqual(initialProfileLanguage)
+    }))
+
+    it('should disable form when unavailable language is set', fakeAsync(() => {
+      component.ngOnInit()
+      tick()
+      userService.lang$.next('jp') // simulate delayed completion of getMyUserProfile request called from shell UI
+      flush()
+
+      expect(configService.getProperty).toHaveBeenCalled()
+      expect(component.availableLanguages.length).toBeGreaterThan(0)
+      expect(component.languageFormGroup).toBeTruthy()
+      expect(component.languageFormGroup.get('language')?.disabled).toBeTrue()
     }))
 
     it('should init remote component config properly', (done) => {
@@ -136,6 +153,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
     it('should limit available languages to shownLanguagesNumber', fakeAsync(() => {
       spyOn(configService, 'getProperty').and.returnValue('en,de,fr,it,es')
+      parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de,fr,it,es'))
       component.shownLanguagesNumber = 2
 
       component.ngOnInit()
@@ -143,11 +161,32 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
       expect(component.availableLanguages.length).toBe(2)
     }))
+
+    it('should set default available languages when parameters service return empty value', fakeAsync(() => {
+      spyOn(configService, 'getProperty').and.returnValue(undefined)
+      parameterServiceSpy.get.and.returnValue(Promise.resolve(undefined))
+      component.ngOnInit()
+      flush()
+      expect(component.availableLanguages.length).toBe(2)
+      expect(component.availableLanguages).toContain('en')
+      expect(component.availableLanguages).toContain('de')
+    }))
+
+    it('should use default languages when parameterService.get returns null', fakeAsync(() => {
+      spyOn(configService, 'getProperty').and.returnValue('en,de')
+      parameterServiceSpy.get.and.returnValue(Promise.resolve(null))
+      component.ngOnInit()
+      flush()
+      expect(component.availableLanguages.length).toBe(2)
+      expect(component.availableLanguages).toContain('en')
+      expect(component.availableLanguages).toContain('de')
+    }))
   })
 
   describe('shouldShowForm', () => {
     beforeEach(() => {
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
+      parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
     })
 
     it('should return false when languageFormGroup is undefined', () => {
@@ -194,6 +233,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       userService.profile$.publish(mockProfile as any)
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
       userApiService.updateMyUserProfile.and.returnValue(of(updatedProfile))
+      parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
     })
 
     afterEach(() => {
