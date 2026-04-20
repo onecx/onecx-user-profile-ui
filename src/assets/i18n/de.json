@@ -250,7 +250,7 @@
     "USER_PERMISSIONS": "Berechtigungen"
   },
   "LANGUAGE_SWITCH": {
-    "TOOLTIP": "Verwendete Sprache ändern. Dieser Vorgang löst eine Seitenaktualisierung aus."
+    "TOOLTIP": "Sprache ändern.<br/>Diese Operation führt zu einem sofortigen Neuladen der Seite."
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {
@@ -258,8 +258,8 @@
       "PROFILES": "Es konnten keine Profile gefunden werden."
     },
     "HTTP_STATUS_0": {
-      "PROFILE": "Unbekanntes Problem beim Abrufen vom Profil. Bitte versuchen sie es noch einmal.",
-      "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen sie es noch einmal."
+      "PROFILE": "Unbekanntes Problem beim Abrufen vom Profil. Bitte versuchen Sie es noch einmal.",
+      "PROFILES": "Unbekanntes Problem beim Abrufen von Profilen. Bitte versuchen Sie es noch einmal."
     },
     "HTTP_STATUS_400": {
       "PROFILE": "Das Profil konnte nicht verarbeitet werden."

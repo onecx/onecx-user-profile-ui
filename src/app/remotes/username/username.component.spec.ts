@@ -6,6 +6,7 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject, firstValueFrom } from 'rxjs'
 
+import { BASE_URL } from '@onecx/angular-remote-components'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { CONFIG_KEY } from '@onecx/angular-integration-interface'
 import {
@@ -55,8 +56,8 @@ describe('OneCXUsernameComponent', () => {
       declarations: [],
       imports: [
         TranslateTestingModule.withTranslations({
-          de: require('./../../../assets/i18n/de.json'),
-          en: require('./../../../assets/i18n/en.json')
+          de: require('src/assets/i18n/de.json'),
+          en: require('src/assets/i18n/en.json')
         }).withDefaultLanguage('en'),
         NoopAnimationsModule
       ],
@@ -70,7 +71,8 @@ describe('OneCXUsernameComponent', () => {
     })
       .overrideComponent(OneCXUsernameComponent, {
         set: {
-          imports: [TranslateTestingModule, CommonModule]
+          imports: [TranslateTestingModule, CommonModule],
+          providers: [{ provide: BASE_URL, useValue: new ReplaySubject<string>(1) }]
         }
       })
       .compileComponents()
