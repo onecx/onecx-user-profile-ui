@@ -3,18 +3,10 @@
     userName: username$ | async
   } as data"
   [attr.aria-label]="'USER_NAME.TOOLTIP' | translate"
-  role="note"
   [attr.pTooltip]="'USER_NAME.TOOLTIP' | translate"
   tooltipPosition="top"
   tooltipEvent="hover"
+  role="note"
 >
   {{ data.userName }}
 </div>
-
-<!--
-
-  [attr.pTooltip]="'USER_NAME.TOOLTIP' | translate"
-  [pTooltip]="'USER_NAME.TOOLTIP' | translate"
-  [attr.aria-label]="'USER_NAME.TOOLTIP' | translate"
-
--->
