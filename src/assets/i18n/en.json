@@ -250,7 +250,7 @@
     "USER_PERMISSIONS": "Permissions"
   },
   "LANGUAGE_SWITCH": {
-    "TOOLTIP": "Change used language. This operation will trigger page refresh"
+    "TOOLTIP": "Change language.<br/>This operation will trigger page reload immediately."
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {
@@ -278,7 +278,7 @@
       "PROFILES": "No data could be found for this Profile."
     },
     "HTTP_STATUS_500": {
-      "PROFILE": "Unknown problem retrieving of the Profile. Please try again.",
+      "PROFILE": "Unknown problem retrieving the Profile. Please try again.",
       "PROFILES": "Unknown problem retrieving Profiles. Please try again."
     }
   }

@@ -13,7 +13,8 @@ import {
   REMOTE_COMPONENT_CONFIG,
   RemoteComponentConfig
 } from '@onecx/angular-remote-components'
-import { firstValueFrom, ReplaySubject, Subscription } from 'rxjs'
+import { firstValueFrom, from, ReplaySubject, Subscription } from 'rxjs'
+import { map, switchMap, take } from 'rxjs/operators'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
@@ -92,10 +93,29 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
     this.subscriptions.add(this.userService.lang$.subscribe((lang) => this.translateService.use(lang)))
   }
 
-  async ngOnInit() {
+  ngOnInit() {
     this.setLanguageForm()
-    await this.setAvailableLanguages()
-    this.makeSubscriptions()
+    const defaultLangs = 'en,de'
+    this.subscriptions.add(
+      this.rcConfig
+        .pipe(
+          take(1),
+          switchMap(({ productName, appId }) =>
+            from(
+              this.parameterService.get(
+                'primary-languages',
+                this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || defaultLangs,
+                productName,
+                appId
+              )
+            ).pipe(map((langs) => (langs || defaultLangs).split(',').slice(0, this.shownLanguagesNumber)))
+          )
+        )
+        .subscribe((langs) => {
+          this.availableLanguages = langs
+          this.makeSubscriptions()
+        })
+    )
   }
 
   ngOnDestroy(): void {
@@ -111,21 +131,6 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
 
   shouldShowForm(): boolean {
     return !!this.languageFormGroup && this.availableLanguages.length > 0 && this.defaultLangSet === true
-  }
-
-  private async setAvailableLanguages() {
-    const defaultLangs = 'en,de'
-    const { productName, appId } = await firstValueFrom(this.rcConfig.asObservable())
-    let translatedLanguages = await this.parameterService.get(
-      'primary-languages',
-      this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || defaultLangs,
-      productName,
-      appId
-    )
-    if (!translatedLanguages) {
-      translatedLanguages = defaultLangs
-    }
-    this.availableLanguages = translatedLanguages.split(',').slice(0, this.shownLanguagesNumber)
   }
 
   private setLanguageForm() {
@@ -146,7 +151,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
       this.languageFormGroup.patchValue({ language: usedLang }, { emitEvent: false })
       this.languageFormGroup.get('language')!.enable({ emitEvent: false })
     } else {
-      console.warn(`Profile language ${usedLang} is not set as available, disabling c1omponent`)
+      console.warn(`Profile language ${usedLang} is not set as available, disabling component`)
       this.languageFormGroup.get('language')!.disable({ emitEvent: false })
     }
     this.defaultLangSet = true
@@ -160,7 +165,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
       await firstValueFrom(this.userApiService.updateMyUserProfile({ updateUserProfileRequest: payload }))
       this.handleUpdateSuccess()
     } catch (error) {
-      console.error(error)
+      console.error('updateMyUserProfile', error)
       await this.handleUpdateFail()
     }
     this.languageFormGroup.get('language')!.enable({ emitEvent: false })

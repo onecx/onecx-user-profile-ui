@@ -1,8 +1,12 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing'
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { CommonModule, Location } from '@angular/common'
+import { provideHttpClient } from '@angular/common/http'
+import { provideHttpClientTesting } from '@angular/common/http/testing'
+import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
 import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
+import { TranslateTestingModule } from 'ngx-translate-testing'
+
 import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
 import { ParametersService } from '@onecx/angular-integration-interface'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-remote-components'
@@ -13,11 +17,9 @@ import {
   provideUserServiceMock,
   MockUserService
 } from '@onecx/angular-integration-interface/mocks'
+
 import { UserProfileAPIService, UserProfile } from 'src/app/shared/generated'
 import { OneCXLanguageSwitchComponent } from './language-switch.component'
-import { provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TranslateTestingModule } from 'ngx-translate-testing'
 
 const mockProfile: UserProfile = {
   id: '123',
@@ -48,7 +50,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     updateMyUserProfile: jasmine.createSpy('updateMyUserProfile').and.returnValue(of({}))
   }
   const locationSpy = jasmine.createSpyObj('Location', ['historyGo'])
-  const messageServiceSpy = jasmine.createSpyObj('PortalMessageService', ['success', 'error'])
+  const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
   const parameterServiceSpy = jasmine.createSpyObj('ParametersService', ['get'])
   const initialProfileLanguage = (mockProfile.settings as Record<string, any>)['locale']
 
@@ -82,7 +84,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
           imports: [TranslateTestingModule, CommonModule],
           providers: [
             { provide: UserProfileAPIService, useValue: userApiService },
-            { provide: PortalMessageService, useValue: messageServiceSpy },
+            { provide: PortalMessageService, useValue: msgServiceSpy },
             { provide: ParametersService, useValue: parameterServiceSpy }
           ]
         }
@@ -95,6 +97,16 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     fixture = TestBed.createComponent(OneCXLanguageSwitchComponent)
     component = fixture.componentInstance
     component.ocxRemoteComponentConfig = rcConfig
+  })
+
+  afterEach(() => {
+    msgServiceSpy.success.calls.reset()
+    msgServiceSpy.error.calls.reset()
+    userApiService.getMyUserProfile.calls.reset()
+    userApiService.updateMyUserProfile.calls.reset()
+    locationSpy.historyGo.calls.reset()
+    userApiService.getMyUserProfile.and.returnValue(of({}))
+    userApiService.updateMyUserProfile.and.returnValue(of({}))
   })
 
   describe('Component initial configuration', () => {
@@ -126,6 +138,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     }))
 
     it('should disable form when unavailable language is set', fakeAsync(() => {
+      spyOn(console, 'warn')
       component.ngOnInit()
       tick()
       userService.lang$.next('jp') // simulate delayed completion of getMyUserProfile request called from shell UI
@@ -135,6 +148,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       expect(component.availableLanguages.length).toBeGreaterThan(0)
       expect(component.languageFormGroup).toBeTruthy()
       expect(component.languageFormGroup.get('language')?.disabled).toBeTrue()
+      expect(console.warn).toHaveBeenCalledWith('Profile language jp is not set as available, disabling component')
     }))
 
     it('should init remote component config properly', (done) => {
@@ -264,7 +278,9 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     }))
 
     it('should handle update error', fakeAsync(() => {
-      userApiService.updateMyUserProfile.and.returnValue(throwError(() => new Error('Error')))
+      spyOn(console, 'error')
+      const errorResponse = { status: 400, statusText: 'Error on updating user settings' }
+      userApiService.updateMyUserProfile.and.returnValue(throwError(() => errorResponse))
 
       component.ngOnInit()
       tick()
@@ -275,10 +291,11 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
       flush()
 
-      expect(messageServiceSpy.error).toHaveBeenCalled()
+      expect(msgServiceSpy.error).toHaveBeenCalled()
       expect(component.languageFormGroup.get('language')?.value).toEqual(oldLanguage)
       expect(userApiService.updateMyUserProfile).toHaveBeenCalledTimes(1)
       expect(locationSpy.historyGo).not.toHaveBeenCalled()
+      expect(console.error).toHaveBeenCalledWith('updateMyUserProfile', errorResponse)
     }))
   })
 })
