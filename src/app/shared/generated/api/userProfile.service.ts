@@ -21,6 +21,10 @@ import { Observable }                                        from 'rxjs';
 // @ts-ignore
 import { ProblemDetailResponse } from '../model/problemDetailResponse';
 // @ts-ignore
+import { UpdateUserPersonContactRequest } from '../model/updateUserPersonContactRequest';
+// @ts-ignore
+import { UpdateUserPersonSettingsRequest } from '../model/updateUserPersonSettingsRequest';
+// @ts-ignore
 import { UpdateUserProfileRequest } from '../model/updateUserProfileRequest';
 // @ts-ignore
 import { UserProfile } from '../model/userProfile';
@@ -32,6 +36,14 @@ import { Configuration }                                     from '../configurat
 
 export interface UpdateMyUserProfileRequestParams {
     updateUserProfileRequest: UpdateUserProfileRequest;
+}
+
+export interface UpdateMyUserProfileContactRequestParams {
+    updateUserPersonContactRequest: UpdateUserPersonContactRequest;
+}
+
+export interface UpdateMyUserProfileSettingsRequestParams {
+    updateUserPersonSettingsRequest: UpdateUserPersonSettingsRequest;
 }
 
 
@@ -267,6 +279,144 @@ export class UserProfileAPIService {
             {
                 context: localVarHttpContext,
                 body: updateUserProfileRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update the user profile contact details of the requesting user
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateMyUserProfileContact(requestParameters: UpdateMyUserProfileContactRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<UserProfile>;
+    public updateMyUserProfileContact(requestParameters: UpdateMyUserProfileContactRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<UserProfile>>;
+    public updateMyUserProfileContact(requestParameters: UpdateMyUserProfileContactRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<UserProfile>>;
+    public updateMyUserProfileContact(requestParameters: UpdateMyUserProfileContactRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const updateUserPersonContactRequest = requestParameters.updateUserPersonContactRequest;
+        if (updateUserPersonContactRequest === null || updateUserPersonContactRequest === undefined) {
+            throw new Error('Required parameter updateUserPersonContactRequest was null or undefined when calling updateMyUserProfileContact.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/userProfile/me/contact`;
+        return this.httpClient.request<UserProfile>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateUserPersonContactRequest,
+                responseType: <any>responseType_,
+                withCredentials: this.configuration.withCredentials,
+                headers: localVarHeaders,
+                observe: observe,
+                reportProgress: reportProgress
+            }
+        );
+    }
+
+    /**
+     * Update the user profile settings of the requesting user
+     * @param requestParameters
+     * @param observe set whether or not to return the data Observable as the body, response or events. defaults to returning the body.
+     * @param reportProgress flag to report request and response progress.
+     */
+    public updateMyUserProfileSettings(requestParameters: UpdateMyUserProfileSettingsRequestParams, observe?: 'body', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<UserProfile>;
+    public updateMyUserProfileSettings(requestParameters: UpdateMyUserProfileSettingsRequestParams, observe?: 'response', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpResponse<UserProfile>>;
+    public updateMyUserProfileSettings(requestParameters: UpdateMyUserProfileSettingsRequestParams, observe?: 'events', reportProgress?: boolean, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<HttpEvent<UserProfile>>;
+    public updateMyUserProfileSettings(requestParameters: UpdateMyUserProfileSettingsRequestParams, observe: any = 'body', reportProgress: boolean = false, options?: {httpHeaderAccept?: 'application/json', context?: HttpContext}): Observable<any> {
+        const updateUserPersonSettingsRequest = requestParameters.updateUserPersonSettingsRequest;
+        if (updateUserPersonSettingsRequest === null || updateUserPersonSettingsRequest === undefined) {
+            throw new Error('Required parameter updateUserPersonSettingsRequest was null or undefined when calling updateMyUserProfileSettings.');
+        }
+
+        let localVarHeaders = this.defaultHeaders;
+
+        let localVarHttpHeaderAcceptSelected: string | undefined = options && options.httpHeaderAccept;
+        if (localVarHttpHeaderAcceptSelected === undefined) {
+            // to determine the Accept header
+            const httpHeaderAccepts: string[] = [
+                'application/json'
+            ];
+            localVarHttpHeaderAcceptSelected = this.configuration.selectHeaderAccept(httpHeaderAccepts);
+        }
+        if (localVarHttpHeaderAcceptSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Accept', localVarHttpHeaderAcceptSelected);
+        }
+
+        let localVarHttpContext: HttpContext | undefined = options && options.context;
+        if (localVarHttpContext === undefined) {
+            localVarHttpContext = new HttpContext();
+        }
+
+
+        // to determine the Content-Type header
+        const consumes: string[] = [
+            'application/json'
+        ];
+        const httpContentTypeSelected: string | undefined = this.configuration.selectHeaderContentType(consumes);
+        if (httpContentTypeSelected !== undefined) {
+            localVarHeaders = localVarHeaders.set('Content-Type', httpContentTypeSelected);
+        }
+
+        let responseType_: 'text' | 'json' | 'blob' = 'json';
+        if (localVarHttpHeaderAcceptSelected) {
+            if (localVarHttpHeaderAcceptSelected.startsWith('text')) {
+                responseType_ = 'text';
+            } else if (this.configuration.isJsonMime(localVarHttpHeaderAcceptSelected)) {
+                responseType_ = 'json';
+            } else {
+                responseType_ = 'blob';
+            }
+        }
+
+        let localVarPath = `/userProfile/me/settings`;
+        return this.httpClient.request<UserProfile>('put', `${this.configuration.basePath}${localVarPath}`,
+            {
+                context: localVarHttpContext,
+                body: updateUserPersonSettingsRequest,
                 responseType: <any>responseType_,
                 withCredentials: this.configuration.withCredentials,
                 headers: localVarHeaders,

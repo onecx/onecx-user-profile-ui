@@ -7,7 +7,7 @@ import { of } from 'rxjs'
 
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
-import { PhoneType, UserProfile, UserPerson, UserProfileAPIService } from 'src/app/shared/generated'
+import { PhoneType, UserProfile, UserPerson } from 'src/app/shared/generated'
 import { PersonalDataComponent } from './personal-data.component'
 
 describe('PersonalDataComponent', () => {
@@ -50,10 +50,6 @@ describe('PersonalDataComponent', () => {
     issuer: 'http://keycloak/realms/OneCX',
     person: defaultPerson
   }
-  const userProfileServiceSpy = {
-    getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
-    updateUserPerson: jasmine.createSpy('updateUserPerson').and.returnValue(of({}))
-  }
   const messageServiceMock: jasmine.SpyObj<PortalMessageService> = jasmine.createSpyObj<PortalMessageService>(
     'PortalMessageService',
     ['success', 'error']
@@ -78,14 +74,10 @@ describe('PersonalDataComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         { provide: PortalMessageService, useValue: messageServiceMock },
-        { provide: UserProfileAPIService, useValue: userProfileServiceSpy },
         { provide: UserService, useValue: userServiceSpy }
       ]
     }).compileComponents()
 
-    userProfileServiceSpy.getMyUserProfile.calls.reset()
-    userProfileServiceSpy.updateUserPerson.calls.reset()
-    userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultProfile as UserProfile))
     userServiceSpy.hasPermission.and.returnValue(true)
 
     countriesInfoMock.getNames.and.returnValue({
