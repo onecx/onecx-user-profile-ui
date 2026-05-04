@@ -58,7 +58,7 @@ describe('PersonalDataUserComponent', () => {
   const routerMock = { navigate: jasmine.createSpy('navigate') }
 
   const userProfileServiceSpy = {
-    updateMyUserProfile: jasmine.createSpy('updateUserPerson').and.returnValue(of({})),
+    updateMyUserProfileContact: jasmine.createSpy('updateMyUserProfileContact').and.returnValue(of({})),
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({}))
   }
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
@@ -96,7 +96,7 @@ describe('PersonalDataUserComponent', () => {
 
   describe('get my profile data', () => {
     afterAll(() => {
-      userProfileServiceSpy.updateMyUserProfile.calls.reset()
+      userProfileServiceSpy.updateMyUserProfileContact.calls.reset()
       userProfileServiceSpy.getMyUserProfile.calls.reset()
       userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
     })
@@ -148,9 +148,9 @@ describe('PersonalDataUserComponent', () => {
   })
 
   describe('onPersonUpdate', () => {
-    it('should call messageService success when updateUserPerson() was successful', () => {
+    it('should call messageService success when updateMyUserProfileContact() was successful', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of({ ...myProfile, person: updatedPerson }))
+      userProfileServiceSpy.updateMyUserProfileContact.and.returnValue(of({ ...myProfile, person: updatedPerson }))
 
       component.onPersonUpdate(updatedPerson, myProfile)
 
@@ -160,25 +160,25 @@ describe('PersonalDataUserComponent', () => {
       })
     })
 
-    it('should call messageService success when updateUserPerson() was successful with empty response', () => {
+    it('should call messageService success when updateMyUserProfileContact() was successful with empty response', () => {
       spyOn(component, 'showMessage').and.callThrough()
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(updatedPerson as UserPerson))
+      userProfileServiceSpy.updateMyUserProfileContact.and.returnValue(of(updatedPerson as UserPerson))
 
       component.onPersonUpdate(updatedPerson, myProfile)
 
       expect(component.showMessage).toHaveBeenCalledOnceWith('success')
     })
 
-    it('should call messageService error when updateUserPerson() not was successful', () => {
+    it('should call messageService error when updateMyUserProfileContact() not was successful', () => {
       const errorResponse = { status: 400, statusText: 'Update person failed' }
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(throwError(() => errorResponse))
+      userProfileServiceSpy.updateMyUserProfileContact.and.returnValue(throwError(() => errorResponse))
       spyOn(component, 'showMessage').and.callThrough()
       spyOn(console, 'error')
 
       component.onPersonUpdate(updatedPerson, myProfile)
 
       expect(component.showMessage).toHaveBeenCalledOnceWith('error')
-      expect(console.error).toHaveBeenCalledWith('updateUserPerson', errorResponse)
+      expect(console.error).toHaveBeenCalledWith('updateMyUserProfileContact', errorResponse)
     })
   })
 

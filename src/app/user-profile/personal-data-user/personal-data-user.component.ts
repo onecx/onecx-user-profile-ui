@@ -6,7 +6,12 @@ import { TranslateService } from '@ngx-translate/core'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action } from '@onecx/angular-accelerator'
 
-import { UserProfileAPIService, UserPerson, UserProfile, UpdateUserProfileRequest } from 'src/app/shared/generated'
+import {
+  UserProfileAPIService,
+  UserPerson,
+  UserProfile,
+  UpdateUserPersonContactRequest
+} from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-personal-data-user',
@@ -49,8 +54,12 @@ export class PersonalDataUserComponent implements AfterViewInit {
   }
 
   public onPersonUpdate(person: UserPerson, profile: UserProfile): void {
-    const updatePayload = this.getUpdateRequest(person, profile)
-    this.userProfileService.updateMyUserProfile({ updateUserProfileRequest: updatePayload }).subscribe({
+    const updatePayload: UpdateUserPersonContactRequest = {
+      modificationCount: profile.modificationCount!,
+      address: person.address,
+      phone: person.phone
+    }
+    this.userProfileService.updateMyUserProfileContact({ updateUserPersonContactRequest: updatePayload }).subscribe({
       next: (updatedProfile) => {
         this.showMessage('success')
         this.userProfile$ = new Observable((prof) => prof.next({ ...updatedProfile }))
@@ -58,7 +67,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
       error: (err) => {
         this.showMessage('error')
         this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
-        console.error('updateUserPerson', err)
+        console.error('updateMyUserProfileContact', err)
       }
     })
   }
@@ -67,15 +76,6 @@ export class PersonalDataUserComponent implements AfterViewInit {
     severity === 'success'
       ? this.msgService.success({ summaryKey: 'USER_PROFILE.MSG.SAVE_SUCCESS' })
       : this.msgService.error({ summaryKey: 'USER_PROFILE.MSG.SAVE_ERROR' })
-  }
-
-  private getUpdateRequest(person: UserPerson, profile: UserProfile): UpdateUserProfileRequest {
-    return {
-      modificationCount: profile.modificationCount!,
-      organization: profile.organization,
-      person: person,
-      settings: profile.settings
-    }
   }
 
   private prepareActionButtons(): void {
