@@ -47,7 +47,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
   const userApiService = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
-    updateMyUserProfile: jasmine.createSpy('updateMyUserProfile').and.returnValue(of({}))
+    updateMyUserProfileSettings: jasmine.createSpy('updateMyUserProfileSettings').and.returnValue(of({}))
   }
   const locationSpy = jasmine.createSpyObj('Location', ['historyGo'])
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error'])
@@ -103,10 +103,10 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
     userApiService.getMyUserProfile.calls.reset()
-    userApiService.updateMyUserProfile.calls.reset()
+    userApiService.updateMyUserProfileSettings.calls.reset()
     locationSpy.historyGo.calls.reset()
     userApiService.getMyUserProfile.and.returnValue(of({}))
-    userApiService.updateMyUserProfile.and.returnValue(of({}))
+    userApiService.updateMyUserProfileSettings.and.returnValue(of({}))
   })
 
   describe('Component initial configuration', () => {
@@ -245,13 +245,13 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     beforeEach(() => {
       userService.profile$.publish(mockProfile as any)
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
-      userApiService.updateMyUserProfile.and.returnValue(of(updatedProfile))
+      userApiService.updateMyUserProfileSettings.and.returnValue(of(updatedProfile))
       parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
     })
 
     afterEach(() => {
       userApiService.getMyUserProfile.calls.reset()
-      userApiService.updateMyUserProfile.calls.reset()
+      userApiService.updateMyUserProfileSettings.calls.reset()
       locationSpy.historyGo.calls.reset()
     })
 
@@ -264,9 +264,9 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
       flush()
 
-      expect(userApiService.updateMyUserProfile).toHaveBeenCalled()
+      expect(userApiService.updateMyUserProfileSettings).toHaveBeenCalled()
       expect(locationSpy.historyGo).toHaveBeenCalled()
-      expect(userApiService.updateMyUserProfile).toHaveBeenCalledWith(
+      expect(userApiService.updateMyUserProfileSettings).toHaveBeenCalledWith(
         jasmine.objectContaining({
           updateUserProfileRequest: jasmine.objectContaining({
             settings: jasmine.objectContaining({
@@ -280,7 +280,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     it('should handle update error', fakeAsync(() => {
       spyOn(console, 'error')
       const errorResponse = { status: 400, statusText: 'Error on updating user settings' }
-      userApiService.updateMyUserProfile.and.returnValue(throwError(() => errorResponse))
+      userApiService.updateMyUserProfileSettings.and.returnValue(throwError(() => errorResponse))
 
       component.ngOnInit()
       tick()
@@ -293,9 +293,9 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
 
       expect(msgServiceSpy.error).toHaveBeenCalled()
       expect(component.languageFormGroup.get('language')?.value).toEqual(oldLanguage)
-      expect(userApiService.updateMyUserProfile).toHaveBeenCalledTimes(1)
+      expect(userApiService.updateMyUserProfileSettings).toHaveBeenCalledTimes(1)
       expect(locationSpy.historyGo).not.toHaveBeenCalled()
-      expect(console.error).toHaveBeenCalledWith('updateMyUserProfile', errorResponse)
+      expect(console.error).toHaveBeenCalledWith('updateMyUserProfileSettings', errorResponse)
     }))
   })
 })
