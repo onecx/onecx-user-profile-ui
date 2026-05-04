@@ -268,7 +268,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       expect(locationSpy.historyGo).toHaveBeenCalled()
       expect(userApiService.updateMyUserProfileSettings).toHaveBeenCalledWith(
         jasmine.objectContaining({
-          updateUserProfileRequest: jasmine.objectContaining({
+          updateUserPersonSettingsRequest: jasmine.objectContaining({
             settings: jasmine.objectContaining({
               locale: newLanguage
             })

@@ -18,13 +18,7 @@ import { map, switchMap, take } from 'rxjs/operators'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
-import {
-  UserProfileAPIService,
-  UpdateUserProfileRequest,
-  Configuration,
-  UserProfile,
-  UpdateUserPersonSettingsRequest
-} from 'src/app/shared/generated'
+import { UserProfileAPIService, Configuration, UpdateUserPersonSettingsRequest } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
 import { ButtonModule } from 'primeng/button'
 import {
@@ -180,7 +174,7 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
       )
       this.handleUpdateSuccess()
     } catch (error) {
-      console.error('updateMyUserProfile', error)
+      console.error('updateMyUserProfileSettings', error)
       await this.handleUpdateFail()
     }
     this.languageFormGroup.get('language')!.enable({ emitEvent: false })
@@ -194,15 +188,5 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
     const usedLang = await firstValueFrom(this.userService.lang$)
     this.languageFormGroup.patchValue({ language: usedLang }, { emitEvent: false })
     this.messageService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
-  }
-
-  private getUpdateProfileRequest(profile: UserProfile, language: string): UpdateUserProfileRequest {
-    return {
-      modificationCount: profile.modificationCount!,
-      settings: {
-        ...profile.settings,
-        locale: language
-      }
-    }
   }
 }
