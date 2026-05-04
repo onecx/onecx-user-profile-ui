@@ -34,7 +34,7 @@ describe('AccountSettingsComponent', () => {
   }
   const userProfileServiceSpy = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
-    updateMyUserProfile: jasmine.createSpy('updateUserSettings').and.returnValue(of({}))
+    updateMyUserProfileSettings: jasmine.createSpy('updateMyUserProfileSettings').and.returnValue(of({}))
   }
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const locationSpy = jasmine.createSpyObj<Location>('Location', ['historyGo'])
@@ -72,10 +72,10 @@ describe('AccountSettingsComponent', () => {
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
     userProfileServiceSpy.getMyUserProfile.calls.reset()
-    userProfileServiceSpy.updateMyUserProfile.calls.reset()
+    userProfileServiceSpy.updateMyUserProfileSettings.calls.reset()
     locationSpy.historyGo.calls.reset()
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of({}))
-    userProfileServiceSpy.updateMyUserProfile.and.returnValue(of({}))
+    userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of({}))
   })
 
   it('should display error if loading fails', fakeAsync(() => {
@@ -103,7 +103,7 @@ describe('AccountSettingsComponent', () => {
   it('should saveUserSettingsInfo', () => {
     component.settings = accountSettings
     const response: UserProfile = { ...accountSettings, modificationCount: 1 }
-    userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
+    userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
     component.saveUserSettingsInfo()
 
@@ -113,12 +113,12 @@ describe('AccountSettingsComponent', () => {
 
   it('should handle error on update in saveUserSettingsInfo', () => {
     const errorResponse = { status: 400, statusText: 'Error on updating user settings' }
-    userProfileServiceSpy.updateMyUserProfile.and.returnValue(throwError(() => errorResponse))
+    userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(throwError(() => errorResponse))
     spyOn(console, 'error')
 
     component.saveUserSettingsInfo()
     expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'USER_SETTINGS.ERROR' })
-    expect(console.error).toHaveBeenCalledWith('updateUserSettings', errorResponse)
+    expect(console.error).toHaveBeenCalledWith('updateMyUserProfileSettings', errorResponse)
   })
 
   it('should reloadPage', () => {
@@ -129,7 +129,7 @@ describe('AccountSettingsComponent', () => {
     it('should call localeChange', () => {
       component.settings = { ...accountSettings }
       const response: UserProfile = { ...profile, modificationCount: 1, settings: { ...accountSettings, locale: 'EN' } }
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
+      userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
       component.localeChange('EN')
 
@@ -145,7 +145,7 @@ describe('AccountSettingsComponent', () => {
         modificationCount: 1,
         settings: { ...accountSettings, timezone: val }
       }
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
+      userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
       component.timezoneChange(val)
 
@@ -161,7 +161,7 @@ describe('AccountSettingsComponent', () => {
         modificationCount: 1,
         settings: { ...accountSettings, colorScheme: val }
       }
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
+      userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
       component.colorSchemeChange(val)
 
@@ -177,7 +177,7 @@ describe('AccountSettingsComponent', () => {
         modificationCount: 1,
         settings: { ...accountSettings, menuMode: val }
       }
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
+      userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
       component.menuModeChange(MenuMode.Slim)
 
@@ -193,7 +193,7 @@ describe('AccountSettingsComponent', () => {
         modificationCount: 1,
         settings: { ...accountSettings, hideMyProfile: val }
       }
-      userProfileServiceSpy.updateMyUserProfile.and.returnValue(of(response))
+      userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
       component.privacySettingsChange({ hideMyProfile: true })
 

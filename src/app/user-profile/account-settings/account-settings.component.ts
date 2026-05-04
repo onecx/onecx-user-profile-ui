@@ -9,7 +9,12 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action } from '@onecx/angular-accelerator'
 
-import { UserProfileAPIService, UserPerson, UserProfile, UpdateUserProfileRequest } from 'src/app/shared/generated'
+import {
+  UserProfileAPIService,
+  UserPerson,
+  UserProfile,
+  UpdateUserPersonSettingsRequest
+} from 'src/app/shared/generated'
 import { PrivacyComponent } from '../privacy/privacy.component'
 
 @Component({
@@ -85,29 +90,23 @@ export class AccountSettingsComponent implements OnInit {
   }
 
   public saveUserSettingsInfo(): void {
-    const updateRequest = this.getUpdateRequest()
-    this.userProfileService.updateMyUserProfile({ updateUserProfileRequest: updateRequest }).subscribe({
+    const updateRequest: UpdateUserPersonSettingsRequest = {
+      modificationCount: this.profile.modificationCount!,
+      settings: { ...this.settings }
+    }
+    this.userProfileService.updateMyUserProfileSettings({ updateUserPersonSettingsRequest: updateRequest }).subscribe({
       next: (res) => {
         this.settings = res.settings!
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
       },
       error: (error) => {
-        console.error('updateUserSettings', error)
+        console.error('updateMyUserProfileSettings', error)
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
   }
   public reloadPage(): void {
     this.location.historyGo(0) // load current page = reload (trick for code coverage)
-  }
-
-  private getUpdateRequest(): UpdateUserProfileRequest {
-    return {
-      modificationCount: this.profile.modificationCount!,
-      organization: this.profile.organization,
-      person: this.profile.person,
-      settings: { ...this.settings }
-    }
   }
 
   private prepareActionButtons(): void {
