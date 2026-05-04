@@ -20,6 +20,8 @@ model/problemDetailInvalidParam.ts
 model/problemDetailParam.ts
 model/problemDetailResponse.ts
 model/refType.ts
+model/updateUserPersonContactRequest.ts
+model/updateUserPersonSettingsRequest.ts
 model/updateUserProfileRequest.ts
 model/userPerson.ts
 model/userPersonAddress.ts
