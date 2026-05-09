@@ -1,5 +1,8 @@
 .language-selector-compact {
   ::ng-deep .p-selectbutton {
+    border: 1px solid var(--primary-color);
+    border-radius: var(--border-radius);
+
     .p-button {
       padding: 0.5rem 1rem;
       font-size: 1rem;
