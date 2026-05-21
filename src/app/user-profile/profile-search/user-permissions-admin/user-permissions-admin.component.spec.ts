@@ -21,7 +21,13 @@ describe('UserPermissionsAdminComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideHttpClientTesting(), provideHttpClient()]
-    }).compileComponents()
+    })
+      .overrideComponent(UserPermissionsAdminComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {

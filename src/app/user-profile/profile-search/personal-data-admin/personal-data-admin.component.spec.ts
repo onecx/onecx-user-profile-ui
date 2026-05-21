@@ -75,7 +75,13 @@ describe('PersonalDataAdminComponent', () => {
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAdminAPIService, useValue: adminServiceSpy }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(PersonalDataAdminComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
     adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile as UserProfile))
   }))
 

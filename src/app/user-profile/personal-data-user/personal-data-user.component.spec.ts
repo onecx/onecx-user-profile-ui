@@ -81,7 +81,13 @@ describe('PersonalDataUserComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: Router, useValue: routerMock }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(PersonalDataUserComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {
@@ -184,6 +190,8 @@ describe('PersonalDataUserComponent', () => {
 
   describe('navigate', () => {
     it('should navigate to account settings', () => {
+      component.userProfile$.subscribe()
+
       component.actions$?.subscribe((action) => {
         action[0].actionCallback()
       })
@@ -192,6 +200,8 @@ describe('PersonalDataUserComponent', () => {
     })
 
     it('should navigate to user roles', () => {
+      component.userProfile$.subscribe()
+
       component.actions$?.subscribe((action) => {
         action[1].actionCallback()
       })

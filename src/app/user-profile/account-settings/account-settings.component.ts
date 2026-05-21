@@ -20,7 +20,8 @@ import { PrivacyComponent } from '../privacy/privacy.component'
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss']
+  styleUrls: ['./account-settings.component.scss'],
+  standalone: false
 })
 export class AccountSettingsComponent implements OnInit {
   @Output() public editModeUpdate = new EventEmitter<boolean>()

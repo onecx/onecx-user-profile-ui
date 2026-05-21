@@ -2,8 +2,7 @@ import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angu
 import { FormControl, FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
-import { ConfigurationService, UserService } from '@onecx/angular-integration-interface'
-import { CONFIG_KEY } from '@onecx/portal-integration-angular'
+import { CONFIG_KEY, ConfigurationService, UserService } from '@onecx/angular-integration-interface'
 
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { sortByLabel } from 'src/app/shared/utils'
@@ -13,7 +12,8 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
 @Component({
   selector: 'app-locale-timezone',
   templateUrl: './locale-timezone.component.html',
-  styleUrls: ['./locale-timezone.component.scss']
+  styleUrls: ['./locale-timezone.component.scss'],
+  standalone: false
 })
 export class LocaleTimezoneComponent implements OnInit, OnChanges {
   @Input() public localeInput: string | undefined
@@ -47,9 +47,9 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     })
   }
 
-  public ngOnInit(): void {
-    this.editLanguage = this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
-    this.editTimezone = this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
+  public async ngOnInit(): Promise<void> {
+    this.editLanguage = await this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
+    this.editTimezone = await this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
     if (this.locale) this.formGroup.patchValue({ locale: this.locale })
     if (this.timezone) this.formGroup.patchValue({ timezone: this.timezone })
   }
@@ -58,7 +58,7 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     if (this.localeInput) this.formGroup.patchValue({ locale: this.localeInput })
     if (this.timezoneInput) this.formGroup.patchValue({ timezone: this.timezoneInput })
     this.formGroup.get('timezone')?.disable()
-    this.initLocalesAndTimezones()
+    void this.initLocalesAndTimezones()
   }
 
   private loadTimezones(): void {
@@ -78,11 +78,17 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     })
   }
 
-  private initLocalesAndTimezones(): void {
-    const supportedLanguagesProperty = this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES)
-    const supportedLanguages = supportedLanguagesProperty
-      ? supportedLanguagesProperty.split(',').map((l) => l.trim())
-      : ['en', 'de']
+  private async initLocalesAndTimezones(): Promise<void> {
+    let supportedLanguagesProperty: unknown
+    try {
+      supportedLanguagesProperty = await this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES)
+    } catch (error) {
+      console.error('getProperty TKIT_SUPPORTED_LANGUAGES', error)
+    }
+    const supportedLanguages =
+      typeof supportedLanguagesProperty === 'string'
+        ? supportedLanguagesProperty.split(',').map((l) => l.trim())
+        : ['en', 'de']
     this.localeSelectItems = supportedLanguages.map((l) => ({
       label: 'LANGUAGE.' + l.toUpperCase(),
       value: l

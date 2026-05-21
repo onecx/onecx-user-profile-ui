@@ -15,7 +15,7 @@
             <h2 class="my-0 sm:mb-2 ml-1 w-full text-base">{{ 'USER_PROFILE.HEADER.BASIC' | translate }}</h2>
           </ng-template>
           <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4">
-            <span class="p-float-label">
+            <p-floatlabel variant="on">
               <input
                 id="up_personal_info_first_name"
                 pInputText
@@ -31,8 +31,8 @@
               <label for="up_personal_info_first_name" aria-hidden="true">
                 {{ 'USER_PROFILE.FIRST_NAME' | translate }}
               </label>
-            </span>
-            <span class="p-float-label">
+            </p-floatlabel>
+            <p-floatlabel variant="on">
               <input
                 id="up_personal_info_last_name"
                 pInputText
@@ -48,8 +48,8 @@
               <label for="up_personal_info_last_name" aria-hidden="true">
                 {{ 'USER_PROFILE.LAST_NAME' | translate }}
               </label>
-            </span>
-            <span class="p-float-label">
+            </p-floatlabel>
+            <p-floatlabel variant="on">
               <input
                 id="up_personal_info_email"
                 pInputText
@@ -63,7 +63,7 @@
                 tooltipEvent="hover"
               />
               <label for="up_personal_info_email" aria-hidden="true">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
-            </span>
+            </p-floatlabel>
           </div>
         </p-panel>
       </div>
@@ -124,10 +124,11 @@
           </ng-template>
 
           <div class="mb-1 flex flex-row flex-wrap justify-content-start gap-3">
-            <span class="p-float-label flex-grow-0" controlErrorAnchor>
+            <p-floatlabel class="flex-grow-0" controlErrorAnchor variant="on">
               <p-dropdown
                 id="up_personal_info_phone_type"
                 formControlName="type"
+                [ngClass]="{ 'p-inputwrapper-filled': !!formGroup.get('phone.type')?.value }"
                 [options]="phoneTypes"
                 [ariaLabel]="'USER_PROFILE.PHONE_TYPE' | translate"
                 [pTooltip]="'USER_PROFILE.PHONE_TYPE.TOOLTIP' | translate"
@@ -138,8 +139,8 @@
               <label for="up_personal_info_phone_type" aria-hidden="true">
                 {{ 'USER_PROFILE.PHONE_TYPE' | translate }}
               </label>
-            </span>
-            <span class="p-float-label flex-grow-1" controlErrorAnchor>
+            </p-floatlabel>
+            <p-floatlabel class="flex-grow-1" controlErrorAnchor variant="on">
               <input
                 id="up_personal_info_phone_number"
                 pInputText
@@ -155,7 +156,7 @@
               <label for="up_personal_info_phone_number" aria-hidden="true">
                 {{ 'USER_PROFILE.PHONE_NUMBER' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
         </p-panel>
       </div>
@@ -234,7 +235,7 @@
 
         <div class="mb-1 flex flex-column justify-content-between gap-3 md:gap-4">
           <div class="flex flex-row flex-wrap gap-3">
-            <span class="p-float-label flex-grow-1" controlErrorAnchor>
+            <p-floatlabel class="flex-grow-1" controlErrorAnchor variant="on">
               <input
                 pInputText
                 type="text"
@@ -249,8 +250,8 @@
               <label for="up_personal_info_address_street" aria-hidden="true">
                 {{ 'USER_PROFILE.STREET' | translate }}
               </label>
-            </span>
-            <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
+            </p-floatlabel>
+            <p-floatlabel class="w-full sm:w-8rem" controlErrorAnchor variant="on">
               <input
                 id="up_personal_info_address_street_no"
                 pInputText
@@ -265,10 +266,10 @@
               <label for="up_personal_info_address_street_no" aria-hidden="true">
                 {{ 'USER_PROFILE.HOUSE_NUMBER' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
           <div class="flex flex-row flex-wrap gap-3">
-            <span class="p-float-label flex-grow-1" controlErrorAnchor>
+            <p-floatlabel class="flex-grow-1" controlErrorAnchor variant="on">
               <input
                 id="up_personal_info_address_city"
                 pInputText
@@ -283,8 +284,8 @@
               <label for="up_personal_info_address_city" aria-hidden="true">
                 {{ 'USER_PROFILE.CITY' | translate }}
               </label>
-            </span>
-            <span class="p-float-label w-full sm:w-8rem" controlErrorAnchor>
+            </p-floatlabel>
+            <p-floatlabel class="w-full sm:w-8rem" controlErrorAnchor variant="on">
               <input
                 id="up_personal_info_address_postal_code"
                 pInputText
@@ -299,12 +300,13 @@
               <label for="up_personal_info_address_postal_code" aria-hidden="true">
                 {{ 'USER_PROFILE.POSTAL_CODE' | translate }}
               </label>
-            </span>
+            </p-floatlabel>
           </div>
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <p-dropdown
               id="up_personal_info_address_country"
               styleClass="w-full min-w-15rem"
+              [ngClass]="{ 'p-inputwrapper-filled': !!formGroup.get('address.country')?.value }"
               formControlName="country"
               [options]="countries"
               [showClear]="formGroup.get('address.country')?.enabled"
@@ -317,7 +319,7 @@
             <label for="up_personal_info_address_country" aria-hidden="true">
               {{ 'USER_PROFILE.COUNTRY' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
         </div>
       </p-panel>
     </div>
@@ -329,7 +331,7 @@
           <h2 class="my-0 sm:mb-2 ml-1 w-full text-base">{{ 'USER_PROFILE.HEADER.INTERNAL' | translate }}</h2>
         </ng-template>
         <div class="mb-1 flex flex-column justify-content-between gap-3 sm:gap-4">
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="up_personal_info_tenant"
               pInputText
@@ -345,9 +347,9 @@
             <label for="up_personal_info_tenant" aria-hidden="true">
               {{ 'USER_PROFILE.INTERN.TENANT' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
 
-          <span class="p-float-label">
+          <p-floatlabel variant="on">
             <input
               id="up_personal_info_provider"
               pInputText
@@ -363,8 +365,8 @@
             <label for="up_personal_info_provider" aria-hidden="true">
               {{ 'USER_PROFILE.INTERN.PROVIDER' | translate }}
             </label>
-          </span>
-          <span class="p-float-label">
+          </p-floatlabel>
+          <p-floatlabel variant="on">
             <input
               id="up_personal_info_issuer"
               pInputText
@@ -380,7 +382,7 @@
             <label for="up_personal_info_issuer" aria-hidden="true">
               {{ 'USER_PROFILE.INTERN.ISSUER' | translate }}
             </label>
-          </span>
+          </p-floatlabel>
         </div>
       </p-panel>
     </div>

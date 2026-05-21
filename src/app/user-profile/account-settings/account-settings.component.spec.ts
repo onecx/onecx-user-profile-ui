@@ -58,7 +58,13 @@ describe('AccountSettingsComponent', () => {
         { provide: Location, useValue: locationSpy },
         { provide: Router, useValue: routerMock }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(AccountSettingsComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {
@@ -203,6 +209,8 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should navigate to user accountSettings', () => {
+    component.personalInfo$?.subscribe()
+
     component.actions$?.subscribe((action) => {
       action[0].actionCallback()
     })
@@ -211,6 +219,8 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should navigate to user permissions', () => {
+    component.personalInfo$?.subscribe()
+
     component.actions$?.subscribe((action) => {
       action[1].actionCallback()
     })

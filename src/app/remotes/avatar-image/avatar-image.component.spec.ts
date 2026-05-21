@@ -3,7 +3,7 @@ import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
 import { TestBed } from '@angular/core/testing'
-import { BASE_URL, RemoteComponentConfig } from '@onecx/angular-remote-components'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject } from 'rxjs'
 import { CommonModule } from '@angular/common'
@@ -35,7 +35,7 @@ describe('OneCXAvatarImageComponent', () => {
 
   let baseUrlSubject: ReplaySubject<any>
   beforeEach(() => {
-    baseUrlSubject = new ReplaySubject<any>(1)
+    baseUrlSubject = new ReplaySubject<RemoteComponentConfig>(1)
     TestBed.configureTestingModule({
       declarations: [],
       imports: [
@@ -48,7 +48,7 @@ describe('OneCXAvatarImageComponent', () => {
         provideHttpClient(),
         provideHttpClientTesting(),
         {
-          provide: BASE_URL,
+          provide: REMOTE_COMPONENT_CONFIG,
           useValue: baseUrlSubject
         },
         provideRouter([{ path: '', component: OneCXAvatarImageComponent }])
@@ -61,7 +61,7 @@ describe('OneCXAvatarImageComponent', () => {
         }
       })
       .compileComponents()
-    baseUrlSubject.next('base_url_mock')
+    baseUrlSubject.next({ baseUrl: 'base_url_mock' } as RemoteComponentConfig)
   })
 
   describe('initialize', () => {
@@ -80,7 +80,7 @@ describe('OneCXAvatarImageComponent', () => {
 
       expect(userAvatarAPIServiceSpy.configuration.basePath).toEqual('base_url_avatar/bff')
       baseUrlSubject.asObservable().subscribe((item) => {
-        expect(item).toEqual('base_url_avatar')
+        expect(item.baseUrl).toEqual('base_url_avatar')
         done()
       })
     })

@@ -5,7 +5,8 @@ import { UserService } from '@onecx/angular-integration-interface'
 
 @Component({
   selector: 'app-privacy',
-  templateUrl: './privacy.component.html'
+  templateUrl: './privacy.component.html',
+  standalone: false
 })
 export class PrivacyComponent implements OnInit, OnChanges {
   @Input() hideMyProfile: boolean | undefined = false

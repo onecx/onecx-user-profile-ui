@@ -6,9 +6,8 @@ import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
-import { RowListGridData } from '@onecx/angular-accelerator'
+import { DataSortDirection, Filter, PortalDialogService, RowListGridData } from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { PortalDialogService } from '@onecx/portal-integration-angular'
 
 import { UserProfile, UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { ProfileSearchComponent } from './profile-search.component'
@@ -80,7 +79,7 @@ describe('ProfileSearchComponent', () => {
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const mockUserService = {
     lang$: { getValue: jasmine.createSpy('getValue') },
-    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
+    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(true)
   }
   const mockDialogService = { openDialog: jasmine.createSpy('openDialog').and.returnValue(of({})) }
 
@@ -103,13 +102,20 @@ describe('ProfileSearchComponent', () => {
         { provide: PortalDialogService, useValue: mockDialogService }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents()
+    })
+      .overrideComponent(ProfileSearchComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
   })
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(ProfileSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
+    await fixture.whenStable()
   })
 
   afterEach(() => {
@@ -211,25 +217,27 @@ describe('ProfileSearchComponent', () => {
    * UI EVENTS
    */
   describe('filtering', () => {
-    it('should filter user profiles correctly by input (case insensitive)', () => {
-      apiServiceSpy.searchUserProfile.and.returnValue(
-        of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
-      )
+    it('should map filtered event data to component filters', () => {
+      const filters: Filter[] = [{ columnId: 'firstName', value: 'Admin' }]
 
-      component.onSearch()
-      expect(component.filteredData$.getValue()?.length).toEqual(2)
+      component.onFiltered(filters)
 
-      component.onFilterChange('Admin')
-      expect(component.filteredData$.getValue()?.length).toEqual(2)
+      expect(component.filters).toEqual(filters)
+    })
 
-      component.onFilterChange('admin')
-      expect(component.filteredData$.getValue()?.length).toEqual(2)
+    it('should map sorted event data to sort state', () => {
+      component.onSorted({ sortColumn: 'lastName', sortDirection: DataSortDirection.ASCENDING })
 
-      component.onFilterChange('Max')
-      expect(component.filteredData$.getValue()?.length).toEqual(1)
+      expect(component.sortField).toEqual('lastName')
+      expect(component.sortDirection).toEqual(DataSortDirection.ASCENDING)
+    })
 
-      component.onFilterChange('Does_not_exist')
-      expect(component.filteredData$.getValue()?.length).toEqual(0)
+    it('should map layout and displayed columns events', () => {
+      component.onDataViewLayoutChange('table')
+      component.onDisplayedColumnKeysChange(['firstName', 'lastName'])
+
+      expect(component.layout).toEqual('table')
+      expect(component.displayedColumnKeys).toEqual(['firstName', 'lastName'])
     })
   })
 

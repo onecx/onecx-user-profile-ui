@@ -42,9 +42,15 @@ describe('LocaleTimezoneComponent', () => {
         { provide: UserService, useValue: userServiceSpy },
         { provide: LOCALE_ID, useValue: 'de=DE' }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(LocaleTimezoneComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
 
-    configServiceSpy.getProperty.and.returnValue('en, de')
+    configServiceSpy.getProperty.and.returnValue(Promise.resolve('en, de'))
   }))
 
   beforeEach(() => {
@@ -56,7 +62,8 @@ describe('LocaleTimezoneComponent', () => {
   })
 
   describe('initialize', () => {
-    it('should create', () => {
+    it('should create', waitForAsync(async () => {
+      await fixture.whenStable()
       expect(component).toBeTruthy()
       expect(component.locale).toBe('en')
       expect(component.timezone).toBe('Europe/Berlin')
@@ -64,7 +71,7 @@ describe('LocaleTimezoneComponent', () => {
       expect(component.editLanguage).toBe(true)
       expect(component.editTimezone).toBe(true)
       expect(component.timeZones.length).toBeGreaterThan(0)
-    })
+    }))
   })
 
   describe('on changes', () => {
@@ -78,13 +85,14 @@ describe('LocaleTimezoneComponent', () => {
       expect(component.formGroup.get('timezone')?.value).toEqual(component.timezoneInput)
     })
 
-    it('should using default languages', () => {
-      configServiceSpy.getProperty.and.returnValue(null)
+    it('should using default languages', waitForAsync(async () => {
+      configServiceSpy.getProperty.and.returnValue(Promise.resolve(null))
 
       component.ngOnChanges()
+      await fixture.whenStable()
 
       expect(component.localeSelectItems).toEqual(defaultLanguageItems)
-    })
+    }))
   })
 
   it('should saveLocale', () => {
@@ -161,8 +169,14 @@ describe('LocaleTimezoneComponent Error', () => {
         { provide: LocalAndTimezoneService, useValue: localeAndTimezoneServiceSpy },
         { provide: LOCALE_ID, useValue: 'de=DE' }
       ]
-    }).compileComponents()
-    configServiceSpy.getProperty.and.returnValue('en, de')
+    })
+      .overrideComponent(LocaleTimezoneComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
+    configServiceSpy.getProperty.and.returnValue(Promise.resolve('en, de'))
   }))
 
   beforeEach(() => {

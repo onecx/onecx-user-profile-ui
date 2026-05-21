@@ -1,5 +1,5 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { ComponentFixture, TestBed, fakeAsync, waitForAsync } from '@angular/core/testing'
+import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
@@ -98,7 +98,7 @@ describe('PersonalDataComponent', () => {
   })
 
   describe('initialize component: user mode', () => {
-    it('should if person was provided then fill form and call createCountryList', fakeAsync(() => {
+    it('should if person was provided then fill form and call createCountryList', () => {
       component.componentInUse = true
       component.userId = undefined
       component.userProfile = defaultProfile
@@ -109,11 +109,11 @@ describe('PersonalDataComponent', () => {
 
       expect(component.person?.phone).toEqual(component.formGroup?.value.phone)
       expect(spyCreateCountry).toHaveBeenCalled()
-    }))
+    })
   })
 
   describe('initialize component: admin mode', () => {
-    it('should if person was provided then fill form and call createCountryList', fakeAsync(() => {
+    it('should if person was provided then fill form and call createCountryList', () => {
       component.componentInUse = true
       component.userProfile = defaultProfile
       const spyCreateCountry = spyOn<any>(component, 'createCountryList')
@@ -123,7 +123,7 @@ describe('PersonalDataComponent', () => {
 
       expect(component.person?.phone).toEqual(component.formGroup?.value.phone)
       expect(spyCreateCountry).toHaveBeenCalled()
-    }))
+    })
 
     it('should if person was not provided then no form is filled and countries not filled', () => {
       component.componentInUse = true
@@ -255,7 +255,7 @@ describe('PersonalDataComponent', () => {
       expect(component.formGroup?.get('phone')?.disabled).toBeTrue()
     })
 
-    it('should choose a landline phone number', fakeAsync(() => {
+    it('should choose a landline phone number', () => {
       // initially the defaultPerson was filled into form
       component.componentInUse = true
       component.userProfile = defaultProfile
@@ -273,7 +273,7 @@ describe('PersonalDataComponent', () => {
       // New phone number
       expect(component.person?.phone).toEqual(phone)
       expect(component.formGroup?.get('phone')?.disabled).toBeTrue()
-    }))
+    })
   })
 
   // Reason: to be reworked

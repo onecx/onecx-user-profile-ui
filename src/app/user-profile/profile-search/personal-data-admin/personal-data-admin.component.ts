@@ -8,7 +8,8 @@ import { UpdateUserProfileRequest, UserPerson, UserProfile, UserProfileAdminAPIS
 
 @Component({
   selector: 'app-personal-data-admin',
-  templateUrl: './personal-data-admin.component.html'
+  templateUrl: './personal-data-admin.component.html',
+  standalone: false
 })
 export class PersonalDataAdminComponent implements OnChanges {
   @Input() public displayPersonalDataDialog = false

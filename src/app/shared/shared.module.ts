@@ -5,24 +5,27 @@ import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { provideErrorTailorConfig } from '@ngneat/error-tailor'
 
 import { AutoCompleteModule } from 'primeng/autocomplete'
+import { ButtonModule } from 'primeng/button'
 import { CalendarModule } from 'primeng/calendar'
-import { DataViewModule } from 'primeng/dataview'
 import { DialogModule } from 'primeng/dialog'
 import { DropdownModule } from 'primeng/dropdown'
+import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputSwitchModule } from 'primeng/inputswitch'
 import { InputTextModule } from 'primeng/inputtext'
-import { InputTextareaModule } from 'primeng/inputtextarea'
+import { TextareaModule } from 'primeng/textarea'
 import { KeyFilterModule } from 'primeng/keyfilter'
 import { ListboxModule } from 'primeng/listbox'
+import { MessageModule } from 'primeng/message'
 import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
 import { SelectButtonModule } from 'primeng/selectbutton'
 import { TableModule } from 'primeng/table'
 import { TabViewModule } from 'primeng/tabview'
 import { ToastModule } from 'primeng/toast'
+import { TooltipModule } from 'primeng/tooltip'
 
-import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
-import { PortalApiConfiguration, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PortalApiConfiguration, provideThemeConfig } from '@onecx/angular-utils'
 import { AngularRemoteComponentsModule } from '@onecx/angular-remote-components'
 
 import { Configuration } from 'src/app/shared/generated'
@@ -31,26 +34,28 @@ import { LabelResolver } from './label.resolver'
 import { AvatarComponent } from './avatar/avatar.component'
 import { PersonalDataComponent } from './personal-data/personal-data.component'
 
-export function apiConfigProvider(configService: ConfigurationService, appStateService: AppStateService) {
-  return new PortalApiConfiguration(Configuration, environment.apiPrefix, configService, appStateService)
+export function apiConfigProvider() {
+  return new PortalApiConfiguration(Configuration, environment.apiPrefix)
 }
 
 @NgModule({
   declarations: [PersonalDataComponent, AvatarComponent],
   imports: [
-    PortalCoreModule.forMicroFrontend(),
+    AngularAcceleratorModule,
     AutoCompleteModule,
+    ButtonModule,
     CalendarModule,
     CommonModule,
-    DataViewModule,
     DialogModule,
     DropdownModule,
+    FloatLabelModule,
     FormsModule,
     InputSwitchModule,
     InputTextModule,
-    InputTextareaModule,
+    TextareaModule,
     KeyFilterModule,
     ListboxModule,
+    MessageModule,
     PanelModule,
     ReactiveFormsModule,
     RippleModule,
@@ -58,22 +63,25 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     TableModule,
     TabViewModule,
     ToastModule,
+    TooltipModule,
     TranslateModule,
     AngularRemoteComponentsModule
   ],
   exports: [
     AutoCompleteModule,
+    ButtonModule,
     CalendarModule,
     CommonModule,
-    DataViewModule,
     DialogModule,
     DropdownModule,
+    FloatLabelModule,
     FormsModule,
     InputSwitchModule,
     InputTextModule,
-    InputTextareaModule,
+    TextareaModule,
     KeyFilterModule,
     ListboxModule,
+    MessageModule,
     PanelModule,
     ReactiveFormsModule,
     RippleModule,
@@ -81,6 +89,7 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
     TableModule,
     TabViewModule,
     ToastModule,
+    TooltipModule,
     TranslateModule,
     AngularRemoteComponentsModule,
     AvatarComponent,
@@ -88,8 +97,9 @@ export function apiConfigProvider(configService: ConfigurationService, appStateS
   ],
   //this is not elegant, for some reason the injection token from primeng does not work across federated module
   providers: [
+    provideThemeConfig(),
     LabelResolver,
-    { provide: Configuration, useFactory: apiConfigProvider, deps: [ConfigurationService, AppStateService] },
+    { provide: Configuration, useFactory: apiConfigProvider },
     provideErrorTailorConfig({
       controlErrorsOn: { async: true, blur: true, change: true },
       errors: {

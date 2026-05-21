@@ -63,7 +63,13 @@ describe('UserPermissionsComponent', () => {
         { provide: Router, useValue: routerMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(UserPermissionsComponent, {
+        set: {
+          template: ''
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {
@@ -92,6 +98,7 @@ describe('UserPermissionsComponent', () => {
 
   it('should navigate to user profile', () => {
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
+    component.personalInfo$?.subscribe()
 
     component.actions$?.subscribe((action) => {
       action[0].actionCallback()
@@ -102,6 +109,7 @@ describe('UserPermissionsComponent', () => {
 
   it('should navigate to account settings', () => {
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
+    component.personalInfo$?.subscribe()
 
     component.actions$?.subscribe((action) => {
       action[1].actionCallback()

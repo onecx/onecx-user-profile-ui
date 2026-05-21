@@ -5,9 +5,17 @@ import { TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { DataAction, DataTableColumn, RowListGridData, InteractiveDataViewComponent } from '@onecx/angular-accelerator'
+import {
+  ColumnType,
+  DataAction,
+  DataSortDirection,
+  DataTableColumn,
+  Filter,
+  InteractiveDataViewComponent,
+  PortalDialogService,
+  RowListGridData
+} from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { ColumnType, DataViewControlTranslations, PortalDialogService } from '@onecx/portal-integration-angular'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
@@ -15,7 +23,8 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
 @Component({
   selector: 'app-profile-search',
   templateUrl: './profile-search.component.html',
-  styleUrls: ['./profile-search.component.scss']
+  styleUrls: ['./profile-search.component.scss'],
+  standalone: false
 })
 export class ProfileSearchComponent implements OnInit {
   public loading = false
@@ -25,15 +34,13 @@ export class ProfileSearchComponent implements OnInit {
   public additionalActions: DataAction[] = []
 
   public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
-  public filteredData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
-  public filterValue: string | undefined
-  public filterBy = 'firstName,lastName,email,creationDate,modificationDate'
-  private filterData = ''
+  public filters: Filter[] = []
+  public sortField = ''
+  public sortDirection: DataSortDirection = DataSortDirection.NONE
+  public layout: 'grid' | 'list' | 'table' = 'table'
+  public displayedColumnKeys: string[] = []
 
-  /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
-
-  public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
   public userProfile: UserProfile | undefined
   public displayPersonalDataDialog = false
@@ -54,8 +61,6 @@ export class ProfileSearchComponent implements OnInit {
     private readonly translate: TranslateService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
-    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.hasEditPermission = true
-    if (this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')) this.hasViewPermission = true
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
@@ -133,34 +138,11 @@ export class ProfileSearchComponent implements OnInit {
     ]
   }
 
-  ngOnInit() {
-    this.initFilter()
+  async ngOnInit(): Promise<void> {
+    this.hasEditPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')
+    this.hasViewPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')
     this.prepareActionButtons()
     this.onSearch()
-  }
-
-  public initFilter(): void {
-    this.resultData$
-      .pipe(
-        map((array) => {
-          if (this.filterData.trim()) {
-            const lowerCaseFilter = this.filterData.toLowerCase()
-            return array.filter((item) => {
-              return ['firstName', 'lastName', 'email', 'creationDate', 'modificationDate'].some((key) => {
-                const value = item[key]
-                return value?.toString().toLowerCase().includes(lowerCaseFilter)
-              })
-            })
-          } else {
-            return array
-          }
-        })
-      )
-      .subscribe({
-        next: (filteredData) => {
-          this.filteredData$.next(filteredData)
-        }
-      })
   }
 
   public onSearch(): void {
@@ -195,7 +177,6 @@ export class ProfileSearchComponent implements OnInit {
               email: row.person.email
             }))
           this.resultData$.next(stream)
-          this.filteredData$.next(stream)
         }
       })
   }
@@ -207,9 +188,21 @@ export class ProfileSearchComponent implements OnInit {
   /**
    * UI EVENTS
    */
-  public onFilterChange(filter: string): void {
-    this.filterData = filter
-    this.resultData$.next(this.resultData$.value)
+  public onFiltered(filters: Filter[]): void {
+    this.filters = filters
+  }
+
+  public onSorted(event: { sortColumn: string; sortDirection: DataSortDirection }): void {
+    this.sortField = event.sortColumn
+    this.sortDirection = event.sortDirection
+  }
+
+  public onDataViewLayoutChange(layout: 'grid' | 'list' | 'table'): void {
+    this.layout = layout
+  }
+
+  public onDisplayedColumnKeysChange(displayedColumnKeys: string[]): void {
+    this.displayedColumnKeys = displayedColumnKeys
   }
 
   public onDetail(ev: any) {

@@ -15,7 +15,8 @@ import {
 
 @Component({
   selector: 'app-personal-data-user',
-  templateUrl: './personal-data-user.component.html'
+  templateUrl: './personal-data-user.component.html',
+  standalone: false
 })
 export class PersonalDataUserComponent implements AfterViewInit {
   @Input() public displayPersonalDataDialog = false

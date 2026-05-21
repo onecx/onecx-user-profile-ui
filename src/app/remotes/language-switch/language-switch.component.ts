@@ -1,18 +1,15 @@
 import { CommonModule, Location } from '@angular/common'
-import { HttpClient } from '@angular/common/http'
 import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { UntilDestroy } from '@ngneat/until-destroy'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import {
   AngularRemoteComponentsModule,
   ocxRemoteComponent,
-  ocxRemoteWebcomponent,
-  provideTranslateServiceForRoot,
-  REMOTE_COMPONENT_CONFIG,
-  RemoteComponentConfig
+  ocxRemoteWebcomponent
 } from '@onecx/angular-remote-components'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { firstValueFrom, from, ReplaySubject, Subscription } from 'rxjs'
 import { map, switchMap, take } from 'rxjs/operators'
 import { ControlErrorsDirective } from '@ngneat/error-tailor'
@@ -29,7 +26,6 @@ import {
   UserService
 } from '@onecx/angular-integration-interface'
 import { TooltipModule } from 'primeng/tooltip'
-import { provideTranslationPathFromMeta, createTranslateLoader } from '@onecx/angular-utils'
 
 @Component({
   selector: 'app-ocx-language-switch',
@@ -53,17 +49,8 @@ import { provideTranslationPathFromMeta, createTranslateLoader } from '@onecx/an
     ParametersService,
     {
       provide: REMOTE_COMPONENT_CONFIG,
-      useValue: new ReplaySubject<string>(1)
-    },
-    provideTranslateServiceForRoot({
-      isolate: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createTranslateLoader,
-        deps: [HttpClient]
-      }
-    }),
-    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')
+      useValue: new ReplaySubject<RemoteComponentConfig>(1)
+    }
   ]
 })
 @UntilDestroy()
@@ -102,13 +89,18 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
           take(1),
           switchMap(({ productName, appId }) =>
             from(
-              this.parameterService.get(
-                'primary-languages',
-                this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES) || defaultLangs,
-                productName,
-                appId
-              )
-            ).pipe(map((langs) => (langs || defaultLangs).split(',').slice(0, this.shownLanguagesNumber)))
+              this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES).catch((error) => {
+                console.error('getProperty TKIT_SUPPORTED_LANGUAGES', error)
+                return defaultLangs
+              })
+            ).pipe(
+              switchMap((supportedLanguages) =>
+                from(
+                  this.parameterService.get('primary-languages', supportedLanguages || defaultLangs, productName, appId)
+                )
+              ),
+              map((langs) => (langs || defaultLangs).split(',').slice(0, this.shownLanguagesNumber))
+            )
           )
         )
         .subscribe((langs) => {

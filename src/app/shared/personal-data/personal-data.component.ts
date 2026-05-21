@@ -13,7 +13,8 @@ import { UserPerson, UserProfile } from 'src/app/shared/generated'
 @Component({
   selector: 'app-personal-data',
   templateUrl: './personal-data.component.html',
-  styleUrls: ['./personal-data.component.scss']
+  styleUrls: ['./personal-data.component.scss'],
+  standalone: false
 })
 export class PersonalDataComponent implements OnChanges {
   @Input() userProfile: UserProfile | undefined = undefined

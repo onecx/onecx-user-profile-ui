@@ -65,6 +65,7 @@
             }
           }
         ],
+        "@angular-eslint/prefer-standalone": "off",
         "@typescript-eslint/no-var-requires": 0
       }
     },

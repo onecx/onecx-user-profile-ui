@@ -10,7 +10,8 @@ import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-permissions',
-  templateUrl: './user-permissions.component.html'
+  templateUrl: './user-permissions.component.html',
+  standalone: false
 })
 export class UserPermissionsComponent {
   public personalInfo$: Observable<UserPerson> | undefined

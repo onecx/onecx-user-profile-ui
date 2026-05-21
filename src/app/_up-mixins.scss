@@ -5,6 +5,7 @@
 /* displaying text like an input field with floating label */
 @mixin float-label-textbox {
   :host {
+    .p-floatlabel,
     .p-float-label {
       display: block;
       position: relative;

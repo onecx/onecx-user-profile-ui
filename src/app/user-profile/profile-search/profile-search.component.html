@@ -8,7 +8,7 @@
     [actions]="[]"
   >
     <div [formGroup]="criteriaGroup" class="flex flex-row flex-wrap gap-3">
-      <span class="p-float-label">
+      <p-floatlabel variant="on">
         <input
           id="up_user_profile_search_criteria_first_name"
           pInputText
@@ -21,8 +21,8 @@
           tooltipEvent="hover"
         />
         <label for="up_user_profile_search_criteria_first_name">{{ 'USER_PROFILE.FIRST_NAME' | translate }}</label>
-      </span>
-      <span class="p-float-label">
+      </p-floatlabel>
+      <p-floatlabel variant="on">
         <input
           id="up_user_profile_search_criteria_last_name"
           pInputText
@@ -35,8 +35,8 @@
           tooltipEvent="hover"
         />
         <label for="up_user_profile_search_criteria_last_name">{{ 'USER_PROFILE.LAST_NAME' | translate }}</label>
-      </span>
-      <span class="p-float-label">
+      </p-floatlabel>
+      <p-floatlabel variant="on">
         <input
           id="up_user_profile_search_criteria_email"
           pInputText
@@ -49,8 +49,8 @@
           tooltipEvent="hover"
         />
         <label for="up_user_profile_search_criteria_email">{{ 'USER_PROFILE.EMAIL' | translate }}</label>
-      </span>
-      <span *ocxAdvanced class="p-float-label">
+      </p-floatlabel>
+      <p-floatlabel *ocxAdvanced variant="on">
         <input
           id="up_user_profile_search_criteria_user_id"
           pInputText
@@ -63,7 +63,7 @@
           tooltipEvent="hover"
         />
         <label for="up_user_profile_search_criteria_key">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
-      </span>
+      </p-floatlabel>
     </div>
   </ocx-search-header>
 
@@ -80,34 +80,31 @@
   <div *ngIf="!(loading || exceptionKey)" class="card pt-2 pb-0">
     <ocx-interactive-data-view
       *ngIf="(resultData$ | async) ?? []"
-      [data]="(filteredData$ | async) ?? []"
+      [data]="(resultData$ | async) ?? []"
       [emptyResultsMessage]="'ACTIONS.SEARCH.NO_DATA' | translate"
       [supportedViewLayouts]="['table']"
+      [layout]="layout"
       [defaultGroupKey]="'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT'"
       [additionalActions]="additionalActions"
       [columns]="columns"
+      [filters]="filters"
+      [sortField]="sortField"
+      [sortDirection]="sortDirection"
+      [clientSideFiltering]="true"
+      [clientSideSorting]="true"
+      [tablePaginator]="true"
+      [pageSize]="20"
+      [pageSizes]="[20, 60, 100]"
+      [disableFilterView]="false"
       actionColumnPosition="left"
       [frozenActionColumn]="true"
+      (filtered)="onFiltered($event)"
+      (sorted)="onSorted($event)"
+      (dataViewLayoutChange)="onDataViewLayoutChange($event)"
+      (displayedColumnKeysChange)="onDisplayedColumnKeysChange($event)"
     >
       <ng-template pTemplate="dateTableCell" let-rowObject="rowObject" let-column="column">
         <ng-container> {{ rowObject[column.id] | date: dateFormat }} </ng-container>
-      </ng-template>
-
-      <ng-template #topCenter>
-        <ocx-data-view-controls
-          [enableSorting]="false"
-          [enableFiltering]="true"
-          (filterChange)="onFilterChange($event)"
-          [filterColumns]="[
-            'USER_PROFILE.FIRST_NAME' | translate,
-            'USER_PROFILE.LAST_NAME' | translate,
-            'USER_PROFILE.EMAIL' | translate,
-            'INTERNAL.CREATION_DATE' | translate,
-            'INTERNAL.MODIFICATION_DATE' | translate
-          ]"
-          [translations]="dataViewControlsTranslations"
-        >
-        </ocx-data-view-controls>
       </ng-template>
     </ocx-interactive-data-view>
   </div>
