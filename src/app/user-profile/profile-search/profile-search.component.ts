@@ -34,11 +34,13 @@ export class ProfileSearchComponent implements OnInit {
   public additionalActions: DataAction[] = []
 
   public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
+  public tableFilter = ''
   public filters: Filter[] = []
   public sortField = ''
   public sortDirection: DataSortDirection = DataSortDirection.NONE
   public layout: 'grid' | 'list' | 'table' = 'table'
   public displayedColumnKeys: string[] = []
+  private allResultData: (RowListGridData & UserProfile)[] = []
 
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
   public dateFormat: string
@@ -176,7 +178,8 @@ export class ProfileSearchComponent implements OnInit {
               displayName: row.person.displayName,
               email: row.person.email
             }))
-          this.resultData$.next(stream)
+          this.allResultData = stream ?? []
+          this.applyGlobalFilter()
         }
       })
   }
@@ -190,6 +193,17 @@ export class ProfileSearchComponent implements OnInit {
    */
   public onFiltered(filters: Filter[]): void {
     this.filters = filters
+  }
+
+  public onGlobalFilter(value: string): void {
+    this.tableFilter = value ?? ''
+    this.applyGlobalFilter()
+  }
+
+  public onClearGlobalFilter(filterInput: HTMLInputElement): void {
+    this.tableFilter = ''
+    filterInput.value = ''
+    this.applyGlobalFilter()
   }
 
   public onSorted(event: { sortColumn: string; sortDirection: DataSortDirection }): void {
@@ -302,5 +316,33 @@ export class ProfileSearchComponent implements OnInit {
         callback: (event) => this.onDelete(event)
       }
     ]
+  }
+
+  private applyGlobalFilter(): void {
+    const normalizedFilter = this.tableFilter.trim().toLocaleLowerCase()
+    if (!normalizedFilter) {
+      this.resultData$.next(this.allResultData)
+      return
+    }
+
+    const filteredData = this.allResultData.filter((row) => {
+      const filterValues = [
+        row['firstName'],
+        row['lastName'],
+        row['email'],
+        row['userId'],
+        row['tenantId'],
+        row.person?.displayName
+      ]
+      return filterValues.some((value) => {
+        if (value == null) return false
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+          return value.toString().toLocaleLowerCase().includes(normalizedFilter)
+        }
+        return false
+      })
+    })
+
+    this.resultData$.next(filteredData)
   }
 }

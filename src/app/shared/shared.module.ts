@@ -10,6 +10,8 @@ import { CalendarModule } from 'primeng/calendar'
 import { DialogModule } from 'primeng/dialog'
 import { DropdownModule } from 'primeng/dropdown'
 import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputGroupModule } from 'primeng/inputgroup'
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon'
 import { InputSwitchModule } from 'primeng/inputswitch'
 import { InputTextModule } from 'primeng/inputtext'
 import { TextareaModule } from 'primeng/textarea'
@@ -50,6 +52,8 @@ export function apiConfigProvider() {
     DropdownModule,
     FloatLabelModule,
     FormsModule,
+    InputGroupModule,
+    InputGroupAddonModule,
     InputSwitchModule,
     InputTextModule,
     TextareaModule,
@@ -76,6 +80,8 @@ export function apiConfigProvider() {
     DropdownModule,
     FloatLabelModule,
     FormsModule,
+    InputGroupModule,
+    InputGroupAddonModule,
     InputSwitchModule,
     InputTextModule,
     TextareaModule,

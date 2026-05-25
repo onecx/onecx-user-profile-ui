@@ -239,6 +239,35 @@ describe('ProfileSearchComponent', () => {
       expect(component.layout).toEqual('table')
       expect(component.displayedColumnKeys).toEqual(['firstName', 'lastName'])
     })
+
+    it('should filter table data with global filter input', () => {
+      apiServiceSpy.searchUserProfile.and.returnValue(
+        of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
+      )
+
+      component.onSearch()
+      component.onGlobalFilter('max')
+
+      expect(component.tableFilter).toEqual('max')
+      expect(component.resultData$.getValue().length).toEqual(1)
+      expect(component.resultData$.getValue()[0]?.['firstName']).toEqual('Max')
+    })
+
+    it('should clear global filter and restore full table data', () => {
+      apiServiceSpy.searchUserProfile.and.returnValue(
+        of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
+      )
+      const input = document.createElement('input')
+      input.value = 'max'
+
+      component.onSearch()
+      component.onGlobalFilter('max')
+      component.onClearGlobalFilter(input)
+
+      expect(component.tableFilter).toEqual('')
+      expect(input.value).toEqual('')
+      expect(component.resultData$.getValue().length).toEqual(2)
+    })
   })
 
   describe('detail', () => {
