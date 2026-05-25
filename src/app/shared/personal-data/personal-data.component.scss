@@ -4,8 +4,15 @@
 @include displaying-text-responsive;
 @include dropdown-zebra-rows;
 
+:host {
+  display: block;
+  background: var(--p-surface-0, var(--surface-0));
+}
+
 :host ::ng-deep {
   .p-panel {
+    box-shadow: var(--up-panel-shadow, var(--overlay-menu-shadow, 0 2px 2px rgb(0 0 0 / 10%)));
+
     .p-panel-header,
     .p-panel-content {
       background: unset;
@@ -16,5 +23,48 @@
   }
   .min-w-15rem {
     min-width: 15rem;
+  }
+
+  p-dropdown#up_personal_info_phone_type,
+  p-dropdown#up_personal_info_address_country {
+    --up-select-placeholder-color: var(
+      --p-inputtext-placeholder-color,
+      var(--p-form-field-placeholder-color, var(--emphasis-medium))
+    );
+    --up-select-border-color: var(
+      --p-inputtext-border-color,
+      var(--p-form-field-border-color, var(--p-select-border-color))
+    );
+    --up-select-hover-border-color: var(
+      --p-inputtext-hover-border-color,
+      var(--p-form-field-hover-border-color, var(--up-select-border-color))
+    );
+    --up-select-focus-border-color: var(
+      --p-inputtext-focus-border-color,
+      var(--p-form-field-focus-border-color, var(--up-select-hover-border-color))
+    );
+
+    border-color: var(--up-select-border-color);
+
+    &:not(.p-disabled):hover {
+      border-color: var(--up-select-hover-border-color);
+    }
+
+    &:not(.p-disabled).p-focus {
+      border-color: var(--up-select-focus-border-color);
+    }
+
+    .p-select-label.p-placeholder,
+    &.p-disabled .p-select-label {
+      color: var(--up-select-placeholder-color);
+      -webkit-text-fill-color: var(--up-select-placeholder-color);
+      opacity: 1;
+    }
+
+    &.p-disabled {
+      background: var(--p-select-background, var(--p-form-field-background, var(--surface-0)));
+      border-color: var(--up-select-border-color);
+      opacity: 1;
+    }
   }
 }
