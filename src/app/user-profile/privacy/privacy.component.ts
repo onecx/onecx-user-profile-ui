@@ -2,11 +2,13 @@ import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angu
 import { FormGroup, FormControl } from '@angular/forms'
 
 import { UserService } from '@onecx/angular-integration-interface'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-privacy',
   templateUrl: './privacy.component.html',
-  standalone: false
+  standalone: true,
+  imports: [SharedModule]
 })
 export class PrivacyComponent implements OnInit, OnChanges {
   @Input() hideMyProfile: boolean | undefined = false
@@ -23,7 +25,13 @@ export class PrivacyComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
-    if (!this.userService.hasPermission('ACCOUNT_SETTINGS_PRIVACY#EDIT')) this.formGroup.get('hideMyProfile')?.disable()
+    void this.initializePermission()
+  }
+
+  private async initializePermission(): Promise<void> {
+    if (!(await this.userService.hasPermission('ACCOUNT_SETTINGS_PRIVACY#EDIT'))) {
+      this.formGroup.get('hideMyProfile')?.disable()
+    }
   }
 
   public ngOnChanges(): void {

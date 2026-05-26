@@ -62,8 +62,8 @@ describe('PersonalDataComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalDataComponent],
       imports: [
+        PersonalDataComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -76,7 +76,14 @@ describe('PersonalDataComponent', () => {
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserService, useValue: userServiceSpy }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(PersonalDataComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
 
     userServiceSpy.hasPermission.and.returnValue(true)
 

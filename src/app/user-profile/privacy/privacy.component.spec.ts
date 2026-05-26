@@ -24,8 +24,8 @@ describe('PrivacyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PrivacyComponent],
       imports: [
+        PrivacyComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -36,7 +36,8 @@ describe('PrivacyComponent', () => {
     })
       .overrideComponent(PrivacyComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()

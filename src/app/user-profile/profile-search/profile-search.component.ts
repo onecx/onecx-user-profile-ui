@@ -6,6 +6,7 @@ import { PrimeIcons } from 'primeng/api'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import {
+  AngularAcceleratorModule,
   ColumnType,
   DataAction,
   DataSortDirection,
@@ -16,15 +17,19 @@ import {
   RowListGridData
 } from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
+import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
   selector: 'app-profile-search',
   templateUrl: './profile-search.component.html',
   styleUrls: ['./profile-search.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [AngularAcceleratorModule, PersonalDataAdminComponent, PortalPageComponent, SharedModule]
 })
 export class ProfileSearchComponent implements OnInit {
   public loading = false
@@ -140,7 +145,11 @@ export class ProfileSearchComponent implements OnInit {
     ]
   }
 
-  async ngOnInit(): Promise<void> {
+  ngOnInit(): void {
+    void this.initializePermissionsAndSearch()
+  }
+
+  private async initializePermissionsAndSearch(): Promise<void> {
     this.hasEditPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')
     this.hasViewPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')
     this.prepareActionButtons()

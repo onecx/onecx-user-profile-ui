@@ -85,8 +85,8 @@ describe('ProfileSearchComponent', () => {
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProfileSearchComponent],
       imports: [
+        ProfileSearchComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -105,7 +105,8 @@ describe('ProfileSearchComponent', () => {
     })
       .overrideComponent(ProfileSearchComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()
@@ -251,6 +252,78 @@ describe('ProfileSearchComponent', () => {
       expect(component.tableFilter).toEqual('max')
       expect(component.resultData$.getValue().length).toEqual(1)
       expect(component.resultData$.getValue()[0]?.['firstName']).toEqual('Max')
+    })
+
+    it('should treat undefined global filter value as empty string', () => {
+      apiServiceSpy.searchUserProfile.and.returnValue(
+        of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
+      )
+
+      component.onSearch()
+      component.onGlobalFilter(undefined as unknown as string)
+
+      expect(component.tableFilter).toEqual('')
+      expect(component.resultData$.getValue().length).toEqual(2)
+    })
+
+    it('should filter rows by numeric values', () => {
+      ;(component as any).allResultData = [
+        {
+          id: 'id-number',
+          firstName: null,
+          lastName: null,
+          email: null,
+          userId: 12345,
+          tenantId: null,
+          person: { displayName: null }
+        },
+        {
+          id: 'id-text',
+          firstName: 'Admin',
+          lastName: null,
+          email: null,
+          userId: 'user-text',
+          tenantId: null,
+          person: { displayName: null }
+        }
+      ]
+
+      component.onGlobalFilter('12345')
+
+      expect(component.resultData$.getValue().length).toEqual(1)
+      expect(component.resultData$.getValue()[0]?.['id']).toEqual('id-number')
+    })
+
+    it('should filter rows by boolean values and ignore unsupported object values', () => {
+      ;(component as any).allResultData = [
+        {
+          id: 'id-bool',
+          firstName: null,
+          lastName: null,
+          email: null,
+          userId: null,
+          tenantId: true,
+          person: { displayName: null }
+        },
+        {
+          id: 'id-object',
+          firstName: null,
+          lastName: null,
+          email: null,
+          userId: null,
+          tenantId: null,
+          person: { displayName: { value: 'Admin' } }
+        }
+      ]
+
+      component.onGlobalFilter('true')
+
+      expect(component.resultData$.getValue().length).toEqual(1)
+      expect(component.resultData$.getValue()[0]?.['id']).toEqual('id-bool')
+
+      component.onGlobalFilter('admin')
+
+      expect(component.resultData$.getValue().length).toEqual(0)
     })
 
     it('should clear global filter and restore full table data', () => {

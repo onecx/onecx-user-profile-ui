@@ -46,8 +46,8 @@ describe('UserPermissionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserPermissionsComponent],
       imports: [
+        UserPermissionsComponent,
         TableModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -66,7 +66,8 @@ describe('UserPermissionsComponent', () => {
     })
       .overrideComponent(UserPermissionsComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()

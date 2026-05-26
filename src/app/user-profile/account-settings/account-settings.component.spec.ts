@@ -41,8 +41,8 @@ describe('AccountSettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AccountSettingsComponent],
       imports: [
+        AccountSettingsComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -61,7 +61,8 @@ describe('AccountSettingsComponent', () => {
     })
       .overrideComponent(AccountSettingsComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()

@@ -33,8 +33,8 @@ describe('LayoutThemeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LayoutThemeComponent],
       imports: [
+        LayoutThemeComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -45,7 +45,8 @@ describe('LayoutThemeComponent', () => {
     })
       .overrideComponent(LayoutThemeComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()

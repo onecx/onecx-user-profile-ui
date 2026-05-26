@@ -27,8 +27,8 @@ describe('LocaleTimezoneComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LocaleTimezoneComponent],
       imports: [
+        LocaleTimezoneComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -45,7 +45,8 @@ describe('LocaleTimezoneComponent', () => {
     })
       .overrideComponent(LocaleTimezoneComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()
@@ -92,6 +93,18 @@ describe('LocaleTimezoneComponent', () => {
       await fixture.whenStable()
 
       expect(component.localeSelectItems).toEqual(defaultLanguageItems)
+    }))
+
+    it('should fallback to default languages when getProperty throws', waitForAsync(async () => {
+      const errorResponse = new Error('configuration failure')
+      configServiceSpy.getProperty.and.returnValue(Promise.reject(errorResponse))
+      spyOn(console, 'error')
+
+      component.ngOnChanges()
+      await fixture.whenStable()
+
+      expect(component.localeSelectItems).toEqual(defaultLanguageItems)
+      expect(console.error).toHaveBeenCalledWith('getProperty TKIT_SUPPORTED_LANGUAGES', errorResponse)
     }))
   })
 
@@ -153,8 +166,8 @@ describe('LocaleTimezoneComponent Error', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LocaleTimezoneComponent],
       imports: [
+        LocaleTimezoneComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -172,7 +185,8 @@ describe('LocaleTimezoneComponent Error', () => {
     })
       .overrideComponent(LocaleTimezoneComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()

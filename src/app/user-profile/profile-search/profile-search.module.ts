@@ -17,8 +17,15 @@ const routes: Routes = [
   }
 ]
 @NgModule({
-  declarations: [ProfileSearchComponent, PersonalDataAdminComponent, UserPermissionsAdminComponent],
-  imports: [AngularAcceleratorModule, PortalPageComponent, RouterModule.forChild(routes), SharedModule],
+  imports: [
+    AngularAcceleratorModule,
+    PersonalDataAdminComponent,
+    PortalPageComponent,
+    ProfileSearchComponent,
+    RouterModule.forChild(routes),
+    SharedModule,
+    UserPermissionsAdminComponent
+  ],
   providers: [provideThemeConfig(), provideTranslationConnectionService()]
 })
 export class ProfileSearchModule {

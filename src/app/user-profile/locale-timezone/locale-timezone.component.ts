@@ -3,9 +3,11 @@ import { FormControl, FormGroup } from '@angular/forms'
 import { SelectItem } from 'primeng/api'
 
 import { CONFIG_KEY, ConfigurationService, UserService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { sortByLabel } from 'src/app/shared/utils'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 
@@ -13,7 +15,8 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
   selector: 'app-locale-timezone',
   templateUrl: './locale-timezone.component.html',
   styleUrls: ['./locale-timezone.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [AngularAcceleratorModule, SharedModule]
 })
 export class LocaleTimezoneComponent implements OnInit, OnChanges {
   @Input() public localeInput: string | undefined
@@ -47,7 +50,11 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
     })
   }
 
-  public async ngOnInit(): Promise<void> {
+  public ngOnInit(): void {
+    void this.initializePermissions()
+  }
+
+  private async initializePermissions(): Promise<void> {
     this.editLanguage = await this.userService.hasPermission('ACCOUNT_SETTINGS_LANGUAGE#EDIT')
     this.editTimezone = await this.userService.hasPermission('ACCOUNT_SETTINGS_TIMEZONE#EDIT')
     if (this.locale) this.formGroup.patchValue({ locale: this.locale })

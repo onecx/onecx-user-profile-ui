@@ -89,15 +89,18 @@ const routes: Routes = [
   }
 ]
 @NgModule({
-  declarations: [
-    PersonalDataUserComponent,
+  imports: [
     AccountSettingsComponent,
+    AngularAcceleratorModule,
     LayoutThemeComponent,
     LocaleTimezoneComponent,
+    PersonalDataUserComponent,
+    PortalPageComponent,
     PrivacyComponent,
+    RouterModule.forChild(routes),
+    SharedModule,
     UserPermissionsComponent
   ],
-  imports: [AngularAcceleratorModule, PortalPageComponent, RouterModule.forChild(routes), SharedModule],
   providers: [provideThemeConfig(), provideTranslationConnectionService()]
 })
 export class UserProfileModule {

@@ -5,11 +5,13 @@ import { catchError, finalize, Observable, of, tap } from 'rxjs'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { UpdateUserProfileRequest, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-personal-data-admin',
   templateUrl: './personal-data-admin.component.html',
-  standalone: false
+  standalone: true,
+  imports: [SharedModule]
 })
 export class PersonalDataAdminComponent implements OnChanges {
   @Input() public displayPersonalDataDialog = false

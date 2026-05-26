@@ -28,8 +28,8 @@ const routes: Routes = [
 ]
 @NgModule({
   bootstrap: [AppComponent],
-  declarations: [AppComponent],
   imports: [
+    AppComponent,
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,

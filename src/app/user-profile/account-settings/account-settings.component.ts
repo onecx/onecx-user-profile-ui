@@ -7,7 +7,8 @@ import { Observable } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
-import { Action } from '@onecx/angular-accelerator'
+import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import {
   UserProfileAPIService,
@@ -15,13 +16,17 @@ import {
   UserProfile,
   UpdateUserPersonSettingsRequest
 } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 import { PrivacyComponent } from '../privacy/privacy.component'
+import { LayoutThemeComponent } from '../layout-theme/layout-theme.component'
+import { LocaleTimezoneComponent } from '../locale-timezone/locale-timezone.component'
 
 @Component({
   selector: 'app-account-settings',
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.scss'],
-  standalone: false
+  standalone: true,
+  imports: [AngularAcceleratorModule, LayoutThemeComponent, LocaleTimezoneComponent, PortalPageComponent, SharedModule]
 })
 export class AccountSettingsComponent implements OnInit {
   @Output() public editModeUpdate = new EventEmitter<boolean>()

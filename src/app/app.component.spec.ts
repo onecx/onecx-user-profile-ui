@@ -6,9 +6,16 @@ import { AppComponent } from './app.component'
 describe('AppComponent', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [AppComponent],
+      imports: [AppComponent],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents()
+    })
+      .overrideComponent(AppComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   })
 
   it('should create the app', () => {

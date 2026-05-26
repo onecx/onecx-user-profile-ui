@@ -65,8 +65,8 @@ describe('PersonalDataUserComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalDataUserComponent],
       imports: [
+        PersonalDataUserComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -84,7 +84,8 @@ describe('PersonalDataUserComponent', () => {
     })
       .overrideComponent(PersonalDataUserComponent, {
         set: {
-          template: ''
+          template: '',
+          imports: []
         }
       })
       .compileComponents()

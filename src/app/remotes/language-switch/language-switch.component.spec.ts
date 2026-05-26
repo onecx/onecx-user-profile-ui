@@ -193,6 +193,25 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       expect(component.availableLanguages).toContain('en')
       expect(component.availableLanguages).toContain('de')
     }))
+
+    it('should fallback to default languages when getProperty fails', fakeAsync(() => {
+      const errorResponse = new Error('configuration failure')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.reject(errorResponse))
+      parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
+      spyOn(console, 'error')
+
+      component.ngOnInit()
+      flush()
+
+      expect(console.error).toHaveBeenCalledWith('getProperty TKIT_SUPPORTED_LANGUAGES', errorResponse)
+      expect(parameterServiceSpy.get).toHaveBeenCalledWith(
+        'primary-languages',
+        'en,de',
+        rcConfig.productName,
+        rcConfig.appId
+      )
+      expect(component.availableLanguages).toEqual(['en', 'de'])
+    }))
   })
 
   describe('shouldShowForm', () => {

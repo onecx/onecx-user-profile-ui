@@ -41,9 +41,9 @@ export function apiConfigProvider() {
 }
 
 @NgModule({
-  declarations: [PersonalDataComponent, AvatarComponent],
   imports: [
     AngularAcceleratorModule,
+    AvatarComponent,
     AutoCompleteModule,
     ButtonModule,
     CalendarModule,
@@ -69,7 +69,8 @@ export function apiConfigProvider() {
     ToastModule,
     TooltipModule,
     TranslateModule,
-    AngularRemoteComponentsModule
+    AngularRemoteComponentsModule,
+    PersonalDataComponent
   ],
   exports: [
     AutoCompleteModule,

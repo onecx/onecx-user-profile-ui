@@ -4,7 +4,8 @@ import { catchError, map, Observable, of, tap } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/angular-integration-interface'
-import { Action } from '@onecx/angular-accelerator'
+import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import {
   UserProfileAPIService,
@@ -12,11 +13,13 @@ import {
   UserProfile,
   UpdateUserPersonContactRequest
 } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-personal-data-user',
   templateUrl: './personal-data-user.component.html',
-  standalone: false
+  standalone: true,
+  imports: [AngularAcceleratorModule, PortalPageComponent, SharedModule]
 })
 export class PersonalDataUserComponent implements AfterViewInit {
   @Input() public displayPersonalDataDialog = false
