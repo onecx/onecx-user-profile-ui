@@ -194,7 +194,7 @@ describe('PersonalDataUserComponent', () => {
       component.userProfile$.subscribe()
 
       component.actions$?.subscribe((action) => {
-        action[0].actionCallback()
+        action[0].actionCallback!()
       })
 
       expect(routerMock.navigate).toHaveBeenCalled()
@@ -204,7 +204,7 @@ describe('PersonalDataUserComponent', () => {
       component.userProfile$.subscribe()
 
       component.actions$?.subscribe((action) => {
-        action[1].actionCallback()
+        action[1].actionCallback!()
       })
 
       expect(routerMock.navigate).toHaveBeenCalled()

@@ -213,7 +213,7 @@ describe('AccountSettingsComponent', () => {
     component.personalInfo$?.subscribe()
 
     component.actions$?.subscribe((action) => {
-      action[0].actionCallback()
+      action[0].actionCallback!()
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()
@@ -223,7 +223,7 @@ describe('AccountSettingsComponent', () => {
     component.personalInfo$?.subscribe()
 
     component.actions$?.subscribe((action) => {
-      action[1].actionCallback()
+      action[1].actionCallback!()
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()

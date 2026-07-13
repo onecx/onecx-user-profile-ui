@@ -136,16 +136,16 @@ describe('ProfileSearchComponent', () => {
   describe('actions', () => {
     it('should perform page actions', () => {
       spyOn(component, 'onDetail')
-      component.additionalActions[0].callback({})
+      component.additionalActions[0].callback!({})
       expect(component.onDetail).toHaveBeenCalled()
       expect(component.additionalActions[0].permission).toEqual('USERPROFILE#ADMIN_EDIT')
 
       spyOn(component, 'onUserPermissions')
-      component.additionalActions[1].callback({})
+      component.additionalActions[1].callback!({})
       expect(component.onUserPermissions).toHaveBeenCalled()
 
       spyOn(component, 'onDelete')
-      component.additionalActions[2].callback({})
+      component.additionalActions[2].callback!({})
       expect(component.onDelete).toHaveBeenCalled()
 
       expect(component.hasEditPermission).toBeTrue()
