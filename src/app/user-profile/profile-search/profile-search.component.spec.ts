@@ -250,7 +250,7 @@ describe('ProfileSearchComponent', () => {
       component.onGlobalFilter('max')
 
       expect(component.tableFilter).toEqual('max')
-      expect(component.resultData$.getValue().length).toEqual(1)
+      expect(component.resultData$.getValue()).toHaveSize(1)
       expect(component.resultData$.getValue()[0]?.['firstName']).toEqual('Max')
     })
 
@@ -263,7 +263,7 @@ describe('ProfileSearchComponent', () => {
       component.onGlobalFilter(undefined as unknown as string)
 
       expect(component.tableFilter).toEqual('')
-      expect(component.resultData$.getValue().length).toEqual(2)
+      expect(component.resultData$.getValue()).toHaveSize(2)
     })
 
     it('should filter rows by numeric values', () => {
@@ -290,7 +290,7 @@ describe('ProfileSearchComponent', () => {
 
       component.onGlobalFilter('12345')
 
-      expect(component.resultData$.getValue().length).toEqual(1)
+      expect(component.resultData$.getValue()).toHaveSize(1)
       expect(component.resultData$.getValue()[0]?.['id']).toEqual('id-number')
     })
 
@@ -318,12 +318,12 @@ describe('ProfileSearchComponent', () => {
 
       component.onGlobalFilter('true')
 
-      expect(component.resultData$.getValue().length).toEqual(1)
+      expect(component.resultData$.getValue()).toHaveSize(1)
       expect(component.resultData$.getValue()[0]?.['id']).toEqual('id-bool')
 
       component.onGlobalFilter('admin')
 
-      expect(component.resultData$.getValue().length).toEqual(0)
+      expect(component.resultData$.getValue()).toHaveSize(0)
     })
 
     it('should clear global filter and restore full table data', () => {
@@ -339,7 +339,7 @@ describe('ProfileSearchComponent', () => {
 
       expect(component.tableFilter).toEqual('')
       expect(input.value).toEqual('')
-      expect(component.resultData$.getValue().length).toEqual(2)
+      expect(component.resultData$.getValue()).toHaveSize(2)
     })
   })
 
