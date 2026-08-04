@@ -12,6 +12,7 @@
   },
   "scripts": {
     "build": "ng build",
+    "postbuild": "mv \"$(find dist/$npm_package_name -maxdepth 1 -type f -name 'styles.*.css' | head -n 1)\" dist/$npm_package_name/styles.css",
     "clean": "npm cache clean --force && ng cache clean && rm -rf *.log dist reports .angular .eslintcache ./node_modules/.cache/prettier/.prettier-cache",
     "lint": "ng lint --cache=true && npx prettier -c --cache .",
     "format": "ng lint --fix",
