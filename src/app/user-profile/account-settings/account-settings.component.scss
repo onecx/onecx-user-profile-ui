@@ -1,7 +1,10 @@
-@import '/src/app/_up-mixins.scss';
+@use '/src/app/_up-mixins.scss' as *;
 
+@include ocx-text-responsive;
+
+/*
 @include tabview-fix-color-selected-tab;
 @include readable-disabled-form-controls;
-@include displaying-text-responsive;
 @include dropdown-zebra-rows;
 @include search-criteria-select-button;
+*/

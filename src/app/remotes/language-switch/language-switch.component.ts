@@ -1,23 +1,23 @@
-import { CommonModule, Location } from '@angular/common'
 import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core'
+import { Location } from '@angular/common'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { UntilDestroy } from '@ngneat/until-destroy'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import { firstValueFrom, from, ReplaySubject, Subscription } from 'rxjs'
+import { map, switchMap, take } from 'rxjs/operators'
+import { ControlErrorsDirective } from '@ngneat/error-tailor'
+
+import { ButtonModule } from 'primeng/button'
+import { SelectButtonModule } from 'primeng/selectbutton'
+import { TooltipModule } from 'primeng/tooltip'
+
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import {
   AngularRemoteComponentsModule,
   ocxRemoteComponent,
   ocxRemoteWebcomponent
 } from '@onecx/angular-remote-components'
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
-import { firstValueFrom, from, ReplaySubject, Subscription } from 'rxjs'
-import { map, switchMap, take } from 'rxjs/operators'
-import { ControlErrorsDirective } from '@ngneat/error-tailor'
-import { SelectButtonModule } from 'primeng/selectbutton'
-import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
-import { UserProfileAPIService, Configuration, UpdateUserPersonSettingsRequest } from 'src/app/shared/generated'
-import { environment } from 'src/environments/environment'
-import { ButtonModule } from 'primeng/button'
 import {
   CONFIG_KEY,
   ConfigurationService,
@@ -25,22 +25,20 @@ import {
   PortalMessageService,
   UserService
 } from '@onecx/angular-integration-interface'
-import { TooltipModule } from 'primeng/tooltip'
+
+import { UserProfileAPIService, Configuration, UpdateUserPersonSettingsRequest } from 'src/app/shared/generated'
+import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-ocx-language-switch',
   standalone: true,
-  templateUrl: './language-switch.component.html',
-  styleUrl: './language-switch.component.scss',
   imports: [
-    AngularRemoteComponentsModule,
-    CommonModule,
     AngularAcceleratorModule,
+    AngularRemoteComponentsModule,
+    ButtonModule,
     ControlErrorsDirective,
     ReactiveFormsModule,
     SelectButtonModule,
-    SharedModuleUserProfile,
-    ButtonModule,
     TranslateModule,
     TooltipModule
   ],
@@ -51,7 +49,9 @@ import { TooltipModule } from 'primeng/tooltip'
       provide: REMOTE_COMPONENT_CONFIG,
       useValue: new ReplaySubject<RemoteComponentConfig>(1)
     }
-  ]
+  ],
+  templateUrl: './language-switch.component.html',
+  styleUrl: './language-switch.component.scss'
 })
 @UntilDestroy()
 export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit, OnDestroy {

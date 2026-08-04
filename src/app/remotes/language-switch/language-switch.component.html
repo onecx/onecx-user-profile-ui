@@ -1,13 +1,16 @@
-<form *ngIf="shouldShowForm()" [formGroup]="languageFormGroup" class="language-selector-compact px-2">
-  <p-selectButton
-    styleClass="white-space-nowrap"
-    formControlName="language"
-    [allowEmpty]="false"
-    [escape]="false"
-    [options]="availableLanguages"
-    [pTooltip]="'LANGUAGE_SWITCH.TOOLTIP' | translate"
-    tooltipPosition="bottom"
-    tooltipEvent="hover"
-  >
-  </p-selectButton>
-</form>
+@if (shouldShowForm()) {
+  <form [formGroup]="languageFormGroup" class="language-selector-compact px-2">
+    <p-selectButton
+      id="up_language_switch_language"
+      styleClass="white-space-nowrap"
+      formControlName="language"
+      [allowEmpty]="false"
+      [escape]="false"
+      [options]="availableLanguages"
+      [pTooltip]="'LANGUAGE_SWITCH.TOOLTIP' | translate"
+      tooltipPosition="bottom"
+      tooltipEvent="hover"
+    >
+    </p-selectButton>
+  </form>
+}

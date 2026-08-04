@@ -1,4 +1,5 @@
-<ng-container *ngIf="imagePath$ | async as imagePath; else placeholder">
+@let imagePath = imagePath$ | async;
+@if (imagePath) {
   <img
     [ocxSrc]="imagePath"
     [id]="id ?? ''"
@@ -9,10 +10,8 @@
     (error)="onImageError()"
     (load)="onImageLoad()"
   />
-</ng-container>
-
-<ng-template #placeholder>
+} @else {
   <div class="flex align-items-center h-full justify-content-center" style="width: 56px">
     <p-skeleton shape="circle" size="2.5rem" class="h-full flex align-items-center"></p-skeleton>
   </div>
-</ng-template>
+}

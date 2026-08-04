@@ -1,19 +1,15 @@
 import { DoBootstrap, Injector, NgModule, inject, provideAppInitializer } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule, Routes, Router } from '@angular/router'
 import { TranslateLoader, TranslateModule, MissingTranslationHandler } from '@ngx-translate/core'
 
-import {
-  AngularAcceleratorMissingTranslationHandler,
-  AngularAcceleratorModule,
-  providePortalDialogService
-} from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule, providePortalDialogService } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import {
-  PortalApiConfiguration,
   createTranslateLoader,
+  MultiLanguageMissingTranslationHandler,
+  PortalApiConfiguration,
   providePermissionService,
   provideThemeConfig,
   provideTranslationConnectionService,
@@ -23,8 +19,8 @@ import { createAppEntrypoint, initializeRouter, startsWith } from '@onecx/angula
 import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 
-import { Configuration } from './shared/generated'
 import { environment } from 'src/environments/environment'
+import { Configuration } from './shared/generated'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 
 function apiConfigProvider() {
@@ -40,17 +36,20 @@ const routes: Routes = [
 @NgModule({
   imports: [
     AppEntrypointComponent,
-    AngularAuthModule,
-    BrowserModule,
-    BrowserAnimationsModule,
     AngularAcceleratorModule,
+    AngularAuthModule,
+    BrowserAnimationsModule,
     RouterModule.forRoot(routes),
     TranslateModule.forRoot({
       isolate: true,
-      loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] },
+      loader: {
+        provide: TranslateLoader,
+        useFactory: createTranslateLoader,
+        deps: [HttpClient]
+      },
       missingTranslationHandler: {
         provide: MissingTranslationHandler,
-        useClass: AngularAcceleratorMissingTranslationHandler
+        useClass: MultiLanguageMissingTranslationHandler
       }
     })
   ],
@@ -63,18 +62,16 @@ const routes: Routes = [
       const appStateService = inject(AppStateService)
       return initializeRouter(router, appStateService)()
     }),
+    provideHttpClient(withInterceptorsFromDi()),
     providePermissionService(),
+    providePortalDialogService(),
     provideThemeConfig(),
     provideTranslationConnectionService(),
-    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
-    provideHttpClient(withInterceptorsFromDi()),
-    providePortalDialogService()
+    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')
   ]
 })
 export class OneCXUserProfileModule implements DoBootstrap {
-  constructor(private readonly injector: Injector) {
-    console.info('OneCX User Profile Module constructor')
-  }
+  private readonly injector = inject(Injector)
 
   ngDoBootstrap(): void {
     createAppEntrypoint(AppEntrypointComponent, 'ocx-user-profile-component', this.injector)

@@ -1,4 +1,4 @@
-@import '/src/app/_up-mixins.scss';
+@use '/src/app/_up-mixins.scss' as *;
 
 @include danger-action;
 @include dialog-footer-buttons;
