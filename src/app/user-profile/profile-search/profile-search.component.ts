@@ -5,17 +5,31 @@ import { TranslateService } from '@ngx-translate/core'
 import { PrimeIcons } from 'primeng/api'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { DataAction, DataTableColumn, RowListGridData, InteractiveDataViewComponent } from '@onecx/angular-accelerator'
+import {
+  AngularAcceleratorModule,
+  ColumnType,
+  DataAction,
+  DataSortDirection,
+  DataTableColumn,
+  Filter,
+  InteractiveDataViewComponent,
+  PortalDialogService,
+  RowListGridData
+} from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { ColumnType, DataViewControlTranslations, PortalDialogService } from '@onecx/portal-integration-angular'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
+import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
   selector: 'app-profile-search',
   templateUrl: './profile-search.component.html',
-  styleUrls: ['./profile-search.component.scss']
+  styleUrls: ['./profile-search.component.scss'],
+  standalone: true,
+  imports: [AngularAcceleratorModule, PersonalDataAdminComponent, PortalPageComponent, SharedModule]
 })
 export class ProfileSearchComponent implements OnInit {
   public loading = false
@@ -25,15 +39,15 @@ export class ProfileSearchComponent implements OnInit {
   public additionalActions: DataAction[] = []
 
   public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
-  public filteredData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
-  public filterValue: string | undefined
-  public filterBy = 'firstName,lastName,email,creationDate,modificationDate'
-  private filterData = ''
+  public tableFilter = ''
+  public filters: Filter[] = []
+  public sortField = ''
+  public sortDirection: DataSortDirection = DataSortDirection.NONE
+  public layout: 'grid' | 'list' | 'table' = 'table'
+  public displayedColumnKeys: string[] = []
+  private allResultData: (RowListGridData & UserProfile)[] = []
 
-  /* ocx-data-view-controls settings */
   @ViewChild(InteractiveDataViewComponent) dataView: InteractiveDataViewComponent | undefined
-
-  public dataViewControlsTranslations: DataViewControlTranslations = {}
   public dateFormat: string
   public userProfile: UserProfile | undefined
   public displayPersonalDataDialog = false
@@ -54,8 +68,6 @@ export class ProfileSearchComponent implements OnInit {
     private readonly translate: TranslateService,
     @Inject(LOCALE_ID) public readonly locale: string
   ) {
-    if (this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')) this.hasEditPermission = true
-    if (this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')) this.hasViewPermission = true
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
@@ -133,34 +145,15 @@ export class ProfileSearchComponent implements OnInit {
     ]
   }
 
-  ngOnInit() {
-    this.initFilter()
-    this.prepareActionButtons()
-    this.onSearch()
+  ngOnInit(): void {
+    void this.initializePermissionsAndSearch()
   }
 
-  public initFilter(): void {
-    this.resultData$
-      .pipe(
-        map((array) => {
-          if (this.filterData.trim()) {
-            const lowerCaseFilter = this.filterData.toLowerCase()
-            return array.filter((item) => {
-              return ['firstName', 'lastName', 'email', 'creationDate', 'modificationDate'].some((key) => {
-                const value = item[key]
-                return value?.toString().toLowerCase().includes(lowerCaseFilter)
-              })
-            })
-          } else {
-            return array
-          }
-        })
-      )
-      .subscribe({
-        next: (filteredData) => {
-          this.filteredData$.next(filteredData)
-        }
-      })
+  private async initializePermissionsAndSearch(): Promise<void> {
+    this.hasEditPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')
+    this.hasViewPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')
+    this.prepareActionButtons()
+    this.onSearch()
   }
 
   public onSearch(): void {
@@ -194,8 +187,8 @@ export class ProfileSearchComponent implements OnInit {
               displayName: row.person.displayName,
               email: row.person.email
             }))
-          this.resultData$.next(stream)
-          this.filteredData$.next(stream)
+          this.allResultData = stream ?? []
+          this.applyGlobalFilter()
         }
       })
   }
@@ -207,9 +200,32 @@ export class ProfileSearchComponent implements OnInit {
   /**
    * UI EVENTS
    */
-  public onFilterChange(filter: string): void {
-    this.filterData = filter
-    this.resultData$.next(this.resultData$.value)
+  public onFiltered(filters: Filter[]): void {
+    this.filters = filters
+  }
+
+  public onGlobalFilter(value: string): void {
+    this.tableFilter = value ?? ''
+    this.applyGlobalFilter()
+  }
+
+  public onClearGlobalFilter(filterInput: HTMLInputElement): void {
+    this.tableFilter = ''
+    filterInput.value = ''
+    this.applyGlobalFilter()
+  }
+
+  public onSorted(event: { sortColumn: string; sortDirection: DataSortDirection }): void {
+    this.sortField = event.sortColumn
+    this.sortDirection = event.sortDirection
+  }
+
+  public onDataViewLayoutChange(layout: 'grid' | 'list' | 'table'): void {
+    this.layout = layout
+  }
+
+  public onDisplayedColumnKeysChange(displayedColumnKeys: string[]): void {
+    this.displayedColumnKeys = displayedColumnKeys
   }
 
   public onDetail(ev: any) {
@@ -309,5 +325,33 @@ export class ProfileSearchComponent implements OnInit {
         callback: (event) => this.onDelete(event)
       }
     ]
+  }
+
+  private applyGlobalFilter(): void {
+    const normalizedFilter = this.tableFilter.trim().toLocaleLowerCase()
+    if (!normalizedFilter) {
+      this.resultData$.next(this.allResultData)
+      return
+    }
+
+    const filteredData = this.allResultData.filter((row) => {
+      const filterValues = [
+        row['firstName'],
+        row['lastName'],
+        row['email'],
+        row['userId'],
+        row['tenantId'],
+        row.person?.displayName
+      ]
+      return filterValues.some((value) => {
+        if (value == null) return false
+        if (typeof value === 'string' || typeof value === 'number' || typeof value === 'boolean') {
+          return value.toString().toLocaleLowerCase().includes(normalizedFilter)
+        }
+        return false
+      })
+    })
+
+    this.resultData$.next(filteredData)
   }
 }

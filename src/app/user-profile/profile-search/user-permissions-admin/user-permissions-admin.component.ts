@@ -2,10 +2,14 @@ import { Component, Input } from '@angular/core'
 import { Observable } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-user-permissions-admin',
-  templateUrl: './user-permissions-admin.component.html'
+  templateUrl: './user-permissions-admin.component.html',
+  standalone: true,
+  imports: [AngularAcceleratorModule, SharedModule]
 })
 export class UserPermissionsAdminComponent {
   @Input() id: string | undefined = 'undefined' // why ever this is required

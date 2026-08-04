@@ -1,10 +1,16 @@
 import { Component, Input, OnChanges } from '@angular/core'
-import { Location } from '@angular/common'
+import { CommonModule, Location } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
+import { TranslateModule } from '@ngx-translate/core'
+import { ButtonModule } from 'primeng/button'
+import { DialogModule } from 'primeng/dialog'
+import { RippleModule } from 'primeng/ripple'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { AppStateService, PortalMessageService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
@@ -12,7 +18,17 @@ import { environment } from 'src/environments/environment'
 @Component({
   selector: 'app-avatar',
   templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.scss']
+  styleUrls: ['./avatar.component.scss'],
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    ButtonModule,
+    CommonModule,
+    DialogModule,
+    RippleModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class AvatarComponent implements OnChanges {
   @Input() userId: string | undefined = undefined

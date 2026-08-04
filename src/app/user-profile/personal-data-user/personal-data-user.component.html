@@ -6,7 +6,7 @@
   >
   </ocx-page-header>
 
-  <ocx-page-content>
+  <ocx-content>
     <ng-container *ngIf="userProfile$ | async as profile">
       <app-personal-data
         [userProfile]="profile"
@@ -15,5 +15,5 @@
         (personUpdate)="onPersonUpdate($event, profile)"
       ></app-personal-data>
     </ng-container>
-  </ocx-page-content>
+  </ocx-content>
 </ocx-portal-page>

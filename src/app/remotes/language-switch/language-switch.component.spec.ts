@@ -7,9 +7,8 @@ import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
-import { PortalMessageService, UserService } from '@onecx/portal-integration-angular'
-import { ParametersService } from '@onecx/angular-integration-interface'
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-remote-components'
+import { ParametersService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import {
   ConfigurationServiceMock,
   provideConfigurationServiceMock,
@@ -113,7 +112,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     beforeEach(() => {
       userService.profile$.publish(mockProfile as any)
       userApiService.getMyUserProfile.and.returnValue(of(mockProfile))
-      spyOn(configService, 'getProperty').and.returnValue('en,de')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve('en,de'))
       parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
     })
 
@@ -165,7 +164,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     })
 
     it('should limit available languages to shownLanguagesNumber', fakeAsync(() => {
-      spyOn(configService, 'getProperty').and.returnValue('en,de,fr,it,es')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve('en,de,fr,it,es'))
       parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de,fr,it,es'))
       component.shownLanguagesNumber = 2
 
@@ -176,7 +175,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     }))
 
     it('should set default available languages when parameters service return empty value', fakeAsync(() => {
-      spyOn(configService, 'getProperty').and.returnValue(undefined)
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve(undefined))
       parameterServiceSpy.get.and.returnValue(Promise.resolve(undefined))
       component.ngOnInit()
       flush()
@@ -186,13 +185,32 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     }))
 
     it('should use default languages when parameterService.get returns null', fakeAsync(() => {
-      spyOn(configService, 'getProperty').and.returnValue('en,de')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve('en,de'))
       parameterServiceSpy.get.and.returnValue(Promise.resolve(null))
       component.ngOnInit()
       flush()
       expect(component.availableLanguages.length).toBe(2)
       expect(component.availableLanguages).toContain('en')
       expect(component.availableLanguages).toContain('de')
+    }))
+
+    it('should fallback to default languages when getProperty fails', fakeAsync(() => {
+      const errorResponse = new Error('configuration failure')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.reject(errorResponse))
+      parameterServiceSpy.get.and.returnValue(Promise.resolve('en,de'))
+      spyOn(console, 'error')
+
+      component.ngOnInit()
+      flush()
+
+      expect(console.error).toHaveBeenCalledWith('getProperty TKIT_SUPPORTED_LANGUAGES', errorResponse)
+      expect(parameterServiceSpy.get).toHaveBeenCalledWith(
+        'primary-languages',
+        'en,de',
+        rcConfig.productName,
+        rcConfig.appId
+      )
+      expect(component.availableLanguages).toEqual(['en', 'de'])
     }))
   })
 
@@ -209,7 +227,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     })
 
     it('should return false when availableLanguages is empty', fakeAsync(() => {
-      spyOn(configService, 'getProperty').and.returnValue('en')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve('en'))
       component.shownLanguagesNumber = 3
       component.ngOnInit()
       flush()
@@ -220,7 +238,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     }))
 
     it('should return false when default language is not set', fakeAsync(() => {
-      spyOn(configService, 'getProperty').and.returnValue('en,de')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve('en,de'))
       component.shownLanguagesNumber = 3
       component.ngOnInit()
       flush()
@@ -231,7 +249,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     }))
 
     it('should show form when all conditions are met', fakeAsync(() => {
-      spyOn(configService, 'getProperty').and.returnValue('en,de')
+      spyOn(configService, 'getProperty').and.returnValue(Promise.resolve('en,de'))
       component.shownLanguagesNumber = 3
       component.ngOnInit()
       tick()

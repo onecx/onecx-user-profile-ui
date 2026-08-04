@@ -5,6 +5,7 @@
 /* displaying text like an input field with floating label */
 @mixin float-label-textbox {
   :host {
+    .p-floatlabel,
     .p-float-label {
       display: block;
       position: relative;
@@ -53,6 +54,17 @@
 @mixin readable-disabled-form-controls {
   :host ::ng-deep {
     --disabled-opacity: 0.7;
+    --up-disabled-input-color: var(
+      --p-inputtext-placeholder-color,
+      var(--p-form-field-placeholder-color, var(--emphasis-medium))
+    );
+
+    .p-inputtext:disabled,
+    .p-inputtext[disabled] {
+      color: var(--up-disabled-input-color);
+      -webkit-text-fill-color: var(--up-disabled-input-color);
+      opacity: 1;
+    }
   }
 }
 

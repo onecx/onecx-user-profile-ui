@@ -65,8 +65,8 @@ describe('PersonalDataUserComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalDataUserComponent],
       imports: [
+        PersonalDataUserComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -81,7 +81,14 @@ describe('PersonalDataUserComponent', () => {
         { provide: ActivatedRoute, useValue: activatedRouteMock },
         { provide: Router, useValue: routerMock }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(PersonalDataUserComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {
@@ -184,16 +191,20 @@ describe('PersonalDataUserComponent', () => {
 
   describe('navigate', () => {
     it('should navigate to account settings', () => {
+      component.userProfile$.subscribe()
+
       component.actions$?.subscribe((action) => {
-        action[0].actionCallback()
+        action[0].actionCallback!()
       })
 
       expect(routerMock.navigate).toHaveBeenCalled()
     })
 
     it('should navigate to user roles', () => {
+      component.userProfile$.subscribe()
+
       component.actions$?.subscribe((action) => {
-        action[1].actionCallback()
+        action[1].actionCallback!()
       })
 
       expect(routerMock.navigate).toHaveBeenCalled()

@@ -1,13 +1,14 @@
 import { NgModule, ModuleWithProviders, SkipSelf, Optional } from '@angular/core';
 import { Configuration } from './configuration';
 import { HttpClient } from '@angular/common/http';
+import { provideThemeConfig } from '@onecx/angular-utils';
 
 
 @NgModule({
   imports:      [],
   declarations: [],
   exports:      [],
-  providers: []
+    providers: [provideThemeConfig()]
 })
 export class ApiModule {
     public static forRoot(configurationFactory: () => Configuration): ModuleWithProviders<ApiModule> {

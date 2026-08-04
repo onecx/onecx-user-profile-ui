@@ -1,21 +1,17 @@
 import { Component, EventEmitter, Inject, Input, OnInit, NO_ERRORS_SCHEMA } from '@angular/core'
 import { CommonModule, Location } from '@angular/common'
-import { HttpClient } from '@angular/common/http'
 import { RouterModule } from '@angular/router'
-import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
+import { TranslateModule } from '@ngx-translate/core'
 import { Observable, ReplaySubject, of } from 'rxjs'
 import { SharedModule } from 'primeng/api'
 
 import {
   AngularRemoteComponentsModule,
-  BASE_URL,
-  RemoteComponentConfig,
   ocxRemoteComponent,
-  ocxRemoteWebcomponent,
-  provideTranslateServiceForRoot
+  ocxRemoteWebcomponent
 } from '@onecx/angular-remote-components'
-import { createRemoteComponentTranslateLoader } from '@onecx/angular-accelerator'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { SharedModule as SharedModuleUserProfile } from 'src/app/shared/shared.module'
 import { Configuration, RefType, UserAvatarAPIService } from 'src/app/shared/generated'
@@ -29,23 +25,15 @@ import { environment } from 'src/environments/environment'
   styleUrls: ['./avatar-image.component.scss'],
   providers: [
     {
-      provide: BASE_URL,
-      useValue: new ReplaySubject<string>(1)
-    },
-    provideTranslateServiceForRoot({
-      isolate: true,
-      loader: {
-        provide: TranslateLoader,
-        useFactory: createRemoteComponentTranslateLoader,
-        deps: [HttpClient, BASE_URL]
-      }
-    })
+      provide: REMOTE_COMPONENT_CONFIG,
+      useValue: new ReplaySubject<RemoteComponentConfig>(1)
+    }
   ],
   schemas: [NO_ERRORS_SCHEMA],
   imports: [
     AngularRemoteComponentsModule,
     CommonModule,
-    PortalCoreModule,
+    AngularAcceleratorModule,
     RouterModule,
     TranslateModule,
     SharedModule,
@@ -67,7 +55,8 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   public displayImage = false
 
   constructor(
-    @Inject(BASE_URL) private readonly baseUrl: ReplaySubject<string>,
+    @Inject(REMOTE_COMPONENT_CONFIG)
+    private readonly remoteComponentConfig$: ReplaySubject<RemoteComponentConfig>,
     private readonly avatarService: UserAvatarAPIService
   ) {}
 
@@ -76,7 +65,7 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   }
 
   ocxInitRemoteComponent(remoteComponentConfig: RemoteComponentConfig) {
-    this.baseUrl.next(remoteComponentConfig.baseUrl)
+    this.remoteComponentConfig$.next(remoteComponentConfig)
     this.placeHolderPath = Location.joinWithSlash(remoteComponentConfig.baseUrl, environment.DEFAULT_LOGO_PATH)
     this.avatarService.configuration = new Configuration({
       basePath: Location.joinWithSlash(remoteComponentConfig.baseUrl, environment.apiPrefix)

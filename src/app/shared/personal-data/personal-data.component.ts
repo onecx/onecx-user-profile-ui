@@ -1,19 +1,46 @@
 import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
+import { CommonModule } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
-import { TranslateService } from '@ngx-translate/core'
+import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { SelectItem } from 'primeng/api'
+import { ButtonModule } from 'primeng/button'
+import { DropdownModule } from 'primeng/dropdown'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
+import { MessageModule } from 'primeng/message'
+import { PanelModule } from 'primeng/panel'
+import { RippleModule } from 'primeng/ripple'
+import { TooltipModule } from 'primeng/tooltip'
 import * as countriesInfo from 'i18n-iso-countries'
 
 import { UserService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PhoneType } from '@onecx/integration-interface'
 
 import { UserPerson, UserProfile } from 'src/app/shared/generated'
+import { AvatarComponent } from '../avatar/avatar.component'
 
 @Component({
   selector: 'app-personal-data',
   templateUrl: './personal-data.component.html',
-  styleUrls: ['./personal-data.component.scss']
+  styleUrls: ['./personal-data.component.scss'],
+  standalone: true,
+  imports: [
+    AngularAcceleratorModule,
+    AvatarComponent,
+    ButtonModule,
+    CommonModule,
+    DropdownModule,
+    FloatLabelModule,
+    InputTextModule,
+    MessageModule,
+    PanelModule,
+    ReactiveFormsModule,
+    RippleModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class PersonalDataComponent implements OnChanges {
   @Input() userProfile: UserProfile | undefined = undefined

@@ -41,8 +41,8 @@ describe('AccountSettingsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [AccountSettingsComponent],
       imports: [
+        AccountSettingsComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -58,7 +58,14 @@ describe('AccountSettingsComponent', () => {
         { provide: Location, useValue: locationSpy },
         { provide: Router, useValue: routerMock }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(AccountSettingsComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {
@@ -203,16 +210,20 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should navigate to user accountSettings', () => {
+    component.personalInfo$?.subscribe()
+
     component.actions$?.subscribe((action) => {
-      action[0].actionCallback()
+      action[0].actionCallback!()
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()
   })
 
   it('should navigate to user permissions', () => {
+    component.personalInfo$?.subscribe()
+
     component.actions$?.subscribe((action) => {
-      action[1].actionCallback()
+      action[1].actionCallback!()
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()

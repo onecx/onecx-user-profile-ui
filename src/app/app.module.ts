@@ -1,15 +1,21 @@
-import { APP_INITIALIZER, NgModule } from '@angular/core'
+import { NgModule } from '@angular/core'
 import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { RouterModule, Routes } from '@angular/router'
-import { TranslateLoader, TranslateModule, TranslateService } from '@ngx-translate/core'
+import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
-import { KeycloakAuthModule } from '@onecx/keycloak-auth'
-import { createTranslateLoader, provideTranslationPathFromMeta } from '@onecx/angular-utils'
-import { APP_CONFIG, UserService } from '@onecx/angular-integration-interface'
-import { translateServiceInitializer, PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { StandaloneShellModule, provideStandaloneProviders } from '@onecx/angular-standalone-shell'
+import { AngularAuthModule } from '@onecx/angular-auth'
+import {
+  createTranslateLoader,
+  providePermissionService,
+  provideThemeConfig,
+  provideTranslationPathFromMeta
+} from '@onecx/angular-utils'
+import { APP_CONFIG } from '@onecx/angular-integration-interface'
 
 import { environment } from 'src/environments/environment'
 import { AppComponent } from './app.component'
@@ -22,13 +28,13 @@ const routes: Routes = [
 ]
 @NgModule({
   bootstrap: [AppComponent],
-  declarations: [AppComponent],
   imports: [
+    AppComponent,
     CommonModule,
     BrowserModule,
     BrowserAnimationsModule,
-    KeycloakAuthModule,
-    PortalCoreModule.forRoot('onecx-user-profile-ui'),
+    AngularAuthModule,
+    AngularAcceleratorModule,
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking',
       enableTracing: true
@@ -36,17 +42,15 @@ const routes: Routes = [
     TranslateModule.forRoot({
       isolate: true,
       loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] }
-    })
+    }),
+    StandaloneShellModule
   ],
   providers: [
     { provide: APP_CONFIG, useValue: environment },
-    {
-      provide: APP_INITIALIZER,
-      useFactory: translateServiceInitializer,
-      multi: true,
-      deps: [UserService, TranslateService]
-    },
+    providePermissionService(),
+    provideThemeConfig(),
     provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
+    provideStandaloneProviders(),
     provideHttpClient(withInterceptorsFromDi())
   ]
 })

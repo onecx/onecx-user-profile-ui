@@ -12,7 +12,7 @@ describe('PrivacyComponent', () => {
   let component: PrivacyComponent
   let fixture: ComponentFixture<PrivacyComponent>
 
-  const authServiceSpy = jasmine.createSpyObj('AUTH_SERVICE', ['hasPermission'])
+  const authServiceSpy = jasmine.createSpyObj('authService', ['hasPermission'])
   const mockUserService = {
     lang$: {
       getValue: jasmine.createSpy('getValue').and.returnValue('en')
@@ -24,8 +24,8 @@ describe('PrivacyComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PrivacyComponent],
       imports: [
+        PrivacyComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -33,7 +33,14 @@ describe('PrivacyComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: mockUserService }]
-    }).compileComponents()
+    })
+      .overrideComponent(PrivacyComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {

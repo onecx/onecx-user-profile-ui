@@ -46,8 +46,8 @@ describe('UserPermissionsComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserPermissionsComponent],
       imports: [
+        UserPermissionsComponent,
         TableModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
@@ -63,7 +63,14 @@ describe('UserPermissionsComponent', () => {
         { provide: Router, useValue: routerMock },
         { provide: ActivatedRoute, useValue: activatedRouteMock }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(UserPermissionsComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {
@@ -92,9 +99,10 @@ describe('UserPermissionsComponent', () => {
 
   it('should navigate to user profile', () => {
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
+    component.personalInfo$?.subscribe()
 
     component.actions$?.subscribe((action) => {
-      action[0].actionCallback()
+      action[0].actionCallback!()
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()
@@ -102,9 +110,10 @@ describe('UserPermissionsComponent', () => {
 
   it('should navigate to account settings', () => {
     userProfileServiceSpy.getMyUserProfile.and.returnValue(of(defaultCurrentUser))
+    component.personalInfo$?.subscribe()
 
     component.actions$?.subscribe((action) => {
-      action[1].actionCallback()
+      action[1].actionCallback!()
     })
 
     expect(routerMock.navigate).toHaveBeenCalled()

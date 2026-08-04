@@ -6,7 +6,6 @@ import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject, firstValueFrom } from 'rxjs'
 
-import { BASE_URL } from '@onecx/angular-remote-components'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { CONFIG_KEY } from '@onecx/angular-integration-interface'
 import {
@@ -72,7 +71,7 @@ describe('OneCXUsernameComponent', () => {
       .overrideComponent(OneCXUsernameComponent, {
         set: {
           imports: [TranslateTestingModule, CommonModule],
-          providers: [{ provide: BASE_URL, useValue: new ReplaySubject<string>(1) }]
+          providers: [{ provide: REMOTE_COMPONENT_CONFIG, useValue: new ReplaySubject<RemoteComponentConfig>(1) }]
         }
       })
       .compileComponents()

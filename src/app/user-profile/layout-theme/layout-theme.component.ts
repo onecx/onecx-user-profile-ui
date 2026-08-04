@@ -5,12 +5,16 @@ import { SelectItem } from 'primeng/api'
 import { map, Observable, of } from 'rxjs'
 
 import { UserService } from '@onecx/angular-integration-interface'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { ColorScheme, MenuMode } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-layout-theme',
-  templateUrl: './layout-theme.component.html'
+  templateUrl: './layout-theme.component.html',
+  standalone: true,
+  imports: [AngularAcceleratorModule, SharedModule]
 })
 export class LayoutThemeComponent implements OnInit, OnChanges {
   @Input() colorScheme: ColorScheme | undefined
@@ -40,11 +44,15 @@ export class LayoutThemeComponent implements OnInit, OnChanges {
   }
 
   public ngOnInit(): void {
+    void this.initializeFormPermissions()
+  }
+
+  private async initializeFormPermissions(): Promise<void> {
     this.prepareDropDownOptions()
-    if (this.userService.hasPermission('ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT')) {
+    if (await this.userService.hasPermission('ACCOUNT_SETTINGS_LAYOUT_MENU#EDIT')) {
       this.formGroup.get('menuMode')?.enable()
     }
-    if (this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
+    if (await this.userService.hasPermission('ACCOUNT_SETTINGS_COLOR_SCHEME#EDIT')) {
       this.formGroup.get('colorScheme')?.enable()
     }
   }

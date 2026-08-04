@@ -12,8 +12,8 @@ describe('UserPermissionsAdminComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [UserPermissionsAdminComponent],
       imports: [
+        UserPermissionsAdminComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -21,7 +21,14 @@ describe('UserPermissionsAdminComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideHttpClientTesting(), provideHttpClient()]
-    }).compileComponents()
+    })
+      .overrideComponent(UserPermissionsAdminComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {

@@ -27,8 +27,8 @@ describe('LocaleTimezoneComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LocaleTimezoneComponent],
       imports: [
+        LocaleTimezoneComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -42,9 +42,16 @@ describe('LocaleTimezoneComponent', () => {
         { provide: UserService, useValue: userServiceSpy },
         { provide: LOCALE_ID, useValue: 'de=DE' }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(LocaleTimezoneComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
 
-    configServiceSpy.getProperty.and.returnValue('en, de')
+    configServiceSpy.getProperty.and.returnValue(Promise.resolve('en, de'))
   }))
 
   beforeEach(() => {
@@ -56,7 +63,8 @@ describe('LocaleTimezoneComponent', () => {
   })
 
   describe('initialize', () => {
-    it('should create', () => {
+    it('should create', waitForAsync(async () => {
+      await fixture.whenStable()
       expect(component).toBeTruthy()
       expect(component.locale).toBe('en')
       expect(component.timezone).toBe('Europe/Berlin')
@@ -64,7 +72,7 @@ describe('LocaleTimezoneComponent', () => {
       expect(component.editLanguage).toBe(true)
       expect(component.editTimezone).toBe(true)
       expect(component.timeZones.length).toBeGreaterThan(0)
-    })
+    }))
   })
 
   describe('on changes', () => {
@@ -78,13 +86,26 @@ describe('LocaleTimezoneComponent', () => {
       expect(component.formGroup.get('timezone')?.value).toEqual(component.timezoneInput)
     })
 
-    it('should using default languages', () => {
-      configServiceSpy.getProperty.and.returnValue(null)
+    it('should using default languages', waitForAsync(async () => {
+      configServiceSpy.getProperty.and.returnValue(Promise.resolve(null))
 
       component.ngOnChanges()
+      await fixture.whenStable()
 
       expect(component.localeSelectItems).toEqual(defaultLanguageItems)
-    })
+    }))
+
+    it('should fallback to default languages when getProperty throws', waitForAsync(async () => {
+      const errorResponse = new Error('configuration failure')
+      configServiceSpy.getProperty.and.returnValue(Promise.reject(errorResponse))
+      spyOn(console, 'error')
+
+      component.ngOnChanges()
+      await fixture.whenStable()
+
+      expect(component.localeSelectItems).toEqual(defaultLanguageItems)
+      expect(console.error).toHaveBeenCalledWith('getProperty TKIT_SUPPORTED_LANGUAGES', errorResponse)
+    }))
   })
 
   it('should saveLocale', () => {
@@ -145,8 +166,8 @@ describe('LocaleTimezoneComponent Error', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LocaleTimezoneComponent],
       imports: [
+        LocaleTimezoneComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -161,8 +182,15 @@ describe('LocaleTimezoneComponent Error', () => {
         { provide: LocalAndTimezoneService, useValue: localeAndTimezoneServiceSpy },
         { provide: LOCALE_ID, useValue: 'de=DE' }
       ]
-    }).compileComponents()
-    configServiceSpy.getProperty.and.returnValue('en, de')
+    })
+      .overrideComponent(LocaleTimezoneComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
+    configServiceSpy.getProperty.and.returnValue(Promise.resolve('en, de'))
   }))
 
   beforeEach(() => {

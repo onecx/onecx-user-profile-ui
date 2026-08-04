@@ -4,13 +4,17 @@ import { TranslateService } from '@ngx-translate/core'
 import { Observable, map } from 'rxjs'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { Action } from '@onecx/angular-accelerator'
+import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-user-permissions',
-  templateUrl: './user-permissions.component.html'
+  templateUrl: './user-permissions.component.html',
+  standalone: true,
+  imports: [AngularAcceleratorModule, PortalPageComponent, SharedModule]
 })
 export class UserPermissionsComponent {
   public personalInfo$: Observable<UserPerson> | undefined

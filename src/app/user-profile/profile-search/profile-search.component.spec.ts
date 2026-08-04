@@ -6,9 +6,8 @@ import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
-import { RowListGridData } from '@onecx/angular-accelerator'
+import { DataSortDirection, Filter, PortalDialogService, RowListGridData } from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { PortalDialogService } from '@onecx/portal-integration-angular'
 
 import { UserProfile, UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
 import { ProfileSearchComponent } from './profile-search.component'
@@ -80,14 +79,14 @@ describe('ProfileSearchComponent', () => {
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const mockUserService = {
     lang$: { getValue: jasmine.createSpy('getValue') },
-    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(of())
+    hasPermission: jasmine.createSpy('hasPermission').and.returnValue(true)
   }
   const mockDialogService = { openDialog: jasmine.createSpy('openDialog').and.returnValue(of({})) }
 
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      declarations: [ProfileSearchComponent],
       imports: [
+        ProfileSearchComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -103,13 +102,21 @@ describe('ProfileSearchComponent', () => {
         { provide: PortalDialogService, useValue: mockDialogService }
       ],
       schemas: [NO_ERRORS_SCHEMA]
-    }).compileComponents()
+    })
+      .overrideComponent(ProfileSearchComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   })
 
   beforeEach(async () => {
     fixture = TestBed.createComponent(ProfileSearchComponent)
     component = fixture.componentInstance
     fixture.detectChanges()
+    await fixture.whenStable()
   })
 
   afterEach(() => {
@@ -129,16 +136,16 @@ describe('ProfileSearchComponent', () => {
   describe('actions', () => {
     it('should perform page actions', () => {
       spyOn(component, 'onDetail')
-      component.additionalActions[0].callback({})
+      component.additionalActions[0].callback!({})
       expect(component.onDetail).toHaveBeenCalled()
       expect(component.additionalActions[0].permission).toEqual('USERPROFILE#ADMIN_EDIT')
 
       spyOn(component, 'onUserPermissions')
-      component.additionalActions[1].callback({})
+      component.additionalActions[1].callback!({})
       expect(component.onUserPermissions).toHaveBeenCalled()
 
       spyOn(component, 'onDelete')
-      component.additionalActions[2].callback({})
+      component.additionalActions[2].callback!({})
       expect(component.onDelete).toHaveBeenCalled()
 
       expect(component.hasEditPermission).toBeTrue()
@@ -211,25 +218,128 @@ describe('ProfileSearchComponent', () => {
    * UI EVENTS
    */
   describe('filtering', () => {
-    it('should filter user profiles correctly by input (case insensitive)', () => {
+    it('should map filtered event data to component filters', () => {
+      const filters: Filter[] = [{ columnId: 'firstName', value: 'Admin' }]
+
+      component.onFiltered(filters)
+
+      expect(component.filters).toEqual(filters)
+    })
+
+    it('should map sorted event data to sort state', () => {
+      component.onSorted({ sortColumn: 'lastName', sortDirection: DataSortDirection.ASCENDING })
+
+      expect(component.sortField).toEqual('lastName')
+      expect(component.sortDirection).toEqual(DataSortDirection.ASCENDING)
+    })
+
+    it('should map layout and displayed columns events', () => {
+      component.onDataViewLayoutChange('table')
+      component.onDisplayedColumnKeysChange(['firstName', 'lastName'])
+
+      expect(component.layout).toEqual('table')
+      expect(component.displayedColumnKeys).toEqual(['firstName', 'lastName'])
+    })
+
+    it('should filter table data with global filter input', () => {
       apiServiceSpy.searchUserProfile.and.returnValue(
         of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
       )
 
       component.onSearch()
-      expect(component.filteredData$.getValue()?.length).toEqual(2)
+      component.onGlobalFilter('max')
 
-      component.onFilterChange('Admin')
-      expect(component.filteredData$.getValue()?.length).toEqual(2)
+      expect(component.tableFilter).toEqual('max')
+      expect(component.resultData$.getValue()).toHaveSize(1)
+      expect(component.resultData$.getValue()[0]?.['firstName']).toEqual('Max')
+    })
 
-      component.onFilterChange('admin')
-      expect(component.filteredData$.getValue()?.length).toEqual(2)
+    it('should treat undefined global filter value as empty string', () => {
+      apiServiceSpy.searchUserProfile.and.returnValue(
+        of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
+      )
 
-      component.onFilterChange('Max')
-      expect(component.filteredData$.getValue()?.length).toEqual(1)
+      component.onSearch()
+      component.onGlobalFilter(undefined as unknown as string)
 
-      component.onFilterChange('Does_not_exist')
-      expect(component.filteredData$.getValue()?.length).toEqual(0)
+      expect(component.tableFilter).toEqual('')
+      expect(component.resultData$.getValue()).toHaveSize(2)
+    })
+
+    it('should filter rows by numeric values', () => {
+      ;(component as any).allResultData = [
+        {
+          id: 'id-number',
+          firstName: null,
+          lastName: null,
+          email: null,
+          userId: 12345,
+          tenantId: null,
+          person: { displayName: null }
+        },
+        {
+          id: 'id-text',
+          firstName: 'Admin',
+          lastName: null,
+          email: null,
+          userId: 'user-text',
+          tenantId: null,
+          person: { displayName: null }
+        }
+      ]
+
+      component.onGlobalFilter('12345')
+
+      expect(component.resultData$.getValue()).toHaveSize(1)
+      expect(component.resultData$.getValue()[0]?.['id']).toEqual('id-number')
+    })
+
+    it('should filter rows by boolean values and ignore unsupported object values', () => {
+      ;(component as any).allResultData = [
+        {
+          id: 'id-bool',
+          firstName: null,
+          lastName: null,
+          email: null,
+          userId: null,
+          tenantId: true,
+          person: { displayName: null }
+        },
+        {
+          id: 'id-object',
+          firstName: null,
+          lastName: null,
+          email: null,
+          userId: null,
+          tenantId: null,
+          person: { displayName: { value: 'Admin' } }
+        }
+      ]
+
+      component.onGlobalFilter('true')
+
+      expect(component.resultData$.getValue()).toHaveSize(1)
+      expect(component.resultData$.getValue()[0]?.['id']).toEqual('id-bool')
+
+      component.onGlobalFilter('admin')
+
+      expect(component.resultData$.getValue()).toHaveSize(0)
+    })
+
+    it('should clear global filter and restore full table data', () => {
+      apiServiceSpy.searchUserProfile.and.returnValue(
+        of({ stream: userProfilepageResult.stream } as UserProfilePageResult)
+      )
+      const input = document.createElement('input')
+      input.value = 'max'
+
+      component.onSearch()
+      component.onGlobalFilter('max')
+      component.onClearGlobalFilter(input)
+
+      expect(component.tableFilter).toEqual('')
+      expect(input.value).toEqual('')
+      expect(component.resultData$.getValue()).toHaveSize(2)
     })
   })
 

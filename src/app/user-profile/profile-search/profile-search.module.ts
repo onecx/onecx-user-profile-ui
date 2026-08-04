@@ -1,8 +1,8 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
-import { addInitializeModuleGuard, InitializeModuleGuard } from '@onecx/angular-integration-interface'
-import { PortalCoreModule } from '@onecx/portal-integration-angular'
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
+import { PortalPageComponent, provideThemeConfig, provideTranslationConnectionService } from '@onecx/angular-utils'
 
 import { SharedModule } from 'src/app/shared/shared.module'
 
@@ -17,13 +17,16 @@ const routes: Routes = [
   }
 ]
 @NgModule({
-  declarations: [ProfileSearchComponent, PersonalDataAdminComponent, UserPermissionsAdminComponent],
   imports: [
-    PortalCoreModule.forMicroFrontend(),
-    [RouterModule.forChild(addInitializeModuleGuard(routes))],
-    SharedModule
+    AngularAcceleratorModule,
+    PersonalDataAdminComponent,
+    PortalPageComponent,
+    ProfileSearchComponent,
+    RouterModule.forChild(routes),
+    SharedModule,
+    UserPermissionsAdminComponent
   ],
-  providers: [InitializeModuleGuard]
+  providers: [provideThemeConfig(), provideTranslationConnectionService()]
 })
 export class ProfileSearchModule {
   constructor() {

@@ -61,8 +61,8 @@ describe('PersonalDataAdminComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [PersonalDataAdminComponent],
       imports: [
+        PersonalDataAdminComponent,
         TranslateTestingModule.withTranslations({
           de: require('/src/assets/i18n/de.json'),
           en: require('/src/assets/i18n/en.json')
@@ -75,7 +75,14 @@ describe('PersonalDataAdminComponent', () => {
         { provide: PortalMessageService, useValue: messageServiceMock },
         { provide: UserProfileAdminAPIService, useValue: adminServiceSpy }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(PersonalDataAdminComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
     adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile as UserProfile))
   }))
 

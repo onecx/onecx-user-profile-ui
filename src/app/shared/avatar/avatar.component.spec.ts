@@ -50,8 +50,8 @@ describe('AvatarComponent', () => {
     mockAppStateService = new MockAppStateService()
 
     TestBed.configureTestingModule({
-      declarations: [AvatarComponent],
       imports: [
+        AvatarComponent,
         TranslateTestingModule.withTranslations({
           de: require('/src/assets/i18n/de.json'),
           en: require('/src/assets/i18n/en.json')
@@ -68,7 +68,14 @@ describe('AvatarComponent', () => {
         { provide: AppStateService, useValue: mockAppStateService },
         { provide: NgxImageCompressService, useValue: imageCompressSpy }
       ]
-    }).compileComponents()
+    })
+      .overrideComponent(AvatarComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
   }))
 
   beforeEach(() => {

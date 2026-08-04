@@ -5,7 +5,7 @@ import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { UserService } from '@onecx/angular-integration-interface'
-import { UserProfileAccountSettingsLayoutAndThemeSettings } from '@onecx/portal-integration-angular'
+import { UserProfileAccountSettingsLayoutAndThemeSettings } from '@onecx/integration-interface'
 
 import { ColorScheme, MenuMode } from 'src/app/shared/generated'
 
@@ -33,8 +33,8 @@ describe('LayoutThemeComponent', () => {
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
-      declarations: [LayoutThemeComponent],
       imports: [
+        LayoutThemeComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -42,7 +42,14 @@ describe('LayoutThemeComponent', () => {
       ],
       schemas: [NO_ERRORS_SCHEMA],
       providers: [provideHttpClientTesting(), provideHttpClient(), { provide: UserService, useValue: mockUserService }]
-    }).compileComponents()
+    })
+      .overrideComponent(LayoutThemeComponent, {
+        set: {
+          template: '',
+          imports: []
+        }
+      })
+      .compileComponents()
 
     mockUserService.hasPermission.and.returnValue(true)
   }))
