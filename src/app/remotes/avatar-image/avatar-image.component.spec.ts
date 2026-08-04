@@ -1,10 +1,10 @@
 import { TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject } from 'rxjs'
+
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { UserAvatarAPIService } from '../../shared/generated'
 import { OneCXAvatarImageComponent } from './avatar-image.component'

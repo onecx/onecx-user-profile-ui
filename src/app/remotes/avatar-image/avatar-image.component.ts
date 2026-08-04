@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Inject, Input, OnInit, NO_ERRORS_SCHEMA, inject } from '@angular/core'
+import { Component, EventEmitter, Inject, Input, OnInit, inject } from '@angular/core'
 import { AsyncPipe, Location, NgStyle } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
@@ -29,12 +29,6 @@ import { environment } from 'src/environments/environment'
     RouterModule,
     SkeletonModule,
     TranslateModule
-  ],
-  providers: [
-    {
-      provide: REMOTE_COMPONENT_CONFIG,
-      useValue: new ReplaySubject<RemoteComponentConfig>(1)
-    }
   ],
   templateUrl: './avatar-image.component.html',
   styleUrls: ['./avatar-image.component.scss']
