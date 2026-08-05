@@ -18,7 +18,7 @@ const profile: UserProfile = {
   }
 }
 
-fdescribe('OneCXUsernameComponent', () => {
+describe('OneCXUsernameComponent', () => {
   let mockUserService: UserServiceMock
   const rcConfigSubject = new ReplaySubject<RemoteComponentConfig>(1)
   const defaultRCConfig = {
