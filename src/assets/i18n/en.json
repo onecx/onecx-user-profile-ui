@@ -252,6 +252,9 @@
   "LANGUAGE_SWITCH": {
     "TOOLTIP": "Change language.<br/>This operation will trigger page reload immediately."
   },
+  "USER_NAME": {
+    "CURRENT": "Name of the logged-in user"
+  },
   "EXCEPTIONS": {
     "NOT_FOUND": {
       "PROFILE": "No data could be found for the Profile.",

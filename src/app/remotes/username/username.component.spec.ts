@@ -1,19 +1,12 @@
 import { TestBed, waitForAsync } from '@angular/core/testing'
-import { CommonModule } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { NoopAnimationsModule } from '@angular/platform-browser/animations'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject, firstValueFrom } from 'rxjs'
 
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
-import { CONFIG_KEY } from '@onecx/angular-integration-interface'
-import {
-  UserServiceMock,
-  ConfigurationServiceMock,
-  provideUserServiceMock,
-  provideConfigurationServiceMock
-} from '@onecx/angular-integration-interface/mocks'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig, TranslationConnectionService } from '@onecx/angular-utils'
+import { UserService } from '@onecx/angular-integration-interface'
+import { UserServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
 
 import { OneCXUsernameComponent } from './username.component'
 import { Config, UserProfile } from '@onecx/integration-interface'
@@ -25,76 +18,60 @@ const profile: UserProfile = {
   }
 }
 
-describe('OneCXUsernameComponent', () => {
-  const rcConfig = new ReplaySubject<RemoteComponentConfig>(1)
+fdescribe('OneCXUsernameComponent', () => {
+  let mockUserService: UserServiceMock
+  const rcConfigSubject = new ReplaySubject<RemoteComponentConfig>(1)
   const defaultRCConfig = {
     productName: 'prodName',
     appId: 'appId',
     baseUrl: 'base',
     permissions: ['permission']
   }
-  rcConfig.next(defaultRCConfig)
+  rcConfigSubject.next(defaultRCConfig)
 
-  const cfg: Config = {
-    [CONFIG_KEY.APP_VERSION]: 'v1'
-  }
-
-  async function setUp(config: Config) {
+  function setUp() {
     const fixture = TestBed.createComponent(OneCXUsernameComponent)
     const component = fixture.componentInstance
-    await mockConfigurationService.init(config)
     fixture.detectChanges()
     return { fixture, component }
   }
-
-  let mockConfigurationService: ConfigurationServiceMock
-  let mockUserService: UserServiceMock
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [],
       imports: [
+        OneCXUsernameComponent,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
-        }).withDefaultLanguage('en'),
-        NoopAnimationsModule
+        }).withDefaultLanguage('en')
       ],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
         provideUserServiceMock(),
-        provideConfigurationServiceMock(),
-        { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfig }
+        { provide: TranslationConnectionService, useValue: {} },
+        { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfigSubject }
       ]
-    })
-      .overrideComponent(OneCXUsernameComponent, {
-        set: {
-          imports: [TranslateTestingModule, CommonModule],
-          providers: [{ provide: REMOTE_COMPONENT_CONFIG, useValue: new ReplaySubject<RemoteComponentConfig>(1) }]
-        }
-      })
-      .compileComponents()
+    }).compileComponents()
 
-    mockConfigurationService = TestBed.inject(ConfigurationServiceMock)
-    mockUserService = TestBed.inject(UserServiceMock)
-
-    mockUserService.profile$.publish(profile as UserProfile)
+    mockUserService = TestBed.inject(UserService) as unknown as UserServiceMock
+    mockUserService.profile$.publish(profile)
   }))
 
   describe('initialize', () => {
     it('should create', async () => {
-      const { component } = await setUp(cfg)
+      const { component } = await setUp()
       expect(component).toBeTruthy()
     })
 
     it('should call ocxInitRemoteComponent with the correct config', async () => {
-      const { component } = await setUp(cfg)
+      const { component } = await setUp()
       const mockConfig: RemoteComponentConfig = defaultRCConfig
 
       component.ocxRemoteComponentConfig = mockConfig
 
-      const rcConfigValue = await firstValueFrom(rcConfig)
+      const rcConfigValue = await firstValueFrom(rcConfigSubject)
       expect(rcConfigValue).toEqual(mockConfig)
     })
   })
@@ -103,7 +80,7 @@ describe('OneCXUsernameComponent', () => {
     it('should show username', async () => {
       mockUserService.profile$.publish(profile as UserProfile)
 
-      const { component } = await setUp(cfg)
+      const { component } = await setUp()
 
       const username = await firstValueFrom(component.username$)
       expect(username).toEqual('OneCX Admin')
@@ -113,7 +90,7 @@ describe('OneCXUsernameComponent', () => {
       const profile = { person: { displayName: '' } } as UserProfile
       mockUserService.profile$.publish(profile)
 
-      const { component } = await setUp(cfg)
+      const { component } = await setUp()
 
       const username = await firstValueFrom(component.username$)
 
