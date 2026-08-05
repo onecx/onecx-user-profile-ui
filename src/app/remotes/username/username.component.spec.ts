@@ -7,9 +7,9 @@ import { ReplaySubject, firstValueFrom } from 'rxjs'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig, TranslationConnectionService } from '@onecx/angular-utils'
 import { UserService } from '@onecx/angular-integration-interface'
 import { UserServiceMock, provideUserServiceMock } from '@onecx/angular-integration-interface/mocks'
+import { UserProfile } from '@onecx/integration-interface'
 
 import { OneCXUsernameComponent } from './username.component'
-import { Config, UserProfile } from '@onecx/integration-interface'
 
 const profile: UserProfile = {
   userId: '123',

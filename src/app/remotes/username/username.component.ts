@@ -1,4 +1,4 @@
-import { Component, Inject, Input, inject } from '@angular/core'
+import { Component, Input, inject } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
