@@ -1,63 +1,68 @@
-import { Component, EventEmitter, OnInit, Output, ViewChild } from '@angular/core'
-import { Location } from '@angular/common'
+import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core'
+import { AsyncPipe, Location } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { map } from 'rxjs/operators'
 import { Observable } from 'rxjs'
+
+import { MessageModule } from 'primeng/message'
+import { TooltipModule } from 'primeng/tooltip'
+import { TabsModule } from 'primeng/tabs'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
-import {
-  UserProfileAPIService,
-  UserPerson,
-  UserProfile,
-  UpdateUserPersonSettingsRequest
-} from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
+import { UserProfileAPIService, UserProfile, UpdateUserPersonSettingsRequest } from 'src/app/shared/generated'
+
 import { PrivacyComponent } from '../privacy/privacy.component'
 import { LayoutThemeComponent } from '../layout-theme/layout-theme.component'
 import { LocaleTimezoneComponent } from '../locale-timezone/locale-timezone.component'
 
 @Component({
   selector: 'app-account-settings',
-  templateUrl: './account-settings.component.html',
-  styleUrls: ['./account-settings.component.scss'],
   standalone: true,
-  imports: [AngularAcceleratorModule, LayoutThemeComponent, LocaleTimezoneComponent, PortalPageComponent, SharedModule]
+  imports: [
+    AsyncPipe,
+    AngularAcceleratorModule,
+    MessageModule,
+    TabsModule,
+    TooltipModule,
+    TranslateModule,
+    // components
+    LayoutThemeComponent,
+    LocaleTimezoneComponent,
+    PortalPageComponent
+  ],
+  templateUrl: './account-settings.component.html',
+  styleUrls: ['./account-settings.component.scss']
 })
 export class AccountSettingsComponent implements OnInit {
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly location = inject(Location)
+  private readonly translate = inject(TranslateService)
+  private readonly msgService = inject(PortalMessageService)
+  private readonly userProfileService = inject(UserProfileAPIService)
+  private readonly confService = inject(ConfigurationService)
+  private readonly slotService = inject(SlotService)
+
   @Output() public editModeUpdate = new EventEmitter<boolean>()
   @ViewChild(PrivacyComponent, { static: false }) privacySettings!: PrivacyComponent
 
   public actions$: Observable<Action[]> | undefined
-  public personalInfo$: Observable<UserPerson>
-  public isChangePasswordComponentDefined$: Observable<boolean>
   public profile: UserProfile = {}
   public settings: Record<string, any> = {}
   public settingsInitial: Record<string, any> = {}
   public changePasswordSlotName = 'onecx-user-profile-change-password'
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly location: Location,
-    private readonly translate: TranslateService,
-    private readonly msgService: PortalMessageService,
-    private readonly userProfileService: UserProfileAPIService,
-    private readonly confService: ConfigurationService, // private readonly stateService: StateService
-    private readonly slotService: SlotService
-  ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
-      map((profile) => {
-        this.prepareActionButtons()
-        return profile.person ?? {}
-      })
-    )
-    this.isChangePasswordComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.changePasswordSlotName)
-  }
+  public personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
+    map((profile) => {
+      this.prepareActionButtons()
+      return profile.person ?? {}
+    })
+  )
+  public isChangePasswordComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(this.changePasswordSlotName)
 
   public ngOnInit(): void {
     this.userProfileService.getMyUserProfile().subscribe({

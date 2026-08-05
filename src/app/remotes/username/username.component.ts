@@ -6,7 +6,6 @@ import { map, Observable, ReplaySubject } from 'rxjs'
 
 import { TooltipModule } from 'primeng/tooltip'
 
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import {
   AngularRemoteComponentsModule,
   ocxRemoteComponent,
@@ -18,7 +17,7 @@ import { UserService } from '@onecx/angular-integration-interface'
 @Component({
   selector: 'app-ocx-username',
   standalone: true,
-  imports: [AngularAcceleratorModule, AngularRemoteComponentsModule, AsyncPipe, TooltipModule, TranslateModule],
+  imports: [AngularRemoteComponentsModule, AsyncPipe, TooltipModule, TranslateModule],
   providers: [
     {
       provide: REMOTE_COMPONENT_CONFIG,

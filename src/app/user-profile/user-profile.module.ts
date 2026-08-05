@@ -1,17 +1,12 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PortalPageComponent, provideThemeConfig, provideTranslationConnectionService } from '@onecx/angular-utils'
 
-import { SharedModule } from 'src/app/shared/shared.module'
 import { LabelResolver } from 'src/app/shared/label.resolver'
 
 import { PersonalDataUserComponent } from './personal-data-user/personal-data-user.component'
 import { AccountSettingsComponent } from './account-settings/account-settings.component'
-import { LayoutThemeComponent } from './layout-theme/layout-theme.component'
-import { LocaleTimezoneComponent } from './locale-timezone/locale-timezone.component'
-import { PrivacyComponent } from './privacy/privacy.component'
 import { UserPermissionsComponent } from './user-permissions/user-permissions.component'
 
 const routes: Routes = [
@@ -90,21 +85,13 @@ const routes: Routes = [
 ]
 @NgModule({
   imports: [
+    RouterModule.forChild(routes),
+    // components
     AccountSettingsComponent,
-    AngularAcceleratorModule,
-    LayoutThemeComponent,
-    LocaleTimezoneComponent,
     PersonalDataUserComponent,
     PortalPageComponent,
-    PrivacyComponent,
-    RouterModule.forChild(routes),
-    SharedModule,
     UserPermissionsComponent
   ],
   providers: [provideThemeConfig(), provideTranslationConnectionService()]
 })
-export class UserProfileModule {
-  constructor() {
-    console.info('User Profile Module constructor')
-  }
-}
+export class UserProfileModule {}

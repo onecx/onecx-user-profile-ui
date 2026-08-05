@@ -1,28 +1,30 @@
-import { Component, EventEmitter, Input, OnChanges, OnInit, Output } from '@angular/core'
-import { FormGroup, FormControl } from '@angular/forms'
+import { Component, EventEmitter, inject, Input, OnChanges, OnInit, Output } from '@angular/core'
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
+
+import { ButtonModule } from 'primeng/button'
+import { InputSwitchModule } from 'primeng/inputswitch'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-privacy',
-  templateUrl: './privacy.component.html',
   standalone: true,
-  imports: [SharedModule]
+  imports: [ButtonModule, InputSwitchModule, ReactiveFormsModule, TranslateModule, TooltipModule],
+  templateUrl: './privacy.component.html'
 })
 export class PrivacyComponent implements OnInit, OnChanges {
-  @Input() hideMyProfile: boolean | undefined = false
+  private readonly userService = inject(UserService)
+  // input
+  @Input() hideMyProfile: boolean | null = false
   @Output() hideMyProfileChange = new EventEmitter<boolean>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 
   public changedPrivacySettings = false
-  public formGroup: FormGroup
-
-  constructor(private readonly userService: UserService) {
-    this.formGroup = new FormGroup({
-      hideMyProfile: new FormControl<boolean>(false)
-    })
-  }
+  public readonly formGroup = new FormGroup({
+    hideMyProfile: new FormControl<boolean>(false)
+  })
 
   public ngOnInit(): void {
     void this.initializePermission()
@@ -40,7 +42,9 @@ export class PrivacyComponent implements OnInit, OnChanges {
 
   public savePrivacySettings(): void {
     this.changedPrivacySettings = true
-    this.hideMyProfileChange.emit(this.formGroup.value)
+    if (this.formGroup.get('hideMyProfile')?.value !== this.hideMyProfile) {
+      this.hideMyProfileChange.emit(this.formGroup.get('hideMyProfile')?.value === true)
+    }
   }
 
   public applyChange() {

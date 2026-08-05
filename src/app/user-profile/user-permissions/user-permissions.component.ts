@@ -1,34 +1,36 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
+import { AsyncPipe } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Observable, map } from 'rxjs'
+
+import { MessageModule } from 'primeng/message'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-user-permissions',
   templateUrl: './user-permissions.component.html',
   standalone: true,
-  imports: [AngularAcceleratorModule, PortalPageComponent, SharedModule]
+  imports: [AsyncPipe, AngularAcceleratorModule, MessageModule, PortalPageComponent, TranslateModule]
 })
 export class UserPermissionsComponent {
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly translate = inject(TranslateService)
+  private readonly userProfileService = inject(UserProfileAPIService)
+  private readonly slotService = inject(SlotService)
+  // data
   public personalInfo$: Observable<UserPerson> | undefined
   public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
   public userRolesAndPermissionsSlotName = 'onecx-user-profile-permissions'
   public actions$: Observable<Action[]> | undefined
 
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly translate: TranslateService,
-    private readonly userProfileService: UserProfileAPIService,
-    private readonly slotService: SlotService
-  ) {
+  constructor() {
     this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
       map((profile) => {
         this.prepareActionButtons()

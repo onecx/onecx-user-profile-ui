@@ -1,5 +1,5 @@
 import { Component, Input, OnChanges } from '@angular/core'
-import { CommonModule, Location } from '@angular/common'
+import { AsyncPipe, Location } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
@@ -17,18 +17,18 @@ import { environment } from 'src/environments/environment'
 
 @Component({
   selector: 'app-avatar',
-  templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.scss'],
   standalone: true,
   imports: [
+    AsyncPipe,
     AngularAcceleratorModule,
     ButtonModule,
-    CommonModule,
     DialogModule,
     RippleModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './avatar.component.html',
+  styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnChanges {
   @Input() userId: string | undefined = undefined

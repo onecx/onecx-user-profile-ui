@@ -1,36 +1,32 @@
-<ocx-portal-page
-  *ngIf="personalInfo$ | async as person"
-  permission="ROLES_PERMISSIONS#VIEW"
-  helpArticleId="PAGE_USER_PERMISSIONS"
->
-  <ocx-page-header
-    [header]="person.firstName + ' ' + person.lastName"
-    [subheader]="'USER_PERMISSIONS.SUBHEADER' | translate"
-    [actions]="(actions$ | async) ?? []"
-  >
-  </ocx-page-header>
-  <ocx-content>
-    <ocx-slot
-      *ngIf="isUserRolesAndPermissionsComponentDefined$ | async; else rolesPermissionsPlaceholder"
-      [name]="userRolesAndPermissionsSlotName"
-      [inputs]="{ active: true }"
+@let person = personalInfo$ | async;
+@if (person) {
+  <ocx-portal-page permission="ROLES_PERMISSIONS#VIEW" helpArticleId="PAGE_USER_PERMISSIONS">
+    <ocx-page-header
+      [header]="person.firstName + ' ' + person.lastName"
+      [subheader]="'USER_PERMISSIONS.SUBHEADER' | translate"
+      [actions]="(actions$ | async) ?? []"
     >
-      <ng-template #skeleton>
+    </ocx-page-header>
+    <ocx-content>
+      @if (isUserRolesAndPermissionsComponentDefined$ | async) {
+        <ocx-slot [name]="userRolesAndPermissionsSlotName" [inputs]="{ active: true }">
+          <ng-template #skeleton>
+            <p-message
+              id="ps_roles_permissions_loading"
+              severity="info"
+              styleClass="m-3"
+              [text]="'ACTIONS.GENERAL.LOADING' | translate"
+            ></p-message>
+          </ng-template>
+        </ocx-slot>
+      } @else {
         <p-message
-          id="ps_roles_permissions_loading"
+          id="ps_roles_permissions_error_message"
           severity="info"
           styleClass="m-3"
-          [text]="'ACTIONS.GENERAL.LOADING' | translate"
+          [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
         ></p-message>
-      </ng-template>
-    </ocx-slot>
-    <ng-template #rolesPermissionsPlaceholder>
-      <p-message
-        id="ps_roles_permissions_error_message"
-        severity="info"
-        styleClass="m-3"
-        [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
-      ></p-message>
-    </ng-template>
-  </ocx-content>
-</ocx-portal-page>
+      }
+    </ocx-content>
+  </ocx-portal-page>
+}

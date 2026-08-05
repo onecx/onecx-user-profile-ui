@@ -1,9 +1,11 @@
 <div class="sm:py-2 px-3">
   <form [formGroup]="formGroup">
     <h2 class="my-2 text-base">{{ 'LANGUAGE_TIMEZONE.LANGUAGE' | translate }}</h2>
-    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editLanguage">
-      {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | uppercase | translate) : 'no-value' }}
-    </div>
+    @if (!editLanguage) {
+      <div class="text-900 w-4 md:flex-order-0 flex-order-1">
+        {{ formGroup.value.locale ? ('LANGUAGE.' + formGroup.value.locale | uppercase | translate) : 'no-value' }}
+      </div>
+    }
     <div
       *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE#EDIT'"
       class="flex flex-wrap justify-content-start align-items-center"
@@ -26,27 +28,30 @@
           <span [id]="item.value"> {{ item.label | translate }} </span>
         </ng-template>
       </p-dropdown>
-      <button
-        *ngIf="changedLanguage"
-        pButton
-        pRipple
-        type="button"
-        id="up_account_locale_refresh"
-        class="ml-3 sm:ml-5 p-2 p-button-text"
-        icon="pi pi-refresh"
-        (click)="applyChange()"
-        [label]="'ACTIONS.GENERAL.RELOAD' | translate"
-        [ariaLabel]="'GENERAL.APPLY' | translate"
-        [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></button>
+      @if (changedLanguage) {
+        <button
+          pButton
+          pRipple
+          type="button"
+          id="up_account_locale_refresh"
+          class="ml-3 sm:ml-5 p-2 p-button-text"
+          icon="pi pi-refresh"
+          (click)="applyChange()"
+          [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+          [ariaLabel]="'GENERAL.APPLY' | translate"
+          [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+      }
     </div>
 
     <h2 class="mt-4 sm:mt-5 mb-2 text-base">{{ 'LANGUAGE_TIMEZONE.TIMEZONE' | translate }}</h2>
-    <div class="text-900 w-4 md:flex-order-0 flex-order-1" *ngIf="!editTimezone">
-      {{ this.formGroup.value['timezone'] ? formGroup.value['timezone'] : 'no-value' }}
-    </div>
+    @if (!editTimezone) {
+      <div class="text-900 w-4 md:flex-order-0 flex-order-1">
+        {{ this.formGroup.value['timezone'] ? formGroup.value['timezone'] : 'no-value' }}
+      </div>
+    }
     <div
       *ocxIfPermission="'ACCOUNT_SETTINGS_TIMEZONE#EDIT'"
       class="flex flex-wrap justify-content-start align-items-center row-gap-3"
@@ -64,29 +69,30 @@
         tooltipPosition="top"
         tooltipEvent="hover"
       ></p-dropdown>
-      <button
-        *ngIf="changedTimezone"
-        pButton
-        pRipple
-        type="button"
-        id="up_account_timezone_refresh"
-        class="ml-3 sm:ml-5 p-2 p-button-text"
-        icon="pi pi-refresh"
-        (click)="applyChange()"
-        [label]="'ACTIONS.GENERAL.RELOAD' | translate"
-        [attr.aria-label]="'GENERAL.APPLY' | translate"
-        [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
-        tooltipPosition="top"
-        tooltipEvent="hover"
-      ></button>
+      @if (changedTimezone) {
+        <button
+          pButton
+          pRipple
+          type="button"
+          id="up_account_timezone_refresh"
+          class="ml-3 sm:ml-5 p-2 p-button-text"
+          icon="pi pi-refresh"
+          (click)="applyChange()"
+          [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+          [attr.aria-label]="'GENERAL.APPLY' | translate"
+          [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></button>
+      }
     </div>
     <p-floatlabel class="mt-4" variant="on">
       <input
         pInputText
         readonly
         type="text"
-        class="w-full xs:w-20rem"
         id="up_account_timezone_example"
+        class="w-full xs:w-20rem"
         [disabled]="true"
         [value]="timezoneExampleDate | date: 'long' : timezoneUTC : locale"
         [ariaLabel]="'LANGUAGE_TIMEZONE.TIMEZONE_EXAMPLE.TOOLTIP' | translate"

@@ -22,6 +22,7 @@ import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 import { environment } from 'src/environments/environment'
 import { Configuration } from './shared/generated'
 import { AppEntrypointComponent } from './app-entrypoint.component'
+import { LabelResolver } from './shared/label.resolver'
 
 function apiConfigProvider() {
   return new PortalApiConfiguration(Configuration, environment.apiPrefix)
@@ -54,6 +55,7 @@ const routes: Routes = [
     })
   ],
   providers: [
+    LabelResolver,
     ConfigurationService,
     { provide: Configuration, useFactory: apiConfigProvider },
     { provide: SLOT_SERVICE, useExisting: SlotService },

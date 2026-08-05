@@ -5,7 +5,6 @@ import { UntilDestroy } from '@ngneat/until-destroy'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { firstValueFrom, from, ReplaySubject, Subscription } from 'rxjs'
 import { map, switchMap, take } from 'rxjs/operators'
-import { ControlErrorsDirective } from '@ngneat/error-tailor'
 
 import { ButtonModule } from 'primeng/button'
 import { SelectButtonModule } from 'primeng/selectbutton'
@@ -36,7 +35,6 @@ import { environment } from 'src/environments/environment'
     AngularAcceleratorModule,
     AngularRemoteComponentsModule,
     ButtonModule,
-    ControlErrorsDirective,
     ReactiveFormsModule,
     SelectButtonModule,
     TranslateModule,
