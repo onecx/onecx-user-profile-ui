@@ -10,7 +10,7 @@ import { SlotService } from '@onecx/angular-remote-components'
 import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
-import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
+import { UserProfileAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-permissions',
