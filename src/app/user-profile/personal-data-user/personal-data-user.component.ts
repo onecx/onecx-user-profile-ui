@@ -1,7 +1,8 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, Input, Output } from '@angular/core'
+import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, inject, Input, Output } from '@angular/core'
+import { AsyncPipe } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, map, Observable, of, tap } from 'rxjs'
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
@@ -13,44 +14,42 @@ import {
   UserProfile,
   UpdateUserPersonContactRequest
 } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
+
+import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-data.component'
 
 @Component({
   selector: 'app-personal-data-user',
-  templateUrl: './personal-data-user.component.html',
   standalone: true,
-  imports: [AngularAcceleratorModule, PortalPageComponent, SharedModule]
+  imports: [AsyncPipe, AngularAcceleratorModule, PortalPageComponent, TranslateModule, PersonalDataComponent],
+  templateUrl: './personal-data-user.component.html',
+  styleUrls: ['./personal-data-user.component.scss']
 })
 export class PersonalDataUserComponent implements AfterViewInit {
+  public readonly translate = inject(TranslateService)
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly userProfileService = inject(UserProfileAPIService)
+  private readonly msgService = inject(PortalMessageService)
+  private readonly cdRef = inject(ChangeDetectorRef)
+  // input
   @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: any
   @Output() public hideDialog = new EventEmitter<boolean>()
 
   public exceptionKey: string | undefined = undefined
   public actions$: Observable<Action[]> | undefined
-  public userProfile$: Observable<UserProfile>
   public messages: { [key: string]: string } = {}
   public componentInUse = false
-
-  constructor(
-    public readonly translate: TranslateService,
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly userProfileService: UserProfileAPIService,
-    private readonly msgService: PortalMessageService,
-    private readonly cdRef: ChangeDetectorRef
-  ) {
-    this.userProfile$ = this.userProfileService.getMyUserProfile().pipe(
-      tap(() => {
-        this.prepareActionButtons()
-      }),
-      catchError((err) => {
-        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
-        console.error('getMyUserProfile', err)
-        return of({})
-      })
-    )
-  }
+  public userProfile$ = this.userProfileService.getMyUserProfile().pipe(
+    tap(() => {
+      this.prepareActionButtons()
+    }),
+    catchError((err) => {
+      this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+      console.error('getMyUserProfile', err)
+      return of({})
+    })
+  )
 
   public ngAfterViewInit() {
     this.componentInUse = true

@@ -1,20 +1,37 @@
 import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
-import { TranslateService } from '@ngx-translate/core'
-import { SelectItem } from 'primeng/api'
+import { AsyncPipe } from '@angular/common'
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { map, Observable, of } from 'rxjs'
+
+import { SelectItem } from 'primeng/api'
+
+import { ButtonModule } from 'primeng/button'
+import { MessageModule } from 'primeng/message'
+import { RippleModule } from 'primeng/ripple'
+import { SelectButtonModule } from 'primeng/selectbutton'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { ColorScheme, MenuMode } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 @Component({
   selector: 'app-layout-theme',
   templateUrl: './layout-theme.component.html',
   standalone: true,
-  imports: [AngularAcceleratorModule, SharedModule]
+  imports: [
+    AsyncPipe,
+    AngularAcceleratorModule,
+    ButtonModule,
+    SelectButtonModule,
+    MessageModule,
+    ReactiveFormsModule,
+    RippleModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class LayoutThemeComponent implements OnInit, OnChanges {
   @Input() colorScheme: ColorScheme | undefined

@@ -1,13 +1,20 @@
 import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core'
-import { FormControl, FormGroup } from '@angular/forms'
+import { DatePipe, UpperCasePipe } from '@angular/common'
+import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
+import { TranslateModule } from '@ngx-translate/core'
+
+import { ButtonModule } from 'primeng/button'
+import { DropdownModule } from 'primeng/dropdown'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputTextModule } from 'primeng/inputtext'
 import { SelectItem } from 'primeng/api'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { CONFIG_KEY, ConfigurationService, UserService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
 import { sortByLabel } from 'src/app/shared/utils'
-import { SharedModule } from 'src/app/shared/shared.module'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 
@@ -16,7 +23,18 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
   templateUrl: './locale-timezone.component.html',
   styleUrls: ['./locale-timezone.component.scss'],
   standalone: true,
-  imports: [AngularAcceleratorModule, SharedModule]
+  imports: [
+    DatePipe,
+    UpperCasePipe,
+    AngularAcceleratorModule,
+    ButtonModule,
+    DropdownModule,
+    FloatLabelModule,
+    InputTextModule,
+    ReactiveFormsModule,
+    TooltipModule,
+    TranslateModule
+  ]
 })
 export class LocaleTimezoneComponent implements OnInit, OnChanges {
   @Input() public localeInput: string | undefined

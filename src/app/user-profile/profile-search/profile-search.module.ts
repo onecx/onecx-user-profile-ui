@@ -1,10 +1,7 @@
 import { NgModule } from '@angular/core'
 import { RouterModule, Routes } from '@angular/router'
 
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
-import { PortalPageComponent, provideThemeConfig, provideTranslationConnectionService } from '@onecx/angular-utils'
-
-import { SharedModule } from 'src/app/shared/shared.module'
+import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { ProfileSearchComponent } from './profile-search.component'
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
@@ -13,23 +10,18 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
 const routes: Routes = [
   {
     path: '',
-    component: ProfileSearchComponent
+    component: ProfileSearchComponent,
+    pathMatch: 'full'
   }
 ]
 @NgModule({
   imports: [
-    AngularAcceleratorModule,
     PersonalDataAdminComponent,
     PortalPageComponent,
     ProfileSearchComponent,
     RouterModule.forChild(routes),
-    SharedModule,
     UserPermissionsAdminComponent
   ],
-  providers: [provideThemeConfig(), provideTranslationConnectionService()]
+  providers: []
 })
-export class ProfileSearchModule {
-  constructor() {
-    console.info('Profile Search Module constructor')
-  }
-}
+export class ProfileSearchModule {}

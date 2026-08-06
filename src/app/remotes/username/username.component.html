@@ -1,13 +1,13 @@
-<div
-  *ngIf="{
-    userName: username$ | async
-  } as data"
-  class="px-2"
-  [attr.aria-label]="'USER_NAME.TOOLTIP' | translate"
-  [attr.pTooltip]="'USER_NAME.TOOLTIP' | translate"
-  tooltipPosition="top"
-  tooltipEvent="hover"
-  role="note"
->
-  {{ data.userName }}
-</div>
+@let userName = username$ | async;
+@if (userName) {
+  <div
+    class="px-2"
+    [attr.aria-label]="'USER_NAME.CURRENT' | translate"
+    [pTooltip]="'USER_NAME.CURRENT' | translate"
+    tooltipPosition="top"
+    tooltipEvent="hover"
+    role="note"
+  >
+    {{ userName }}
+  </div>
+}

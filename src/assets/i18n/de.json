@@ -211,7 +211,7 @@
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Passwort",
     "TAB_NAME_PASSWORD.TOOLTIP": "Passwort des Nutzers",
-    "NOT_AVAILABLE": "Die Funktion zur Passwortänderung ist nicht verfügbar"
+    "NOT_AVAILABLE": "Die Funktion zur Passwortänderung ist nicht verfügbar."
   },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Darstellung & Aussehen",
@@ -251,6 +251,9 @@
   },
   "LANGUAGE_SWITCH": {
     "TOOLTIP": "Sprache ändern.<br/>Diese Operation führt zu einem sofortigen Neuladen der Seite."
+  },
+  "USER_NAME": {
+    "CURRENT": "Name des angemeldeten Nutzers"
   },
   "EXCEPTIONS": {
     "NOT_FOUND": {

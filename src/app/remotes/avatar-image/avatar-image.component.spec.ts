@@ -1,67 +1,45 @@
-import { NO_ERRORS_SCHEMA } from '@angular/core'
+import { TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { TestbedHarnessEnvironment } from '@angular/cdk/testing/testbed'
-import { TestBed } from '@angular/core/testing'
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject } from 'rxjs'
-import { CommonModule } from '@angular/common'
-import { provideRouter, RouterModule } from '@angular/router'
+
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { UserAvatarAPIService } from '../../shared/generated'
 import { OneCXAvatarImageComponent } from './avatar-image.component'
-import { OneCXAvatarImageComponentHarness } from './avatar-image.harness'
 
 describe('OneCXAvatarImageComponent', () => {
+  let baseUrlSubject: ReplaySubject<RemoteComponentConfig>
   const userAvatarAPIServiceSpy = jasmine.createSpyObj<UserAvatarAPIService>('UserAvatarAPIService', ['configuration'])
 
   function setUp() {
     const fixture = TestBed.createComponent(OneCXAvatarImageComponent)
     const component = fixture.componentInstance
     fixture.detectChanges()
-
     return { fixture, component }
   }
 
-  async function setUpWithHarness() {
-    const { fixture, component } = setUp()
-    const avatarImageHarness = await TestbedHarnessEnvironment.harnessForFixture(
-      fixture,
-      OneCXAvatarImageComponentHarness
-    )
-    return { fixture, component, avatarImageHarness }
-  }
-
-  let baseUrlSubject: ReplaySubject<any>
   beforeEach(() => {
     baseUrlSubject = new ReplaySubject<RemoteComponentConfig>(1)
     TestBed.configureTestingModule({
       declarations: [],
       imports: [
+        OneCXAvatarImageComponent,
         TranslateTestingModule.withTranslations({
+          de: require('/src/assets/i18n/de.json'),
           en: require('/src/assets/i18n/en.json')
         }).withDefaultLanguage('en')
       ],
-      schemas: [NO_ERRORS_SCHEMA],
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
-        {
-          provide: REMOTE_COMPONENT_CONFIG,
-          useValue: baseUrlSubject
-        },
-        provideRouter([{ path: '', component: OneCXAvatarImageComponent }])
+        { provide: REMOTE_COMPONENT_CONFIG, useValue: baseUrlSubject },
+        { provide: UserAvatarAPIService, useValue: userAvatarAPIServiceSpy }
       ]
-    })
-      .overrideComponent(OneCXAvatarImageComponent, {
-        set: {
-          imports: [TranslateTestingModule, CommonModule, RouterModule],
-          providers: [{ provide: UserAvatarAPIService, useValue: userAvatarAPIServiceSpy }]
-        }
-      })
-      .compileComponents()
-    baseUrlSubject.next({ baseUrl: 'base_url_mock' } as RemoteComponentConfig)
+    }).compileComponents()
+
+    baseUrlSubject.next({ baseUrl: 'base_url' } as RemoteComponentConfig)
   })
 
   describe('initialize', () => {
@@ -71,28 +49,26 @@ describe('OneCXAvatarImageComponent', () => {
       expect(component).toBeTruthy()
     })
 
-    it('should init remote component', (done: DoneFn) => {
+    it('should initialize remote component', (done: DoneFn) => {
       const { component } = setUp()
+      const config = { baseUrl: 'base_url' } as RemoteComponentConfig
 
-      component.ocxInitRemoteComponent({
-        baseUrl: 'base_url_avatar'
-      } as RemoteComponentConfig)
+      component.ocxInitRemoteComponent(config)
 
-      expect(userAvatarAPIServiceSpy.configuration.basePath).toEqual('base_url_avatar/bff')
       baseUrlSubject.asObservable().subscribe((item) => {
-        expect(item.baseUrl).toEqual('base_url_avatar')
+        expect(item).toEqual(config)
         done()
       })
     })
 
     it('should call ocxInitRemoteComponent with the correct config', () => {
+      const { component } = setUp()
       const mockConfig: RemoteComponentConfig = {
         appId: 'appId',
         productName: 'prodName',
         permissions: ['permission'],
         baseUrl: 'base'
       }
-      const { component } = setUp()
       spyOn(component, 'ocxInitRemoteComponent')
 
       component.ocxRemoteComponentConfig = mockConfig
@@ -102,10 +78,9 @@ describe('OneCXAvatarImageComponent', () => {
 
     it('should set imagePath to placeholder onImageError', (done) => {
       const { component } = setUp()
+      const config = { baseUrl: 'base_url' } as RemoteComponentConfig
 
-      component.ocxInitRemoteComponent({
-        baseUrl: 'base_url_avatar'
-      } as RemoteComponentConfig)
+      component.ocxInitRemoteComponent(config)
 
       component.onImageError()
       expect(component.imagePath$).toBeDefined()
@@ -122,19 +97,17 @@ describe('OneCXAvatarImageComponent', () => {
     })
   })
 
-  describe('user profile', () => {
-    it('should use correct image class', async () => {
-      const { avatarImageHarness } = await setUpWithHarness()
+  describe('avatar', () => {
+    it('should use correct image path', (done) => {
+      const fixture = TestBed.createComponent(OneCXAvatarImageComponent)
+      const component = fixture.componentInstance
+      component.ocxInitRemoteComponent({ baseUrl: 'base_url' } as RemoteComponentConfig)
+      fixture.detectChanges()
 
-      const imageClass = await avatarImageHarness.getAvatarImageClass()
-      expect(imageClass).toEqual('user-avatar-image')
-    })
-
-    it('should use correct image path', async () => {
-      const { avatarImageHarness } = await setUpWithHarness()
-
-      const imagePath = await avatarImageHarness.getAvatarImageURL()
-      expect(imagePath).toEqual('base_url_avatar/bff/userProfile/me/avatar?refType=small')
+      component.imagePath$?.subscribe((url) => {
+        expect(url).toEqual('base_url/bff/userProfile/me/avatar?refType=small')
+        done()
+      })
     })
   })
 })

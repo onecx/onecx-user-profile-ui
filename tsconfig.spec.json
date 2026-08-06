@@ -8,6 +8,12 @@
     "useDefineForClassFields": false
   },
   "files": ["src/test.ts", "src/polyfills.ts"],
-  "exclude": ["src/app/shared/generated/**/*", "node_modules"],
+  "exclude": [
+    "src/app/shared/generated/**/*",
+    "node_modules",
+    "src/test.ts",
+    "src/**/*.harness.ts",
+    "src/app/shared/mocks/**"
+  ],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }

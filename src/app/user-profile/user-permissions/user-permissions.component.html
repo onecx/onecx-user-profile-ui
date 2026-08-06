@@ -1,36 +1,38 @@
-<ocx-portal-page
-  *ngIf="personalInfo$ | async as person"
-  permission="ROLES_PERMISSIONS#VIEW"
-  helpArticleId="PAGE_USER_PERMISSIONS"
->
-  <ocx-page-header
-    [header]="person.firstName + ' ' + person.lastName"
-    [subheader]="'USER_PERMISSIONS.SUBHEADER' | translate"
-    [actions]="(actions$ | async) ?? []"
-  >
-  </ocx-page-header>
-  <ocx-content>
-    <ocx-slot
-      *ngIf="isUserRolesAndPermissionsComponentDefined$ | async; else rolesPermissionsPlaceholder"
-      [name]="userRolesAndPermissionsSlotName"
-      [inputs]="{ active: true }"
+@let person = personalInfo$ | async;
+@if (person) {
+  <ocx-portal-page permission="ROLES_PERMISSIONS#VIEW" helpArticleId="PAGE_USER_PERMISSIONS">
+    <ocx-page-header
+      [header]="person.firstName + ' ' + person.lastName"
+      [subheader]="'USER_PERMISSIONS.SUBHEADER' | translate"
+      [actions]="(actions$ | async) ?? []"
     >
-      <ng-template #skeleton>
-        <p-message
-          id="ps_roles_permissions_loading"
-          severity="info"
-          styleClass="m-3"
-          [text]="'ACTIONS.GENERAL.LOADING' | translate"
-        ></p-message>
-      </ng-template>
-    </ocx-slot>
-    <ng-template #rolesPermissionsPlaceholder>
-      <p-message
-        id="ps_roles_permissions_error_message"
-        severity="info"
-        styleClass="m-3"
-        [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
-      ></p-message>
-    </ng-template>
-  </ocx-content>
-</ocx-portal-page>
+    </ocx-page-header>
+
+    <ocx-content class="ocx-content">
+      @if (isUserRolesAndPermissionsComponentDefined$ | async) {
+        <ocx-slot [name]="userRolesAndPermissionsSlotName" [inputs]="{ active: true }">
+          <ng-template #skeleton>
+            <div class="p-1">
+              <p-message
+                id="ps_roles_permissions_loading"
+                severity="info"
+                styleClass="m-3 max-w-30rem"
+                [text]="'ACTIONS.GENERAL.LOADING' | translate"
+              ></p-message>
+            </div>
+          </ng-template>
+        </ocx-slot>
+      } @else {
+        <!-- this div is a helper element for displaying the error message with distance to ocx-content. -->
+        <div class="p-1">
+          <p-message
+            id="ps_roles_permissions_error_message"
+            severity="info"
+            styleClass="m-3 max-w-30rem"
+            [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
+          ></p-message>
+        </div>
+      }
+    </ocx-content>
+  </ocx-portal-page>
+}

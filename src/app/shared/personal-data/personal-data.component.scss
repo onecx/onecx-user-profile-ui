@@ -1,7 +1,6 @@
-@import '/src/app/_up-mixins.scss';
+@use '/src/app/_up-mixins.scss' as *;
 
-@include readable-disabled-form-controls;
-@include displaying-text-responsive;
+@include ocx-text-responsive;
 @include dropdown-zebra-rows;
 
 :host {

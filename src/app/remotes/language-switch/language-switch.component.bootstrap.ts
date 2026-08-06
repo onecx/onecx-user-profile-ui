@@ -1,11 +1,10 @@
 import { importProvidersFrom } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
 import { provideRouter } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader } from '@ngx-translate/core'
 
-import { AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
+import { AngularAcceleratorModule, AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
 import { AngularAuthModule } from '@onecx/angular-auth'
 import { provideTranslateServiceForRoot } from '@onecx/angular-remote-components'
 import { createTranslateLoader, provideThemeConfig, provideTranslationPathFromMeta } from '@onecx/angular-utils'
@@ -16,9 +15,7 @@ import { OneCXLanguageSwitchComponent } from './language-switch.component'
 
 bootstrapRemoteComponent(OneCXLanguageSwitchComponent, 'ocx-language-switch-component', environment.production, [
   provideHttpClient(withInterceptorsFromDi()),
-  importProvidersFrom(AngularAuthModule),
-  importProvidersFrom(BrowserModule),
-  importProvidersFrom(BrowserAnimationsModule),
+  importProvidersFrom(AngularAcceleratorModule, AngularAuthModule, BrowserAnimationsModule),
   provideTranslateServiceForRoot({
     isolate: true,
     loader: {

@@ -1,8 +1,10 @@
-import { Component, EventEmitter, Input, OnChanges, Output } from '@angular/core'
-import { CommonModule } from '@angular/common'
+import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core'
+import { NgClass } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
 import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
+import * as countriesInfo from 'i18n-iso-countries'
+
 import { SelectItem } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
 import { DropdownModule } from 'primeng/dropdown'
@@ -12,7 +14,6 @@ import { MessageModule } from 'primeng/message'
 import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
 import { TooltipModule } from 'primeng/tooltip'
-import * as countriesInfo from 'i18n-iso-countries'
 
 import { UserService } from '@onecx/angular-integration-interface'
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
@@ -23,14 +24,12 @@ import { AvatarComponent } from '../avatar/avatar.component'
 
 @Component({
   selector: 'app-personal-data',
-  templateUrl: './personal-data.component.html',
-  styleUrls: ['./personal-data.component.scss'],
   standalone: true,
   imports: [
+    NgClass,
     AngularAcceleratorModule,
     AvatarComponent,
     ButtonModule,
-    CommonModule,
     DropdownModule,
     FloatLabelModule,
     InputTextModule,
@@ -40,9 +39,15 @@ import { AvatarComponent } from '../avatar/avatar.component'
     RippleModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './personal-data.component.html',
+  styleUrls: ['./personal-data.component.scss']
 })
 export class PersonalDataComponent implements OnChanges {
+  public readonly http = inject(HttpClient)
+  public readonly user: UserService = inject(UserService)
+  public readonly translate: TranslateService = inject(TranslateService)
+  // input
   @Input() userProfile: UserProfile | undefined = undefined
   @Input() userId: string | undefined = undefined // if set then it is admin view else user view
   @Input() exceptionKey: string | undefined = undefined
@@ -56,15 +61,7 @@ export class PersonalDataComponent implements OnChanges {
     { value: PhoneType.MOBILE, label: 'Mobile' },
     { value: PhoneType.LANDLINE, label: 'Landline' }
   ]
-  public formGroup: UntypedFormGroup
-
-  constructor(
-    public readonly http: HttpClient,
-    public readonly user: UserService,
-    public readonly translate: TranslateService
-  ) {
-    this.formGroup = this.initFormGroup()
-  }
+  public formGroup = this.initFormGroup()
 
   /**
    * This is triggered by different views: user and admin (with userId)

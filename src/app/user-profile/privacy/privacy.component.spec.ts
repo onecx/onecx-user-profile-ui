@@ -21,6 +21,11 @@ describe('PrivacyComponent', () => {
       return ['ACCOUNT_SETTINGS_PRIVACY#EDIT'].includes(permission)
     })
   }
+  function initTestComponent() {
+    fixture = TestBed.createComponent(PrivacyComponent)
+    component = fixture.componentInstance
+    fixture.detectChanges()
+  }
 
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
@@ -44,8 +49,7 @@ describe('PrivacyComponent', () => {
   }))
 
   beforeEach(() => {
-    fixture = TestBed.createComponent(PrivacyComponent)
-    component = fixture.componentInstance
+    initTestComponent()
   })
 
   afterEach(() => {
@@ -54,22 +58,24 @@ describe('PrivacyComponent', () => {
   })
 
   it('should create with permissions', () => {
-    fixture.detectChanges()
     expect(component).toBeTruthy()
   })
 
   it('should create without permissions', () => {
     mockUserService.hasPermission.and.returnValue(false)
-    fixture = TestBed.createComponent(PrivacyComponent)
-    component = fixture.componentInstance
-    fixture.detectChanges()
+    initTestComponent()
+
     expect(component).toBeTruthy()
   })
 
   it('should save privacy settings', () => {
+    spyOn(component.hideMyProfileChange, 'emit')
+    component.formGroup.get('hideMyProfile')?.setValue(true)
+
     component.savePrivacySettings()
 
     expect(component.changedPrivacySettings).toBeTruthy()
+    expect(component.hideMyProfileChange.emit).toHaveBeenCalledWith(true)
   })
 
   it('should emit applyChange', () => {

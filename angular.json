@@ -33,7 +33,13 @@
             "scripts": ["node_modules/@webcomponents/webcomponentsjs/webcomponents-bundle.js"],
             "extraWebpackConfig": "webpack.config.js",
             "outputHashing": "all",
-            "commonChunk": false
+            "commonChunk": false,
+            "sourceMap": {
+              "scripts": true,
+              "styles": false,
+              "hidden": true,
+              "vendor": true
+            }
           },
           "configurations": {
             "development": {

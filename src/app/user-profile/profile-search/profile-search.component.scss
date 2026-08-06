@@ -1,101 +1,18 @@
-@import '/src/app/_up-mixins.scss';
+@use '/src/app/_up-mixins.scss' as *;
 
 @include danger-action;
-@include dialog-footer-buttons;
-@include table-zebra-rows;
-@include table-inline-buttons;
-@include table-responsive-columns;
-@include displaying-text-responsive;
-@include correct-ocx-interactive-data-view;
+@include ocx-text-responsive;
+@include ocx-interactive-data-view-fixes;
 
 :host ::ng-deep {
-  .p-datatable .p-datatable-thead > tr > th {
-    border-bottom-width: 2px;
-  }
-  .p-datatable .p-datatable-thead > tr > th,
-  .p-datatable .p-datatable-tbody > tr > td {
-    padding: 0.5rem;
-  }
-  .p-datatable .p-datatable-thead > tr > th,
-  .p-datatable .p-datatable-tbody > tr > td:first-of-type {
-    text-align: center !important;
-    white-space: nowrap;
+  .ocx-content > div {
+    margin-bottom: 0 !important;
+    padding: 0.75rem 0.5rem !important;
   }
 
-  .up-profile-search-interactive-header > .flex {
-    display: grid !important;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-  }
-
-  .up-profile-search-interactive-header > .flex > div:nth-child(2) {
-    justify-self: center;
-  }
-
-  .up-profile-search-interactive-header > .flex > div:last-child {
-    justify-self: end;
-  }
-
-  .up-filter-group {
-    min-width: 20rem;
-  }
-
-  .up-filter-float {
-    min-width: 14rem;
-  }
-
-  .up-filter-input {
-    width: 100%;
-  }
-
-  .up-filter-clear {
-    min-width: 2.5rem;
-  }
-
-  @media (max-width: 768px) {
-    .up-profile-search-interactive-header > .flex {
-      grid-template-columns: 1fr;
-      row-gap: 0.5rem;
-    }
-
-    .up-profile-search-interactive-header > .flex > div:nth-child(2) {
-      justify-self: stretch;
-    }
-
-    .up-profile-search-interactive-header > .flex > div:last-child {
-      justify-self: stretch;
-    }
-
-    .up-filter-group {
-      width: 100%;
-      min-width: 0;
-    }
-
-    .up-filter-float {
-      width: 100%;
-      min-width: 0;
-    }
-  }
-
-  /* correct header layouting by lib */
-  .table-header-wrapper {
-    flex-direction: row !important;
-    justify-content: flex-start !important;
-    flex-wrap: wrap !important;
-  }
-  .table-header-wrapper span:first-child {
-    margin-right: 10px !important;
-  }
-  // hide unusable stuff
-  ocx-column-group-selection {
-    display: none;
-  }
-
-  // used in personal-data-admin
-  .user-profile-name {
-    top: 1.55rem;
-    right: 8rem;
-    font-weight: var(--dialog-header-font-weight); // same as dialog-title
-    font-size: var(--dialog-header-font-size);
-  }
+  /* fixes for p-card */
+  --onecx-user-profile-onecx-user-profile-ui-card-body-padding: 0.5rem;
+  --onecx-user-profile-onecx-user-profile-ui-card-border-radius: 4px;
+  --onecx-user-profile-onecx-user-profile-ui-card-shadow:
+    0 2px 1px -1px #0003, 0 1px 1px #00000024, 0 1px 3px #0000001f;
 }

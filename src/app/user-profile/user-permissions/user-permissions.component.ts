@@ -1,44 +1,42 @@
-import { Component } from '@angular/core'
+import { Component, inject } from '@angular/core'
+import { AsyncPipe } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
-import { TranslateService } from '@ngx-translate/core'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { Observable, map } from 'rxjs'
+
+import { MessageModule } from 'primeng/message'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
-import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
+import { UserProfileAPIService } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-permissions',
-  templateUrl: './user-permissions.component.html',
   standalone: true,
-  imports: [AngularAcceleratorModule, PortalPageComponent, SharedModule]
+  imports: [AsyncPipe, AngularAcceleratorModule, MessageModule, PortalPageComponent, TranslateModule],
+  templateUrl: './user-permissions.component.html',
+  styleUrls: ['./user-permissions.component.scss']
 })
 export class UserPermissionsComponent {
-  public personalInfo$: Observable<UserPerson> | undefined
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
+  private readonly translate = inject(TranslateService)
+  private readonly userProfileService = inject(UserProfileAPIService)
+  private readonly slotService = inject(SlotService)
+  // data
   public userRolesAndPermissionsSlotName = 'onecx-user-profile-permissions'
   public actions$: Observable<Action[]> | undefined
-
-  constructor(
-    private readonly route: ActivatedRoute,
-    private readonly router: Router,
-    private readonly translate: TranslateService,
-    private readonly userProfileService: UserProfileAPIService,
-    private readonly slotService: SlotService
-  ) {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
-      map((profile) => {
-        this.prepareActionButtons()
-        return profile.person ?? {}
-      })
-    )
-    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
-      this.userRolesAndPermissionsSlotName
-    )
-  }
+  public isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+    this.userRolesAndPermissionsSlotName
+  )
+  public personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
+    map((profile) => {
+      this.prepareActionButtons()
+      return profile.person ?? {}
+    })
+  )
 
   private prepareActionButtons(): void {
     this.actions$ = this.translate

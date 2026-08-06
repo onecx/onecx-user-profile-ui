@@ -1,5 +1,5 @@
-import { Component, Input, OnChanges } from '@angular/core'
-import { CommonModule, Location } from '@angular/common'
+import { Component, DestroyRef, inject, Input, OnChanges } from '@angular/core'
+import { AsyncPipe, Location } from '@angular/common'
 import { HttpErrorResponse } from '@angular/common/http'
 import { catchError, map, Observable, of } from 'rxjs'
 import { NgxImageCompressService } from 'ngx-image-compress'
@@ -14,23 +14,32 @@ import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { RefType, UserAvatarAdminAPIService, UserAvatarAPIService } from 'src/app/shared/generated'
 import { environment } from 'src/environments/environment'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 
 @Component({
   selector: 'app-avatar',
-  templateUrl: './avatar.component.html',
-  styleUrls: ['./avatar.component.scss'],
   standalone: true,
   imports: [
+    AsyncPipe,
     AngularAcceleratorModule,
     ButtonModule,
-    CommonModule,
     DialogModule,
     RippleModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  templateUrl: './avatar.component.html',
+  styleUrls: ['./avatar.component.scss']
 })
 export class AvatarComponent implements OnChanges {
+  private readonly avatarAdminService = inject(UserAvatarAdminAPIService)
+  private readonly avatarMeService = inject(UserAvatarAPIService)
+  private readonly location = inject(Location)
+  private readonly msgService = inject(PortalMessageService)
+  private readonly imageCompress = inject(NgxImageCompressService)
+  private readonly appState = inject(AppStateService)
+  private readonly destroyRef = inject(DestroyRef)
+  // input
   @Input() userId: string | undefined = undefined
   @Input() componentInUse = false // prevent displaying and reloading things
 
@@ -39,20 +48,14 @@ export class AvatarComponent implements OnChanges {
   public displayAvatarDeleteDialog = false
   public showPlaceholder = true
 
-  constructor(
-    private readonly avatarAdminService: UserAvatarAdminAPIService,
-    private readonly avatarMeService: UserAvatarAPIService,
-    private readonly location: Location,
-    private readonly msgService: PortalMessageService,
-    private readonly imageCompress: NgxImageCompressService,
-    private readonly appState: AppStateService
-  ) {
+  constructor() {
     // get the placeholder image
-    appState.currentMfe$
+    this.appState.currentMfe$
       .pipe(
         map((mfe) => {
           this.defaultImageUrl = Location.joinWithSlash(mfe.remoteBaseUrl, environment.DEFAULT_LOGO_PATH)
-        })
+        }),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe()
   }

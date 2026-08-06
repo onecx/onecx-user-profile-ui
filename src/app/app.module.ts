@@ -1,8 +1,6 @@
 import { NgModule } from '@angular/core'
-import { CommonModule } from '@angular/common'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
-import { BrowserModule } from '@angular/platform-browser'
-import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
+import { provideAnimations } from '@angular/platform-browser/animations'
 import { RouterModule, Routes } from '@angular/router'
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core'
 
@@ -27,35 +25,28 @@ const routes: Routes = [
   }
 ]
 @NgModule({
-  bootstrap: [AppComponent],
   imports: [
     AppComponent,
-    CommonModule,
-    BrowserModule,
-    BrowserAnimationsModule,
-    AngularAuthModule,
     AngularAcceleratorModule,
+    AngularAuthModule,
     RouterModule.forRoot(routes, {
       initialNavigation: 'enabledBlocking',
-      enableTracing: true
+      enableTracing: false
     }),
+    StandaloneShellModule,
     TranslateModule.forRoot({
       isolate: true,
       loader: { provide: TranslateLoader, useFactory: createTranslateLoader, deps: [HttpClient] }
-    }),
-    StandaloneShellModule
+    })
   ],
   providers: [
     { provide: APP_CONFIG, useValue: environment },
+    provideAnimations(),
+    provideHttpClient(withInterceptorsFromDi()),
     providePermissionService(),
-    provideThemeConfig(),
-    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
     provideStandaloneProviders(),
-    provideHttpClient(withInterceptorsFromDi())
+    provideThemeConfig(),
+    provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/')
   ]
 })
-export class AppModule {
-  constructor() {
-    console.info('OneCX User Profile Module constructor')
-  }
-}
+export class AppModule {}

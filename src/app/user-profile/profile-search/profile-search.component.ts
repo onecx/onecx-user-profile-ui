@@ -1,8 +1,21 @@
-import { Component, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
-import { UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { Component, inject, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { AsyncPipe, DatePipe } from '@angular/common'
+import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, catchError, finalize, map, of, Observable } from 'rxjs'
-import { TranslateService } from '@ngx-translate/core'
+
 import { PrimeIcons } from 'primeng/api'
+import { ButtonModule } from 'primeng/button'
+import { DialogModule } from 'primeng/dialog'
+import { FloatLabelModule } from 'primeng/floatlabel'
+import { InputGroupModule } from 'primeng/inputgroup'
+import { InputGroupAddonModule } from 'primeng/inputgroupaddon'
+import { InputSwitchModule } from 'primeng/inputswitch'
+import { InputTextModule } from 'primeng/inputtext'
+import { MessageModule } from 'primeng/message'
+import { RippleModule } from 'primeng/ripple'
+import { SelectButtonModule } from 'primeng/selectbutton'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { SlotService } from '@onecx/angular-remote-components'
 import {
@@ -20,18 +33,47 @@ import { PortalMessageService, UserService } from '@onecx/angular-integration-in
 import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
+
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
   selector: 'app-profile-search',
-  templateUrl: './profile-search.component.html',
-  styleUrls: ['./profile-search.component.scss'],
   standalone: true,
-  imports: [AngularAcceleratorModule, PersonalDataAdminComponent, PortalPageComponent, SharedModule]
+  imports: [
+    AsyncPipe,
+    DatePipe,
+    AngularAcceleratorModule,
+    ButtonModule,
+    DialogModule,
+    FloatLabelModule,
+    FormsModule,
+    InputGroupModule,
+    InputGroupAddonModule,
+    InputSwitchModule,
+    InputTextModule,
+    MessageModule,
+    RippleModule,
+    SelectButtonModule,
+    ReactiveFormsModule,
+    TooltipModule,
+    TranslateModule,
+    // components
+    PortalPageComponent,
+    PersonalDataAdminComponent
+  ],
+  templateUrl: './profile-search.component.html',
+  styleUrls: ['./profile-search.component.scss']
 })
 export class ProfileSearchComponent implements OnInit {
+  private readonly user: UserService = inject(UserService)
+  private readonly slotService: SlotService = inject(SlotService)
+  private readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder)
+  private readonly userProfileAdminService = inject(UserProfileAdminAPIService)
+  private readonly portalMessageService: PortalMessageService = inject(PortalMessageService)
+  private readonly portalDialogService: PortalDialogService = inject(PortalDialogService)
+  private readonly translate: TranslateService = inject(TranslateService)
+  // data
   public loading = false
   public exceptionKey: string | undefined
   public criteriaGroup: UntypedFormGroup
@@ -57,17 +99,7 @@ export class ProfileSearchComponent implements OnInit {
   public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
   public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
 
-  constructor(
-    private readonly userProfileAdminService: UserProfileAdminAPIService,
-    private readonly user: UserService,
-    private readonly fb: UntypedFormBuilder,
-    private readonly portalMessageService: PortalMessageService,
-    private readonly portalDialogService: PortalDialogService,
-    private readonly slotService: SlotService,
-    private readonly userService: UserService,
-    private readonly translate: TranslateService,
-    @Inject(LOCALE_ID) public readonly locale: string
-  ) {
+  constructor(@Inject(LOCALE_ID) public readonly locale: string) {
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
@@ -150,8 +182,8 @@ export class ProfileSearchComponent implements OnInit {
   }
 
   private async initializePermissionsAndSearch(): Promise<void> {
-    this.hasEditPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_EDIT')
-    this.hasViewPermission = await this.userService.hasPermission('USERPROFILE#ADMIN_VIEW')
+    this.hasEditPermission = await this.user.hasPermission('USERPROFILE#ADMIN_EDIT')
+    this.hasViewPermission = await this.user.hasPermission('USERPROFILE#ADMIN_VIEW')
     this.prepareActionButtons()
     this.onSearch()
   }

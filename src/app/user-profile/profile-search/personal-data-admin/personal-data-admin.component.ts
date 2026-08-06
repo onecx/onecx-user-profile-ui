@@ -1,19 +1,40 @@
-import { Component, EventEmitter, Input, Output, OnChanges } from '@angular/core'
-import { TranslateService } from '@ngx-translate/core'
+import { Component, EventEmitter, Input, Output, OnChanges, inject } from '@angular/core'
+import { AsyncPipe } from '@angular/common'
+import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { catchError, finalize, Observable, of, tap } from 'rxjs'
+
+import { ButtonModule } from 'primeng/button'
+import { DialogModule } from 'primeng/dialog'
+import { MessageModule } from 'primeng/message'
+import { TooltipModule } from 'primeng/tooltip'
 
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { UpdateUserProfileRequest, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
-import { SharedModule } from 'src/app/shared/shared.module'
+
+import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-data.component'
 
 @Component({
   selector: 'app-personal-data-admin',
-  templateUrl: './personal-data-admin.component.html',
   standalone: true,
-  imports: [SharedModule]
+  imports: [
+    AsyncPipe,
+    ButtonModule,
+    DialogModule,
+    TranslateModule,
+    MessageModule,
+    TooltipModule,
+    // components
+    PersonalDataComponent
+  ],
+  templateUrl: './personal-data-admin.component.html',
+  styleUrls: ['./personal-data-admin.component.scss']
 })
 export class PersonalDataAdminComponent implements OnChanges {
+  public readonly translate = inject(TranslateService)
+  public readonly userProfileAdminService = inject(UserProfileAdminAPIService)
+  private readonly msgService = inject(PortalMessageService)
+  // input
   @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: string | undefined
   @Output() public hideDialog = new EventEmitter<boolean>()
@@ -25,12 +46,6 @@ export class PersonalDataAdminComponent implements OnChanges {
   public messages: { [key: string]: string } = {}
   public componentInUse = false
   public profile: UserProfile = {}
-
-  constructor(
-    public readonly translate: TranslateService,
-    public readonly userProfileAdminService: UserProfileAdminAPIService,
-    private readonly msgService: PortalMessageService
-  ) {}
 
   public ngOnChanges(): void {
     this.componentInUse = false
