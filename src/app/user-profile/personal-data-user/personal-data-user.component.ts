@@ -21,7 +21,8 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
   selector: 'app-personal-data-user',
   standalone: true,
   imports: [AsyncPipe, AngularAcceleratorModule, PortalPageComponent, TranslateModule, PersonalDataComponent],
-  templateUrl: './personal-data-user.component.html'
+  templateUrl: './personal-data-user.component.html',
+  styleUrls: ['./personal-data-user.component.scss']
 })
 export class PersonalDataUserComponent implements AfterViewInit {
   public readonly translate = inject(TranslateService)

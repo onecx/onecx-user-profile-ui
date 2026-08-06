@@ -1,0 +1,9 @@
+:host ::ng-deep {
+  /* Displaying user profile name within the header on right side */
+  .user-profile-name {
+    top: 1.55rem;
+    right: 8rem;
+    font-weight: var(--dialog-header-font-weight); // same as dialog-title
+    font-size: var(--dialog-header-font-size);
+  }
+}

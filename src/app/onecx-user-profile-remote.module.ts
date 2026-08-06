@@ -23,10 +23,7 @@ import { environment } from 'src/environments/environment'
 import { Configuration } from './shared/generated'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { LabelResolver } from './shared/label.resolver'
-
-function apiConfigProvider() {
-  return new PortalApiConfiguration(Configuration, environment.apiPrefix)
-}
+import { apiConfigProvider } from './shared/apiConfigProvider.utils'
 
 const routes: Routes = [
   {
@@ -57,7 +54,7 @@ const routes: Routes = [
   providers: [
     LabelResolver,
     ConfigurationService,
-    { provide: Configuration, useFactory: apiConfigProvider },
+    { provide: Configuration, useFactory: apiConfigProvider, deps: [Injector] },
     { provide: SLOT_SERVICE, useExisting: SlotService },
     provideAppInitializer(() => {
       const router = inject(Router)

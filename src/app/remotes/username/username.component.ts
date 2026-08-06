@@ -1,4 +1,4 @@
-import { Component, Input, inject } from '@angular/core'
+import { Component, DestroyRef, Input, inject } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule } from '@ngx-translate/core'
@@ -29,6 +29,7 @@ import { UserService } from '@onecx/angular-integration-interface'
 export class OneCXUsernameComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
   private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
   private readonly userService = inject(UserService)
+  private readonly destroyRef = inject(DestroyRef)
 
   @Input() set ocxRemoteComponentConfig(rcConfig: RemoteComponentConfig) {
     this.ocxInitRemoteComponent(rcConfig)
@@ -43,6 +44,6 @@ export class OneCXUsernameComponent implements ocxRemoteComponent, ocxRemoteWebc
       const username = profile.person?.displayName
       return username
     }),
-    takeUntilDestroyed()
+    takeUntilDestroyed(this.destroyRef)
   )
 }

@@ -27,7 +27,8 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
     // components
     PersonalDataComponent
   ],
-  templateUrl: './personal-data-admin.component.html'
+  templateUrl: './personal-data-admin.component.html',
+  styleUrls: ['./personal-data-admin.component.scss']
 })
 export class PersonalDataAdminComponent implements OnChanges {
   public readonly translate = inject(TranslateService)

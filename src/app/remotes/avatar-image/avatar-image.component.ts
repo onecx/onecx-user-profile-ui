@@ -35,6 +35,7 @@ import { environment } from 'src/environments/environment'
 })
 export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
   private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
+  private readonly avatarService = inject(UserAvatarAPIService)
   // input
   @Input() id: string | undefined = undefined
   @Input() styleClass: string | undefined = undefined // image container
@@ -43,20 +44,13 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   @Input() imageType: RefType = RefType.Small // image
   // output
   @Input() imageLoaded = new EventEmitter<boolean>()
+  @Input() set ocxRemoteComponentConfig(config: RemoteComponentConfig) {
+    this.ocxInitRemoteComponent(config)
+  }
 
   public imagePath$: Observable<string> | undefined
   public placeHolderPath = ''
   public displayImage = false
-
-  constructor(
-    @Inject(REMOTE_COMPONENT_CONFIG)
-    private readonly remoteComponentConfig$: ReplaySubject<RemoteComponentConfig>,
-    private readonly avatarService: UserAvatarAPIService
-  ) {}
-
-  @Input() set ocxRemoteComponentConfig(config: RemoteComponentConfig) {
-    this.ocxInitRemoteComponent(config)
-  }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig) {
     this.remoteComponentConfig.next(config)

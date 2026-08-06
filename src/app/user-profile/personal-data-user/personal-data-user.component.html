@@ -6,7 +6,7 @@
   >
   </ocx-page-header>
 
-  <ocx-content>
+  <ocx-content class="ocx-content">
     @let profile = (userProfile$ | async) ?? null;
     @if (profile) {
       <app-personal-data

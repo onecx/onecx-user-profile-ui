@@ -1,50 +1,56 @@
 @if (componentInUse) {
-  <div class="mx-2 h-full flex flex-wrap justify-content-center md:justify-content-start row-gap-0">
-    <div *ocxIfPermission="'PROFILE_AVATAR#VIEW'">
-      <img
-        [ocxSrc]="imageUrl$ | async"
-        class="border-circle avatar-image sm:avatar-image md:avatar-image"
-        [alt]="'AVATAR.' + (showPlaceholder ? 'PLACEHOLDER' : 'AVATAR') | translate"
-        [pTooltip]="'AVATAR.' + (showPlaceholder ? 'PLACEHOLDER' : 'AVATAR') | translate"
+  <!-- userId => admin mode (modal dialog) 
+              => me mode (full page)
+    Arrange image and buttons: full page => horizontal, modal dialog => vertical
+  -->
+  @let imgStyleClass = userId ? 'flex-column align-items-center' : 'flex-row justify-content-start';
+  <div [class]="'mx-2 h-full flex flex-wrap gap-0 ' + imgStyleClass">
+    <img
+      *ocxIfPermission="'PROFILE_AVATAR#VIEW'"
+      [ocxSrc]="imageUrl$ | async"
+      class="border-circle avatar-image sm:avatar-image md:avatar-image"
+      [alt]="'AVATAR.' + (showPlaceholder ? 'PLACEHOLDER' : 'AVATAR') | translate"
+      [pTooltip]="'AVATAR.' + (showPlaceholder ? 'PLACEHOLDER' : 'AVATAR') | translate"
+      tooltipPosition="top"
+      tooltipEvent="hover"
+    />
+
+    <!-- userId => admin mode (modal dialog) 
+                => me mode (full page)
+    Arrange buttons: full page => vertical, modal dialog => horizontal 
+    -->
+    @let buttonStyleClass = userId ? 'flex-row gap-3' : 'flex-column gap-1';
+    <div
+      *ocxIfPermission="(userId ? 'USERPROFILE#ADMIN_' : 'PROFILE_AVATAR#') + 'EDIT'"
+      [class]="'flex flex-nowrap align-items-start ' + buttonStyleClass"
+    >
+      <p-button
+        pRipple
+        icon="pi pi-upload"
+        id="up_avatar_action_select"
+        variant="text"
+        (onClick)="onFileUpload()"
+        [label]="'ACTIONS.GENERAL.CHANGE' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.CHANGE' | translate"
+        [pTooltip]="'AVATAR.CHOOSE' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
-      />
-    </div>
-
-    <ng-container *ocxIfPermission="(userId ? 'USERPROFILE#ADMIN_' : 'PROFILE_AVATAR#') + 'EDIT'">
-      <div class="flex flex-column sm:flex-row md:flex-column flex-nowrap align-items-start row-gap-1">
-        <button
-          pButton
+      ></p-button>
+      @if (!showPlaceholder) {
+        <p-button
           pRipple
-          type="button"
-          icon="pi pi-upload"
-          class="p-2 p-button-text"
-          id="up_avatar_action_select"
-          (click)="onFileUpload()"
-          [label]="'ACTIONS.GENERAL.CHANGE' | translate"
-          [ariaLabel]="'ACTIONS.GENERAL.CHANGE' | translate"
-          [pTooltip]="'AVATAR.CHOOSE' | translate"
+          icon="pi pi-trash"
+          id="up_avatar_action_remove"
+          variant="text"
+          (onClick)="displayAvatarDeleteDialog = true"
+          [label]="'ACTIONS.GENERAL.REMOVE' | translate"
+          [ariaLabel]="'ACTIONS.GENERAL.REMOVE' | translate"
+          [pTooltip]="'AVATAR.REMOVE' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
-        ></button>
-        @if (!showPlaceholder) {
-          <button
-            pButton
-            pRipple
-            type="button"
-            icon="pi pi-trash"
-            class="p-2 p-button-text"
-            id="up_avatar_action_remove"
-            (click)="displayAvatarDeleteDialog = true"
-            [label]="'ACTIONS.GENERAL.REMOVE' | translate"
-            [ariaLabel]="'ACTIONS.GENERAL.REMOVE' | translate"
-            [pTooltip]="'AVATAR.REMOVE' | translate"
-            tooltipPosition="top"
-            tooltipEvent="hover"
-          ></button>
-        }
-      </div>
-    </ng-container>
+        ></p-button>
+      }
+    </div>
   </div>
 }
 

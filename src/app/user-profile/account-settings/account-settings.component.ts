@@ -45,7 +45,6 @@ export class AccountSettingsComponent implements OnInit {
   private readonly translate = inject(TranslateService)
   private readonly msgService = inject(PortalMessageService)
   private readonly userProfileService = inject(UserProfileAPIService)
-  private readonly confService = inject(ConfigurationService)
   private readonly slotService = inject(SlotService)
 
   @Output() public editModeUpdate = new EventEmitter<boolean>()

@@ -35,18 +35,6 @@ const routes: Routes = [
     }
   },
   {
-    path: 'search',
-    loadChildren: () => import('./profile-search/profile-search.module').then((m) => m.ProfileSearchModule),
-    pathMatch: 'full',
-    data: {
-      breadcrumb: 'BREADCRUMBS.SEARCH',
-      breadcrumbFn: (data: any) => `${data.labeli18n}`
-    },
-    resolve: {
-      labeli18n: LabelResolver
-    }
-  },
-  {
     path: 'roles-and-perms',
     component: UserPermissionsComponent,
     pathMatch: 'full',
@@ -76,6 +64,18 @@ const routes: Routes = [
     pathMatch: 'full',
     data: {
       breadcrumb: 'BREADCRUMBS.USER_PERMISSIONS',
+      breadcrumbFn: (data: any) => `${data.labeli18n}`
+    },
+    resolve: {
+      labeli18n: LabelResolver
+    }
+  },
+  {
+    path: 'search',
+    loadChildren: () => import('./profile-search/profile-search.module').then((m) => m.ProfileSearchModule),
+    pathMatch: 'full',
+    data: {
+      breadcrumb: 'BREADCRUMBS.SEARCH',
       breadcrumbFn: (data: any) => `${data.labeli18n}`
     },
     resolve: {

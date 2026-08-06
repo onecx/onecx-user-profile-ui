@@ -9,7 +9,7 @@
   <div
     [formGroup]="formGroup"
     class="flex flex-column row-gap-4"
-    [ngClass]="userId ? 'mt-1 mb-2 mx-3 sm:mx-4' : 'p-3 sm:p-4'"
+    [ngClass]="userId ? 'mb-2 mx-2 sm:mx-3' : 'p-2 sm:p-3'"
   >
     <div class="flex flex-column sm:flex-row flex-wrap column-gap-3 md:column-gap-4 lg:column-gap-5 row-gap-4">
       <div class="flex-1 flex flex-column row-gap-4">
@@ -27,7 +27,7 @@
                   class="w-full pt-3 pb-2 text-responsive"
                   [disabled]="true"
                   [value]="userProfile?.person?.firstName"
-                  [attr.aria-label]="'USER_PROFILE.FIRST_NAME' | translate"
+                  [ariaLabel]="'USER_PROFILE.FIRST_NAME' | translate"
                   [pTooltip]="'USER_PROFILE.FIRST_NAME.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -44,7 +44,7 @@
                   class="w-full pt-3 pb-2 text-responsive"
                   [disabled]="true"
                   [value]="userProfile?.person?.lastName"
-                  [attr.aria-label]="'USER_PROFILE.LAST_NAME' | translate"
+                  [ariaLabel]="'USER_PROFILE.LAST_NAME' | translate"
                   [pTooltip]="'USER_PROFILE.LAST_NAME.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -61,7 +61,7 @@
                   class="w-full pt-3 pb-2 text-responsive"
                   [disabled]="true"
                   [value]="userProfile?.person?.email"
-                  [attr.aria-label]="'USER_PROFILE.EMAIL' | translate"
+                  [ariaLabel]="'USER_PROFILE.EMAIL' | translate"
                   [pTooltip]="'USER_PROFILE.EMAIL.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -81,47 +81,44 @@
                   class="flex flex-row column-gap-3"
                 >
                   @if (formGroup.get('phone')?.disabled) {
-                    <button
-                      pButton
+                    <p-button
                       pRipple
                       id="up_personal_info_phone_edit"
-                      class="p-1 p-button-text"
                       icon="pi pi-pencil"
-                      (click)="onTogglePhoneEdit()"
+                      variant="text"
+                      (onClick)="onTogglePhoneEdit()"
                       [label]="'ACTIONS.GENERAL.EDIT' | translate"
                       [ariaLabel]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                       [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                       tooltipPosition="top"
                       tooltipEvent="hover"
-                    ></button>
+                    ></p-button>
                   } @else {
-                    <button
-                      pButton
+                    <p-button
                       pRipple
                       id="up_personal_info_phone_cancel"
                       icon="pi pi-times"
-                      class="p-1 p-button-text"
-                      (click)="onCancelPhoneEdit()"
+                      variant="text"
+                      (onClick)="onCancelPhoneEdit()"
                       [label]="'ACTIONS.GENERAL.CANCEL' | translate"
                       [ariaLabel]="'ACTIONS.GENERAL.CANCEL' | translate"
                       [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
                       tooltipPosition="top"
                       tooltipEvent="hover"
-                    ></button>
-                    <button
-                      pButton
+                    ></p-button>
+                    <p-button
                       pRipple
                       id="up_personal_info_phone_save"
-                      class="p-1 p-button-text"
+                      variant="text"
                       icon="pi pi-save"
-                      (click)="this.updatePhone()"
+                      (onClick)="this.updatePhone()"
                       [disabled]="formGroup.invalid"
                       [label]="'ACTIONS.GENERAL.SAVE' | translate"
                       [ariaLabel]="'ACTIONS.GENERAL.SAVE' | translate"
                       [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
                       tooltipPosition="top"
                       tooltipEvent="hover"
-                    ></button>
+                    ></p-button>
                   }
                 </div>
               </div>
@@ -152,7 +149,7 @@
                   class="pt-3 pb-2 w-full min-w-15rem text-responsive"
                   formControlName="number"
                   [value]="person?.phone?.number"
-                  [attr.aria-label]="'USER_PROFILE.PHONE_NUMBER' | translate"
+                  [ariaLabel]="'USER_PROFILE.PHONE_NUMBER' | translate"
                   [pTooltip]="'USER_PROFILE.PHONE_NUMBER.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -188,12 +185,10 @@
                 class="flex flex-row column-gap-3"
               >
                 @if (formGroup.get('address')?.disabled) {
-                  <button
-                    pButton
+                  <p-button
                     pRipple
-                    type="button"
                     icon="pi pi-pencil"
-                    class="p-1 p-button-text"
+                    variant="text"
                     id="up_personal_info_address_edit"
                     (click)="onToggleAddressEdit()"
                     [label]="'ACTIONS.GENERAL.EDIT' | translate"
@@ -201,14 +196,12 @@
                     [pTooltip]="'ACTIONS.GENERAL.EDIT.TOOLTIP' | translate"
                     tooltipPosition="top"
                     tooltipEvent="hover"
-                  ></button>
+                  ></p-button>
                 } @else {
-                  <button
-                    pButton
+                  <p-button
                     pRipple
-                    type="button"
                     icon="pi pi-times"
-                    class="p-1 p-button-text"
+                    variant="text"
                     id="up_personal_info_address_cancel"
                     (click)="onCancelAddressEdit()"
                     [label]="'ACTIONS.GENERAL.CANCEL' | translate"
@@ -216,13 +209,11 @@
                     [pTooltip]="'ACTIONS.GENERAL.CANCEL.TOOLTIP' | translate"
                     tooltipPosition="top"
                     tooltipEvent="hover"
-                  ></button>
-                  <button
-                    pButton
+                  ></p-button>
+                  <p-button
                     pRipple
-                    type="button"
                     icon="pi pi-save"
-                    class="p-1 p-button-text"
+                    variant="text"
                     id="up_personal_info_address_save"
                     (click)="updateAddress()"
                     [disabled]="formGroup.invalid"
@@ -231,7 +222,7 @@
                     [pTooltip]="'ACTIONS.GENERAL.SAVE.TOOLTIP' | translate"
                     tooltipPosition="top"
                     tooltipEvent="hover"
-                  ></button>
+                  ></p-button>
                 }
               </div>
             </div>
@@ -246,7 +237,7 @@
                   class="pt-3 pb-2 w-full min-w-15rem text-responsive"
                   id="up_personal_info_address_street"
                   formControlName="street"
-                  [attr.aria-label]="'USER_PROFILE.STREET' | translate"
+                  [ariaLabel]="'USER_PROFILE.STREET' | translate"
                   [pTooltip]="'USER_PROFILE.STREET.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -262,7 +253,7 @@
                   type="text"
                   class="pt-3 pb-2 w-full text-responsive"
                   formControlName="streetNo"
-                  [attr.aria-label]="'USER_PROFILE.HOUSE_NUMBER' | translate"
+                  [ariaLabel]="'USER_PROFILE.HOUSE_NUMBER' | translate"
                   [pTooltip]="'USER_PROFILE.HOUSE_NUMBER.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -280,7 +271,7 @@
                   type="text"
                   class="pt-3 pb-2 w-full min-w-15rem text-responsive"
                   formControlName="city"
-                  [attr.aria-label]="'USER_PROFILE.CITY' | translate"
+                  [ariaLabel]="'USER_PROFILE.CITY' | translate"
                   [pTooltip]="'USER_PROFILE.CITY.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -296,7 +287,7 @@
                   type="text"
                   class="pt-3 pb-2 w-full text-responsive"
                   formControlName="postalCode"
-                  [attr.aria-label]="'USER_PROFILE.POSTAL_CODE' | translate"
+                  [ariaLabel]="'USER_PROFILE.POSTAL_CODE' | translate"
                   [pTooltip]="'USER_PROFILE.POSTAL_CODE.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
@@ -314,7 +305,7 @@
                 formControlName="country"
                 [options]="countries"
                 [showClear]="formGroup.get('address.country')?.enabled"
-                [ariaLabel]="'up_personal_info_address_country'"
+                [ariaLabel]="'USER_PROFILE.COUNTRY' | translate"
                 [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -343,7 +334,7 @@
                 class="w-full pt-3 pb-2 text-responsive"
                 [disabled]="true"
                 [value]="userProfile?.tenantId"
-                [attr.aria-label]="'USER_PROFILE.INTERN.TENANT' | translate"
+                [ariaLabel]="'USER_PROFILE.INTERN.TENANT' | translate"
                 [pTooltip]="'USER_PROFILE.INTERN.TENANT.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -361,7 +352,7 @@
                 class="w-full pt-3 pb-2 text-responsive"
                 [disabled]="true"
                 [value]="userProfile?.identityProvider"
-                [attr.aria-label]="'USER_PROFILE.INTERN.PROVIDER' | translate"
+                [ariaLabel]="'USER_PROFILE.INTERN.PROVIDER' | translate"
                 [pTooltip]="'USER_PROFILE.INTERN.PROVIDER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
@@ -378,7 +369,7 @@
                 class="w-full pt-3 pb-2 text-responsive"
                 [disabled]="true"
                 [value]="userProfile?.issuer"
-                [attr.aria-label]="'USER_PROFILE.INTERN.ISSUER' | translate"
+                [ariaLabel]="'USER_PROFILE.INTERN.ISSUER' | translate"
                 [pTooltip]="'USER_PROFILE.INTERN.ISSUER.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
