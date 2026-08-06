@@ -9,7 +9,6 @@ import { AngularAuthModule } from '@onecx/angular-auth'
 import {
   createTranslateLoader,
   MultiLanguageMissingTranslationHandler,
-  PortalApiConfiguration,
   providePermissionService,
   provideThemeConfig,
   provideTranslationConnectionService,
@@ -19,7 +18,6 @@ import { createAppEntrypoint, initializeRouter, startsWith } from '@onecx/angula
 import { AppStateService, ConfigurationService } from '@onecx/angular-integration-interface'
 import { SLOT_SERVICE, SlotService } from '@onecx/angular-remote-components'
 
-import { environment } from 'src/environments/environment'
 import { Configuration } from './shared/generated'
 import { AppEntrypointComponent } from './app-entrypoint.component'
 import { LabelResolver } from './shared/label.resolver'

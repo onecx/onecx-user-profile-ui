@@ -8,6 +8,9 @@ import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
 
+/* IMPORTANT
+  This component is not used anymore and was replaced by a slot in account-settings.
+*/
 @Component({
   selector: 'app-privacy',
   standalone: true,
@@ -17,7 +20,7 @@ import { UserService } from '@onecx/angular-integration-interface'
 export class PrivacyComponent implements OnInit, OnChanges {
   private readonly userService = inject(UserService)
   // input
-  @Input() hideMyProfile: boolean | null = false
+  @Input() hideMyProfile: boolean | null = false // the current value of the setting
   @Output() hideMyProfileChange = new EventEmitter<boolean>()
   @Output() public applyChanges = new EventEmitter<boolean>()
 

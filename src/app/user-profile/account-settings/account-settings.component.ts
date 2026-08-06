@@ -10,7 +10,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { TabsModule } from 'primeng/tabs'
 
 import { SlotService } from '@onecx/angular-remote-components'
-import { ConfigurationService, PortalMessageService } from '@onecx/angular-integration-interface'
+import { PortalMessageService } from '@onecx/angular-integration-interface'
 import { Action, AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
@@ -31,9 +31,9 @@ import { LocaleTimezoneComponent } from '../locale-timezone/locale-timezone.comp
     TooltipModule,
     TranslateModule,
     // components
+    PortalPageComponent,
     LayoutThemeComponent,
-    LocaleTimezoneComponent,
-    PortalPageComponent
+    LocaleTimezoneComponent
   ],
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.scss']

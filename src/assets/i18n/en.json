@@ -211,7 +211,7 @@
   "PASSWORD": {
     "TAB_NAME_PASSWORD": "Password",
     "TAB_NAME_PASSWORD.TOOLTIP": "The user's Password",
-    "NOT_AVAILABLE": "Password change functionality is not available"
+    "NOT_AVAILABLE": "Password change functionality is not available."
   },
   "LAYOUT_THEME": {
     "TAB_NAME_LAYOUT_THEME": "Layout & Theme",

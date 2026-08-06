@@ -17,7 +17,7 @@ import { UserService } from '@onecx/angular-integration-interface'
 @Component({
   selector: 'app-ocx-username',
   standalone: true,
-  imports: [AngularRemoteComponentsModule, AsyncPipe, TooltipModule, TranslateModule],
+  imports: [AsyncPipe, AngularRemoteComponentsModule, TooltipModule, TranslateModule],
   providers: [
     {
       provide: REMOTE_COMPONENT_CONFIG,

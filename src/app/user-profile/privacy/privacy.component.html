@@ -12,19 +12,19 @@
     ></p-inputSwitch>
 
     @if (changedPrivacySettings) {
-      <button
-        pButton
+      <p-button
         pRipple
-        type="button"
-        icon="pi pi-refresh"
         id="up_privacy_settings_hide_my_profile_refresh"
-        class="ml-3 p-2 p-button-text"
-        (click)="applyChange()"
+        class="ml-3"
+        variant="text"
+        icon="pi pi-refresh"
+        (onClick)="applyChange()"
         [label]="'ACTIONS.GENERAL.RELOAD' | translate"
+        [ariaLabel]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
         [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
-      ></button>
+      ></p-button>
     }
   </div>
 </div>

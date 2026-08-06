@@ -9,7 +9,7 @@
     </ocx-page-header>
   }
 
-  <ocx-content>
+  <ocx-content class="ocx-content">
     <p-tabs [lazy]="false" value="0">
       <p-tablist>
         <p-tab
@@ -32,51 +32,58 @@
         >
           {{ 'LAYOUT_THEME.TAB_NAME_LAYOUT_THEME' | translate }}
         </p-tab>
-        <p-tab
-          value="2"
-          *ocxIfPermission="'CHANGE_PASSWORD#VIEW'"
-          [ariaLabel]="'PASSWORD.TAB_NAME_PASSWORD' | translate"
-          [pTooltip]="'PASSWORD.TAB_NAME_PASSWORD.TOOLTIP' | translate"
-          tooltipPosition="top"
-          tooltipEvent="hover"
-        >
-          {{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}
-        </p-tab>
-      </p-tablist>
-    </p-tabs>
-    <p-tabpanels>
-      <!-- PROPS -->
-      <p-tabpanel value="0">
-        <app-locale-timezone
-          [localeInput]="settingsInitial['locale']"
-          [timezoneInput]="settingsInitial['timezone']"
-          (localeChange)="localeChange($event)"
-          (timezoneChange)="timezoneChange($event)"
-          (applyChanges)="reloadPage()"
-        ></app-locale-timezone>
-      </p-tabpanel>
-      <p-tabpanel value="1">
-        <app-layout-theme
-          [colorScheme]="settingsInitial['colorScheme']"
-          [menuMode]="settingsInitial['menuMode']"
-          (colorSchemeChange)="colorSchemeChange($event)"
-          (menuModeChange)="menuModeChange($event)"
-          (applyChanges)="reloadPage()"
-        ></app-layout-theme>
-      </p-tabpanel>
-      <p-tabpanel value="2">
         @if (isChangePasswordComponentDefined$ | async) {
-          <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
-            <ocx-slot [name]="changePasswordSlotName"> </ocx-slot>
-          </div>
-        } @else {
-          <p-message
-            id="ps_change_password_error_message"
-            severity="error"
-            [text]="'PASSWORD.NOT_AVAILABLE' | translate"
-          ></p-message>
+          <p-tab
+            value="2"
+            *ocxIfPermission="'CHANGE_PASSWORD#VIEW'"
+            [ariaLabel]="'PASSWORD.TAB_NAME_PASSWORD' | translate"
+            [pTooltip]="'PASSWORD.TAB_NAME_PASSWORD.TOOLTIP' | translate"
+            tooltipPosition="top"
+            tooltipEvent="hover"
+          >
+            {{ 'PASSWORD.TAB_NAME_PASSWORD' | translate }}
+          </p-tab>
         }
-      </p-tabpanel>
-    </p-tabpanels>
+      </p-tablist>
+      <p-tabpanels>
+        <!-- PROPS -->
+        <p-tabpanel value="0">
+          <app-locale-timezone
+            [localeInput]="settingsInitial['locale']"
+            [timezoneInput]="settingsInitial['timezone']"
+            (localeChange)="localeChange($event)"
+            (timezoneChange)="timezoneChange($event)"
+            (applyChanges)="reloadPage()"
+          ></app-locale-timezone>
+        </p-tabpanel>
+        <p-tabpanel value="1">
+          <app-layout-theme
+            [colorScheme]="settingsInitial['colorScheme']"
+            [menuMode]="settingsInitial['menuMode']"
+            (colorSchemeChange)="colorSchemeChange($event)"
+            (menuModeChange)="menuModeChange($event)"
+            (applyChanges)="reloadPage()"
+          ></app-layout-theme>
+        </p-tabpanel>
+        <p-tabpanel value="2">
+          <!--
+            The previous used component <app-change-password> is now replaced by a slot.
+            The assigned component is in OneCX usually OneCXChangePasswordComponent, provided by OneCX IAM UI.
+          -->
+          @if (isChangePasswordComponentDefined$ | async) {
+            <div class="sm:pt-2 pb-2 sm:pb-3 px-3">
+              <ocx-slot [name]="changePasswordSlotName"> </ocx-slot>
+            </div>
+          } @else {
+            <p-message
+              id="ps_change_password_error_message"
+              severity="error"
+              styleClass="m-3 max-w-30rem"
+              [text]="'PASSWORD.NOT_AVAILABLE' | translate"
+            ></p-message>
+          }
+        </p-tabpanel>
+      </p-tabpanels>
+    </p-tabs>
   </ocx-content>
 </ocx-portal-page>

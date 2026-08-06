@@ -1,10 +1,17 @@
 @use '/src/app/_up-mixins.scss' as *;
 
 @include ocx-text-responsive;
+@include ocx-p-tabs;
 
-/*
-@include tabview-fix-color-selected-tab;
-@include readable-disabled-form-controls;
-@include dropdown-zebra-rows;
-@include search-criteria-select-button;
-*/
+:host ::ng-deep {
+  .ocx-content > div {
+    margin-bottom: 0 !important;
+    padding: 0 !important;
+  }
+  .p-tabs .p-tabpanels {
+    padding: 0;
+    &.non-modal-panels {
+      padding: 0.3rem 1rem;
+    }
+  }
+}
