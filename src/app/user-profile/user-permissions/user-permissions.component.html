@@ -7,25 +7,31 @@
       [actions]="(actions$ | async) ?? []"
     >
     </ocx-page-header>
-    <ocx-content>
+
+    <ocx-content class="ocx-content">
       @if (isUserRolesAndPermissionsComponentDefined$ | async) {
         <ocx-slot [name]="userRolesAndPermissionsSlotName" [inputs]="{ active: true }">
           <ng-template #skeleton>
-            <p-message
-              id="ps_roles_permissions_loading"
-              severity="info"
-              styleClass="m-3"
-              [text]="'ACTIONS.GENERAL.LOADING' | translate"
-            ></p-message>
+            <div class="p-1">
+              <p-message
+                id="ps_roles_permissions_loading"
+                severity="info"
+                styleClass="m-3 max-w-30rem"
+                [text]="'ACTIONS.GENERAL.LOADING' | translate"
+              ></p-message>
+            </div>
           </ng-template>
         </ocx-slot>
       } @else {
-        <p-message
-          id="ps_roles_permissions_error_message"
-          severity="info"
-          styleClass="m-3"
-          [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
-        ></p-message>
+        <!-- this div is a helper element for displaying the error message with distance to ocx-content. -->
+        <div class="p-1">
+          <p-message
+            id="ps_roles_permissions_error_message"
+            severity="info"
+            styleClass="m-3 max-w-30rem"
+            [text]="'USER_PROFILE.MSG.SLOT_NOT_DEFINED_USER' | translate"
+          ></p-message>
+        </div>
       }
     </ocx-content>
   </ocx-portal-page>

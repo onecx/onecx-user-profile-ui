@@ -14,9 +14,10 @@ import { UserProfileAPIService, UserPerson } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-user-permissions',
-  templateUrl: './user-permissions.component.html',
   standalone: true,
-  imports: [AsyncPipe, AngularAcceleratorModule, MessageModule, PortalPageComponent, TranslateModule]
+  imports: [AsyncPipe, AngularAcceleratorModule, MessageModule, PortalPageComponent, TranslateModule],
+  templateUrl: './user-permissions.component.html',
+  styleUrls: ['./user-permissions.component.scss']
 })
 export class UserPermissionsComponent {
   private readonly route = inject(ActivatedRoute)
@@ -25,22 +26,17 @@ export class UserPermissionsComponent {
   private readonly userProfileService = inject(UserProfileAPIService)
   private readonly slotService = inject(SlotService)
   // data
-  public personalInfo$: Observable<UserPerson> | undefined
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean> | undefined
   public userRolesAndPermissionsSlotName = 'onecx-user-profile-permissions'
   public actions$: Observable<Action[]> | undefined
-
-  constructor() {
-    this.personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
-      map((profile) => {
-        this.prepareActionButtons()
-        return profile.person ?? {}
-      })
-    )
-    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
-      this.userRolesAndPermissionsSlotName
-    )
-  }
+  public isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+    this.userRolesAndPermissionsSlotName
+  )
+  public personalInfo$ = this.userProfileService.getMyUserProfile().pipe(
+    map((profile) => {
+      this.prepareActionButtons()
+      return profile.person ?? {}
+    })
+  )
 
   private prepareActionButtons(): void {
     this.actions$ = this.translate
