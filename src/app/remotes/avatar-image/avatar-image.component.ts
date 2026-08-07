@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, OnInit, inject } from '@angular/core'
+import { Component, EventEmitter, Input, inject } from '@angular/core'
 import { AsyncPipe, Location, NgStyle } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { Observable, ReplaySubject, of } from 'rxjs'
+import { ReplaySubject, of } from 'rxjs'
 
 import { SkeletonModule } from 'primeng/skeleton'
 
