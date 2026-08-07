@@ -10,10 +10,10 @@
   "files": ["src/test.ts", "src/polyfills.ts"],
   "exclude": [
     "src/app/shared/generated/**/*",
-    "node_modules",
+    "src/app/shared/mocks/**",
     "src/test.ts",
     "src/**/*.harness.ts",
-    "src/app/shared/mocks/**"
+    "node_modules"
   ],
   "include": ["**/*.spec.ts", "**/*.d.ts"]
 }
