@@ -1,14 +1,14 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing'
-import { CommonModule, Location } from '@angular/common'
+import { Location } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
+import { FormBuilder } from '@angular/forms'
 import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 
 import { ParametersService, PortalMessageService, UserService } from '@onecx/angular-integration-interface'
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig, TranslationConnectionService } from '@onecx/angular-utils'
 import {
   ConfigurationServiceMock,
   provideConfigurationServiceMock,
@@ -30,19 +30,20 @@ const updatedProfile: UserProfile = {
   settings: { locale: 'de' } as any
 }
 
-const rcConfig: RemoteComponentConfig = {
-  appId: 'app',
-  productName: 'product',
-  permissions: ['VIEW'],
-  baseUrl: '/url'
-}
-
-describe('OneCXLanguageSwitchComponent - Business Logic', () => {
+describe('OneCXLanguageSwitchComponent', () => {
   let component: OneCXLanguageSwitchComponent
   let fixture: ComponentFixture<OneCXLanguageSwitchComponent>
   let configService: ConfigurationServiceMock
   let userService: MockUserService
-  let rcConfigSubject: ReplaySubject<any>
+  let mockUserService: UserServiceMock
+  let rcConfigSubject = new ReplaySubject<RemoteComponentConfig>(1)
+  const rcConfig: RemoteComponentConfig = {
+    appId: 'app',
+    productName: 'product',
+    permissions: ['VIEW'],
+    baseUrl: '/url'
+  }
+  rcConfigSubject.next(rcConfig)
 
   const userApiService = {
     getMyUserProfile: jasmine.createSpy('getMyUserProfile').and.returnValue(of({})),
@@ -60,7 +61,6 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     await TestBed.configureTestingModule({
       imports: [
         OneCXLanguageSwitchComponent,
-        ReactiveFormsModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -68,30 +68,23 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
       ],
       providers: [
         FormBuilder,
-        UserService,
         provideHttpClient(),
         provideHttpClientTesting(),
-        { provide: TranslateService, useValue: translateServiceSpy },
         provideConfigurationServiceMock(),
         provideUserServiceMock(),
+        { provide: TranslationConnectionService, useValue: {} },
         { provide: Location, useValue: locationSpy },
-        { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfigSubject }
+        { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfigSubject },
+        { provide: UserProfileAPIService, useValue: userApiService },
+        { provide: PortalMessageService, useValue: msgServiceSpy },
+        { provide: ParametersService, useValue: parameterServiceSpy },
+        { provide: TranslateService, useValue: translateServiceSpy }
       ]
-    })
-      .overrideComponent(OneCXLanguageSwitchComponent, {
-        set: {
-          imports: [TranslateTestingModule, CommonModule],
-          providers: [
-            { provide: UserProfileAPIService, useValue: userApiService },
-            { provide: PortalMessageService, useValue: msgServiceSpy },
-            { provide: ParametersService, useValue: parameterServiceSpy }
-          ]
-        }
-      })
-      .compileComponents()
+    }).compileComponents()
 
     configService = TestBed.inject(ConfigurationServiceMock)
     userService = TestBed.inject(UserServiceMock)
+    mockUserService = TestBed.inject(UserService) as unknown as UserServiceMock
 
     fixture = TestBed.createComponent(OneCXLanguageSwitchComponent)
     component = fixture.componentInstance

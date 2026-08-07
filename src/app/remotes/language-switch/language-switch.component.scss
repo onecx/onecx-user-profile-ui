@@ -1,57 +1,11 @@
-.language-selector-compact {
-  ::ng-deep .p-selectbutton {
-    border: 1px solid var(--primary-color);
-    border-radius: var(--border-radius);
-
-    .p-button {
-      padding: 0.5rem 1rem;
-      font-size: 1rem;
-      min-width: 0.75rem;
-      height: 1.5rem;
-      font-weight: 500;
-      transition: all 0.05s ease-in-out;
-      border-width: 1px;
-    }
-
-    .p-button:not(.p-highlight) {
-      background-color: white;
-      border: 1px solid white !important;
-      color: var(--text-color);
-
-      &:hover:not(:disabled) {
-        background-color: var(--primary-color);
-        border: 1px solid white !important;
-        color: white;
-      }
-    }
-
-    .p-button.p-highlight {
-      background-color: color-mix(in srgb, var(--primary-color) 75%, transparent);
-      border: 1px solid var(--primary-color) !important;
-      color: white;
-
-      &:hover:not(:disabled) {
-        background-color: var(--primary-color);
-      }
-    }
-
-    .p-button:disabled {
-      opacity: 0.5;
-      cursor: not-allowed;
-    }
-
-    .p-button:first-child {
-      border-top-left-radius: var(--border-radius);
-      border-bottom-left-radius: var(--border-radius);
-    }
-
-    .p-button:last-child {
-      border-top-right-radius: var(--border-radius);
-      border-bottom-right-radius: var(--border-radius);
-    }
-
-    .p-button:not(:first-child):not(:last-child) {
-      border-radius: 0;
+:host ::ng-deep {
+  .p-togglebutton {
+    padding: 0.1rem;
+  }
+  .p-togglebutton:not(:disabled):not(.p-togglebutton-checked):hover {
+    .p-togglebutton-content {
+      background: var(--topbar-bg-color);
+      color: var(--topbar-text-color);
     }
   }
 }

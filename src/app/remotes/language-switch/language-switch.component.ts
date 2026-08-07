@@ -1,22 +1,22 @@
-import { Component, Inject, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, DestroyRef, inject, Inject, Input, OnDestroy, OnInit } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Location } from '@angular/common'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
-import { UntilDestroy } from '@ngneat/until-destroy'
-import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { firstValueFrom, from, ReplaySubject, Subscription } from 'rxjs'
+import { TranslateModule } from '@ngx-translate/core'
+import { firstValueFrom, from, ReplaySubject } from 'rxjs'
 import { map, switchMap, take } from 'rxjs/operators'
 
 import { ButtonModule } from 'primeng/button'
 import { SelectButtonModule } from 'primeng/selectbutton'
+import { ToggleButtonModule } from 'primeng/togglebutton'
 import { TooltipModule } from 'primeng/tooltip'
 
-import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import {
   AngularRemoteComponentsModule,
   ocxRemoteComponent,
   ocxRemoteWebcomponent
 } from '@onecx/angular-remote-components'
+import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 import {
   CONFIG_KEY,
   ConfigurationService,
@@ -32,13 +32,12 @@ import { environment } from 'src/environments/environment'
   selector: 'app-ocx-language-switch',
   standalone: true,
   imports: [
-    AngularAcceleratorModule,
     AngularRemoteComponentsModule,
     ButtonModule,
     ReactiveFormsModule,
     SelectButtonModule,
-    TranslateModule,
-    TooltipModule
+    TooltipModule,
+    TranslateModule
   ],
   providers: [
     PortalMessageService,
@@ -51,8 +50,17 @@ import { environment } from 'src/environments/environment'
   templateUrl: './language-switch.component.html',
   styleUrl: './language-switch.component.scss'
 })
-@UntilDestroy()
-export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit, OnDestroy {
+export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
+  private readonly rcConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
+  private readonly destroyRef = inject(DestroyRef)
+  private readonly location = inject(Location)
+  private readonly userApiService = inject(UserProfileAPIService)
+  private readonly userService = inject(UserService)
+  private readonly configService = inject(ConfigurationService)
+  private readonly messageService = inject(PortalMessageService)
+  private readonly parameterService = inject(ParametersService)
+  private readonly formBuilder = inject(FormBuilder)
+
   @Input() set ocxRemoteComponentConfig(conf: RemoteComponentConfig) {
     this.ocxInitRemoteComponent(conf)
   }
@@ -62,78 +70,52 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
   public languageFormGroup!: FormGroup
   public defaultLangSet = false // needed for ommiting visible language switch on the component
 
-  private readonly subscriptions: Subscription = new Subscription()
-
-  constructor(
-    @Inject(REMOTE_COMPONENT_CONFIG) private readonly rcConfig: ReplaySubject<RemoteComponentConfig>,
-    private readonly userApiService: UserProfileAPIService,
-    private readonly userService: UserService,
-    private readonly translateService: TranslateService,
-    private readonly formBuilder: FormBuilder,
-    private readonly configService: ConfigurationService,
-    private readonly messageService: PortalMessageService,
-    private readonly location: Location,
-    private readonly parameterService: ParametersService
-  ) {
-    this.subscriptions.add(this.userService.lang$.subscribe((lang) => this.translateService.use(lang)))
+  ocxInitRemoteComponent(config: RemoteComponentConfig): void {
+    this.rcConfig.next(config)
+    this.userApiService.configuration = new Configuration({
+      basePath: Location.joinWithSlash(config.baseUrl, environment.apiPrefix)
+    })
   }
 
   ngOnInit() {
     this.setLanguageForm()
     const defaultLangs = 'en,de'
-    this.subscriptions.add(
-      this.rcConfig
-        .pipe(
-          take(1),
-          switchMap(({ productName, appId }) =>
-            from(
-              this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES).catch((error) => {
-                console.error('getProperty TKIT_SUPPORTED_LANGUAGES', error)
-                return defaultLangs
-              })
-            ).pipe(
-              switchMap((supportedLanguages) =>
-                from(
-                  this.parameterService.get('primary-languages', supportedLanguages || defaultLangs, productName, appId)
-                )
-              ),
-              map((langs) => (langs || defaultLangs).split(',').slice(0, this.shownLanguagesNumber))
-            )
+
+    this.rcConfig
+      .pipe(
+        take(1),
+        switchMap(({ productName, appId }) =>
+          from(
+            this.configService.getProperty(CONFIG_KEY.TKIT_SUPPORTED_LANGUAGES).catch((error) => {
+              console.error('getProperty TKIT_SUPPORTED_LANGUAGES', error)
+              return defaultLangs
+            })
+          ).pipe(
+            switchMap((supportedLanguages) =>
+              from(
+                this.parameterService.get('primary-languages', supportedLanguages || defaultLangs, productName, appId)
+              )
+            ),
+            map((langs) => (langs || defaultLangs).split(',').slice(0, this.shownLanguagesNumber))
           )
-        )
-        .subscribe((langs) => {
-          this.availableLanguages = langs
-          this.makeSubscriptions()
-        })
-    )
-  }
-
-  ngOnDestroy(): void {
-    this.subscriptions.unsubscribe()
-  }
-
-  ocxInitRemoteComponent(config: RemoteComponentConfig): void {
-    this.userApiService.configuration = new Configuration({
-      basePath: Location.joinWithSlash(config.baseUrl, environment.apiPrefix)
-    })
-    this.rcConfig.next(config)
-  }
-
-  shouldShowForm(): boolean {
-    return !!this.languageFormGroup && this.availableLanguages.length > 0 && this.defaultLangSet === true
-  }
-
-  private setLanguageForm() {
-    this.languageFormGroup = this.formBuilder.group({
-      language: [null]
-    })
+        ),
+        takeUntilDestroyed(this.destroyRef)
+      )
+      .subscribe((langs) => {
+        console.log('available languages', langs, this.shownLanguagesNumber)
+        this.availableLanguages = langs
+        this.makeSubscriptions()
+      })
   }
 
   private makeSubscriptions() {
-    this.subscriptions.add(this.userService.lang$.subscribe(this.handleProfileLanguageChange.bind(this)))
-    this.subscriptions.add(
-      this.languageFormGroup.get('language')!.valueChanges.subscribe(this.handleLanguageUpdate.bind(this))
-    )
+    this.userService.lang$
+      .pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((lang) => this.handleProfileLanguageChange(lang))
+    this.languageFormGroup
+      .get('language')!
+      .valueChanges.pipe(takeUntilDestroyed(this.destroyRef))
+      .subscribe((value) => this.handleLanguageUpdate(value))
   }
 
   private handleProfileLanguageChange(usedLang: string) {
@@ -157,7 +139,6 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
         locale: language
       }
     }
-
     try {
       await firstValueFrom(
         this.userApiService.updateMyUserProfileSettings({ updateUserPersonSettingsRequest: updateRequest })
@@ -178,5 +159,15 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
     const usedLang = await firstValueFrom(this.userService.lang$)
     this.languageFormGroup.patchValue({ language: usedLang }, { emitEvent: false })
     this.messageService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
+  }
+
+  public shouldShowForm(): boolean {
+    return !!this.languageFormGroup && this.availableLanguages.length > 0 && this.defaultLangSet === true
+  }
+
+  private setLanguageForm() {
+    this.languageFormGroup = this.formBuilder.group({
+      language: [null]
+    })
   }
 }

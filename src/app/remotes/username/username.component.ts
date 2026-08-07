@@ -27,16 +27,16 @@ import { UserService } from '@onecx/angular-integration-interface'
   templateUrl: './username.component.html'
 })
 export class OneCXUsernameComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
-  private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
-  private readonly userService = inject(UserService)
+  private readonly rcConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
   private readonly destroyRef = inject(DestroyRef)
+  private readonly userService = inject(UserService)
 
   @Input() set ocxRemoteComponentConfig(rcConfig: RemoteComponentConfig) {
     this.ocxInitRemoteComponent(rcConfig)
   }
 
   public ocxInitRemoteComponent(config: RemoteComponentConfig) {
-    this.remoteComponentConfig.next(config)
+    this.rcConfig.next(config)
   }
 
   public username$: Observable<string | undefined> = this.userService.profile$.pipe(
