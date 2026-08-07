@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, Inject, Input, OnDestroy, OnInit } from '@angular/core'
+import { Component, DestroyRef, inject, Input, OnInit } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { Location } from '@angular/common'
 import { FormBuilder, FormGroup, ReactiveFormsModule } from '@angular/forms'
@@ -8,7 +8,6 @@ import { map, switchMap, take } from 'rxjs/operators'
 
 import { ButtonModule } from 'primeng/button'
 import { SelectButtonModule } from 'primeng/selectbutton'
-import { ToggleButtonModule } from 'primeng/togglebutton'
 import { TooltipModule } from 'primeng/tooltip'
 
 import {
