@@ -101,7 +101,6 @@ export class OneCXLanguageSwitchComponent implements ocxRemoteComponent, ocxRemo
         takeUntilDestroyed(this.destroyRef)
       )
       .subscribe((langs) => {
-        console.log('available languages', langs, this.shownLanguagesNumber)
         this.availableLanguages = langs
         this.makeSubscriptions()
       })
