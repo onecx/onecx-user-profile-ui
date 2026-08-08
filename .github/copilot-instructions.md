@@ -1,6 +1,6 @@
 ## Project overview
 
-Angular 19 micro-frontend with **standalone components**, **OnPush change detection** and **signal-first** state management.
+Angular 19 micro-frontend with **standalone components**, **OnPush change detection**
 Testing framework: **Karma + Jasmine** — do NOT replace with Jest and do NOT add Jest dependencies.
 
 ---
@@ -23,6 +23,12 @@ Third-party (primeng/*, ngx-translate/*, file-saver, …)
 OneCX (@onecx/*)
 Local (src/app/*)
 ```
+
+### Module Imports
+- Between the sections, add a blank line.
+- Do not suggest legacy NgModules.
+- Avoid adding redundant template imports in spec files since standalone components self-contain their template dependencies.
+- If there are multiple imports from the same module, combine them into a single import statement and order them alphabetically.
 
 ---
 
