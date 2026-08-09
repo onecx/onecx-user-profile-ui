@@ -38,6 +38,7 @@ Local (src/app/*)
 - All components are **standalone** (`standalone: true` in `@Component`).
 - Always use **`ChangeDetectionStrategy.OnPush`**.
 - Use **`inject()`** for dependency injection — never inject via constructor parameters.
+- Do not use these modules in component templates: `CommonModule`, `BrowserModule`. Standalone components self-contain their template dependencies. In case of CommonModule use the specific parts of it which are needed, e.g. `AsyncPipe`, `NgIf`, `NgForOf`, `NgClass`, etc.
 
 ### Component API — signals only
 | Decorator (old) | Modern equivalent |
@@ -108,4 +109,3 @@ public readonly headers = computed(() => {
 - Name tests: `should <behaviour> when <condition>`.
 - Verify that a method or signal exists in the source before writing a test for it.
 - Mock services with `jasmine.createSpyObj()` or `{ provide: X, useValue: mockObj }`.
-
