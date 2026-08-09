@@ -1,17 +1,17 @@
-import { Component, EventEmitter, Input, OnInit, inject } from '@angular/core'
+import { Component, EventEmitter, Input, inject } from '@angular/core'
 import { AsyncPipe, Location, NgStyle } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { Observable, ReplaySubject, of } from 'rxjs'
+import { ReplaySubject, of } from 'rxjs'
 
 import { SkeletonModule } from 'primeng/skeleton'
 
+import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import {
   AngularRemoteComponentsModule,
   ocxRemoteComponent,
   ocxRemoteWebcomponent
 } from '@onecx/angular-remote-components'
-import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Configuration, RefType, UserAvatarAPIService } from 'src/app/shared/generated'
@@ -39,8 +39,8 @@ import { environment } from 'src/environments/environment'
   templateUrl: './avatar-image.component.html',
   styleUrls: ['./avatar-image.component.scss']
 })
-export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
-  private readonly remoteComponentConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
+export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+  private readonly rcConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
   private readonly avatarService = inject(UserAvatarAPIService)
   // input
   @Input() id: string | undefined = undefined
@@ -54,23 +54,16 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
     this.ocxInitRemoteComponent(config)
   }
 
-  public imagePath$: Observable<string> | undefined
+  public imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
   public placeHolderPath = ''
   public displayImage = false
 
   ocxInitRemoteComponent(config: RemoteComponentConfig) {
-    this.remoteComponentConfig.next(config)
+    this.rcConfig.next(config)
     this.placeHolderPath = Location.joinWithSlash(config.baseUrl, environment.DEFAULT_LOGO_PATH)
     this.avatarService.configuration = new Configuration({
       basePath: Location.joinWithSlash(config.baseUrl, environment.apiPrefix)
     })
-  }
-
-  ngOnInit(): void {
-    // imagePath$ is an observable on purpose, so this component can be easily extended to
-    // also display avatars of other user where a call the bff is needed to get the url
-    // To do this, call the bff here and set the observable as imagePath$ here
-    this.imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
   }
 
   public onImageError(): void {

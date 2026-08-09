@@ -39,17 +39,15 @@
   }
 }
 
-@mixin readable-disabled-components {
-  :host ::ng-deep {
-    --disabled-opacity: 0.7;
-  }
-}
-
-@mixin compact-dropdown-list-items {
-  :host ::ng-deep {
-    .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
-      padding: 0.4rem 1rem !important;
-    }
+@mixin displaying-text-ellipsis($lines: 1) {
+  text-overflow: ellipsis;
+  overflow: hidden;
+  @if ($lines > 1) {
+    display: -webkit-box;
+    -webkit-line-clamp: $lines;
+    -webkit-box-orient: vertical;
+  } @else {
+    white-space: nowrap;
   }
 }
 
@@ -70,6 +68,14 @@
     .danger-action-bg {
       color: white;
       background-color: var(--danger-button-bg);
+    }
+  }
+}
+
+@mixin compact-dropdown-list-items {
+  :host ::ng-deep {
+    .p-dropdown-panel .p-dropdown-items .p-dropdown-item {
+      padding: 0.4rem 1rem !important;
     }
   }
 }

@@ -99,13 +99,11 @@ describe('OneCXAvatarImageComponent', () => {
 
   describe('avatar', () => {
     it('should use correct image path', (done) => {
-      const fixture = TestBed.createComponent(OneCXAvatarImageComponent)
-      const component = fixture.componentInstance
-      component.ocxInitRemoteComponent({ baseUrl: 'base_url' } as RemoteComponentConfig)
-      fixture.detectChanges()
+      const { component } = setUp()
 
+      // default image type is small
       component.imagePath$?.subscribe((url) => {
-        expect(url).toEqual('base_url/bff/userProfile/me/avatar?refType=small')
+        expect(url).toEqual('http://onecx-user-profile-bff:8080/userProfile/me/avatar?refType=small')
         done()
       })
     })

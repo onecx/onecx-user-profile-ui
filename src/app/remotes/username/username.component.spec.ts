@@ -1,6 +1,4 @@
 import { TestBed, waitForAsync } from '@angular/core/testing'
-import { provideHttpClient } from '@angular/common/http'
-import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { ReplaySubject, firstValueFrom } from 'rxjs'
 
@@ -47,8 +45,6 @@ describe('OneCXUsernameComponent', () => {
         }).withDefaultLanguage('en')
       ],
       providers: [
-        provideHttpClient(),
-        provideHttpClientTesting(),
         provideUserServiceMock(),
         { provide: TranslationConnectionService, useValue: {} },
         { provide: REMOTE_COMPONENT_CONFIG, useValue: rcConfigSubject }

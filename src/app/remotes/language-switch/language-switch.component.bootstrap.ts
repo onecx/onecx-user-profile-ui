@@ -1,7 +1,6 @@
 import { importProvidersFrom } from '@angular/core'
 import { HttpClient, provideHttpClient, withInterceptorsFromDi } from '@angular/common/http'
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations'
-import { provideRouter } from '@angular/router'
 import { MissingTranslationHandler, TranslateLoader } from '@ngx-translate/core'
 
 import { AngularAcceleratorModule, AngularAcceleratorMissingTranslationHandler } from '@onecx/angular-accelerator'
@@ -29,11 +28,5 @@ bootstrapRemoteComponent(OneCXLanguageSwitchComponent, 'ocx-language-switch-comp
     }
   }),
   provideTranslationPathFromMeta(import.meta.url, 'assets/i18n/'),
-  provideThemeConfig(),
-  provideRouter([
-    {
-      path: '**',
-      children: []
-    }
-  ])
+  provideThemeConfig()
 ])
