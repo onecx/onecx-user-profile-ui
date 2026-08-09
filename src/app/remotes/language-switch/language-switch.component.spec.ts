@@ -2,7 +2,7 @@ import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core
 import { Location } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
+import { FormBuilder } from '@angular/forms'
 import { of, ReplaySubject, Subject, throwError } from 'rxjs'
 import { TranslateService } from '@ngx-translate/core'
 import { TranslateTestingModule } from 'ngx-translate-testing'
