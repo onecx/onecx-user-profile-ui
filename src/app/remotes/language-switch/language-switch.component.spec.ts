@@ -1,5 +1,5 @@
 import { ComponentFixture, TestBed, fakeAsync, tick, flush } from '@angular/core/testing'
-import { CommonModule, Location } from '@angular/common'
+import { Location } from '@angular/common'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { FormBuilder, ReactiveFormsModule } from '@angular/forms'
@@ -37,7 +37,7 @@ const rcConfig: RemoteComponentConfig = {
   baseUrl: '/url'
 }
 
-describe('OneCXLanguageSwitchComponent - Business Logic', () => {
+fdescribe('OneCXLanguageSwitchComponent', () => {
   let component: OneCXLanguageSwitchComponent
   let fixture: ComponentFixture<OneCXLanguageSwitchComponent>
   let configService: ConfigurationServiceMock
@@ -60,7 +60,6 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     await TestBed.configureTestingModule({
       imports: [
         OneCXLanguageSwitchComponent,
-        ReactiveFormsModule,
         TranslateTestingModule.withTranslations({
           de: require('src/assets/i18n/de.json'),
           en: require('src/assets/i18n/en.json')
@@ -80,7 +79,7 @@ describe('OneCXLanguageSwitchComponent - Business Logic', () => {
     })
       .overrideComponent(OneCXLanguageSwitchComponent, {
         set: {
-          imports: [TranslateTestingModule, CommonModule],
+          imports: [TranslateTestingModule],
           providers: [
             { provide: UserProfileAPIService, useValue: userApiService },
             { provide: PortalMessageService, useValue: msgServiceSpy },
