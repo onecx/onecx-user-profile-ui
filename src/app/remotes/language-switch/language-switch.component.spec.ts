@@ -37,7 +37,7 @@ const rcConfig: RemoteComponentConfig = {
   baseUrl: '/url'
 }
 
-fdescribe('OneCXLanguageSwitchComponent', () => {
+describe('OneCXLanguageSwitchComponent', () => {
   let component: OneCXLanguageSwitchComponent
   let fixture: ComponentFixture<OneCXLanguageSwitchComponent>
   let configService: ConfigurationServiceMock
