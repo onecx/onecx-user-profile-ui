@@ -2,7 +2,7 @@ import { Component, inject, OnInit, ViewChild } from '@angular/core'
 import { AsyncPipe, DatePipe } from '@angular/common'
 import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { BehaviorSubject, catchError, finalize, map, of, Observable } from 'rxjs'
+import { BehaviorSubject, catchError, finalize, map, of } from 'rxjs'
 
 import { PrimeIcons } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
