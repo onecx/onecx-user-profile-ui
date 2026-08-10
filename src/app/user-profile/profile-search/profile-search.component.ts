@@ -200,21 +200,21 @@ export class ProfileSearchComponent implements OnInit {
         finalize(() => (this.loading = false))
       )
       .subscribe({
-        next: (stream) => {
+        next: (stream: UserProfile[]) => {
           if (stream?.length === 0) {
             this.portalMessageService.success({
               summaryKey: 'ACTIONS.SEARCH.MESSAGE.SUCCESS',
               detailKey: 'ACTIONS.SEARCH.MESSAGE.NO_PROFILES'
             })
           } else
-            stream = stream?.map((row: any) => ({
+            stream = stream?.map((row: UserProfile) => ({
               ...row,
-              lastName: row.person.lastName,
-              firstName: row.person.firstName,
-              displayName: row.person.displayName,
-              email: row.person.email
+              lastName: row.person?.lastName,
+              firstName: row.person?.firstName,
+              displayName: row.person?.displayName,
+              email: row.person?.email
             }))
-          this.allResultData = stream ?? []
+          this.allResultData = (stream ?? []) as (RowListGridData & UserProfile)[]
           this.applyGlobalFilter()
         }
       })
