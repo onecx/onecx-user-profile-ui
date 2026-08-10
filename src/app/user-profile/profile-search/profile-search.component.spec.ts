@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
-import { DataSortDirection, Filter, PortalDialogService, RowListGridData } from '@onecx/angular-accelerator'
+import { DataSortDirection, PortalDialogService, RowListGridData } from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
 import { UserProfile, UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
