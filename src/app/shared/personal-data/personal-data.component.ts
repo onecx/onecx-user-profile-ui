@@ -1,7 +1,7 @@
 import { Component, EventEmitter, inject, Input, OnChanges, Output } from '@angular/core'
 import { NgClass } from '@angular/common'
 import { HttpClient } from '@angular/common/http'
-import { ReactiveFormsModule, UntypedFormControl, UntypedFormGroup, Validators } from '@angular/forms'
+import { FormGroup, FormControl, ReactiveFormsModule, Validators } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import * as countriesInfo from 'i18n-iso-countries'
 
@@ -81,18 +81,18 @@ export class PersonalDataComponent implements OnChanges {
     }
   }
 
-  private initFormGroup(): UntypedFormGroup {
-    return new UntypedFormGroup({
-      address: new UntypedFormGroup({
-        street: new UntypedFormControl('', [Validators.maxLength(255)]),
-        streetNo: new UntypedFormControl('', [Validators.maxLength(255)]),
-        postalCode: new UntypedFormControl('', [Validators.maxLength(255)]),
-        city: new UntypedFormControl('', [Validators.maxLength(255)]),
-        country: new UntypedFormControl('DE')
+  private initFormGroup(): FormGroup {
+    return new FormGroup({
+      address: new FormGroup({
+        street: new FormControl<string | null>(null, [Validators.maxLength(255)]),
+        streetNo: new FormControl<string | null>(null, [Validators.maxLength(255)]),
+        postalCode: new FormControl<string | null>(null, [Validators.maxLength(255)]),
+        city: new FormControl<string | null>(null, [Validators.maxLength(255)]),
+        country: new FormControl<string>('DE')
       }),
-      phone: new UntypedFormGroup({
-        type: new UntypedFormControl(PhoneType.MOBILE),
-        number: new UntypedFormControl('', [Validators.maxLength(255)])
+      phone: new FormGroup({
+        type: new FormControl<string>(PhoneType.MOBILE),
+        number: new FormControl<string | null>(null, [Validators.maxLength(255)])
       })
     })
   }
@@ -104,8 +104,9 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onCancelAddressEdit(): void {
+    this.formGroup?.get('address')?.reset()
     if (this.person?.address) {
-      this.formGroup?.patchValue({ address: this.person.address })
+      this.formGroup?.get('address')?.setValue(this.person.address)
     }
     this.onToggleAddressEdit()
   }
@@ -125,8 +126,9 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onCancelPhoneEdit(): void {
+    this.formGroup?.get('phone')?.reset()
     if (this.person?.phone) {
-      this.formGroup?.patchValue({ phone: this.person?.phone })
+      this.formGroup?.get('phone')?.setValue(this.person?.phone)
     }
     this.onTogglePhoneEdit()
   }

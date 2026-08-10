@@ -82,7 +82,6 @@ export class ProfileSearchComponent implements OnInit {
 
   public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
   public tableFilter = ''
-  public filters: Filter[] = []
   public sortField = ''
   public sortDirection: DataSortDirection = DataSortDirection.NONE
   public layout: 'grid' | 'list' | 'table' = 'table'
@@ -145,7 +144,7 @@ export class ProfileSearchComponent implements OnInit {
       {
         columnType: ColumnType.STRING,
         id: 'tenantId',
-        nameKey: 'USER_PROFILE.TENANT',
+        nameKey: 'USER_PROFILE.INTERN.TENANT',
         filterable: false,
         sortable: true,
         predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED', 'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL']
@@ -232,10 +231,6 @@ export class ProfileSearchComponent implements OnInit {
   /**
    * UI EVENTS
    */
-  public onFiltered(filters: Filter[]): void {
-    this.filters = filters
-  }
-
   public onGlobalFilter(value: string): void {
     this.tableFilter = value ?? ''
     this.applyGlobalFilter()

@@ -218,14 +218,6 @@ describe('ProfileSearchComponent', () => {
    * UI EVENTS
    */
   describe('filtering', () => {
-    it('should map filtered event data to component filters', () => {
-      const filters: Filter[] = [{ columnId: 'firstName', value: 'Admin' }]
-
-      component.onFiltered(filters)
-
-      expect(component.filters).toEqual(filters)
-    })
-
     it('should map sorted event data to sort state', () => {
       component.onSorted({ sortColumn: 'lastName', sortDirection: DataSortDirection.ASCENDING })
 

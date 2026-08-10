@@ -3,6 +3,7 @@
 @include danger-action;
 @include ocx-text-responsive;
 @include ocx-interactive-data-view-fixes;
+@include p-table-zebra-rows;
 
 :host ::ng-deep {
   .ocx-content > div {
@@ -15,4 +16,21 @@
   --onecx-user-profile-onecx-user-profile-ui-card-border-radius: 4px;
   --onecx-user-profile-onecx-user-profile-ui-card-shadow:
     0 2px 1px -1px #0003, 0 1px 1px #00000024, 0 1px 3px #0000001f;
+
+  .p-datatable {
+    --table-zebra-first-column-even-bg: inherit;
+
+    .p-datatable-thead > tr > th {
+      border-bottom-width: 2px;
+    }
+    /* action buttons */
+    .p-datatable-thead > tr > th,
+    .p-datatable-tbody > tr > td {
+      padding: 0.5rem;
+      &:first-child {
+        text-align: center;
+        padding: 0.2rem;
+      }
+    }
+  }
 }

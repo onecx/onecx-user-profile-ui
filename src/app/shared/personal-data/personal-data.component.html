@@ -304,6 +304,7 @@
                 [ngClass]="{ 'p-inputwrapper-filled': !!formGroup.get('address.country')?.value }"
                 formControlName="country"
                 [options]="countries"
+                appendTo="body"
                 [showClear]="formGroup.get('address.country')?.enabled"
                 [ariaLabel]="'USER_PROFILE.COUNTRY' | translate"
                 [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
