@@ -1,8 +1,8 @@
-import { Component, inject, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { Component, inject, OnInit, ViewChild } from '@angular/core'
 import { AsyncPipe, DatePipe } from '@angular/common'
-import { FormsModule, ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
-import { BehaviorSubject, catchError, finalize, map, of, Observable } from 'rxjs'
+import { BehaviorSubject, catchError, finalize, map, of } from 'rxjs'
 
 import { PrimeIcons } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
@@ -24,7 +24,6 @@ import {
   DataAction,
   DataSortDirection,
   DataTableColumn,
-  Filter,
   InteractiveDataViewComponent,
   PortalDialogService,
   RowListGridData
@@ -47,7 +46,6 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
     ButtonModule,
     DialogModule,
     FloatLabelModule,
-    FormsModule,
     InputGroupModule,
     InputGroupAddonModule,
     InputSwitchModule,
@@ -68,7 +66,7 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
 export class ProfileSearchComponent implements OnInit {
   private readonly user: UserService = inject(UserService)
   private readonly slotService: SlotService = inject(SlotService)
-  private readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder)
+  private readonly fb: FormBuilder = inject(FormBuilder)
   private readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   private readonly portalMessageService: PortalMessageService = inject(PortalMessageService)
   private readonly portalDialogService: PortalDialogService = inject(PortalDialogService)
@@ -76,13 +74,12 @@ export class ProfileSearchComponent implements OnInit {
   // data
   public loading = false
   public exceptionKey: string | undefined
-  public criteriaGroup: UntypedFormGroup
+  public criteriaGroup: FormGroup
   public columns: DataTableColumn[] = []
   public additionalActions: DataAction[] = []
 
   public resultData$ = new BehaviorSubject<(RowListGridData & UserProfile)[]>([])
   public tableFilter = ''
-  public filters: Filter[] = []
   public sortField = ''
   public sortDirection: DataSortDirection = DataSortDirection.NONE
   public layout: 'grid' | 'list' | 'table' = 'table'
@@ -97,9 +94,11 @@ export class ProfileSearchComponent implements OnInit {
   public hasEditPermission = false
   public hasViewPermission = false
   public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
+  public isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+    this.adminViewPermissionsSlotName
+  )
 
-  constructor(@Inject(LOCALE_ID) public readonly locale: string) {
+  constructor() {
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
@@ -108,15 +107,11 @@ export class ProfileSearchComponent implements OnInit {
       size: 50
     })
     this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
-    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
-      this.adminViewPermissionsSlotName
-    )
     const commoneColumnSelectionKeys = [
       'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
       'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
       'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
     ]
-
     this.columns = [
       {
         columnType: ColumnType.STRING,
@@ -145,7 +140,7 @@ export class ProfileSearchComponent implements OnInit {
       {
         columnType: ColumnType.STRING,
         id: 'tenantId',
-        nameKey: 'USER_PROFILE.TENANT',
+        nameKey: 'USER_PROFILE.INTERN.TENANT',
         filterable: false,
         sortable: true,
         predefinedGroupKeys: ['ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED', 'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL']
@@ -232,10 +227,6 @@ export class ProfileSearchComponent implements OnInit {
   /**
    * UI EVENTS
    */
-  public onFiltered(filters: Filter[]): void {
-    this.filters = filters
-  }
-
   public onGlobalFilter(value: string): void {
     this.tableFilter = value ?? ''
     this.applyGlobalFilter()

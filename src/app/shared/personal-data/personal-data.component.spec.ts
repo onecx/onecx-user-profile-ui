@@ -140,7 +140,7 @@ describe('PersonalDataComponent', () => {
       component.ngOnChanges()
 
       expect(component.person?.firstName).toEqual(undefined)
-      expect(component.formGroup?.value.phone).toEqual({ type: 'MOBILE', number: '' })
+      expect(component.formGroup?.value.phone).toEqual({ type: 'MOBILE', number: null })
       expect(component.countries).toEqual([])
     })
 

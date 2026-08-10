@@ -6,7 +6,7 @@ import { provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
-import { DataSortDirection, Filter, PortalDialogService, RowListGridData } from '@onecx/angular-accelerator'
+import { DataSortDirection, PortalDialogService, RowListGridData } from '@onecx/angular-accelerator'
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
 import { UserProfile, UserProfileAdminAPIService, UserProfilePageResult } from 'src/app/shared/generated'
@@ -218,14 +218,6 @@ describe('ProfileSearchComponent', () => {
    * UI EVENTS
    */
   describe('filtering', () => {
-    it('should map filtered event data to component filters', () => {
-      const filters: Filter[] = [{ columnId: 'firstName', value: 'Admin' }]
-
-      component.onFiltered(filters)
-
-      expect(component.filters).toEqual(filters)
-    })
-
     it('should map sorted event data to sort state', () => {
       component.onSorted({ sortColumn: 'lastName', sortDirection: DataSortDirection.ASCENDING })
 
