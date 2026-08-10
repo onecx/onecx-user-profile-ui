@@ -1,6 +1,6 @@
-import { Component, inject, Inject, LOCALE_ID, OnInit, ViewChild } from '@angular/core'
+import { Component, inject, OnInit, ViewChild } from '@angular/core'
 import { AsyncPipe, DatePipe } from '@angular/common'
-import { ReactiveFormsModule, UntypedFormBuilder, UntypedFormGroup } from '@angular/forms'
+import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, catchError, finalize, map, of, Observable } from 'rxjs'
 
@@ -66,7 +66,7 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
 export class ProfileSearchComponent implements OnInit {
   private readonly user: UserService = inject(UserService)
   private readonly slotService: SlotService = inject(SlotService)
-  private readonly fb: UntypedFormBuilder = inject(UntypedFormBuilder)
+  private readonly fb: FormBuilder = inject(FormBuilder)
   private readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   private readonly portalMessageService: PortalMessageService = inject(PortalMessageService)
   private readonly portalDialogService: PortalDialogService = inject(PortalDialogService)
@@ -74,7 +74,7 @@ export class ProfileSearchComponent implements OnInit {
   // data
   public loading = false
   public exceptionKey: string | undefined
-  public criteriaGroup: UntypedFormGroup
+  public criteriaGroup: FormGroup
   public columns: DataTableColumn[] = []
   public additionalActions: DataAction[] = []
 
@@ -94,9 +94,11 @@ export class ProfileSearchComponent implements OnInit {
   public hasEditPermission = false
   public hasViewPermission = false
   public adminViewPermissionsSlotName = 'onecx-user-profile-admin-view-permissions'
-  public isUserRolesAndPermissionsComponentDefined$: Observable<boolean>
+  public isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
+    this.adminViewPermissionsSlotName
+  )
 
-  constructor(@Inject(LOCALE_ID) public readonly locale: string) {
+  constructor() {
     this.criteriaGroup = this.fb.group({
       firstName: null,
       lastName: null,
@@ -105,15 +107,11 @@ export class ProfileSearchComponent implements OnInit {
       size: 50
     })
     this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
-    this.isUserRolesAndPermissionsComponentDefined$ = this.slotService.isSomeComponentDefinedForSlot(
-      this.adminViewPermissionsSlotName
-    )
     const commoneColumnSelectionKeys = [
       'ACTIONS.SEARCH.PREDEFINED_GROUP.DEFAULT',
       'ACTIONS.SEARCH.PREDEFINED_GROUP.EXTENDED',
       'ACTIONS.SEARCH.PREDEFINED_GROUP.FULL'
     ]
-
     this.columns = [
       {
         columnType: ColumnType.STRING,
