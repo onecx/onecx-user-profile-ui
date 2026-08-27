@@ -1,8 +1,8 @@
-import { Component, EventEmitter, Input, inject } from '@angular/core'
+import { Component, EventEmitter, Input, inject, OnInit } from '@angular/core'
 import { AsyncPipe, Location, NgStyle } from '@angular/common'
 import { RouterModule } from '@angular/router'
 import { TranslateModule } from '@ngx-translate/core'
-import { ReplaySubject, of } from 'rxjs'
+import { Observable, ReplaySubject, of } from 'rxjs'
 
 import { SkeletonModule } from 'primeng/skeleton'
 
@@ -39,7 +39,7 @@ import { environment } from 'src/environments/environment'
   templateUrl: './avatar-image.component.html',
   styleUrls: ['./avatar-image.component.scss']
 })
-export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent {
+export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteWebcomponent, OnInit {
   private readonly rcConfig = inject<ReplaySubject<RemoteComponentConfig>>(REMOTE_COMPONENT_CONFIG)
   private readonly avatarService = inject(UserAvatarAPIService)
   // input
@@ -54,9 +54,13 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
     this.ocxInitRemoteComponent(config)
   }
 
-  public imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
+  public imagePath$: Observable<string> = of('')
   public placeHolderPath = ''
   public displayImage = false
+
+  ngOnInit(): void {
+    this.imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
+  }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig) {
     this.rcConfig.next(config)
