@@ -17,7 +17,6 @@ import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-u
 import { Configuration, RefType, UserAvatarAPIService } from 'src/app/shared/generated'
 import { bffImageUrl } from 'src/app/shared/utils'
 import { environment } from 'src/environments/environment'
-import path from 'path/win32'
 
 @Component({
   selector: 'app-avatar-image',
