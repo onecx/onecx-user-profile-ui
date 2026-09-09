@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe, DatePipe } from '@angular/common'
 import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -65,13 +66,14 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
   styleUrls: ['./profile-search.component.scss']
 })
 export class ProfileSearchComponent implements OnInit {
-  private readonly user: UserService = inject(UserService)
-  private readonly slotService: SlotService = inject(SlotService)
   private readonly fb: FormBuilder = inject(FormBuilder)
+  private readonly slotService: SlotService = inject(SlotService)
+  private readonly translate: TranslateService = inject(TranslateService)
+  private readonly user: UserService = inject(UserService)
   private readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   private readonly portalMessageService: PortalMessageService = inject(PortalMessageService)
   private readonly portalDialogService: PortalDialogService = inject(PortalDialogService)
-  private readonly translate: TranslateService = inject(TranslateService)
+  private readonly destroyRef = inject(DestroyRef)
   // data
   public loading = false
   public exceptionKey: string | undefined
@@ -198,7 +200,8 @@ export class ProfileSearchComponent implements OnInit {
           console.error('searchUserProfile', err)
           return of([])
         }),
-        finalize(() => (this.loading = false))
+        finalize(() => (this.loading = false)),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (stream: UserProfile[]) => {

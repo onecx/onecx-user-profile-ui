@@ -33,8 +33,8 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
 })
 export class PersonalDataAdminComponent implements OnChanges {
   public readonly translate = inject(TranslateService)
-  public readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   private readonly msgService = inject(PortalMessageService)
+  public readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   // input
   @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: string | undefined

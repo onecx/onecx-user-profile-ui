@@ -26,12 +26,12 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
   styleUrls: ['./personal-data-user.component.scss']
 })
 export class PersonalDataUserComponent implements AfterViewInit {
+  private readonly cdRef = inject(ChangeDetectorRef)
   public readonly translate = inject(TranslateService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
-  private readonly userProfileService = inject(UserProfileAPIService)
   private readonly msgService = inject(PortalMessageService)
-  private readonly cdRef = inject(ChangeDetectorRef)
+  private readonly userProfileService = inject(UserProfileAPIService)
   // input
   @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: any
