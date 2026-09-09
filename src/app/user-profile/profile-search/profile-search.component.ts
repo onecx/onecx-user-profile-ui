@@ -32,6 +32,7 @@ import { PortalMessageService, UserService } from '@onecx/angular-integration-in
 import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
@@ -193,7 +194,7 @@ export class ProfileSearchComponent implements OnInit {
       .pipe(
         map((data: any) => data.stream),
         catchError((err) => {
-          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILES'
+          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILES'
           console.error('searchUserProfile', err)
           return of([])
         }),

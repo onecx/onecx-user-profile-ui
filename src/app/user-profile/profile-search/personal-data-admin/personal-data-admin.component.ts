@@ -11,6 +11,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { UpdateUserProfileRequest, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-data.component'
 
@@ -60,7 +61,7 @@ export class PersonalDataAdminComponent implements OnChanges {
           this.profile = { ...profile }
         }),
         catchError((err) => {
-          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILE'
           console.error('getUserProfile', err)
           return of(undefined)
         }),

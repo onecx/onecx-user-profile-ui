@@ -14,6 +14,7 @@ import {
   UserProfile,
   UpdateUserPersonContactRequest
 } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-data.component'
 
@@ -45,7 +46,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
       this.prepareActionButtons()
     }),
     catchError((err) => {
-      this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+      this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILE'
       console.error('getMyUserProfile', err)
       return of({})
     })
@@ -69,7 +70,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
       },
       error: (err) => {
         this.showMessage('error')
-        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILE'
         console.error('updateMyUserProfileContact', err)
       }
     })
