@@ -11,6 +11,7 @@ import { TooltipModule } from 'primeng/tooltip'
 import { PortalMessageService } from '@onecx/angular-integration-interface'
 
 import { UpdateUserProfileRequest, UserPerson, UserProfile, UserProfileAdminAPIService } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-data.component'
 
@@ -32,15 +33,15 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
 })
 export class PersonalDataAdminComponent implements OnChanges {
   public readonly translate = inject(TranslateService)
-  public readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   private readonly msgService = inject(PortalMessageService)
+  public readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   // input
   @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: string | undefined
   @Output() public hideDialog = new EventEmitter<boolean>()
 
   public exceptionKey: string | undefined = undefined
-  public userProfile$!: Observable<UserProfile | undefined>
+  public userProfile$!: Observable<UserProfile>
 
   public userId: string | undefined = undefined // needed to get avatar
   public messages: { [key: string]: string } = {}
@@ -60,9 +61,9 @@ export class PersonalDataAdminComponent implements OnChanges {
           this.profile = { ...profile }
         }),
         catchError((err) => {
-          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILE'
           console.error('getUserProfile', err)
-          return of(undefined)
+          return of({} as UserProfile)
         }),
         finalize(() => (this.componentInUse = true))
       )
@@ -96,7 +97,7 @@ export class PersonalDataAdminComponent implements OnChanges {
   public onCloseDialog(): void {
     this.componentInUse = false
     this.displayPersonalDataDialog = false
-    this.userProfile$ = of({})
+    this.userProfile$ = of({} as UserProfile)
     this.hideDialog.emit(true)
   }
 

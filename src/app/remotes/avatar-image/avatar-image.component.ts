@@ -15,7 +15,7 @@ import {
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
 import { Configuration, RefType, UserAvatarAPIService } from 'src/app/shared/generated'
-import { bffImageUrl } from 'src/app/shared/utils'
+import { Utils } from 'src/app/shared/utils'
 import { environment } from 'src/environments/environment'
 
 @Component({
@@ -59,7 +59,7 @@ export class OneCXAvatarImageComponent implements ocxRemoteComponent, ocxRemoteW
   public displayImage = false
 
   ngOnInit(): void {
-    this.imagePath$ = of(bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
+    this.imagePath$ = of(Utils.bffImageUrl(this.avatarService.configuration.basePath, 'avatar', this.imageType))
   }
 
   ocxInitRemoteComponent(config: RemoteComponentConfig) {

@@ -14,6 +14,7 @@ import {
   UserProfile,
   UpdateUserPersonContactRequest
 } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-data.component'
 
@@ -25,12 +26,12 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
   styleUrls: ['./personal-data-user.component.scss']
 })
 export class PersonalDataUserComponent implements AfterViewInit {
+  private readonly cdRef = inject(ChangeDetectorRef)
   public readonly translate = inject(TranslateService)
   private readonly route = inject(ActivatedRoute)
   private readonly router = inject(Router)
-  private readonly userProfileService = inject(UserProfileAPIService)
   private readonly msgService = inject(PortalMessageService)
-  private readonly cdRef = inject(ChangeDetectorRef)
+  private readonly userProfileService = inject(UserProfileAPIService)
   // input
   @Input() public displayPersonalDataDialog = false
   @Input() public userProfileId: any
@@ -45,9 +46,9 @@ export class PersonalDataUserComponent implements AfterViewInit {
       this.prepareActionButtons()
     }),
     catchError((err) => {
-      this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+      this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILE'
       console.error('getMyUserProfile', err)
-      return of({})
+      return of({} as UserProfile)
     })
   )
 
@@ -69,7 +70,7 @@ export class PersonalDataUserComponent implements AfterViewInit {
       },
       error: (err) => {
         this.showMessage('error')
-        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILE'
+        this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILE'
         console.error('updateMyUserProfileContact', err)
       }
     })

@@ -1,4 +1,5 @@
-import { Component, inject, OnInit, ViewChild } from '@angular/core'
+import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core'
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe, DatePipe } from '@angular/common'
 import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -32,6 +33,7 @@ import { PortalMessageService, UserService } from '@onecx/angular-integration-in
 import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
@@ -64,13 +66,14 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
   styleUrls: ['./profile-search.component.scss']
 })
 export class ProfileSearchComponent implements OnInit {
-  private readonly user: UserService = inject(UserService)
-  private readonly slotService: SlotService = inject(SlotService)
   private readonly fb: FormBuilder = inject(FormBuilder)
+  private readonly slotService: SlotService = inject(SlotService)
+  private readonly translate: TranslateService = inject(TranslateService)
+  private readonly user: UserService = inject(UserService)
   private readonly userProfileAdminService = inject(UserProfileAdminAPIService)
   private readonly portalMessageService: PortalMessageService = inject(PortalMessageService)
   private readonly portalDialogService: PortalDialogService = inject(PortalDialogService)
-  private readonly translate: TranslateService = inject(TranslateService)
+  private readonly destroyRef = inject(DestroyRef)
   // data
   public loading = false
   public exceptionKey: string | undefined
@@ -193,11 +196,12 @@ export class ProfileSearchComponent implements OnInit {
       .pipe(
         map((data: any) => data.stream),
         catchError((err) => {
-          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + err.status + '.PROFILES'
+          this.exceptionKey = 'EXCEPTIONS.HTTP_STATUS_' + Utils.mapping_error_status(err.status) + '.PROFILES'
           console.error('searchUserProfile', err)
           return of([])
         }),
-        finalize(() => (this.loading = false))
+        finalize(() => (this.loading = false)),
+        takeUntilDestroyed(this.destroyRef)
       )
       .subscribe({
         next: (stream: UserProfile[]) => {

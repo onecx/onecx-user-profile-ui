@@ -14,7 +14,7 @@ import { CONFIG_KEY, ConfigurationService, UserService } from '@onecx/angular-in
 import { AngularAcceleratorModule } from '@onecx/angular-accelerator'
 
 import { LocalAndTimezoneService } from './service/localAndTimezone.service'
-import { sortByLabel } from 'src/app/shared/utils'
+import { Utils } from 'src/app/shared/utils'
 
 type SelectTimeZone = { label: string; value: string; utc: string; factor: string }
 
@@ -95,7 +95,7 @@ export class LocaleTimezoneComponent implements OnInit, OnChanges {
           utc: tz.utc,
           factor: tz.factor
         }))
-        this.timeZones.sort(sortByLabel)
+        this.timeZones.sort(Utils.sortByLabel)
       },
       error: (err) => {
         console.error('getTimezoneData', err)
