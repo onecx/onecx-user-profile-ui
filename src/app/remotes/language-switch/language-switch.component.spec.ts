@@ -170,7 +170,7 @@ describe('OneCXLanguageSwitchComponent', () => {
       component.ngOnInit()
       flush()
 
-      expect(component.availableLanguages.length).toBe(2)
+      expect(component.availableLanguages).toHaveSize(2)
     }))
 
     it('should set default available languages when parameters service return empty value', fakeAsync(() => {
@@ -178,7 +178,7 @@ describe('OneCXLanguageSwitchComponent', () => {
       parameterServiceSpy.get.and.returnValue(Promise.resolve(undefined))
       component.ngOnInit()
       flush()
-      expect(component.availableLanguages.length).toBe(2)
+      expect(component.availableLanguages).toHaveSize(2)
       expect(component.availableLanguages).toContain('en')
       expect(component.availableLanguages).toContain('de')
     }))
@@ -188,7 +188,7 @@ describe('OneCXLanguageSwitchComponent', () => {
       parameterServiceSpy.get.and.returnValue(Promise.resolve(null))
       component.ngOnInit()
       flush()
-      expect(component.availableLanguages.length).toBe(2)
+      expect(component.availableLanguages).toHaveSize(2)
       expect(component.availableLanguages).toContain('en')
       expect(component.availableLanguages).toContain('de')
     }))

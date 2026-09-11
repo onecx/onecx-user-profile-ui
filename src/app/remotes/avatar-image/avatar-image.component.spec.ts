@@ -93,7 +93,11 @@ describe('OneCXAvatarImageComponent', () => {
 
     it('should emit image loaded', () => {
       const { component } = setUp()
+      spyOn(component.imageLoaded, 'emit')
+
       component.onImageLoad()
+
+      expect(component.imageLoaded.emit).toHaveBeenCalled()
     })
   })
 
