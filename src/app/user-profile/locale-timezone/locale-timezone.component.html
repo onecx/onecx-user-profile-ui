@@ -29,20 +29,18 @@
         </ng-template>
       </p-dropdown>
       @if (changedLanguage) {
-        <button
-          pButton
+        <p-button
           pRipple
-          type="button"
           id="up_account_locale_refresh"
           class="ml-3 sm:ml-5 p-2 p-button-text"
           icon="pi pi-refresh"
-          (click)="applyChange()"
+          (onClick)="applyChange()"
           [label]="'ACTIONS.GENERAL.RELOAD' | translate"
           [ariaLabel]="'GENERAL.APPLY' | translate"
           [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
-        ></button>
+        ></p-button>
       }
     </div>
 
@@ -70,20 +68,18 @@
         tooltipEvent="hover"
       ></p-dropdown>
       @if (changedTimezone) {
-        <button
-          pButton
+        <p-button
           pRipple
-          type="button"
           id="up_account_timezone_refresh"
           class="ml-3 sm:ml-5 p-2 p-button-text"
           icon="pi pi-refresh"
-          (click)="applyChange()"
+          (onClick)="applyChange()"
           [label]="'ACTIONS.GENERAL.RELOAD' | translate"
-          [attr.aria-label]="'GENERAL.APPLY' | translate"
+          [ariaLabel]="'GENERAL.APPLY' | translate"
           [pTooltip]="'ACTIONS.GENERAL.APPLY.TOOLTIP' | translate"
           tooltipPosition="top"
           tooltipEvent="hover"
-        ></button>
+        ></p-button>
       }
     </div>
     <p-floatlabel class="mt-4" variant="on">

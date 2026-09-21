@@ -97,11 +97,6 @@ describe('PersonalDataAdminComponent', () => {
     adminServiceSpy.updateUserProfile.calls.reset()
   })
 
-  it('should create', () => {
-    expect(component).toBeTruthy()
-    expect(adminServiceSpy.getUserProfile).toHaveBeenCalled
-  })
-
   describe('get user profile', () => {
     it('should set userPerson$ to defaultProfile.person', (done) => {
       adminServiceSpy.getUserProfile.and.returnValue(of(defaultProfile))

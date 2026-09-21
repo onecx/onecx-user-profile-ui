@@ -62,7 +62,7 @@
           tooltipPosition="top"
           tooltipEvent="hover"
         />
-        <label for="up_user_profile_search_criteria_key">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
+        <label for="up_user_profile_search_criteria_user_id">{{ 'USER_PROFILE.USER_ID' | translate }}</label>
       </p-floatlabel>
     </div>
   </ocx-search-header>
@@ -125,12 +125,12 @@
               id="up_user_profile_search_table_filter_clear"
               icon="pi pi-filter-slash"
               styleClass="up-filter-clear"
+              (onClick)="onClearGlobalFilter(filterInput)"
               [disabled]="!tableFilter"
               [ariaLabel]="'ACTIONS.SEARCH.FILTER_CLEAR' | translate"
               [pTooltip]="'ACTIONS.SEARCH.FILTER_CLEAR' | translate"
               tooltipPosition="top"
               tooltipEvent="hover"
-              (onClick)="onClearGlobalFilter(filterInput)"
             ></p-button>
           </p-inputgroup>
         </ng-template>

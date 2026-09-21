@@ -139,7 +139,7 @@ describe('PersonalDataComponent', () => {
       fixture.detectChanges()
       component.ngOnChanges()
 
-      expect(component.person?.firstName).toEqual(undefined)
+      expect(component.person?.firstName).toBeUndefined()
       expect(component.formGroup?.value.phone).toEqual({ type: 'MOBILE', number: null })
       expect(component.countries).toEqual([])
     })
@@ -280,52 +280,6 @@ describe('PersonalDataComponent', () => {
       // New phone number
       expect(component.person?.phone).toEqual(phone)
       expect(component.formGroup?.get('phone')?.disabled).toBeTrue()
-    })
-  })
-
-  // Reason: to be reworked
-  xdescribe('createCountryList', () => {
-    let countriesInfo: any
-
-    beforeEach(() => {
-      countriesInfo = jasmine.createSpyObj('countriesInfo', ['registerLocale', 'getNames'])
-      countriesInfo.getNames.and.returnValue({
-        US: 'United States',
-        GB: 'United Kingdom',
-        DE: 'Germany'
-      })
-    })
-
-    it('should create country list', async () => {
-      //const translateMock = { currentLang: 'en' }
-
-      // Mock the response of dynamic import
-      spyOn(window as any, 'import').and.returnValue(
-        Promise.resolve({
-          default: {
-            US: 'United States',
-            CA: 'Canada',
-            GB: 'United Kingdom'
-            // Other country names...
-          }
-        })
-      )
-
-      // Mock the registerLocale method
-      spyOn(countriesInfo, 'registerLocale').and.returnValue(undefined)
-
-      // Mock the getNames method
-      spyOn(countriesInfo, 'getNames').and.returnValue({
-        US: 'United States',
-        DE: 'Germany'
-      })
-
-      //const person: UserPerson = {} // Mock user data
-
-      //await component.ngOnInit()
-
-      // Assert registerLocale is called with the correct path
-      //expect(window.import).toHaveBeenCalledWith(`i18n-iso-countries/langs/${translateMock.currentLang}.json`)
     })
   })
 })

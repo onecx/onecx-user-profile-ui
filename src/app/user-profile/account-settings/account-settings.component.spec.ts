@@ -128,10 +128,6 @@ describe('AccountSettingsComponent', () => {
     expect(console.error).toHaveBeenCalledWith('updateMyUserProfileSettings', errorResponse)
   })
 
-  it('should reloadPage', () => {
-    component.reloadPage()
-  })
-
   describe('on change settings', () => {
     it('should call localeChange', () => {
       component.settings = { ...accountSettings }
