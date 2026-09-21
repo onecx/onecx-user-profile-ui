@@ -108,8 +108,8 @@ describe('AccountSettingsComponent', () => {
   })
 
   it('should saveUserSettingsInfo', () => {
-    component.settings = accountSettings
-    const response: UserProfile = { ...accountSettings, modificationCount: 1 }
+    component.profile = profile
+    const response: UserProfile = { ...profile, modificationCount: 1 }
     userProfileServiceSpy.updateMyUserProfileSettings.and.returnValue(of(response))
 
     component.saveUserSettingsInfo()
