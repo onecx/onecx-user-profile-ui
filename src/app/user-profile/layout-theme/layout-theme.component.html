@@ -21,9 +21,10 @@
       @if (changedMenuMode) {
         <p-button
           pRipple
+          id="up_layout_theme_menu_mode_apply"
+          class="ml-3 sm:ml-5"
           icon="pi pi-refresh"
-          class="ml-3 p-2 p-button-text"
-          id="up_layout_theme_menu_mode_refresh"
+          size="small"
           (onClick)="applyChange()"
           [label]="'ACTIONS.GENERAL.RELOAD' | translate"
           [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
@@ -51,9 +52,10 @@
       @if (changedColorScheme) {
         <p-button
           pRipple
-          icon="pi pi-refresh"
-          class="ml-3 p-2 p-button-text"
           id="up_layout_theme_color_scheme_refresh"
+          icon="pi pi-refresh"
+          class="ml-3 sm:ml-5"
+          size="small"
           (onClick)="applyChange()"
           [label]="'ACTIONS.GENERAL.RELOAD' | translate"
           [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
@@ -64,6 +66,7 @@
       }
     </div>
 
+    <!-- disabled because breadcrumbs feature is not currently supported -->
     @if (false) {
       <h2 class="mt-4 sm:mt-5 mb-3 text-base">{{ 'LAYOUT_THEME.BREADCRUMBS' | translate }}</h2>
       <div class="flex flex-wrap justify-content-start align-items-center row-gap-1">
@@ -80,10 +83,11 @@
         @if (changedBreadcrumbs) {
           <p-button
             pRipple
-            [disabled]="true"
-            icon="pi pi-refresh"
-            class="ml-5 p-2 p-button-text"
             id="up_layout_theme_display_breadcrumbs_refresh"
+            icon="pi pi-refresh"
+            class="ml-3 sm:ml-5"
+            [disabled]="true"
+            size="small"
             (onClick)="applyChange()"
             [label]="'ACTIONS.GENERAL.RELOAD' | translate"
             [ariaLabel]="'ACTIONS.GENERAL.RELOAD' | translate"
