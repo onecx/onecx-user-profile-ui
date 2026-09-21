@@ -65,19 +65,23 @@ export class AccountSettingsComponent implements OnInit {
 
   public ngOnInit(): void {
     this.userProfileService.getMyUserProfile().subscribe({
-      next: (profile) => {
-        this.profile = profile
-        if (profile.settings) {
-          this.settings = profile.settings!
-          this.settingsInitial = { ...this.settings }
-        }
-      },
+      next: (profile) => this.initLocalProfile(profile),
       error: (error) => {
         console.error('getUserSettings', error)
         this.msgService.error({ summaryKey: 'USER_SETTINGS.ERROR' })
       }
     })
   }
+
+  // Make a local copy of the user profile settings for easier manipulation
+  private initLocalProfile(up: UserProfile): void {
+    this.profile = up
+    if (up.settings) {
+      this.settings = up.settings!
+      this.settingsInitial = { ...this.settings }
+    }
+  }
+
   public localeChange(ev: any) {
     this.settings = { ...this.settings, locale: ev }
     this.saveUserSettingsInfo()
@@ -105,8 +109,8 @@ export class AccountSettingsComponent implements OnInit {
       settings: { ...this.settings }
     }
     this.userProfileService.updateMyUserProfileSettings({ updateUserPersonSettingsRequest: updateRequest }).subscribe({
-      next: (res) => {
-        this.settings = res.settings!
+      next: (profile) => {
+        this.initLocalProfile(profile)
         this.msgService.success({ summaryKey: 'USER_SETTINGS.SUCCESS' })
       },
       error: (error) => {
