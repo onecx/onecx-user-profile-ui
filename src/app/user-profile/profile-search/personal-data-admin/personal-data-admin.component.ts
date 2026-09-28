@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, Output, OnChanges, inject } from '@angular/core'
+import { Component, EventEmitter, Input, Output, OnChanges, inject, ChangeDetectionStrategy } from '@angular/core'
 import { AsyncPipe } from '@angular/common'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { catchError, finalize, Observable, of, tap } from 'rxjs'
@@ -28,6 +28,7 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
     // components
     PersonalDataComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './personal-data-admin.component.html',
   styleUrls: ['./personal-data-admin.component.scss']
 })

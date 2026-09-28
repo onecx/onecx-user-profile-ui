@@ -1,4 +1,4 @@
-import { Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, EventEmitter, inject, OnInit, Output, ViewChild } from '@angular/core'
 import { AsyncPipe, Location } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -35,6 +35,7 @@ import { LocaleTimezoneComponent } from '../locale-timezone/locale-timezone.comp
     LayoutThemeComponent,
     LocaleTimezoneComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './account-settings.component.html',
   styleUrls: ['./account-settings.component.scss']
 })

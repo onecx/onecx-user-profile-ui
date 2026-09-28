@@ -1,4 +1,13 @@
-import { AfterViewInit, ChangeDetectorRef, Component, EventEmitter, inject, Input, Output } from '@angular/core'
+import {
+  AfterViewInit,
+  ChangeDetectorRef,
+  Component,
+  EventEmitter,
+  inject,
+  Input,
+  Output,
+  ChangeDetectionStrategy
+} from '@angular/core'
 import { AsyncPipe } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { catchError, map, Observable, of, tap } from 'rxjs'
@@ -22,6 +31,7 @@ import { PersonalDataComponent } from 'src/app/shared/personal-data/personal-dat
   selector: 'app-personal-data-user',
   standalone: true,
   imports: [AsyncPipe, AngularAcceleratorModule, PortalPageComponent, TranslateModule, PersonalDataComponent],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './personal-data-user.component.html',
   styleUrls: ['./personal-data-user.component.scss']
 })
