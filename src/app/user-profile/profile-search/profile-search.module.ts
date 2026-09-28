@@ -5,6 +5,7 @@ import { PortalPageComponent } from '@onecx/angular-utils'
 
 import { ProfileSearchComponent } from './profile-search.component'
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
+import { ProfileDeleteComponent } from './profile-delete/profile-delete.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 const routes: Routes = [
@@ -18,6 +19,7 @@ const routes: Routes = [
   imports: [
     PersonalDataAdminComponent,
     PortalPageComponent,
+    ProfileDeleteComponent,
     ProfileSearchComponent,
     RouterModule.forChild(routes),
     UserPermissionsAdminComponent

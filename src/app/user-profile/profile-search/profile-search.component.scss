@@ -1,6 +1,5 @@
 @use '/src/app/_up-mixins.scss' as *;
 
-@include danger-action;
 @include ocx-text-responsive;
 @include ocx-interactive-data-view-fixes;
 @include p-table-zebra-rows;

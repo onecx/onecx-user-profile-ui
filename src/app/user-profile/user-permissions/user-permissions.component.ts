@@ -1,4 +1,4 @@
-import { Component, inject } from '@angular/core'
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core'
 import { AsyncPipe } from '@angular/common'
 import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -16,6 +16,7 @@ import { UserProfileAPIService } from 'src/app/shared/generated'
   selector: 'app-user-permissions',
   standalone: true,
   imports: [AsyncPipe, AngularAcceleratorModule, MessageModule, PortalPageComponent, TranslateModule],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './user-permissions.component.html',
   styleUrls: ['./user-permissions.component.scss']
 })

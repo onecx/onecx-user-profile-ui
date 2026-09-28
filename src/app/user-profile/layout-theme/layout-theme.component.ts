@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, Output, EventEmitter, OnChanges } from '@angular/core'
+import { Component, OnInit, Input, Output, EventEmitter, OnChanges, ChangeDetectionStrategy } from '@angular/core'
 import { AsyncPipe } from '@angular/common'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
@@ -19,19 +19,20 @@ import { ColorScheme, MenuMode } from 'src/app/shared/generated'
 
 @Component({
   selector: 'app-layout-theme',
-  templateUrl: './layout-theme.component.html',
   standalone: true,
   imports: [
     AsyncPipe,
     AngularAcceleratorModule,
     ButtonModule,
-    SelectButtonModule,
     MessageModule,
     ReactiveFormsModule,
     RippleModule,
+    SelectButtonModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './layout-theme.component.html'
 })
 export class LayoutThemeComponent implements OnInit, OnChanges {
   @Input() colorScheme: ColorScheme | undefined

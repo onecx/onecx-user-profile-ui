@@ -2,7 +2,7 @@
 @if (profile && displayPersonalDataDialog) {
   <p-dialog
     [visible]="true"
-    (onVisibleChange)="onCloseDialog()"
+    (visibleChange)="onCloseDialog()"
     [modal]="true"
     [closable]="true"
     [draggable]="true"

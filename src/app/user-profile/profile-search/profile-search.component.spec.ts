@@ -73,8 +73,7 @@ describe('ProfileSearchComponent', () => {
   let fixture: ComponentFixture<ProfileSearchComponent>
 
   const apiServiceSpy = {
-    searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({})),
-    deleteUserProfile: jasmine.createSpy('deleteUserProfile').and.returnValue(of({}))
+    searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({}))
   }
   const msgServiceSpy = jasmine.createSpyObj<PortalMessageService>('PortalMessageService', ['success', 'error', 'info'])
   const mockUserService = {
@@ -123,7 +122,6 @@ describe('ProfileSearchComponent', () => {
     msgServiceSpy.success.calls.reset()
     msgServiceSpy.error.calls.reset()
     apiServiceSpy.searchUserProfile.calls.reset()
-    apiServiceSpy.deleteUserProfile.calls.reset()
     mockUserService.lang$.getValue.and.returnValue('de')
     mockUserService.hasPermission.and.returnValue(true)
     apiServiceSpy.searchUserProfile.and.returnValue(of({}) as any)
@@ -420,28 +418,30 @@ describe('ProfileSearchComponent', () => {
     })
   })
 
-  describe('deletion', () => {
-    it('should delete a user profile successfully', () => {
-      apiServiceSpy.deleteUserProfile.and.returnValue(of({}))
+  describe('delete dialog lifecycle', () => {
+    it('should hide the delete dialog and clear the selected profile', () => {
       component.userProfile = userProfile1
       component.displayDeleteDialog = true
 
-      component.onDeleteConfirmation()
+      component.onProfileDeleteHideDialog()
 
       expect(component.userProfile).toBeUndefined()
-      expect(msgServiceSpy.success).toHaveBeenCalledWith({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
+      expect(component.displayDeleteDialog).toBeFalse()
     })
 
-    it('should display error', () => {
-      const errorResponse = { status: 400, statusText: 'Bad Request' }
-      apiServiceSpy.deleteUserProfile.and.returnValue(throwError(() => errorResponse))
-      component.userProfile = userProfile1
-      spyOn(console, 'error')
+    it('should not clear state when already closed', () => {
+      component.onProfileDeleteHideDialog()
 
-      component.onDeleteConfirmation()
+      expect(component.userProfile).toBeUndefined()
+      expect(component.displayDeleteDialog).toBeFalse()
+    })
 
-      expect(msgServiceSpy.error).toHaveBeenCalledWith({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
-      expect(console.error).toHaveBeenCalledWith('deleteUserProfile', errorResponse)
+    it('should refresh the search results when the delete dialog signals completion', () => {
+      spyOn(component, 'onSearch')
+
+      component.onProfileDeleteDone()
+
+      expect(component.onSearch).toHaveBeenCalled()
     })
   })
 

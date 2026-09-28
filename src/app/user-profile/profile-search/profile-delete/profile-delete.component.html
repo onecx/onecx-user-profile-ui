@@ -1,0 +1,50 @@
+@if (displayDeleteDialog) {
+  <p-dialog
+    [visible]="true"
+    (visibleChange)="onCloseDialog()"
+    [header]="'ACTIONS.DELETE.USER' | translate"
+    [modal]="true"
+    [closable]="true"
+    [draggable]="true"
+    [resizable]="true"
+    [dismissableMask]="true"
+    [style]="{ 'max-width': '450px' }"
+  >
+    <div class="flex column-gap-3 row-gap-1 justify-content-start align-items-center">
+      <div class="pi pi-question-circle text-3xl danger-action-text"></div>
+      <div>
+        <div id="up_user_delete_message_text" class="font-bold">{{ 'ACTIONS.DELETE.MESSAGE_TEXT' | translate }}</div>
+        <div id="up_user_delete_user_display_name" class="mt-2 text-center font-bold danger-action-text">
+          {{ displayName }}
+        </div>
+        <div class="mt-2">{{ 'ACTIONS.DELETE.MESSAGE_HINT' | translate }}</div>
+        <div class="mt-2 white-space-nowrap">{{ 'ACTIONS.DELETE.MESSAGE_INFO' | translate }}</div>
+      </div>
+    </div>
+
+    <ng-template pTemplate="footer">
+      <div class="flex flex-wrap justify-content-end column-gap-2 row-gap-1">
+        <p-button
+          id="up_user_delete_action_no"
+          icon="pi pi-times"
+          (onClick)="onCloseDialog()"
+          [label]="'ACTIONS.CONFIRMATION.NO' | translate"
+          [ariaLabel]="'ACTIONS.CONFIRMATION.NO' | translate"
+          [pTooltip]="'ACTIONS.CONFIRMATION.NO.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></p-button>
+        <p-button
+          id="up_user_delete_action_yes"
+          icon="pi pi-check"
+          (onClick)="onDeleteConfirmation()"
+          [label]="'ACTIONS.CONFIRMATION.YES' | translate"
+          [ariaLabel]="'ACTIONS.CONFIRMATION.YES' | translate"
+          [pTooltip]="'ACTIONS.CONFIRMATION.YES.TOOLTIP' | translate"
+          tooltipPosition="top"
+          tooltipEvent="hover"
+        ></p-button>
+      </div>
+    </ng-template>
+  </p-dialog>
+}

@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Input, OnInit, OnChanges, Output } from '@angular/core'
+import { Component, EventEmitter, Input, OnInit, OnChanges, Output, ChangeDetectionStrategy } from '@angular/core'
 import { DatePipe, UpperCasePipe } from '@angular/common'
 import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
@@ -20,8 +20,6 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
 
 @Component({
   selector: 'app-locale-timezone',
-  templateUrl: './locale-timezone.component.html',
-  styleUrls: ['./locale-timezone.component.scss'],
   standalone: true,
   imports: [
     DatePipe,
@@ -34,7 +32,10 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
     ReactiveFormsModule,
     TooltipModule,
     TranslateModule
-  ]
+  ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  templateUrl: './locale-timezone.component.html',
+  styleUrls: ['./locale-timezone.component.scss']
 })
 export class LocaleTimezoneComponent implements OnInit, OnChanges {
   @Input() public localeInput: string | undefined
