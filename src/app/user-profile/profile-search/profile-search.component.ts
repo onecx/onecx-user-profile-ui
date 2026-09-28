@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core'
+import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewChild } from '@angular/core'
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe, DatePipe } from '@angular/common'
 import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
@@ -7,7 +7,6 @@ import { BehaviorSubject, catchError, finalize, map, of } from 'rxjs'
 
 import { PrimeIcons } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
-import { DialogModule } from 'primeng/dialog'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputGroupModule } from 'primeng/inputgroup'
 import { InputGroupAddonModule } from 'primeng/inputgroupaddon'
@@ -36,6 +35,7 @@ import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generate
 import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
+import { ProfileDeleteComponent } from './profile-delete/profile-delete.component'
 import { UserPermissionsAdminComponent } from './user-permissions-admin/user-permissions-admin.component'
 
 @Component({
@@ -46,7 +46,6 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
     DatePipe,
     AngularAcceleratorModule,
     ButtonModule,
-    DialogModule,
     FloatLabelModule,
     InputGroupModule,
     InputGroupAddonModule,
@@ -60,8 +59,10 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
     TranslateModule,
     // components
     PortalPageComponent,
-    PersonalDataAdminComponent
+    PersonalDataAdminComponent,
+    ProfileDeleteComponent
   ],
+  changeDetection: ChangeDetectionStrategy.OnPush,
   templateUrl: './profile-search.component.html',
   styleUrls: ['./profile-search.component.scss']
 })
@@ -262,7 +263,13 @@ export class ProfileSearchComponent implements OnInit {
   public onCloseDetail(): void {
     this.userProfile = undefined
     this.displayPersonalDataDialog = false
+  }
+  public onProfileDeleteHideDialog(): void {
+    this.userProfile = undefined
     this.displayDeleteDialog = false
+  }
+  public onProfileDeleteDone(): void {
+    this.onSearch()
   }
 
   public onDelete(ev: any): void {
@@ -279,23 +286,6 @@ export class ProfileSearchComponent implements OnInit {
         })
       )
       .subscribe()
-  }
-
-  public onDeleteConfirmation(): void {
-    if (this.userProfile?.id) {
-      this.userProfileAdminService.deleteUserProfile({ id: this.userProfile?.id }).subscribe({
-        next: () => {
-          this.userProfile = undefined
-          this.displayDeleteDialog = false
-          this.portalMessageService.success({ summaryKey: 'ACTIONS.DELETE.MESSAGE.OK' })
-        },
-        error: (err) => {
-          console.error('deleteUserProfile', err)
-          this.portalMessageService.error({ summaryKey: 'ACTIONS.DELETE.MESSAGE.NOK' })
-        }
-      })
-    }
-    this.onSearch()
   }
 
   public onUserPermissions(ev: any) {
