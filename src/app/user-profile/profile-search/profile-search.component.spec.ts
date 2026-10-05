@@ -2,7 +2,7 @@ import { NO_ERRORS_SCHEMA } from '@angular/core'
 import { ComponentFixture, TestBed } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
-import { provideRouter } from '@angular/router'
+import { ActivatedRoute, provideRouter } from '@angular/router'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { BehaviorSubject, of, throwError } from 'rxjs'
 
@@ -71,6 +71,7 @@ const userProfilepageResult: UserProfilePageResult = {
 describe('ProfileSearchComponent', () => {
   let component: ProfileSearchComponent
   let fixture: ComponentFixture<ProfileSearchComponent>
+  let activatedRoute: ActivatedRoute
 
   const apiServiceSpy = {
     searchUserProfile: jasmine.createSpy('searchUserProfile').and.returnValue(of({}))
@@ -116,6 +117,7 @@ describe('ProfileSearchComponent', () => {
     component = fixture.componentInstance
     fixture.detectChanges()
     await fixture.whenStable()
+    activatedRoute = TestBed.inject(ActivatedRoute)
   })
 
   afterEach(() => {
@@ -178,6 +180,37 @@ describe('ProfileSearchComponent', () => {
       expect(apiServiceSpy.searchUserProfile).toHaveBeenCalled()
     })
 
+    it('should omit empty form values before calling the API', () => {
+      component.criteriaGroup.patchValue({
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        userId: 'user-1'
+      })
+
+      component.onSearch()
+      expect(apiServiceSpy.searchUserProfile.calls.mostRecent().args[0]).toEqual({
+        userPersonCriteria: {
+          firstName: 'John',
+          lastName: 'Doe',
+          email: 'john@example.com',
+          userId: 'user-1'
+        }
+      })
+
+      component.criteriaGroup.patchValue({
+        firstName: '',
+        lastName: '',
+        email: '',
+        userId: ''
+      })
+
+      component.onSearch()
+      expect(apiServiceSpy.searchUserProfile.calls.mostRecent().args[0]).toEqual({
+        userPersonCriteria: {}
+      })
+    })
+
     it('should search user profiles - successful empty stream ', () => {
       apiServiceSpy.searchUserProfile.and.returnValue(of({ stream: [] } as UserProfilePageResult))
 
@@ -209,6 +242,26 @@ describe('ProfileSearchComponent', () => {
       component.onResetCriteria()
 
       expect(component.criteriaGroup.reset).toHaveBeenCalled()
+    })
+
+    it('should restore criteria from query params and trigger search', () => {
+      activatedRoute.snapshot.queryParams = {
+        firstName: 'John',
+        lastName: 'Doe',
+        email: 'john@example.com',
+        userId: 'user-1'
+      }
+
+      spyOn(component, 'onSearch')
+
+      const restored = (component as any).restoreStateFromQueryParams()
+
+      expect(restored).toBeTrue()
+      expect(component.criteriaGroup.get('firstName')?.value).toBe('John')
+      expect(component.criteriaGroup.get('lastName')?.value).toBe('Doe')
+      expect(component.criteriaGroup.get('email')?.value).toBe('john@example.com')
+      expect(component.criteriaGroup.get('userId')?.value).toBe('user-1')
+      expect(component.onSearch).toHaveBeenCalled()
     })
   })
 
