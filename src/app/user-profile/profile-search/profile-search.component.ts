@@ -240,6 +240,7 @@ export class ProfileSearchComponent implements OnInit {
 
   public onResetCriteria(): void {
     this.criteriaGroup.reset()
+    this.onSearch()
   }
 
   /**
