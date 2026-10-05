@@ -31,7 +31,7 @@ import {
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
-import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { UserPersonCriteria, UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
 import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
@@ -107,8 +107,7 @@ export class ProfileSearchComponent implements OnInit {
       firstName: null,
       lastName: null,
       email: null,
-      userId: null,
-      size: 50
+      userId: null
     })
     this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
     const commoneColumnSelectionKeys = [
@@ -190,10 +189,19 @@ export class ProfileSearchComponent implements OnInit {
   public onSearch(): void {
     this.loading = true
     this.exceptionKey = undefined
-    const userPersonCriteria = this.criteriaGroup.value
-    const criteria = { userPersonCriteria: userPersonCriteria }
+
+    const formValues = this.criteriaGroup.getRawValue() as Partial<UserPersonCriteria>
+    const criteria = Object.fromEntries(
+      Object.entries({
+        firstName: formValues.firstName?.trim(),
+        lastName: formValues.lastName?.trim(),
+        email: formValues.email?.trim(),
+        userId: formValues.userId?.trim()
+      }).filter(([, value]) => value !== null && value !== undefined && value !== '')
+    ) as UserPersonCriteria
+
     this.userProfileAdminService
-      .searchUserProfile(criteria)
+      .searchUserProfile({ userPersonCriteria: criteria })
       .pipe(
         map((data: any) => data.stream),
         catchError((err) => {
