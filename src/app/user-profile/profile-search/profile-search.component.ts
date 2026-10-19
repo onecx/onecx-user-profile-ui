@@ -110,7 +110,8 @@ export class ProfileSearchComponent implements OnInit {
       firstName: null,
       lastName: null,
       email: null,
-      userId: null
+      userId: null,
+      size: 50
     })
     this.dateFormat = this.user.lang$.getValue() === 'de' ? 'dd.MM.yyyy HH:mm' : 'M/d/yy, h:mm a'
     const commoneColumnSelectionKeys = [
