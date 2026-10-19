@@ -37,6 +37,10 @@
         "SUCCESS": "Search done",
         "NO_RESULTS": "No results",
         "NO_PROFILES": "No User Profiles found"
+      },
+      "RESET_BUTTON": {
+        "ARIA_LABEL": "Reset search criteria and results",
+        "TOOLTIP": "Reset search criteria and results"
       }
     },
     "VIEW": {
