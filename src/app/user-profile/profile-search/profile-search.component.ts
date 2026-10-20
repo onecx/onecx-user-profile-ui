@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, OnInit, ViewChi
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop'
 import { AsyncPipe, DatePipe } from '@angular/common'
 import { FormGroup, ReactiveFormsModule, FormBuilder } from '@angular/forms'
+import { ActivatedRoute, Router } from '@angular/router'
 import { TranslateModule, TranslateService } from '@ngx-translate/core'
 import { BehaviorSubject, catchError, finalize, map, of } from 'rxjs'
 
@@ -31,7 +32,7 @@ import {
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 import { PortalPageComponent } from '@onecx/angular-utils'
 
-import { UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
+import { UserPersonCriteria, UserProfileAdminAPIService, UserProfile } from 'src/app/shared/generated'
 import { Utils } from 'src/app/shared/utils'
 
 import { PersonalDataAdminComponent } from './personal-data-admin/personal-data-admin.component'
@@ -68,6 +69,8 @@ import { UserPermissionsAdminComponent } from './user-permissions-admin/user-per
 })
 export class ProfileSearchComponent implements OnInit {
   private readonly fb: FormBuilder = inject(FormBuilder)
+  private readonly route = inject(ActivatedRoute)
+  private readonly router = inject(Router)
   private readonly slotService: SlotService = inject(SlotService)
   private readonly translate: TranslateService = inject(TranslateService)
   private readonly user: UserService = inject(UserService)
@@ -184,16 +187,27 @@ export class ProfileSearchComponent implements OnInit {
     this.hasEditPermission = await this.user.hasPermission('USERPROFILE#ADMIN_EDIT')
     this.hasViewPermission = await this.user.hasPermission('USERPROFILE#ADMIN_VIEW')
     this.prepareActionButtons()
-    this.onSearch()
+    const restored = this.restoreStateFromQueryParams()
+    if (!restored) this.onSearch()
   }
 
   public onSearch(): void {
     this.loading = true
     this.exceptionKey = undefined
-    const userPersonCriteria = this.criteriaGroup.value
-    const criteria = { userPersonCriteria: userPersonCriteria }
+
+    const formValues = this.criteriaGroup.getRawValue() as Partial<UserPersonCriteria>
+    const criteria = Object.fromEntries(
+      Object.entries({
+        firstName: formValues.firstName?.trim(),
+        lastName: formValues.lastName?.trim(),
+        email: formValues.email?.trim(),
+        userId: formValues.userId?.trim()
+      }).filter(([, value]) => value !== null && value !== undefined && value !== '')
+    ) as UserPersonCriteria
+
+    this.updateSearchParamsFromState()
     this.userProfileAdminService
-      .searchUserProfile(criteria)
+      .searchUserProfile({ userPersonCriteria: criteria })
       .pipe(
         map((data: any) => data.stream),
         catchError((err) => {
@@ -227,6 +241,7 @@ export class ProfileSearchComponent implements OnInit {
 
   public onResetCriteria(): void {
     this.criteriaGroup.reset()
+    this.onSearch()
   }
 
   /**
@@ -370,5 +385,61 @@ export class ProfileSearchComponent implements OnInit {
     })
 
     this.resultData$.next(filteredData)
+  }
+
+  private updateSearchParamsFromState(): void {
+    const queryParams = {
+      firstName:
+        this.criteriaGroup && this.criteriaGroup.controls['firstName']?.value !== ''
+          ? this.criteriaGroup.controls['firstName']?.value
+          : null,
+      lastName:
+        this.criteriaGroup && this.criteriaGroup.controls['lastName']?.value !== ''
+          ? this.criteriaGroup.controls['lastName']?.value
+          : null,
+      email:
+        this.criteriaGroup && this.criteriaGroup.controls['email']?.value !== ''
+          ? this.criteriaGroup.controls['email']?.value
+          : null,
+      userId:
+        this.criteriaGroup && this.criteriaGroup.controls['userId']?.value !== ''
+          ? this.criteriaGroup.controls['userId']?.value
+          : null
+    }
+
+    this.router.navigate([], {
+      relativeTo: this.route,
+      queryParams,
+      replaceUrl: true,
+      queryParamsHandling: 'merge'
+    })
+  }
+
+  private restoreStateFromQueryParams(): boolean {
+    const queryParams = this.route.snapshot.queryParams
+    const paramKeys = Object.keys(queryParams)
+
+    if (!paramKeys.length) return false
+
+    const firstName = queryParams['firstName']
+    const lastName = queryParams['lastName']
+    const email = queryParams['email']
+    const userId = queryParams['userId']
+
+    if (firstName !== undefined) {
+      this.criteriaGroup.controls['firstName']?.setValue(firstName)
+    }
+    if (lastName !== undefined) {
+      this.criteriaGroup.controls['lastName']?.setValue(lastName)
+    }
+    if (email !== undefined) {
+      this.criteriaGroup.controls['email']?.setValue(email)
+    }
+    if (userId !== undefined) {
+      this.criteriaGroup.controls['userId']?.setValue(userId)
+    }
+
+    this.onSearch()
+    return true
   }
 }

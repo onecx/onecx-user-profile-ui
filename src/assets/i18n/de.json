@@ -37,6 +37,10 @@
         "SUCCESS": "Suche durchgeführt",
         "NO_RESULTS": "Keine Ergebnisse",
         "NO_PROFILES": "Keine Nutzerprofile gefunden"
+      },
+      "RESET_BUTTON": {
+        "ARIA_LABEL": "Suchkriterien und Ergebnisse zurücksetzen",
+        "TOOLTIP": "Suchkriterien und Ergebnisse zurücksetzen"
       }
     },
     "VIEW": {
