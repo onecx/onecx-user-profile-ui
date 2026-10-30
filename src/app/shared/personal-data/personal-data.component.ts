@@ -98,9 +98,12 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onToggleAddressEdit(): void {
-    this.formGroup.get('address')?.disabled
-      ? this.formGroup.get('address')?.enable()
-      : this.formGroup.get('address')?.disable()
+    const addressControl = this.formGroup.get('address')
+    if (addressControl?.disabled) {
+      addressControl.enable()
+    } else {
+      addressControl?.disable()
+    }
   }
 
   public onCancelAddressEdit(): void {
@@ -120,9 +123,12 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onTogglePhoneEdit(): void {
-    this.formGroup.get('phone')?.disabled
-      ? this.formGroup.get('phone')?.enable()
-      : this.formGroup.get('phone')?.disable()
+    const phoneControl = this.formGroup.get('phone')
+    if (phoneControl?.disabled) {
+      phoneControl.enable()
+    } else {
+      phoneControl?.disable()
+    }
   }
 
   public onCancelPhoneEdit(): void {
