@@ -77,7 +77,7 @@ export class PersonalDataComponent implements OnChanges {
       this.formGroup?.patchValue(this.person)
       this.formGroup.get('address')?.disable()
       this.formGroup.get('phone')?.disable()
-      this.createCountryList()
+      this.createCountryList().catch((err) => console.error(err))
     }
   }
 
