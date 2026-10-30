@@ -141,18 +141,22 @@ export class PersonalDataComponent implements OnChanges {
     }
   }
 
-  private async createCountryList() {
-    const lang = this.user.lang$.getValue()
-    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + lang + '.json'))
-    const countryList = countriesInfo.getNames(lang)
-    const countryCodes = Object.keys(countryList)
-    const countryNames = Object.values(countryList)
-    this.countries = [] // important: trigger UI update
-    for (let i = 0; i < countryCodes.length - 1; i++) {
-      this.countries.push({
-        label: countryNames[i].toString(),
-        value: countryCodes[i].toString()
-      } as SelectItem)
-    }
+  private createCountryList(): Promise<void> {
+    return Promise.resolve()
+      .then(() => {
+        const lang = this.user.lang$.getValue()
+        countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + lang + '.json'))
+        const countryList = countriesInfo.getNames(lang)
+        const countryCodes = Object.keys(countryList)
+        const countryNames = Object.values(countryList)
+        this.countries = [] // important: trigger UI update
+        for (let i = 0; i < countryCodes.length - 1; i++) {
+          this.countries.push({
+            label: countryNames[i].toString(),
+            value: countryCodes[i].toString()
+          } as SelectItem)
+        }
+      })
+      .catch((err) => console.error(err))
   }
 }
