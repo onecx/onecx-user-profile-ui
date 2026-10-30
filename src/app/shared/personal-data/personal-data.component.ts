@@ -77,7 +77,7 @@ export class PersonalDataComponent implements OnChanges {
       this.formGroup?.patchValue(this.person)
       this.formGroup.get('address')?.disable()
       this.formGroup.get('phone')?.disable()
-      this.createCountryList()
+      this.createCountryList().catch((err) => console.error(err))
     }
   }
 
@@ -98,9 +98,12 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onToggleAddressEdit(): void {
-    this.formGroup.get('address')?.disabled
-      ? this.formGroup.get('address')?.enable()
-      : this.formGroup.get('address')?.disable()
+    const addressControl = this.formGroup.get('address')
+    if (addressControl?.disabled) {
+      addressControl.enable()
+    } else {
+      addressControl?.disable()
+    }
   }
 
   public onCancelAddressEdit(): void {
@@ -120,9 +123,12 @@ export class PersonalDataComponent implements OnChanges {
   }
 
   public onTogglePhoneEdit(): void {
-    this.formGroup.get('phone')?.disabled
-      ? this.formGroup.get('phone')?.enable()
-      : this.formGroup.get('phone')?.disable()
+    const phoneControl = this.formGroup.get('phone')
+    if (phoneControl?.disabled) {
+      phoneControl.enable()
+    } else {
+      phoneControl?.disable()
+    }
   }
 
   public onCancelPhoneEdit(): void {
@@ -141,18 +147,22 @@ export class PersonalDataComponent implements OnChanges {
     }
   }
 
-  private async createCountryList() {
-    const lang = this.user.lang$.getValue()
-    countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + lang + '.json'))
-    const countryList = countriesInfo.getNames(lang)
-    const countryCodes = Object.keys(countryList)
-    const countryNames = Object.values(countryList)
-    this.countries = [] // important: trigger UI update
-    for (let i = 0; i < countryCodes.length - 1; i++) {
-      this.countries.push({
-        label: countryNames[i].toString(),
-        value: countryCodes[i].toString()
-      } as SelectItem)
-    }
+  private createCountryList(): Promise<void> {
+    return Promise.resolve()
+      .then(() => {
+        const lang = this.user.lang$.getValue()
+        countriesInfo.registerLocale(require('i18n-iso-countries/langs/' + lang + '.json'))
+        const countryList = countriesInfo.getNames(lang)
+        const countryCodes = Object.keys(countryList)
+        const countryNames = Object.values(countryList)
+        this.countries = [] // important: trigger UI update
+        for (let i = 0; i < countryCodes.length - 1; i++) {
+          this.countries.push({
+            label: countryNames[i].toString(),
+            value: countryCodes[i].toString()
+          } as SelectItem)
+        }
+      })
+      .catch((err) => console.error(err))
   }
 }

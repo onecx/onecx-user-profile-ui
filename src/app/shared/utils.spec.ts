@@ -1,4 +1,5 @@
 import { FormGroup, FormControl } from '@angular/forms'
+import { fakeAsync, flushMicrotasks } from '@angular/core/testing'
 import { SelectItem } from 'primeng/api'
 
 import { RefType } from './generated'
@@ -43,7 +44,7 @@ describe('util functions', () => {
     let writeTextSpy: jasmine.Spy
 
     beforeEach(() => {
-      writeTextSpy = spyOn(navigator.clipboard, 'writeText')
+      writeTextSpy = spyOn(navigator.clipboard, 'writeText').and.returnValue(Promise.resolve())
     })
 
     it('should copy text to clipboard', () => {
@@ -51,6 +52,17 @@ describe('util functions', () => {
 
       expect(writeTextSpy).toHaveBeenCalledWith('text')
     })
+
+    it('should log an error when clipboard write fails', fakeAsync(() => {
+      const error = new Error('clipboard failed')
+      const consoleSpy = spyOn(console, 'error')
+      writeTextSpy.and.returnValue(Promise.reject(error))
+
+      Utils.copyToClipboard('text')
+      flushMicrotasks()
+
+      expect(consoleSpy).toHaveBeenCalledWith(error)
+    }))
   })
 
   describe('forceFormValidation', () => {
