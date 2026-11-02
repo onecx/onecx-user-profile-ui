@@ -130,7 +130,6 @@ describe('PersonalDataAdminComponent', () => {
       component.userProfileId = defaultProfile.id
       spyOn(component, 'showMessage').and.callThrough()
       spyOn(console, 'error')
-      expect().nothing()
 
       component.ngOnChanges()
 
@@ -139,7 +138,7 @@ describe('PersonalDataAdminComponent', () => {
         error: () => {
           expect(component.showMessage).toHaveBeenCalledOnceWith('error')
           expect(console.error).toHaveBeenCalledOnceWith('getUserProfile', errorResponse)
-          done.fail
+          done.fail()
         }
       })
     })

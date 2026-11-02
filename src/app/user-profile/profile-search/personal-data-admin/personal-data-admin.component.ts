@@ -90,9 +90,11 @@ export class PersonalDataAdminComponent implements OnChanges {
   }
 
   public showMessage(severity: 'success' | 'error'): void {
-    severity === 'success'
-      ? this.msgService.success({ summaryKey: 'USER_PROFILE.MSG.SAVE_SUCCESS' })
-      : this.msgService.error({ summaryKey: 'USER_PROFILE.MSG.SAVE_ERROR' })
+    if (severity === 'success') {
+      this.msgService.success({ summaryKey: 'USER_PROFILE.MSG.SAVE_SUCCESS' })
+    } else {
+      this.msgService.error({ summaryKey: 'USER_PROFILE.MSG.SAVE_ERROR' })
+    }
   }
 
   public onCloseDialog(): void {

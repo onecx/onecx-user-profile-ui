@@ -19,7 +19,7 @@ export const Utils = {
   },
 
   copyToClipboard(text?: string): void {
-    if (text) navigator.clipboard.writeText(text)
+    if (text) navigator.clipboard.writeText(text).catch((err) => console.error(err))
   },
 
   /**
@@ -29,7 +29,9 @@ export const Utils = {
     if (form instanceof FormGroup || form instanceof FormArray) {
       for (const inner in form.controls) {
         const control = form.get(inner)
-        control && this.forceFormValidation(control)
+        if (control) {
+          this.forceFormValidation(control)
+        }
       }
     } else {
       form.markAsDirty()

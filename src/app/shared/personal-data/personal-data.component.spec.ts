@@ -1,9 +1,10 @@
 import { NO_ERRORS_SCHEMA } from '@angular/core'
-import { ComponentFixture, TestBed, waitForAsync } from '@angular/core/testing'
+import { ComponentFixture, fakeAsync, flushMicrotasks, TestBed, waitForAsync } from '@angular/core/testing'
 import { provideHttpClient } from '@angular/common/http'
 import { provideHttpClientTesting } from '@angular/common/http/testing'
 import { TranslateTestingModule } from 'ngx-translate-testing'
 import { of } from 'rxjs'
+import * as countriesInfo from 'i18n-iso-countries'
 
 import { PortalMessageService, UserService } from '@onecx/angular-integration-interface'
 
@@ -109,7 +110,7 @@ describe('PersonalDataComponent', () => {
       component.componentInUse = true
       component.userId = undefined
       component.userProfile = defaultProfile
-      const spyCreateCountry = spyOn<any>(component, 'createCountryList')
+      const spyCreateCountry = spyOn<any>(component, 'createCountryList').and.returnValue(Promise.resolve())
 
       fixture.detectChanges()
       component.ngOnChanges()
@@ -117,13 +118,46 @@ describe('PersonalDataComponent', () => {
       expect(component.person?.phone).toEqual(component.formGroup?.value.phone)
       expect(spyCreateCountry).toHaveBeenCalled()
     })
+
+    it('should log an error when createCountryList rejects', fakeAsync(() => {
+      const error = new Error('country list failed')
+      const consoleSpy = spyOn(console, 'error')
+      component.componentInUse = true
+      component.userId = undefined
+      component.userProfile = defaultProfile
+      spyOn<any>(component, 'createCountryList').and.returnValue(Promise.reject(error))
+
+      fixture.detectChanges()
+      component.ngOnChanges()
+      flushMicrotasks()
+
+      expect(consoleSpy).toHaveBeenCalledWith(error)
+    }))
+
+    it('should log an error when createCountryList fails', async () => {
+      const error = new Error('country list failed')
+      const consoleSpy = spyOn(console, 'error')
+      const originalRegisterLocale = countriesInfo.registerLocale
+
+      component.componentInUse = true
+      component.userId = undefined
+      component.userProfile = defaultProfile
+      ;(countriesInfo as any).registerLocale = jasmine.createSpy('registerLocale').and.callFake(() => {
+        throw error
+      })
+
+      await component['createCountryList']()
+
+      expect(consoleSpy).toHaveBeenCalledWith(error)
+      ;(countriesInfo as any).registerLocale = originalRegisterLocale
+    })
   })
 
   describe('initialize component: admin mode', () => {
     it('should if person was provided then fill form and call createCountryList', () => {
       component.componentInUse = true
       component.userProfile = defaultProfile
-      const spyCreateCountry = spyOn<any>(component, 'createCountryList')
+      const spyCreateCountry = spyOn<any>(component, 'createCountryList').and.returnValue(Promise.resolve())
 
       fixture.detectChanges()
       component.ngOnChanges()
