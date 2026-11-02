@@ -27,8 +27,7 @@ export default defineConfig([
     'src/**/*.ico',
     'src/**/*.svg',
     'src/app/shared/generated/**/*',
-    'src/assets/api/*',
-    'src/assets/api/**/*'
+    'src/assets/api/*'
   ]),
   {
     files: ['**/*.ts'],
