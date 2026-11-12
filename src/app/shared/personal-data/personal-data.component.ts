@@ -7,12 +7,12 @@ import * as countriesInfo from 'i18n-iso-countries'
 
 import { SelectItem } from 'primeng/api'
 import { ButtonModule } from 'primeng/button'
-import { DropdownModule } from 'primeng/dropdown'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputTextModule } from 'primeng/inputtext'
 import { MessageModule } from 'primeng/message'
 import { PanelModule } from 'primeng/panel'
 import { RippleModule } from 'primeng/ripple'
+import { SelectModule } from 'primeng/select'
 import { TooltipModule } from 'primeng/tooltip'
 
 import { UserService } from '@onecx/angular-integration-interface'
@@ -30,13 +30,13 @@ import { AvatarComponent } from '../avatar/avatar.component'
     AngularAcceleratorModule,
     AvatarComponent,
     ButtonModule,
-    DropdownModule,
     FloatLabelModule,
     InputTextModule,
     MessageModule,
     PanelModule,
     ReactiveFormsModule,
     RippleModule,
+    SelectModule,
     TooltipModule,
     TranslateModule
   ],
