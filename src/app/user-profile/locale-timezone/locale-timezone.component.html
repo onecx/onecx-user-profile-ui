@@ -10,7 +10,7 @@
       *ocxIfPermission="'ACCOUNT_SETTINGS_LANGUAGE#EDIT'"
       class="flex flex-wrap justify-content-start align-items-center"
     >
-      <p-dropdown
+      <p-select
         id="up_account_locale_list"
         formControlName="locale"
         [options]="localeSelectItems"
@@ -27,7 +27,7 @@
         <ng-template pTemplate="selectedItem" let-item>
           <span [id]="item.value"> {{ item.label | translate }} </span>
         </ng-template>
-      </p-dropdown>
+      </p-select>
       @if (changedLanguage) {
         <p-button
           pRipple
@@ -55,7 +55,7 @@
       *ocxIfPermission="'ACCOUNT_SETTINGS_TIMEZONE#EDIT'"
       class="flex flex-wrap justify-content-start align-items-center row-gap-3"
     >
-      <p-dropdown
+      <p-select
         id="up_account_timezone_list"
         styleClass="shrink-margin"
         formControlName="timezone"
@@ -67,7 +67,7 @@
         [pTooltip]="'LANGUAGE_TIMEZONE.TIMEZONE.TOOLTIP' | translate"
         tooltipPosition="top"
         tooltipEvent="hover"
-      ></p-dropdown>
+      />
       @if (changedTimezone) {
         <p-button
           pRipple

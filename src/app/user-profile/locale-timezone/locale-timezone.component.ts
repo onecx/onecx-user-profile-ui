@@ -4,7 +4,7 @@ import { FormControl, FormGroup, ReactiveFormsModule } from '@angular/forms'
 import { TranslateModule } from '@ngx-translate/core'
 
 import { ButtonModule } from 'primeng/button'
-import { DropdownModule } from 'primeng/dropdown'
+import { SelectModule } from 'primeng/select'
 import { FloatLabelModule } from 'primeng/floatlabel'
 import { InputTextModule } from 'primeng/inputtext'
 import { SelectItem } from 'primeng/api'
@@ -26,10 +26,10 @@ type SelectTimeZone = { label: string; value: string; utc: string; factor: strin
     UpperCasePipe,
     AngularAcceleratorModule,
     ButtonModule,
-    DropdownModule,
     FloatLabelModule,
     InputTextModule,
     ReactiveFormsModule,
+    SelectModule,
     TooltipModule,
     TranslateModule
   ],

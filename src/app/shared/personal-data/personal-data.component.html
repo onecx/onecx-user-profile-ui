@@ -126,7 +126,7 @@
 
             <div class="mb-1 flex flex-row flex-wrap justify-content-start gap-3">
               <p-floatlabel class="flex-grow-0" controlErrorAnchor variant="on">
-                <p-dropdown
+                <p-select
                   id="up_personal_info_phone_type"
                   formControlName="type"
                   [ngClass]="{ 'p-inputwrapper-filled': !!formGroup.get('phone.type')?.value }"
@@ -135,8 +135,7 @@
                   [pTooltip]="'USER_PROFILE.PHONE_TYPE.TOOLTIP' | translate"
                   tooltipPosition="top"
                   tooltipEvent="hover"
-                >
-                </p-dropdown>
+                />
                 <label for="up_personal_info_phone_type" aria-hidden="true">
                   {{ 'USER_PROFILE.PHONE_TYPE' | translate }}
                 </label>
@@ -298,7 +297,7 @@
               </p-floatlabel>
             </div>
             <p-floatlabel variant="on">
-              <p-dropdown
+              <p-select
                 id="up_personal_info_address_country"
                 styleClass="w-full min-w-15rem"
                 [ngClass]="{ 'p-inputwrapper-filled': !!formGroup.get('address.country')?.value }"
@@ -310,8 +309,7 @@
                 [pTooltip]="'USER_PROFILE.COUNTRY.TOOLTIP' | translate"
                 tooltipPosition="top"
                 tooltipEvent="hover"
-              >
-              </p-dropdown>
+              />
               <label for="up_personal_info_address_country" aria-hidden="true">
                 {{ 'USER_PROFILE.COUNTRY' | translate }}
               </label>

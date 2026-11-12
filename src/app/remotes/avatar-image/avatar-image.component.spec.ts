@@ -6,7 +6,7 @@ import { ReplaySubject } from 'rxjs'
 
 import { REMOTE_COMPONENT_CONFIG, RemoteComponentConfig } from '@onecx/angular-utils'
 
-import { UserAvatarAPIService } from '../../shared/generated'
+import { UserAvatarAPIService } from 'src/app/shared/generated'
 import { OneCXAvatarImageComponent } from './avatar-image.component'
 
 describe('OneCXAvatarImageComponent', () => {
